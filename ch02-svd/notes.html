@@ -1,0 +1,1987 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2. The singular value decomposition &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch02-svd/notes';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.11. Lab 2: The singular value decomposition" href="lab.html" />
+    <link rel="prev" title="1.9. Lab 1: Matrix computations, orthogonality, and norms" href="../ch01-matrix-computations/lab.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">2. The singular value decomposition</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch02-svd/notes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch02-svd/notes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The singular value decomposition</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#existence-uniqueness-and-geometry">2.1. Existence, uniqueness, and geometry</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-idea">2.1.1. The idea</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#existence">2.1.2. Existence</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniqueness">2.1.3. Uniqueness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#full-thin-and-compact-forms">2.1.4. Full, thin, and compact forms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometry-the-image-of-the-unit-sphere">2.1.5. Geometry: the image of the unit sphere</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-svd-reveals">2.2. What the SVD reveals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-and-the-four-fundamental-subspaces">2.2.1. Rank and the four fundamental subspaces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#norms-and-the-condition-number">2.2.2. Norms and the condition number</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#singular-values-and-eigenvalues">2.3. Singular values and eigenvalues</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-symmetric-matrices">2.3.1. Three symmetric matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#singular-values-are-not-eigenvalues">2.3.2. Singular values are not eigenvalues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-not-compute-singular-values-from-a-ta">2.3.3. Why not compute singular values from <span class="math notranslate nohighlight">\(A^TA\)</span>?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#low-rank-approximation-and-perturbation-theory">2.4. Low-rank approximation and perturbation theory</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">2.4.1. Motivation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-eckart-young-mirsky-theorem">2.4.2. The Eckart–Young–Mirsky theorem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perturbation-of-singular-values">2.4.3. Perturbation of singular values</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-rank">2.4.4. Numerical rank</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-a-low-rank-approximation">2.4.5. Computing a low-rank approximation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-pseudoinverse-and-minimum-norm-least-squares">2.5. The pseudoinverse and minimum-norm least squares</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">2.5.1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimum-norm-least-squares">2.5.2. Minimum-norm least squares</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-pseudoinverse-is-not-continuous">2.5.3. The pseudoinverse is not continuous</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-the-svd-in-practice">2.6. Computing the SVD in practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">2.7. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">2.8. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">2.9. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">2.10. Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-singular-value-decomposition">
+<span id="ch02"></span><h1><span class="section-number">2. </span>The singular value decomposition<a class="headerlink" href="#the-singular-value-decomposition" title="Link to this heading">#</a></h1>
+<p>Every matrix, square or rectangular, symmetric or not, becomes diagonal when
+we are allowed to choose one orthonormal basis for its domain and another for
+its range. This is the content of the singular value decomposition (SVD),
+<span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span>. Geometrically it says that every linear map sends the unit
+sphere to an ellipsoid, and the lengths of the semi-axes of that ellipsoid,
+the singular values, measure how strongly the map stretches in each
+direction. We met the first of them in <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-fig-induced-norm"><span class="std std-numref">Figure 1.2</span></a>, where
+the 2-norm appeared as the longest semi-axis.</p>
+<p>The SVD answers many questions about a matrix at once. It reveals the rank of a matrix and orthonormal bases for its four fundamental
+subspaces; it gives the 2-norm, the Frobenius norm and the 2-norm condition
+number; it produces the best approximation of a matrix by one of lower rank;
+and it defines the pseudoinverse and the minimum-norm solution of a
+least-squares problem. Just as important for a numerical course, singular
+values are <em>well conditioned</em>: a perturbation of size <span class="math notranslate nohighlight">\(\epsilon\)</span> in the matrix
+moves no singular value by more than <span class="math notranslate nohighlight">\(\epsilon\)</span>. This makes the SVD the
+reliable tool for deciding questions such as “what is the rank of this
+matrix?” in floating-point arithmetic, where exact answers are not available.</p>
+<p>This chapter develops the theory with complete proofs, emphasizing the facts
+that later chapters depend on. Algorithms for computing the SVD are the
+subject of <a class="reference internal" href="../ch10-qr-algorithm/notes.html#ch10"><span class="std std-numref">Chapter 10</span></a>; here we treat <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd</span></code> as a
+backward stable black box and learn what can and cannot be concluded from its
+output.</p>
+<div class="admonition-learning-objectives admonition">
+<p class="admonition-title">Learning objectives</p>
+<p>After working through this chapter you should be able to:</p>
+<ol class="arabic simple">
+<li><p>prove that every real matrix has an SVD, describe in what sense it is
+unique, and interpret it geometrically as a map from the unit sphere to an
+ellipsoid;</p></li>
+<li><p>move between the full, thin and compact forms of the SVD and read off the
+rank, the four fundamental subspaces, <span class="math notranslate nohighlight">\(\|A\|_2\)</span>, <span class="math notranslate nohighlight">\(\|A\|_F\)</span> and
+<span class="math notranslate nohighlight">\(\kappa_2(A)\)</span>;</p></li>
+<li><p>relate singular values to the eigenvalues of <span class="math notranslate nohighlight">\(A^TA\)</span>, <span class="math notranslate nohighlight">\(AA^T\)</span> and the
+augmented matrix <span class="math notranslate nohighlight">\(\begin{bmatrix}0&amp;A^T\\A&amp;0\end{bmatrix}\)</span>, and explain
+why singular values should not be computed from the eigenvalues of <span class="math notranslate nohighlight">\(A^TA\)</span>;</p></li>
+<li><p>state and prove the Eckart–Young–Mirsky theorem in the 2-norm and the
+Frobenius norm, Weyl’s inequality for singular values, and the
+perturbation bound <span class="math notranslate nohighlight">\(|\sigma_i(A+E) - \sigma_i(A)|\le\|E\|_2\)</span>;</p></li>
+<li><p>define the numerical rank with a tolerance and choose the tolerance
+sensibly;</p></li>
+<li><p>define the Moore–Penrose pseudoinverse and use it to write down the
+minimum-norm least-squares solution;</p></li>
+<li><p>verify all of these statements numerically, and compute low-rank
+approximations with honest error measurements.</p></li>
+</ol>
+</div>
+<section id="existence-uniqueness-and-geometry">
+<span id="ch02-sec-existence"></span><h2><span class="section-number">2.1. </span>Existence, uniqueness, and geometry<a class="headerlink" href="#existence-uniqueness-and-geometry" title="Link to this heading">#</a></h2>
+<section id="the-idea">
+<h3><span class="section-number">2.1.1. </span>The idea<a class="headerlink" href="#the-idea" title="Link to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>. In <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-induced-formulas">Theorem 1.4</a> we found
+that <span class="math notranslate nohighlight">\(\|A\|_2^2\)</span> is the largest eigenvalue of <span class="math notranslate nohighlight">\(A^TA\)</span> and that the unit
+vector <span class="math notranslate nohighlight">\(v_1\)</span> which <span class="math notranslate nohighlight">\(A\)</span> stretches most is a corresponding eigenvector. Having
+found this most-stretched direction, it is natural to look for the
+most-stretched direction orthogonal to it, and so on. The SVD records the
+outcome: orthonormal input directions <span class="math notranslate nohighlight">\(v_1,v_2,\dots\)</span>, orthonormal output
+directions <span class="math notranslate nohighlight">\(u_1,u_2,\dots\)</span>, and stretch factors <span class="math notranslate nohighlight">\(\sigma_1\ge\sigma_2\ge\dots\)</span>
+with <span class="math notranslate nohighlight">\(Av_i = \sigma_iu_i\)</span>.</p>
+<p>Throughout the chapter <span class="math notranslate nohighlight">\(p = \min(m,n)\)</span>.</p>
+<div class="proof definition admonition" id="ch02-def-svd">
+<p class="admonition-title"><span class="caption-number">Definition 2.1 </span> (Singular value decomposition)</p>
+<section class="definition-content" id="proof-content">
+<p>A <em>singular value decomposition</em> of <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> is a factorization</p>
+<div class="math notranslate nohighlight" id="equation-ch02-eq-svd">
+<span class="eqno">(2.1)<a class="headerlink" href="#equation-ch02-eq-svd" title="Link to this equation">#</a></span>\[
+A = U\Sigma V^T ,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(U\in\R^{m\times m}\)</span> and <span class="math notranslate nohighlight">\(V\in\R^{n\times n}\)</span> are orthogonal and
+<span class="math notranslate nohighlight">\(\Sigma\in\R^{m\times n}\)</span> is diagonal, <span class="math notranslate nohighlight">\(\Sigma = \diag(\sigma_1,\dots,\sigma_p)\)</span>
+(padded with zero rows or columns), with
+<span class="math notranslate nohighlight">\(\sigma_1\ge\sigma_2\ge\dots\ge\sigma_p\ge0\)</span>. The numbers <span class="math notranslate nohighlight">\(\sigma_i\)</span> are the
+<em>singular values</em> of <span class="math notranslate nohighlight">\(A\)</span>, the columns <span class="math notranslate nohighlight">\(u_i\)</span> of <span class="math notranslate nohighlight">\(U\)</span> are <em>left singular
+vectors</em>, and the columns <span class="math notranslate nohighlight">\(v_i\)</span> of <span class="math notranslate nohighlight">\(V\)</span> are <em>right singular vectors</em>. It is
+convenient to set <span class="math notranslate nohighlight">\(\sigma_k = 0\)</span> for <span class="math notranslate nohighlight">\(k&gt;p\)</span>.</p>
+</section>
+</div><p>Multiplying <a class="reference internal" href="#equation-ch02-eq-svd">(2.1)</a> on the right by <span class="math notranslate nohighlight">\(V\)</span> and on the left by <span class="math notranslate nohighlight">\(U^T\)</span>
+shows that, column by column,</p>
+<div class="math notranslate nohighlight" id="equation-ch02-eq-singular-pairs">
+<span class="eqno">(2.2)<a class="headerlink" href="#equation-ch02-eq-singular-pairs" title="Link to this equation">#</a></span>\[
+Av_i = \sigma_iu_i,\qquad A^Tu_i = \sigma_iv_i,\qquad i = 1,\dots,p,
+\]</div>
+<p>while <span class="math notranslate nohighlight">\(Av_i = 0\)</span> for <span class="math notranslate nohighlight">\(p&lt;i\le n\)</span> and <span class="math notranslate nohighlight">\(A^Tu_i = 0\)</span> for <span class="math notranslate nohighlight">\(p&lt;i\le m\)</span>.</p>
+</section>
+<section id="existence">
+<h3><span class="section-number">2.1.2. </span>Existence<a class="headerlink" href="#existence" title="Link to this heading">#</a></h3>
+<div class="proof theorem admonition" id="ch02-thm-svd">
+<p class="admonition-title"><span class="caption-number">Theorem 2.1 </span> (Existence of the SVD)</p>
+<section class="theorem-content" id="proof-content">
+<p>Every <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> has a singular value decomposition, and
+<span class="math notranslate nohighlight">\(\sigma_1 = \|A\|_2\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. We use induction on <span class="math notranslate nohighlight">\(p = \min(m,n)\)</span>. Let <span class="math notranslate nohighlight">\(\sigma_1 = \|A\|_2\)</span>. Since the unit
+sphere is compact and <span class="math notranslate nohighlight">\(x\mapsto\|Ax\|_2\)</span> is continuous, there is a unit
+vector <span class="math notranslate nohighlight">\(v_1\in\R^n\)</span> with <span class="math notranslate nohighlight">\(\|Av_1\|_2 = \sigma_1\)</span>. If <span class="math notranslate nohighlight">\(\sigma_1&gt;0\)</span> put
+<span class="math notranslate nohighlight">\(u_1 = Av_1/\sigma_1\)</span>; if <span class="math notranslate nohighlight">\(\sigma_1 = 0\)</span> let <span class="math notranslate nohighlight">\(u_1\in\R^m\)</span> be any unit vector.
+In both cases <span class="math notranslate nohighlight">\(Av_1 = \sigma_1u_1\)</span> and <span class="math notranslate nohighlight">\(\|u_1\|_2 = 1\)</span>.</p>
+<p>Extend <span class="math notranslate nohighlight">\(v_1\)</span> to an orthogonal matrix <span class="math notranslate nohighlight">\(V_1 = [v_1,\ \widehat V]\in\R^{n\times n}\)</span>
+and <span class="math notranslate nohighlight">\(u_1\)</span> to an orthogonal matrix <span class="math notranslate nohighlight">\(U_1 = [u_1,\ \widehat U]\in\R^{m\times m}\)</span>
+(for instance by Gram–Schmidt applied to <span class="math notranslate nohighlight">\(v_1, e_1,\dots,e_n\)</span>, or with a
+Householder reflector that maps <span class="math notranslate nohighlight">\(e_1\)</span> to <span class="math notranslate nohighlight">\(\pm v_1\)</span>). Because
+<span class="math notranslate nohighlight">\(u_1^TAv_1 = \sigma_1\)</span> and <span class="math notranslate nohighlight">\(\widehat U^TAv_1 = \sigma_1\widehat U^Tu_1 = 0\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+S := U_1^TAV_1 = \begin{bmatrix}\sigma_1 &amp; w^T\\ 0 &amp; B\end{bmatrix},
+\qquad w = \widehat V^TA^Tu_1\in\R^{n-1},\quad B = \widehat U^TA\widehat V\in\R^{(m-1)\times(n-1)} .
+\end{split}\]</div>
+<p>We claim <span class="math notranslate nohighlight">\(w = 0\)</span>. By unitary invariance (<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-unitary-invariance">Theorem 1.6</a>)
+<span class="math notranslate nohighlight">\(\|S\|_2 = \|A\|_2 = \sigma_1\)</span>. The first entry of
+<span class="math notranslate nohighlight">\(S\begin{bmatrix}\sigma_1\\ w\end{bmatrix}\)</span> is <span class="math notranslate nohighlight">\(\sigma_1^2 + w^Tw\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\Big\|S\begin{bmatrix}\sigma_1\\ w\end{bmatrix}\Big\|_2 \ge \sigma_1^2 + w^Tw
+= (\sigma_1^2 + w^Tw)^{1/2}\,\Big\|\begin{bmatrix}\sigma_1\\ w\end{bmatrix}\Big\|_2 .
+\end{split}\]</div>
+<p>If <span class="math notranslate nohighlight">\(w\neq0\)</span> this shows <span class="math notranslate nohighlight">\(\|S\|_2\ge(\sigma_1^2+w^Tw)^{1/2}&gt;\sigma_1\)</span>, a
+contradiction. Hence <span class="math notranslate nohighlight">\(A = U_1\begin{bmatrix}\sigma_1&amp;0\\0&amp;B\end{bmatrix}V_1^T\)</span>.</p>
+<p>If <span class="math notranslate nohighlight">\(p = 1\)</span>, the block <span class="math notranslate nohighlight">\(B\)</span> has no rows or no columns, and since <span class="math notranslate nohighlight">\(w = 0\)</span> the
+matrix <span class="math notranslate nohighlight">\(S\)</span> already has the form of <span class="math notranslate nohighlight">\(\Sigma\)</span>; we are done. Otherwise <span class="math notranslate nohighlight">\(\min(m-1,n-1) = p-1\)</span>, and by the
+induction hypothesis <span class="math notranslate nohighlight">\(B = U_2\Sigma_2V_2^T\)</span> with singular values
+<span class="math notranslate nohighlight">\(\sigma_2\ge\dots\ge\sigma_p\ge0\)</span>, where <span class="math notranslate nohighlight">\(\sigma_2 = \|B\|_2\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \underbrace{U_1\begin{bmatrix}1&amp;0\\0&amp;U_2\end{bmatrix}}_{U}
+\underbrace{\begin{bmatrix}\sigma_1&amp;0\\0&amp;\Sigma_2\end{bmatrix}}_{\Sigma}
+\underbrace{\begin{bmatrix}1&amp;0\\0&amp;V_2^T\end{bmatrix}V_1^T}_{V^T},
+\end{split}\]</div>
+<p>and <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span> are products of orthogonal matrices. It remains to check the
+ordering: for any unit <span class="math notranslate nohighlight">\(x\in\R^{n-1}\)</span>,
+<span class="math notranslate nohighlight">\(\|Bx\|_2\le\|S\,[0;\,x]\|_2\le\sigma_1\)</span>, so <span class="math notranslate nohighlight">\(\sigma_2 = \|B\|_2\le\sigma_1\)</span>.</p>
+</div>
+<p>The proof follows <span class="bibtex-citation" id="id1">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Lecture 4). It constructs the
+singular triplets greedily, which is exactly the “most-stretched direction”
+idea above. A second proof, from the eigendecomposition of <span class="math notranslate nohighlight">\(A^TA\)</span>, is
+outlined in <a class="reference internal" href="#ch02-rem-second-proof">Remark 2.1</a>. For complex matrices the same
+argument gives <span class="math notranslate nohighlight">\(A = U\Sigma V^*\)</span> with unitary <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span> and real
+nonnegative <span class="math notranslate nohighlight">\(\sigma_i\)</span>; everything in this chapter carries over with <span class="math notranslate nohighlight">\(^T\)</span>
+replaced by <span class="math notranslate nohighlight">\(^*\)</span>.</p>
+</section>
+<section id="uniqueness">
+<h3><span class="section-number">2.1.3. </span>Uniqueness<a class="headerlink" href="#uniqueness" title="Link to this heading">#</a></h3>
+<div class="proof proposition admonition" id="ch02-prop-uniqueness">
+<p class="admonition-title"><span class="caption-number">Proposition 2.1 </span> (Uniqueness of the SVD)</p>
+<section class="proposition-content" id="proof-content">
+<p>The singular values of <span class="math notranslate nohighlight">\(A\)</span> are uniquely determined: <span class="math notranslate nohighlight">\(\sigma_1^2,\dots,\sigma_p^2\)</span>
+are the <span class="math notranslate nohighlight">\(p\)</span> largest eigenvalues of <span class="math notranslate nohighlight">\(A^TA\)</span> (and of <span class="math notranslate nohighlight">\(AA^T\)</span>), counted with
+multiplicity. If <span class="math notranslate nohighlight">\(\sigma_1&gt;\sigma_2&gt;\dots&gt;\sigma_p&gt;0\)</span>, then for each
+<span class="math notranslate nohighlight">\(i\le p\)</span> the pair <span class="math notranslate nohighlight">\((u_i,v_i)\)</span> is unique up to replacing it by <span class="math notranslate nohighlight">\((-u_i,-v_i)\)</span>.
+In that case the remaining columns <span class="math notranslate nohighlight">\(v_{p+1},\dots,v_n\)</span> and
+<span class="math notranslate nohighlight">\(u_{p+1},\dots,u_m\)</span> can be any orthonormal bases of <span class="math notranslate nohighlight">\(\nullsp(A)\)</span> and <span class="math notranslate nohighlight">\(\nullsp(A^T)\)</span>, respectively.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. From <a class="reference internal" href="#equation-ch02-eq-svd">(2.1)</a>, <span class="math notranslate nohighlight">\(A^TA = V(\Sigma^T\Sigma)V^T\)</span> with
+<span class="math notranslate nohighlight">\(\Sigma^T\Sigma = \diag(\sigma_1^2,\dots,\sigma_p^2,0,\dots,0)\in\R^{n\times n}\)</span>.
+This is an eigendecomposition, and eigenvalues are unique, so the <span class="math notranslate nohighlight">\(\sigma_i\)</span>
+are determined; the same argument applies to
+<span class="math notranslate nohighlight">\(AA^T = U(\Sigma\Sigma^T)U^T\)</span>. If the <span class="math notranslate nohighlight">\(\sigma_i\)</span> are distinct and positive,
+each <span class="math notranslate nohighlight">\(\sigma_i^2\)</span> with <span class="math notranslate nohighlight">\(i\le p\)</span> is a simple eigenvalue of <span class="math notranslate nohighlight">\(A^TA\)</span> (it differs
+from the other <span class="math notranslate nohighlight">\(\sigma_j^2\)</span> and from the eigenvalue <span class="math notranslate nohighlight">\(0\)</span> of multiplicity
+<span class="math notranslate nohighlight">\(n-p\)</span>). Its unit eigenvector <span class="math notranslate nohighlight">\(v_i\)</span> is therefore unique up to sign, and
+<span class="math notranslate nohighlight">\(u_i = Av_i/\sigma_i\)</span> is determined by <span class="math notranslate nohighlight">\(v_i\)</span>, so the signs are coupled. In
+this case the last statement follows from <span class="math notranslate nohighlight">\(Av_i = 0\)</span> for <span class="math notranslate nohighlight">\(i&gt;p\)</span>, <span class="math notranslate nohighlight">\(A^Tu_i = 0\)</span> for <span class="math notranslate nohighlight">\(i&gt;p\)</span>, and
+a dimension count: with all <span class="math notranslate nohighlight">\(\sigma_i&gt;0\)</span>, <span class="math notranslate nohighlight">\(\dim\nullsp(A) = n-p\)</span> and
+<span class="math notranslate nohighlight">\(\dim\nullsp(A^T) = m-p\)</span>.</p>
+</div>
+<p>When singular values are repeated, only the subspace spanned by the
+corresponding singular vectors is determined. The identity matrix is the
+extreme case: <span class="math notranslate nohighlight">\(I = QIQ^T\)</span> is an SVD for every orthogonal <span class="math notranslate nohighlight">\(Q\)</span>
+(<a class="reference internal" href="#ch02-ex-uniqueness"><span class="std std-numref">Exercise 2.3</span></a>). Software therefore cannot be expected to return
+the same singular vectors as a hand computation, and comparisons in the lab
+are made up to sign or through subspaces.</p>
+</section>
+<section id="full-thin-and-compact-forms">
+<h3><span class="section-number">2.1.4. </span>Full, thin, and compact forms<a class="headerlink" href="#full-thin-and-compact-forms" title="Link to this heading">#</a></h3>
+<p>Only the first <span class="math notranslate nohighlight">\(p\)</span> columns of <span class="math notranslate nohighlight">\(U\)</span> or <span class="math notranslate nohighlight">\(V\)</span> multiply nonzero entries of <span class="math notranslate nohighlight">\(\Sigma\)</span>,
+and only the first <span class="math notranslate nohighlight">\(r = \rank(A)\)</span> multiply nonzero singular values. Dropping
+the others gives three versions of the SVD. Let <span class="math notranslate nohighlight">\(r\)</span> be the number of positive
+singular values and write <span class="math notranslate nohighlight">\(U_k = [u_1,\dots,u_k]\)</span>, <span class="math notranslate nohighlight">\(V_k = [v_1,\dots,v_k]\)</span>,
+<span class="math notranslate nohighlight">\(\Sigma_k = \diag(\sigma_1,\dots,\sigma_k)\)</span>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Form</p></th>
+<th class="head"><p>Factors</p></th>
+<th class="head"><p>Sizes (for <span class="math notranslate nohighlight">\(m\ge n\)</span>)</p></th>
+<th class="head"><p>Used for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>full</p></td>
+<td><p><span class="math notranslate nohighlight">\(U\Sigma V^T\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(m\times m\)</span>, <span class="math notranslate nohighlight">\(m\times n\)</span>, <span class="math notranslate nohighlight">\(n\times n\)</span></p></td>
+<td><p>proofs; bases of all of <span class="math notranslate nohighlight">\(\R^m\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>thin (economy)</p></td>
+<td><p><span class="math notranslate nohighlight">\(U_n\Sigma_nV^T\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(m\times n\)</span>, <span class="math notranslate nohighlight">\(n\times n\)</span>, <span class="math notranslate nohighlight">\(n\times n\)</span></p></td>
+<td><p>most computations</p></td>
+</tr>
+<tr class="row-even"><td><p>compact</p></td>
+<td><p><span class="math notranslate nohighlight">\(U_r\Sigma_rV_r^T\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(m\times r\)</span>, <span class="math notranslate nohighlight">\(r\times r\)</span>, <span class="math notranslate nohighlight">\(r\times n\)</span></p></td>
+<td><p>rank, pseudoinverse, low rank</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For <span class="math notranslate nohighlight">\(m&lt;n\)</span> the thin form is <span class="math notranslate nohighlight">\(U\Sigma_mV_m^T\)</span>. The compact form is the same as
+the <em>outer-product expansion</em></p>
+<div class="math notranslate nohighlight" id="equation-ch02-eq-outer">
+<span class="eqno">(2.3)<a class="headerlink" href="#equation-ch02-eq-outer" title="Link to this equation">#</a></span>\[
+A = \sum_{i=1}^{r}\sigma_i\,u_iv_i^T ,
+\]</div>
+<p>which is the outer-product view <a class="reference internal" href="../ch01-matrix-computations/notes.html#equation-ch01-eq-outer-view">(1.3)</a> of a product
+applied to <span class="math notranslate nohighlight">\((U_r\Sigma_r)V_r^T\)</span>. Each term <span class="math notranslate nohighlight">\(\sigma_iu_iv_i^T\)</span> has rank one
+and 2-norm <span class="math notranslate nohighlight">\(\sigma_i\)</span>. In NumPy, <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd(A)</span></code> returns the full
+form by default, and <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd(A,</span> <span class="pre">full_matrices=False)</span></code> the thin
+form; both return <span class="math notranslate nohighlight">\(V^T\)</span> (called <code class="docutils literal notranslate"><span class="pre">Vh</span></code>), not <span class="math notranslate nohighlight">\(V\)</span>, and the singular values as a
+one-dimensional array in decreasing order.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For a tall matrix the full <span class="math notranslate nohighlight">\(U\)</span> is <span class="math notranslate nohighlight">\(m\times m\)</span>. With <span class="math notranslate nohighlight">\(m = 10^5\)</span> and <span class="math notranslate nohighlight">\(n = 10\)</span>,
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd(A)</span></code> tries to allocate <span class="math notranslate nohighlight">\(10^{10}\)</span> numbers (80 GB) for <span class="math notranslate nohighlight">\(U\)</span>,
+while the thin factors need about <span class="math notranslate nohighlight">\(10^6\)</span>. Ask for the thin SVD unless you
+really need a basis of <span class="math notranslate nohighlight">\(\nullsp(A^T)\)</span>.</p>
+</div>
+</section>
+<section id="geometry-the-image-of-the-unit-sphere">
+<h3><span class="section-number">2.1.5. </span>Geometry: the image of the unit sphere<a class="headerlink" href="#geometry-the-image-of-the-unit-sphere" title="Link to this heading">#</a></h3>
+<p>Write <span class="math notranslate nohighlight">\(x\mapsto Ax\)</span> as <span class="math notranslate nohighlight">\(x\mapsto U(\Sigma(V^Tx))\)</span>. The factor <span class="math notranslate nohighlight">\(V^T\)</span> is
+orthogonal, so it maps the unit sphere to itself and the basis
+<span class="math notranslate nohighlight">\(v_1,\dots,v_n\)</span> to <span class="math notranslate nohighlight">\(e_1,\dots,e_n\)</span>. The factor <span class="math notranslate nohighlight">\(\Sigma\)</span> stretches coordinate
+<span class="math notranslate nohighlight">\(i\)</span> by <span class="math notranslate nohighlight">\(\sigma_i\)</span> (and embeds <span class="math notranslate nohighlight">\(\R^n\)</span> in <span class="math notranslate nohighlight">\(\R^m\)</span> or drops coordinates), turning
+the sphere into an axis-aligned ellipsoid. Finally <span class="math notranslate nohighlight">\(U\)</span> moves <span class="math notranslate nohighlight">\(e_i\)</span> to <span class="math notranslate nohighlight">\(u_i\)</span>
+without changing lengths or angles.</p>
+<div class="proof theorem admonition" id="ch02-thm-ellipsoid">
+<p class="admonition-title"><span class="caption-number">Theorem 2.2 </span> (Image of the unit sphere)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> have rank <span class="math notranslate nohighlight">\(n\)</span> (so <span class="math notranslate nohighlight">\(m\ge n\)</span>) and SVD
+<span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\{Ax : \|x\|_2 = 1\} = \Big\{y\in\range(A) : \sum_{i=1}^n\frac{(u_i^Ty)^2}{\sigma_i^2} = 1\Big\},
+\]</div>
+<p>a hyperellipsoid in the <span class="math notranslate nohighlight">\(n\)</span>-dimensional subspace <span class="math notranslate nohighlight">\(\range(A)\)</span> whose semi-axes
+are the vectors <span class="math notranslate nohighlight">\(\sigma_iu_i\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. For a unit vector <span class="math notranslate nohighlight">\(x\)</span> let <span class="math notranslate nohighlight">\(c = V^Tx\)</span>, so <span class="math notranslate nohighlight">\(\|c\|_2 = 1\)</span> and
+<span class="math notranslate nohighlight">\(y = Ax = \sum_i\sigma_ic_iu_i\)</span>. Hence <span class="math notranslate nohighlight">\(y\in\range(A)\)</span>, <span class="math notranslate nohighlight">\(u_i^Ty = \sigma_ic_i\)</span>
+and <span class="math notranslate nohighlight">\(\sum_i(u_i^Ty)^2/\sigma_i^2 = \|c\|_2^2 = 1\)</span>. Conversely, if
+<span class="math notranslate nohighlight">\(y\in\range(A) = \Span\{u_1,\dots,u_n\}\)</span> satisfies the equation, put
+<span class="math notranslate nohighlight">\(c_i = u_i^Ty/\sigma_i\)</span> (all <span class="math notranslate nohighlight">\(\sigma_i&gt;0\)</span> because the rank is <span class="math notranslate nohighlight">\(n\)</span>) and
+<span class="math notranslate nohighlight">\(x = Vc\)</span>. Then <span class="math notranslate nohighlight">\(\|x\|_2 = \|c\|_2 = 1\)</span> and
+<span class="math notranslate nohighlight">\(Ax = \sum_i\sigma_ic_iu_i = \sum_i(u_i^Ty)u_i = y\)</span>.</p>
+</div>
+<p>If <span class="math notranslate nohighlight">\(\rank(A) = r&lt;n\)</span>, the image of the sphere is not a surface but the <em>solid</em>
+ellipsoid <span class="math notranslate nohighlight">\(\{y\in\range(A):\sum_{i\le r}(u_i^Ty)^2/\sigma_i^2\le1\}\)</span>
+(<a class="reference internal" href="#ch02-ex-rank-deficient-image"><span class="std std-numref">Exercise 2.4</span></a>): the directions in <span class="math notranslate nohighlight">\(\nullsp(A)\)</span> are
+squashed to zero and the sphere collapses onto a lower-dimensional solid
+ellipsoid.</p>
+<div class="proof example admonition" id="ch02-exa-svd-by-hand">
+<p class="admonition-title"><span class="caption-number">Example 2.1 </span> (An SVD by hand)</p>
+<section class="example-content" id="proof-content">
+<p>Take the matrix <span class="math notranslate nohighlight">\(B = \begin{bmatrix}3&amp;0\\4&amp;5\end{bmatrix}\)</span> of
+<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-exa-matrix-norms">Example 1.3</a>. There we found that
+<span class="math notranslate nohighlight">\(B^TB = \begin{bmatrix}25&amp;20\\20&amp;25\end{bmatrix}\)</span> has eigenvalues <span class="math notranslate nohighlight">\(45\)</span> and <span class="math notranslate nohighlight">\(5\)</span>
+with eigenvectors <span class="math notranslate nohighlight">\((1,1)^T/\sqrt2\)</span> and <span class="math notranslate nohighlight">\((1,-1)^T/\sqrt2\)</span>. So
+<span class="math notranslate nohighlight">\(\sigma_1 = \sqrt{45} = 3\sqrt5\)</span>, <span class="math notranslate nohighlight">\(\sigma_2 = \sqrt5\)</span>, and we may take
+<span class="math notranslate nohighlight">\(v_1 = (1,1)^T/\sqrt2\)</span>, <span class="math notranslate nohighlight">\(v_2 = (1,-1)^T/\sqrt2\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+u_1 = \frac{Bv_1}{\sigma_1} = \frac{(3,9)^T}{\sqrt2\cdot3\sqrt5} = \frac{(1,3)^T}{\sqrt{10}},
+\qquad
+u_2 = \frac{Bv_2}{\sigma_2} = \frac{(3,-1)^T}{\sqrt2\cdot\sqrt5} = \frac{(3,-1)^T}{\sqrt{10}} ,
+\]</div>
+<p>and one checks directly that</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\frac{1}{\sqrt{10}}\begin{bmatrix}1&amp;3\\3&amp;-1\end{bmatrix}
+\begin{bmatrix}3\sqrt5&amp;0\\0&amp;\sqrt5\end{bmatrix}
+\frac{1}{\sqrt2}\begin{bmatrix}1&amp;1\\1&amp;-1\end{bmatrix}
+= \frac{1}{2}\begin{bmatrix}1&amp;3\\3&amp;-1\end{bmatrix}\begin{bmatrix}3&amp;3\\1&amp;-1\end{bmatrix}
+= \begin{bmatrix}3&amp;0\\4&amp;5\end{bmatrix}.
+\end{split}\]</div>
+<p>Both <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span> here have determinant <span class="math notranslate nohighlight">\(-1\)</span>; they are reflections, not
+rotations. The SVD makes no promise about orientation, and flipping the sign
+of a pair <span class="math notranslate nohighlight">\((u_i,v_i)\)</span> changes both determinants.</p>
+</section>
+</div><figure class="align-default" id="ch02-fig-svd-geometry">
+<a class="reference internal image-reference" href="../_images/ch02-svd-geometry.png"><img alt="Four panels. The unit circle with right singular vectors v1 and v2; the same circle after V transpose with e1 and e2; an axis-aligned ellipse with semi-axes sigma1 e1 and sigma2 e2; and the final tilted ellipse with semi-axes sigma1 u1 and sigma2 u2." src="../_images/ch02-svd-geometry.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2.1 </span><span class="caption-text">The SVD of the matrix <span class="math notranslate nohighlight">\(B\)</span> of <a class="reference internal" href="#ch02-exa-svd-by-hand">Example 2.1</a> applied one
+factor at a time: <span class="math notranslate nohighlight">\(V^T\)</span> maps <span class="math notranslate nohighlight">\(v_1,v_2\)</span> to <span class="math notranslate nohighlight">\(e_1,e_2\)</span>, <span class="math notranslate nohighlight">\(\Sigma\)</span> stretches the
+axes by <span class="math notranslate nohighlight">\(\sigma_1 = 3\sqrt5\)</span> and <span class="math notranslate nohighlight">\(\sigma_2 = \sqrt5\)</span>, and <span class="math notranslate nohighlight">\(U\)</span> maps the axes to
+<span class="math notranslate nohighlight">\(u_1,u_2\)</span>. The highlighted arc starts at <span class="math notranslate nohighlight">\(v_1\)</span> and shows the two reflections.
+The last panel is the ellipse of <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-fig-induced-norm"><span class="std std-numref">Figure 1.2</span></a>.</span><a class="headerlink" href="#ch02-fig-svd-geometry" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="what-the-svd-reveals">
+<span id="ch02-sec-properties"></span><h2><span class="section-number">2.2. </span>What the SVD reveals<a class="headerlink" href="#what-the-svd-reveals" title="Link to this heading">#</a></h2>
+<section id="rank-and-the-four-fundamental-subspaces">
+<h3><span class="section-number">2.2.1. </span>Rank and the four fundamental subspaces<a class="headerlink" href="#rank-and-the-four-fundamental-subspaces" title="Link to this heading">#</a></h3>
+<div class="proof theorem admonition" id="ch02-thm-subspaces">
+<p class="admonition-title"><span class="caption-number">Theorem 2.3 </span> (Rank and fundamental subspaces)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span> and let <span class="math notranslate nohighlight">\(r\)</span> be the number of positive singular values.
+Then <span class="math notranslate nohighlight">\(\rank(A) = r\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\range(A) &amp;= \Span\{u_1,\dots,u_r\}, &amp; \nullsp(A^T) &amp;= \Span\{u_{r+1},\dots,u_m\},\\
+\range(A^T) &amp;= \Span\{v_1,\dots,v_r\}, &amp; \nullsp(A) &amp;= \Span\{v_{r+1},\dots,v_n\}.
+\end{aligned}
+\end{split}\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. By <a class="reference internal" href="#equation-ch02-eq-outer">(2.3)</a>, <span class="math notranslate nohighlight">\(Ax = \sum_{i\le r}\sigma_i(v_i^Tx)u_i\)</span>, so
+<span class="math notranslate nohighlight">\(\range(A)\subseteq\Span\{u_1,\dots,u_r\}\)</span>, and choosing <span class="math notranslate nohighlight">\(x = v_j\)</span> gives
+<span class="math notranslate nohighlight">\(Av_j = \sigma_ju_j\)</span> with <span class="math notranslate nohighlight">\(\sigma_j&gt;0\)</span> for <span class="math notranslate nohighlight">\(j\le r\)</span>, so the inclusion is an
+equality and <span class="math notranslate nohighlight">\(\rank(A) = r\)</span>. Next, <span class="math notranslate nohighlight">\(x = \sum_jc_jv_j\)</span> lies in <span class="math notranslate nohighlight">\(\nullsp(A)\)</span>
+exactly when <span class="math notranslate nohighlight">\(\sum_{j\le r}\sigma_jc_ju_j = 0\)</span>, that is, when <span class="math notranslate nohighlight">\(c_j = 0\)</span> for
+<span class="math notranslate nohighlight">\(j\le r\)</span>. The statements for <span class="math notranslate nohighlight">\(A^T = V\Sigma^TU^T\)</span> follow by exchanging the
+roles of <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span>.</p>
+</div>
+<p>The theorem displays the orthogonal decompositions
+<span class="math notranslate nohighlight">\(\R^n = \range(A^T)\oplus\nullsp(A)\)</span> and <span class="math notranslate nohighlight">\(\R^m = \range(A)\oplus\nullsp(A^T)\)</span>,
+and it shows that <span class="math notranslate nohighlight">\(A\)</span> maps the orthonormal basis <span class="math notranslate nohighlight">\(v_1,\dots,v_r\)</span> of
+<span class="math notranslate nohighlight">\(\range(A^T)\)</span> to the orthogonal basis <span class="math notranslate nohighlight">\(\sigma_1u_1,\dots,\sigma_ru_r\)</span> of
+<span class="math notranslate nohighlight">\(\range(A)\)</span>. The SVD is not the only factorization that yields orthonormal
+bases for all four subspaces: the complete orthogonal decomposition, computed
+by QR factorization with column pivoting, does so as well and more cheaply
+<span class="bibtex-citation" id="id2">[<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">Golub and Van Loan, 2013</a>]</span> (Section 5.4). What the SVD adds is that its bases
+diagonalize <span class="math notranslate nohighlight">\(A\)</span>, and that its rank decisions come with the optimality and
+perturbation guarantees of <a class="reference internal" href="#ch02-sec-low-rank"><span class="std std-numref">Section 2.4</span></a>.</p>
+</section>
+<section id="norms-and-the-condition-number">
+<h3><span class="section-number">2.2.2. </span>Norms and the condition number<a class="headerlink" href="#norms-and-the-condition-number" title="Link to this heading">#</a></h3>
+<div class="proof theorem admonition" id="ch02-thm-norms">
+<p class="admonition-title"><span class="caption-number">Theorem 2.4 </span> (Norms from the SVD)</p>
+<section class="theorem-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> with singular values <span class="math notranslate nohighlight">\(\sigma_1\ge\dots\ge\sigma_p\)</span>:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\|A\|_2 = \sigma_1\)</span> and <span class="math notranslate nohighlight">\(\|A\|_F = (\sigma_1^2+\dots+\sigma_p^2)^{1/2}\)</span>;</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(m\ge n\)</span>, then <span class="math notranslate nohighlight">\(\min_{\|x\|_2 = 1}\|Ax\|_2 = \sigma_n\)</span>;</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(A\)</span> is square and nonsingular, then <span class="math notranslate nohighlight">\(A^{-1} = V\Sigma^{-1}U^T\)</span>,
+<span class="math notranslate nohighlight">\(\|A^{-1}\|_2 = 1/\sigma_n\)</span>, <span class="math notranslate nohighlight">\(\kappa_2(A) = \|A\|_2\|A^{-1}\|_2 = \sigma_1/\sigma_n\)</span>
+and <span class="math notranslate nohighlight">\(|\det A| = \sigma_1\sigma_2\cdots\sigma_n\)</span>.</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. By unitary invariance (<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-unitary-invariance">Theorem 1.6</a>),
+<span class="math notranslate nohighlight">\(\|A\|_2 = \|\Sigma\|_2\)</span> and <span class="math notranslate nohighlight">\(\|A\|_F = \|\Sigma\|_F\)</span>. For the diagonal
+<span class="math notranslate nohighlight">\(\Sigma\)</span>, <span class="math notranslate nohighlight">\(\|\Sigma x\|_2^2 = \sum_i\sigma_i^2x_i^2\)</span>, which is at most
+<span class="math notranslate nohighlight">\(\sigma_1^2\|x\|_2^2\)</span> with equality at <span class="math notranslate nohighlight">\(x = e_1\)</span>, and at least
+<span class="math notranslate nohighlight">\(\sigma_n^2\|x\|_2^2\)</span> when <span class="math notranslate nohighlight">\(m\ge n\)</span>, with equality at <span class="math notranslate nohighlight">\(x = e_n\)</span>; since <span class="math notranslate nohighlight">\(V\)</span>
+maps the unit sphere onto itself this gives (1) for the 2-norm and (2). The
+Frobenius norm of <span class="math notranslate nohighlight">\(\Sigma\)</span> is <span class="math notranslate nohighlight">\((\sum_i\sigma_i^2)^{1/2}\)</span> by definition. For
+(3), <span class="math notranslate nohighlight">\(A\)</span> nonsingular means <span class="math notranslate nohighlight">\(\sigma_n&gt;0\)</span>, and
+<span class="math notranslate nohighlight">\((U\Sigma V^T)(V\Sigma^{-1}U^T) = I\)</span>. The matrix <span class="math notranslate nohighlight">\(V\Sigma^{-1}U^T\)</span> is an SVD
+of <span class="math notranslate nohighlight">\(A^{-1}\)</span> after reversing the order of the columns, so its largest singular
+value is <span class="math notranslate nohighlight">\(1/\sigma_n\)</span>. Finally
+<span class="math notranslate nohighlight">\(|\det A| = |\det U|\,|\det\Sigma|\,|\det V| = \prod_i\sigma_i\)</span>.</p>
+</div>
+<p>Part (1) turns <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-frobenius">Theorem 1.5</a> into a statement about
+singular values: <span class="math notranslate nohighlight">\(\sigma_1^2\le\sum_{i\le r}\sigma_i^2\le r\sigma_1^2\)</span>. Part
+(3) is our first look at the 2-norm condition number. In
+<a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a> we will show that <span class="math notranslate nohighlight">\(\kappa_2(A)\)</span> bounds how much
+relative perturbations of the data of <span class="math notranslate nohighlight">\(Ax = b\)</span> can be magnified in the
+solution, and that <span class="math notranslate nohighlight">\(1/\kappa_2(A)\)</span> is the relative distance from <span class="math notranslate nohighlight">\(A\)</span> to the
+nearest singular matrix (<a class="reference internal" href="#ch02-ex-distance-singular"><span class="std std-numref">Exercise 2.6</span></a>).</p>
+<div class="proof example admonition" id="ch02-exa-norms-by-hand">
+<p class="admonition-title"><span class="caption-number">Example 2.2 </span> (Continuing the example)</p>
+<section class="example-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(B = \begin{bmatrix}3&amp;0\\4&amp;5\end{bmatrix}\)</span> we have
+<span class="math notranslate nohighlight">\(\|B\|_F^2 = 9+16+25 = 50 = 45+5 = \sigma_1^2+\sigma_2^2\)</span>,
+<span class="math notranslate nohighlight">\(\kappa_2(B) = 3\sqrt5/\sqrt5 = 3\)</span> and <span class="math notranslate nohighlight">\(|\det B| = 15 = 3\sqrt5\cdot\sqrt5\)</span>.
+The inverse <span class="math notranslate nohighlight">\(B^{-1} = \tfrac1{15}\begin{bmatrix}5&amp;0\\-4&amp;3\end{bmatrix}\)</span> has
+<span class="math notranslate nohighlight">\(\|B^{-1}\|_2 = 1/\sqrt5\approx0.447\)</span>.</p>
+</section>
+</div><div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>Let <span class="math notranslate nohighlight">\(Q\in\R^{m\times n}\)</span> have orthonormal columns. What are its singular
+values, and what are <span class="math notranslate nohighlight">\(\|Q\|_2\)</span>, <span class="math notranslate nohighlight">\(\|Q\|_F\)</span> and, when <span class="math notranslate nohighlight">\(m = n\)</span>, <span class="math notranslate nohighlight">\(\kappa_2(Q)\)</span>?</p>
+<p><em>Answer.</em> <span class="math notranslate nohighlight">\(Q = QI_nI_n\)</span> is a thin SVD, so all <span class="math notranslate nohighlight">\(n\)</span> singular values equal <span class="math notranslate nohighlight">\(1\)</span>
+(and the full SVD pads <span class="math notranslate nohighlight">\(\Sigma\)</span> with zero rows). Hence <span class="math notranslate nohighlight">\(\|Q\|_2 = 1\)</span>,
+<span class="math notranslate nohighlight">\(\|Q\|_F = \sqrt n\)</span>, and an orthogonal matrix has <span class="math notranslate nohighlight">\(\kappa_2(Q) = 1\)</span>, the
+smallest possible value. This is the precise sense in which orthogonal
+matrices are perfectly conditioned.</p>
+</div>
+</section>
+</section>
+<section id="singular-values-and-eigenvalues">
+<span id="ch02-sec-eigen"></span><h2><span class="section-number">2.3. </span>Singular values and eigenvalues<a class="headerlink" href="#singular-values-and-eigenvalues" title="Link to this heading">#</a></h2>
+<section id="three-symmetric-matrices">
+<h3><span class="section-number">2.3.1. </span>Three symmetric matrices<a class="headerlink" href="#three-symmetric-matrices" title="Link to this heading">#</a></h3>
+<div class="proof theorem admonition" id="ch02-thm-eigen">
+<p class="admonition-title"><span class="caption-number">Theorem 2.5 </span> (Eigenvalues of <span class="math notranslate nohighlight">\(A^TA\)</span>, <span class="math notranslate nohighlight">\(AA^T\)</span> and the augmented matrix)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A = U\Sigma V^T\in\R^{m\times n}\)</span> with <span class="math notranslate nohighlight">\(p = \min(m,n)\)</span>.</p>
+<ol class="arabic">
+<li><p><span class="math notranslate nohighlight">\(A^TA = V(\Sigma^T\Sigma)V^T\)</span>: its eigenvalues are
+<span class="math notranslate nohighlight">\(\sigma_1^2,\dots,\sigma_p^2\)</span> and <span class="math notranslate nohighlight">\(n-p\)</span> zeros, with eigenvectors
+<span class="math notranslate nohighlight">\(v_1,\dots,v_n\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(AA^T = U(\Sigma\Sigma^T)U^T\)</span>: its eigenvalues are
+<span class="math notranslate nohighlight">\(\sigma_1^2,\dots,\sigma_p^2\)</span> and <span class="math notranslate nohighlight">\(m-p\)</span> zeros, with eigenvectors
+<span class="math notranslate nohighlight">\(u_1,\dots,u_m\)</span>.</p></li>
+<li><p>The symmetric <em>augmented matrix</em></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+   C = \begin{bmatrix}0 &amp; A^T\\ A &amp; 0\end{bmatrix}\in\R^{(m+n)\times(m+n)}
+   \end{split}\]</div>
+<p>has the eigenvalues <span class="math notranslate nohighlight">\(\pm\sigma_1,\dots,\pm\sigma_p\)</span> and <span class="math notranslate nohighlight">\(|m-n|\)</span>
+additional zeros. For <span class="math notranslate nohighlight">\(i\le p\)</span> the vectors
+<span class="math notranslate nohighlight">\(\tfrac1{\sqrt2}\begin{bmatrix}v_i\\ \pm u_i\end{bmatrix}\)</span> are unit
+eigenvectors for <span class="math notranslate nohighlight">\(\pm\sigma_i\)</span>.</p>
+</li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Parts (1) and (2) are obtained by multiplying out, since
+<span class="math notranslate nohighlight">\(\Sigma^T\Sigma = \diag(\sigma_1^2,\dots,\sigma_p^2,0,\dots,0)\in\R^{n\times n}\)</span>
+and similarly for <span class="math notranslate nohighlight">\(\Sigma\Sigma^T\in\R^{m\times m}\)</span>. For (3), using
+<a class="reference internal" href="#equation-ch02-eq-singular-pairs">(2.2)</a>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+C\begin{bmatrix}v_i\\ \pm u_i\end{bmatrix}
+= \begin{bmatrix}\pm A^Tu_i\\ Av_i\end{bmatrix}
+= \begin{bmatrix}\pm\sigma_iv_i\\ \sigma_iu_i\end{bmatrix}
+= \pm\sigma_i\begin{bmatrix}v_i\\ \pm u_i\end{bmatrix},\qquad i\le p .
+\end{split}\]</div>
+<p>If <span class="math notranslate nohighlight">\(m&gt;n\)</span>, then <span class="math notranslate nohighlight">\(A^Tu_j = 0\)</span> for <span class="math notranslate nohighlight">\(j = n+1,\dots,m\)</span>, so
+<span class="math notranslate nohighlight">\(C\,[0;\,u_j] = 0\)</span>; if <span class="math notranslate nohighlight">\(n&gt;m\)</span>, then <span class="math notranslate nohighlight">\(Av_j = 0\)</span> for <span class="math notranslate nohighlight">\(j = m+1,\dots,n\)</span>, so
+<span class="math notranslate nohighlight">\(C\,[v_j;\,0] = 0\)</span>. The <span class="math notranslate nohighlight">\(2p\)</span> vectors <span class="math notranslate nohighlight">\([v_i;\,\pm u_i]/\sqrt2\)</span> together with
+these <span class="math notranslate nohighlight">\(|m-n|\)</span> vectors are orthonormal, because
+<span class="math notranslate nohighlight">\([v_i;\,u_i]^T[v_j;\,\pm u_j] = \delta_{ij}\pm\delta_{ij}\)</span>. Since
+<span class="math notranslate nohighlight">\(2p+|m-n| = m+n\)</span>, they form a complete orthonormal set of eigenvectors of
+<span class="math notranslate nohighlight">\(C\)</span>, and the listed eigenvalues are all of them.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The augmented matrix <span class="math notranslate nohighlight">\(C\)</span> is singular whenever <span class="math notranslate nohighlight">\(m\neq n\)</span>, because it has
+<span class="math notranslate nohighlight">\(|m-n|\)</span> zero eigenvalues, even if <span class="math notranslate nohighlight">\(A\)</span> has full rank. Only for square
+nonsingular <span class="math notranslate nohighlight">\(A\)</span> is <span class="math notranslate nohighlight">\(\kappa_2(C) = \sigma_1/\sigma_n = \kappa_2(A)\)</span>. Statements
+such as “the augmented matrix has the same condition number as <span class="math notranslate nohighlight">\(A\)</span>” are
+therefore false for rectangular <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</div>
+<div class="proof remark admonition" id="ch02-rem-second-proof">
+<p class="admonition-title"><span class="caption-number">Remark 2.1 </span> (A second proof of existence)</p>
+<section class="remark-content" id="proof-content">
+<p>Part (1) can be turned around into a proof of <a class="reference internal" href="#ch02-thm-svd">Theorem 2.1</a>. By the
+spectral theorem <span class="math notranslate nohighlight">\(A^TA = V\Lambda V^T\)</span> with <span class="math notranslate nohighlight">\(V\)</span> orthogonal and
+<span class="math notranslate nohighlight">\(\lambda_1\ge\dots\ge\lambda_n\ge0\)</span>. Put <span class="math notranslate nohighlight">\(\sigma_i = \sqrt{\lambda_i}\)</span>, let
+<span class="math notranslate nohighlight">\(r\)</span> be the number of positive <span class="math notranslate nohighlight">\(\sigma_i\)</span> and <span class="math notranslate nohighlight">\(u_i = Av_i/\sigma_i\)</span> for
+<span class="math notranslate nohighlight">\(i\le r\)</span>. Then <span class="math notranslate nohighlight">\(u_i^Tu_j = v_i^TA^TAv_j/(\sigma_i\sigma_j) = \delta_{ij}\)</span>, and
+<span class="math notranslate nohighlight">\(Av_i = 0\)</span> for <span class="math notranslate nohighlight">\(i&gt;r\)</span> because <span class="math notranslate nohighlight">\(\|Av_i\|_2^2 = \lambda_i = 0\)</span>. Extending
+<span class="math notranslate nohighlight">\(u_1,\dots,u_r\)</span> to an orthonormal basis of <span class="math notranslate nohighlight">\(\R^m\)</span> gives <span class="math notranslate nohighlight">\(AV = U\Sigma\)</span>. This
+proof relies on the spectral theorem, whereas the proof of
+<a class="reference internal" href="#ch02-thm-svd">Theorem 2.1</a> is self-contained. It also suggests an algorithm, and
+that algorithm is a bad one, as we now explain.</p>
+</section>
+</div></section>
+<section id="singular-values-are-not-eigenvalues">
+<h3><span class="section-number">2.3.2. </span>Singular values are not eigenvalues<a class="headerlink" href="#singular-values-are-not-eigenvalues" title="Link to this heading">#</a></h3>
+<p>For a symmetric matrix the singular values are the absolute values of the
+eigenvalues (<a class="reference internal" href="#ch02-ex-symmetric"><span class="std std-numref">Exercise 2.2</span></a>). For other square matrices the two
+sets are related only loosely: <span class="math notranslate nohighlight">\(\max_i|\lambda_i|\le\sigma_1\)</span>
+(<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-spectral-radius">Theorem 1.7</a>) and
+<span class="math notranslate nohighlight">\(\prod_i|\lambda_i| = |\det A| = \prod_i\sigma_i\)</span>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not confuse singular values with absolute values of eigenvalues. The
+matrix <span class="math notranslate nohighlight">\(J = \begin{bmatrix}1&amp;1\\0&amp;1\end{bmatrix}\)</span> has the double eigenvalue
+<span class="math notranslate nohighlight">\(1\)</span>, but <span class="math notranslate nohighlight">\(J^TJ = \begin{bmatrix}1&amp;1\\1&amp;2\end{bmatrix}\)</span> has eigenvalues
+<span class="math notranslate nohighlight">\((3\pm\sqrt5)/2\)</span>, so the singular values of <span class="math notranslate nohighlight">\(J\)</span> are
+<span class="math notranslate nohighlight">\((\sqrt5+1)/2\approx1.618\)</span> and <span class="math notranslate nohighlight">\((\sqrt5-1)/2\approx0.618\)</span>. Eigenvalues
+describe what <span class="math notranslate nohighlight">\(A\)</span> does to vectors it maps to multiples of themselves;
+singular values describe how <span class="math notranslate nohighlight">\(A\)</span> stretches, with different bases on the two
+sides.</p>
+</div>
+</section>
+<section id="why-not-compute-singular-values-from-a-ta">
+<h3><span class="section-number">2.3.3. </span>Why not compute singular values from <span class="math notranslate nohighlight">\(A^TA\)</span>?<a class="headerlink" href="#why-not-compute-singular-values-from-a-ta" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="#ch02-thm-eigen">Theorem 2.5</a> suggests computing <span class="math notranslate nohighlight">\(\sigma_i = \sqrt{\lambda_i(A^TA)}\)</span>
+with a symmetric eigensolver. In exact arithmetic this is correct. In
+floating-point arithmetic it throws away information before the eigensolver
+even starts. The squaring is visible in the condition number: if <span class="math notranslate nohighlight">\(A\)</span> has full
+column rank, <span class="math notranslate nohighlight">\(\kappa_2(A^TA) = \sigma_1^2/\sigma_n^2 = \kappa_2(A)^2\)</span>.</p>
+<div class="proof example admonition" id="ch02-exa-lauchli">
+<p class="admonition-title"><span class="caption-number">Example 2.3 </span> (The Läuchli matrix)</p>
+<section class="example-content" id="proof-content">
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}1&amp;1\\ \delta&amp;0\\ 0&amp;\delta\end{bmatrix},\qquad
+A^TA = \begin{bmatrix}1+\delta^2&amp;1\\1&amp;1+\delta^2\end{bmatrix}.
+\end{split}\]</div>
+<p>The eigenvalues of <span class="math notranslate nohighlight">\(A^TA\)</span> are <span class="math notranslate nohighlight">\(2+\delta^2\)</span> and <span class="math notranslate nohighlight">\(\delta^2\)</span>, so the singular
+values are <span class="math notranslate nohighlight">\(\sigma_1 = \sqrt{2+\delta^2}\)</span> and <span class="math notranslate nohighlight">\(\sigma_2 = \delta\)</span>. Take
+<span class="math notranslate nohighlight">\(\delta = 10^{-8}\)</span>. Then <span class="math notranslate nohighlight">\(\delta^2 = 10^{-16}\)</span> is smaller than the unit
+roundoff <span class="math notranslate nohighlight">\(u\approx1.1\times10^{-16}\)</span>, so <span class="math notranslate nohighlight">\(1+\delta^2\)</span> rounds to <span class="math notranslate nohighlight">\(1\)</span> and the
+computed <span class="math notranslate nohighlight">\(A^TA\)</span> is exactly <span class="math notranslate nohighlight">\(\begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}\)</span>, a singular
+matrix. Its eigenvalues are <span class="math notranslate nohighlight">\(2\)</span> and <span class="math notranslate nohighlight">\(0\)</span>, and the computed <span class="math notranslate nohighlight">\(\sigma_2\)</span> is <span class="math notranslate nohighlight">\(0\)</span>:
+every digit of <span class="math notranslate nohighlight">\(\sigma_2\)</span> has been lost although <span class="math notranslate nohighlight">\(A\)</span> itself is stored
+exactly and <span class="math notranslate nohighlight">\(\kappa_2(A)\approx1.4\times10^{8}\)</span> is modest compared with
+<span class="math notranslate nohighlight">\(1/u\)</span>. In contrast, <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd(A)</span></code> returns <span class="math notranslate nohighlight">\(\sigma_2\)</span> with a relative
+error below <span class="math notranslate nohighlight">\(10^{-7}\)</span> (the lab reports the actual value), and so does the
+symmetric eigensolver applied to the augmented matrix <span class="math notranslate nohighlight">\(C\)</span>.</p>
+</section>
+</div><p>The general explanation uses two facts. First, forming <span class="math notranslate nohighlight">\(A^TA\)</span> in floating
+point commits an error <span class="math notranslate nohighlight">\(F\)</span> with <span class="math notranslate nohighlight">\(\|F\|_2\)</span> of order <span class="math notranslate nohighlight">\(u\|A\|_2^2 = u\sigma_1^2\)</span>
+(the analysis of matrix products is in <a class="reference internal" href="../ch03-floating-point/notes.html#ch03"><span class="std std-numref">Chapter 3</span></a>). Second,
+a symmetric perturbation <span class="math notranslate nohighlight">\(F\)</span> moves each eigenvalue of a symmetric matrix by at
+most <span class="math notranslate nohighlight">\(\|F\|_2\)</span> (Weyl’s theorem for eigenvalues, <span class="bibtex-citation" id="id3">[<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">Golub and Van Loan, 2013</a>]</span>,
+Section 8.1; see also <a class="reference internal" href="../ch09-eigenvalues/notes.html#ch09"><span class="std std-numref">Chapter 9</span></a>). So even with a perfect
+eigensolver the computed <span class="math notranslate nohighlight">\(\sigma_i^2\)</span> carries an absolute error of order
+<span class="math notranslate nohighlight">\(u\sigma_1^2\)</span>, and the computed <span class="math notranslate nohighlight">\(\sigma_i\)</span> an error of order
+<span class="math notranslate nohighlight">\(u\sigma_1^2/\sigma_i\)</span>; singular values below about <span class="math notranslate nohighlight">\(\sqrt u\,\sigma_1\approx
+10^{-8}\sigma_1\)</span> are lost entirely. A backward stable SVD algorithm instead
+returns the exact singular values of <span class="math notranslate nohighlight">\(A+E\)</span> with <span class="math notranslate nohighlight">\(\|E\|_2\)</span> of order
+<span class="math notranslate nohighlight">\(u\sigma_1\)</span>, and by <a class="reference internal" href="#ch02-cor-perturbation">Corollary 2.1</a> below its errors are of
+order <span class="math notranslate nohighlight">\(u\sigma_1\)</span>, not <span class="math notranslate nohighlight">\(u\sigma_1^2/\sigma_i\)</span> <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span>
+(Lecture 31). The same holds for a backward stable eigensolver applied to the
+augmented matrix <span class="math notranslate nohighlight">\(C\)</span>, whose norm is <span class="math notranslate nohighlight">\(\sigma_1\)</span> rather than <span class="math notranslate nohighlight">\(\sigma_1^2\)</span>; its
+disadvantage is only its size, <span class="math notranslate nohighlight">\(m+n\)</span>.</p>
+<p><a class="reference internal" href="#ch02-fig-eig-vs-svd"><span class="std std-numref">Figure 2.2</span></a> shows the effect on a <span class="math notranslate nohighlight">\(30\times20\)</span> matrix with
+singular values <span class="math notranslate nohighlight">\(1, \dots, 10^{-14}\)</span> spaced evenly on a logarithmic scale. The
+SVD and the augmented matrix have relative errors that follow
+<span class="math notranslate nohighlight">\(u\sigma_1/\sigma_i\)</span>; the route through <span class="math notranslate nohighlight">\(A^TA\)</span> follows
+<span class="math notranslate nohighlight">\(u(\sigma_1/\sigma_i)^2\)</span> until it has no correct digits left, for
+<span class="math notranslate nohighlight">\(\sigma_i\lesssim10^{-8}\)</span>.</p>
+<figure class="align-default" id="ch02-fig-eig-vs-svd">
+<a class="reference internal image-reference" href="../_images/ch02-eig-vs-svd.png"><img alt="Log-log plot of relative error against singular value. The eigenvalue route through A transpose A follows the steeper dashed line and exceeds 1 below 1e-8; the SVD and augmented-matrix routes follow the dotted line u sigma1 over sigma i." src="../_images/ch02-eig-vs-svd.png" style="width: 70%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2.2 </span><span class="caption-text">Relative errors of singular values computed by <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd</span></code>, by the
+symmetric eigensolver applied to <span class="math notranslate nohighlight">\(C = \begin{bmatrix}0&amp;A^T\\A&amp;0\end{bmatrix}\)</span>,
+and as square roots of the eigenvalues of the computed <span class="math notranslate nohighlight">\(A^TA\)</span>, for a matrix
+with prescribed singular values <span class="math notranslate nohighlight">\(10^0,\dots,10^{-14}\)</span>. The reference values
+are the prescribed ones; rounding errors in forming <span class="math notranslate nohighlight">\(A\)</span> already perturb them
+by about <span class="math notranslate nohighlight">\(u\sigma_1\)</span> in absolute terms.</span><a class="headerlink" href="#ch02-fig-eig-vs-svd" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="low-rank-approximation-and-perturbation-theory">
+<span id="ch02-sec-low-rank"></span><h2><span class="section-number">2.4. </span>Low-rank approximation and perturbation theory<a class="headerlink" href="#low-rank-approximation-and-perturbation-theory" title="Link to this heading">#</a></h2>
+<section id="motivation">
+<h3><span class="section-number">2.4.1. </span>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">#</a></h3>
+<p>A rank-<span class="math notranslate nohighlight">\(k\)</span> matrix <span class="math notranslate nohighlight">\(B = XY^T\)</span> with <span class="math notranslate nohighlight">\(X\in\R^{m\times k}\)</span>, <span class="math notranslate nohighlight">\(Y\in\R^{n\times k}\)</span>
+is stored with <span class="math notranslate nohighlight">\(k(m+n)\)</span> numbers instead of <span class="math notranslate nohighlight">\(mn\)</span> and applied to a vector with
+about <span class="math notranslate nohighlight">\(2k(m+n)\)</span> flops instead of <span class="math notranslate nohighlight">\(2mn\)</span>. Many matrices that arise in practice
+are close to a matrix of low rank: data matrices whose rows are noisy
+observations of a few underlying patterns, discretized smooth kernels,
+images. The question is how close, and which low-rank matrix is closest. The
+truncated SVD answers both.</p>
+<div class="proof definition admonition" id="ch02-def-truncated">
+<p class="admonition-title"><span class="caption-number">Definition 2.2 </span> (Truncated SVD)</p>
+<section class="definition-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(0\le k\le p\)</span>, the <em>truncated SVD</em> of rank <span class="math notranslate nohighlight">\(k\)</span> of <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span> is</p>
+<div class="math notranslate nohighlight" id="equation-ch02-eq-truncated">
+<span class="eqno">(2.4)<a class="headerlink" href="#equation-ch02-eq-truncated" title="Link to this equation">#</a></span>\[
+A_k = \sum_{i=1}^{k}\sigma_iu_iv_i^T = U_k\Sigma_kV_k^T ,\qquad A_0 = 0 .
+\]</div>
+</section>
+</div><p>The error of the truncation is <span class="math notranslate nohighlight">\(A-A_k = \sum_{i=k+1}^{p}\sigma_iu_iv_i^T\)</span>,
+which is itself an outer-product expansion with orthonormal <span class="math notranslate nohighlight">\(u_i\)</span> and <span class="math notranslate nohighlight">\(v_i\)</span>.
+By <a class="reference internal" href="#ch02-thm-norms">Theorem 2.4</a>,</p>
+<div class="math notranslate nohighlight" id="equation-ch02-eq-truncation-error">
+<span class="eqno">(2.5)<a class="headerlink" href="#equation-ch02-eq-truncation-error" title="Link to this equation">#</a></span>\[
+\|A-A_k\|_2 = \sigma_{k+1},\qquad \|A-A_k\|_F = \Big(\sum_{i=k+1}^{p}\sigma_i^2\Big)^{1/2}.
+\]</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The two errors in <a class="reference internal" href="#equation-ch02-eq-truncation-error">(2.5)</a> are different numbers. The
+2-norm error is the first discarded singular value; the Frobenius error is the
+root-sum-of-squares of <em>all</em> discarded singular values, and it can be much
+larger: for <span class="math notranslate nohighlight">\(A = I_n\)</span> and <span class="math notranslate nohighlight">\(k = 0\)</span> it is <span class="math notranslate nohighlight">\(\sqrt n\)</span> times larger. Printing a
+Frobenius-norm error next to <span class="math notranslate nohighlight">\(\sigma_{k+1}\)</span> and expecting them to agree is a
+common mistake.</p>
+</div>
+</section>
+<section id="the-eckart-young-mirsky-theorem">
+<h3><span class="section-number">2.4.2. </span>The Eckart–Young–Mirsky theorem<a class="headerlink" href="#the-eckart-young-mirsky-theorem" title="Link to this heading">#</a></h3>
+<div class="proof theorem admonition" id="ch02-thm-eckart-young">
+<p class="admonition-title"><span class="caption-number">Theorem 2.6 </span> (Eckart–Young–Mirsky)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> and <span class="math notranslate nohighlight">\(0\le k&lt;p\)</span>. For every <span class="math notranslate nohighlight">\(B\in\R^{m\times n}\)</span> with
+<span class="math notranslate nohighlight">\(\rank(B)\le k\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\|A-B\|_2\ge\sigma_{k+1}
+\qquad\text{and}\qquad
+\|A-B\|_F\ge\Big(\sum_{i=k+1}^{p}\sigma_i^2\Big)^{1/2},
+\]</div>
+<p>with equality in both for <span class="math notranslate nohighlight">\(B = A_k\)</span>. Thus <span class="math notranslate nohighlight">\(A_k\)</span> is a best rank-<span class="math notranslate nohighlight">\(k\)</span>
+approximation of <span class="math notranslate nohighlight">\(A\)</span> in both norms.</p>
+</section>
+</div><p>The Frobenius-norm statement is due to <span class="bibtex-citation" id="id5">Eckart and Young [<a class="reference internal" href="../back/bibliography.html#id49" title="Carl Eckart and Gale Young. The approximation of one matrix by another of lower rank. Psychometrika, 1(3):211–218, 1936.">1936</a>]</span>, and
+<span class="bibtex-citation" id="id6">Mirsky [<a class="reference internal" href="../back/bibliography.html#id91" title="L. Mirsky. Symmetric gauge functions and unitarily invariant norms. The Quarterly Journal of Mathematics, 11(1):50–59, 1960.">1960</a>]</span> extended it to every unitarily invariant norm, which
+includes the 2-norm. We prove the 2-norm statement directly and derive the
+Frobenius statement from Weyl’s inequality.</p>
+<div class="proof admonition" id="proof">
+<p>Proof. <em>2-norm.</em> Let <span class="math notranslate nohighlight">\(\rank(B)\le k\)</span>. Then <span class="math notranslate nohighlight">\(\dim\nullsp(B)\ge n-k\)</span>, and
+<span class="math notranslate nohighlight">\(\dim\Span\{v_1,\dots,v_{k+1}\} = k+1\)</span>. Since <span class="math notranslate nohighlight">\((n-k)+(k+1)&gt;n\)</span>, the two
+subspaces intersect nontrivially: there is a unit vector
+<span class="math notranslate nohighlight">\(w = \sum_{i=1}^{k+1}c_iv_i\)</span> with <span class="math notranslate nohighlight">\(Bw = 0\)</span> and <span class="math notranslate nohighlight">\(\sum_ic_i^2 = 1\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\|A-B\|_2^2\ge\|(A-B)w\|_2^2 = \|Aw\|_2^2
+= \Big\|\sum_{i=1}^{k+1}\sigma_ic_iu_i\Big\|_2^2
+= \sum_{i=1}^{k+1}\sigma_i^2c_i^2\ge\sigma_{k+1}^2 .
+\]</div>
+<p>Equality for <span class="math notranslate nohighlight">\(B = A_k\)</span> is <a class="reference internal" href="#equation-ch02-eq-truncation-error">(2.5)</a>.</p>
+</div>
+<p>With the convention <span class="math notranslate nohighlight">\(\sigma_k = 0\)</span> for <span class="math notranslate nohighlight">\(k&gt;p\)</span> the 2-norm statement holds for
+every <span class="math notranslate nohighlight">\(k\ge0\)</span> (for <span class="math notranslate nohighlight">\(k\ge p\)</span>, take <span class="math notranslate nohighlight">\(B = A\)</span>). It can be read as a variational
+characterization of each singular value:</p>
+<div class="math notranslate nohighlight" id="equation-ch02-eq-sigma-distance">
+<span class="eqno">(2.6)<a class="headerlink" href="#equation-ch02-eq-sigma-distance" title="Link to this equation">#</a></span>\[
+\sigma_{k}(A) = \min\{\|A-X\|_2 : \rank(X)\le k-1\},\qquad k\ge1 .
+\]</div>
+<p>In words, <span class="math notranslate nohighlight">\(\sigma_k\)</span> is the 2-norm distance from <span class="math notranslate nohighlight">\(A\)</span> to the set of matrices
+of rank less than <span class="math notranslate nohighlight">\(k\)</span>. For a square matrix, <span class="math notranslate nohighlight">\(\sigma_n\)</span> is the distance to the
+nearest singular matrix.</p>
+<div class="proof theorem admonition" id="ch02-thm-weyl">
+<p class="admonition-title"><span class="caption-number">Theorem 2.7 </span> (Weyl’s inequality for singular values)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A,B\in\R^{m\times n}\)</span> and let <span class="math notranslate nohighlight">\(i,j\ge1\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma_{i+j-1}(A+B)\le\sigma_i(A)+\sigma_j(B) .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Let <span class="math notranslate nohighlight">\(A_{i-1}\)</span> and <span class="math notranslate nohighlight">\(B_{j-1}\)</span> be truncated SVDs of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> as in
+<a class="reference internal" href="#equation-ch02-eq-truncated">(2.4)</a> (with <span class="math notranslate nohighlight">\(A_{i-1} = A\)</span> if <span class="math notranslate nohighlight">\(i-1\ge p\)</span>, and similarly for
+<span class="math notranslate nohighlight">\(B\)</span>). The matrix <span class="math notranslate nohighlight">\(A_{i-1}+B_{j-1}\)</span> has rank at most <span class="math notranslate nohighlight">\(i+j-2\)</span>, so by
+<a class="reference internal" href="#equation-ch02-eq-sigma-distance">(2.6)</a> and the triangle inequality</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\sigma_{i+j-1}(A+B)&amp;\le\|(A+B)-(A_{i-1}+B_{j-1})\|_2\\
+&amp;\le\|A-A_{i-1}\|_2+\|B-B_{j-1}\|_2 = \sigma_i(A)+\sigma_j(B).
+\end{aligned}
+\end{split}\]</div>
+</div>
+<p>The inequality is classical; see <span class="bibtex-citation" id="id7">Horn and Johnson [<a class="reference internal" href="../back/bibliography.html#id6" title="Roger A. Horn and Charles R. Johnson. Matrix Analysis. Cambridge University Press, Cambridge, 2nd edition, 2013.">2013</a>]</span> (Chapter 7) for this and
+related inequalities. With it, the Frobenius part of Eckart–Young–Mirsky
+takes three lines.</p>
+<div class="proof admonition" id="proof">
+<p>Proof. <em>Frobenius norm.</em> Let <span class="math notranslate nohighlight">\(\rank(B)\le k\)</span>, so <span class="math notranslate nohighlight">\(\sigma_{k+1}(B) = 0\)</span>. Apply
+<a class="reference internal" href="#ch02-thm-weyl">Theorem 2.7</a> to the sum <span class="math notranslate nohighlight">\((A-B)+B\)</span> with <span class="math notranslate nohighlight">\(j = k+1\)</span>: for
+<span class="math notranslate nohighlight">\(i = 1,\dots,p-k\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma_{i+k}(A)\le\sigma_i(A-B)+\sigma_{k+1}(B) = \sigma_i(A-B).
+\]</div>
+<p>Squaring and summing, <span class="math notranslate nohighlight">\(\|A-B\|_F^2 = \sum_{i=1}^{p}\sigma_i(A-B)^2\ge
+\sum_{i=1}^{p-k}\sigma_{i+k}(A)^2 = \sum_{i=k+1}^{p}\sigma_i(A)^2\)</span>. Equality
+for <span class="math notranslate nohighlight">\(B = A_k\)</span> is <a class="reference internal" href="#equation-ch02-eq-truncation-error">(2.5)</a>.</p>
+</div>
+<p>The best approximation need not be unique. If <span class="math notranslate nohighlight">\(\sigma_k = \sigma_{k+1}\)</span>, the
+singular vectors, and hence <span class="math notranslate nohighlight">\(A_k\)</span>, are not uniquely determined, and every
+choice gives a best approximation in both norms. In the 2-norm there are
+usually many minimizers even when the singular values are distinct (<a class="reference internal" href="#ch02-ex-eckart-nonunique"><span class="std std-numref">Exercise 2.7</span></a>).</p>
+<div class="proof example admonition" id="ch02-exa-rank-one">
+<p class="admonition-title"><span class="caption-number">Example 2.4 </span> (Best rank-one approximation by hand)</p>
+<section class="example-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(B = \begin{bmatrix}3&amp;0\\4&amp;5\end{bmatrix}\)</span> of
+<a class="reference internal" href="#ch02-exa-svd-by-hand">Example 2.1</a>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+B_1 = \sigma_1u_1v_1^T = 3\sqrt5\cdot\frac{1}{\sqrt{20}}\begin{bmatrix}1\\3\end{bmatrix}\begin{bmatrix}1&amp;1\end{bmatrix}
+= \begin{bmatrix}1.5&amp;1.5\\4.5&amp;4.5\end{bmatrix},
+\qquad
+B-B_1 = \begin{bmatrix}1.5&amp;-1.5\\-0.5&amp;0.5\end{bmatrix}.
+\end{split}\]</div>
+<p>The error <span class="math notranslate nohighlight">\(B-B_1\)</span> has rank one, so its 2-norm and Frobenius norm coincide:
+both equal <span class="math notranslate nohighlight">\((2\cdot1.5^2+2\cdot0.5^2)^{1/2} = \sqrt5 = \sigma_2\)</span>, as
+<a class="reference internal" href="#equation-ch02-eq-truncation-error">(2.5)</a> predicts.</p>
+</section>
+</div></section>
+<section id="perturbation-of-singular-values">
+<h3><span class="section-number">2.4.3. </span>Perturbation of singular values<a class="headerlink" href="#perturbation-of-singular-values" title="Link to this heading">#</a></h3>
+<p>Taking <span class="math notranslate nohighlight">\(j = 1\)</span> in Weyl’s inequality gives the most important perturbation
+result for singular values.</p>
+<div class="proof corollary admonition" id="ch02-cor-perturbation">
+<p class="admonition-title"><span class="caption-number">Corollary 2.1 </span> (Singular values are perfectly conditioned)</p>
+<section class="corollary-content" id="proof-content">
+<p>For all <span class="math notranslate nohighlight">\(A,E\in\R^{m\times n}\)</span> and all <span class="math notranslate nohighlight">\(i\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-ch02-eq-perturbation">
+<span class="eqno">(2.7)<a class="headerlink" href="#equation-ch02-eq-perturbation" title="Link to this equation">#</a></span>\[
+|\sigma_i(A+E)-\sigma_i(A)|\le\|E\|_2 .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <a class="reference internal" href="#ch02-thm-weyl">Theorem 2.7</a> with <span class="math notranslate nohighlight">\(j = 1\)</span> gives
+<span class="math notranslate nohighlight">\(\sigma_i(A+E)\le\sigma_i(A)+\sigma_1(E)\)</span>, and applied to
+<span class="math notranslate nohighlight">\(A = (A+E)+(-E)\)</span> it gives <span class="math notranslate nohighlight">\(\sigma_i(A)\le\sigma_i(A+E)+\sigma_1(E)\)</span>. Recall
+<span class="math notranslate nohighlight">\(\sigma_1(E) = \|E\|_2\)</span>.</p>
+</div>
+<p>The bound is attained, for instance by <span class="math notranslate nohighlight">\(E = \epsilon u_1v_1^T\)</span> with
+<span class="math notranslate nohighlight">\(\epsilon&gt;0\)</span>, which increases <span class="math notranslate nohighlight">\(\sigma_1\)</span> by exactly <span class="math notranslate nohighlight">\(\epsilon\)</span>. There is also
+a Frobenius-norm version, due to <span class="bibtex-citation" id="id8">Mirsky [<a class="reference internal" href="../back/bibliography.html#id91" title="L. Mirsky. Symmetric gauge functions and unitarily invariant norms. The Quarterly Journal of Mathematics, 11(1):50–59, 1960.">1960</a>]</span>:
+<span class="math notranslate nohighlight">\(\big(\sum_i(\sigma_i(A+E)-\sigma_i(A))^2\big)^{1/2}\le\|E\|_F\)</span>.</p>
+<p>In the language of <a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>, the absolute condition number
+of each singular value, as a function of <span class="math notranslate nohighlight">\(A\)</span> in the 2-norm, is <span class="math notranslate nohighlight">\(1\)</span>. Nothing
+like this holds for eigenvalues of nonsymmetric matrices: the eigenvalues of
+<span class="math notranslate nohighlight">\(\begin{bmatrix}0&amp;1\\ \epsilon&amp;0\end{bmatrix}\)</span> are <span class="math notranslate nohighlight">\(\pm\sqrt\epsilon\)</span>, so a
+perturbation of size <span class="math notranslate nohighlight">\(10^{-16}\)</span> moves them by <span class="math notranslate nohighlight">\(10^{-8}\)</span>
+(<a class="reference internal" href="../ch09-eigenvalues/notes.html#ch09"><span class="std std-numref">Chapter 9</span></a>). Combined with backward stability, the
+corollary says that a computed singular value <span class="math notranslate nohighlight">\(\widehat\sigma_i\)</span> satisfies
+<span class="math notranslate nohighlight">\(|\widehat\sigma_i-\sigma_i|\lesssim c\,u\,\sigma_1\)</span> for a modest constant <span class="math notranslate nohighlight">\(c\)</span>.
+This is excellent absolute accuracy, but the <em>relative</em> accuracy of a small
+singular value is only about <span class="math notranslate nohighlight">\(u\sigma_1/\sigma_i\)</span>: singular values much
+smaller than <span class="math notranslate nohighlight">\(u\sigma_1\)</span> are not determined by the data at all.</p>
+</section>
+<section id="numerical-rank">
+<h3><span class="section-number">2.4.4. </span>Numerical rank<a class="headerlink" href="#numerical-rank" title="Link to this heading">#</a></h3>
+<p>In exact arithmetic the rank of <span class="math notranslate nohighlight">\(A\)</span> is the number of nonzero singular values.
+In floating point this definition is useless. A matrix of exact rank <span class="math notranslate nohighlight">\(r\)</span>,
+stored with rounding errors of size <span class="math notranslate nohighlight">\(u\|A\|_2\)</span>, generically has full rank,
+and by <a class="reference internal" href="#equation-ch02-eq-perturbation">(2.7)</a> its trailing singular values are merely
+<em>small</em>, of order <span class="math notranslate nohighlight">\(u\sigma_1\)</span>. The meaningful question is how many singular
+values are larger than the uncertainty in the data.</p>
+<div class="proof definition admonition" id="ch02-def-numerical-rank">
+<p class="admonition-title"><span class="caption-number">Definition 2.3 </span> (Numerical rank)</p>
+<section class="definition-content" id="proof-content">
+<p>For a tolerance <span class="math notranslate nohighlight">\(\tau\ge0\)</span>, the <em>numerical rank</em> of <span class="math notranslate nohighlight">\(A\)</span> is
+<span class="math notranslate nohighlight">\(\rank_\tau(A) = \#\{i : \sigma_i(A)&gt;\tau\}\)</span>.</p>
+</section>
+</div><div class="proof proposition admonition" id="ch02-prop-numerical-rank">
+<p class="admonition-title"><span class="caption-number">Proposition 2.2 </span> (Characterizations of the numerical rank)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> and <span class="math notranslate nohighlight">\(\tau\ge0\)</span>.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\rank_\tau(A) = \min\{\rank(B) : \|A-B\|_2\le\tau\}\)</span>.</p></li>
+<li><p>Suppose <span class="math notranslate nohighlight">\(A = \widehat A+E\)</span> where <span class="math notranslate nohighlight">\(\rank(\widehat A) = r\)</span> and
+<span class="math notranslate nohighlight">\(\|E\|_2\le\eta\)</span>. If <span class="math notranslate nohighlight">\(\tau\ge\eta\)</span> and <span class="math notranslate nohighlight">\(\sigma_r(\widehat A)&gt;\tau+\eta\)</span>,
+then <span class="math notranslate nohighlight">\(\rank_\tau(A) = r\)</span>.</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1) Let <span class="math notranslate nohighlight">\(k = \rank_\tau(A)\)</span>. Then <span class="math notranslate nohighlight">\(\|A-A_k\|_2 = \sigma_{k+1}\le\tau\)</span>, so the
+minimum is at most <span class="math notranslate nohighlight">\(k\)</span>. If <span class="math notranslate nohighlight">\(\rank(B)\le k-1\)</span>, then
+<span class="math notranslate nohighlight">\(\|A-B\|_2\ge\sigma_k&gt;\tau\)</span> by <a class="reference internal" href="#ch02-thm-eckart-young">Theorem 2.6</a>, so the
+minimum is at least <span class="math notranslate nohighlight">\(k\)</span>.
+(2) By <a class="reference internal" href="#ch02-cor-perturbation">Corollary 2.1</a>, <span class="math notranslate nohighlight">\(\sigma_i(A)\le\sigma_i(\widehat A)+\eta
+= \eta\le\tau\)</span> for <span class="math notranslate nohighlight">\(i&gt;r\)</span>, and
+<span class="math notranslate nohighlight">\(\sigma_r(A)\ge\sigma_r(\widehat A)-\eta&gt;\tau\)</span>.</p>
+</div>
+<p>Part (2) says that the numerical rank recovers the rank of an unknown
+underlying matrix when the tolerance exceeds the noise level and the gap
+between <span class="math notranslate nohighlight">\(\sigma_r\)</span> and <span class="math notranslate nohighlight">\(\sigma_{r+1}\)</span> is wide enough. <code class="docutils literal notranslate"><span class="pre">numpy.linalg.matrix_rank</span></code>
+uses <span class="math notranslate nohighlight">\(\tau = \max(m,n)\,\epsmach\,\sigma_1\)</span> by default, which is appropriate
+when the only errors are rounding errors in a matrix known to working
+precision. For measured data the tolerance should reflect the measurement
+error. When the singular values decay gradually, with no gap, every choice of
+<span class="math notranslate nohighlight">\(\tau\)</span> is a modeling decision rather than a numerical one
+<span class="bibtex-citation" id="id9">[<a class="reference internal" href="../back/bibliography.html#id13" title="Per Christian Hansen. Rank-Deficient and Discrete Ill-Posed Problems: Numerical Aspects of Linear Inversion. SIAM, Philadelphia, 1998.">Hansen, 1998</a>]</span>.</p>
+<div class="proof example admonition" id="ch02-exa-noisy-low-rank">
+<p class="admonition-title"><span class="caption-number">Example 2.5 </span> (A rank-8 matrix plus noise)</p>
+<section class="example-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(\widehat A = LR\)</span> where <span class="math notranslate nohighlight">\(L\in\R^{60\times8}\)</span> and <span class="math notranslate nohighlight">\(R\in\R^{8\times60}\)</span> have
+independent standard normal entries, and <span class="math notranslate nohighlight">\(A = \widehat A+0.05\,E\)</span> with <span class="math notranslate nohighlight">\(E\)</span> a
+standard normal <span class="math notranslate nohighlight">\(60\times60\)</span> matrix (generator <code class="docutils literal notranslate"><span class="pre">default_rng(11)</span></code>, as in
+the figure script). The computed singular values
+(<a class="reference internal" href="#ch02-fig-low-rank"><span class="std std-numref">Figure 2.3</span></a>) have a clear gap: <span class="math notranslate nohighlight">\(\sigma_8\approx36.3\)</span> and
+<span class="math notranslate nohighlight">\(\sigma_9\approx0.650\)</span>. The noise has <span class="math notranslate nohighlight">\(\|0.05E\|_2\approx0.719\)</span>, and indeed
+<span class="math notranslate nohighlight">\(\sigma_9(A)\le\sigma_9(\widehat A)+\|0.05E\|_2 = 0.719\)</span> by
+<a class="reference internal" href="#ch02-cor-perturbation">Corollary 2.1</a>. Any tolerance between about <span class="math notranslate nohighlight">\(0.72\)</span> and
+<span class="math notranslate nohighlight">\(36\)</span> gives numerical rank <span class="math notranslate nohighlight">\(8\)</span>. The best rank-8 approximation has relative
+error <span class="math notranslate nohighlight">\(\|A-A_8\|_F/\|A\|_F\approx0.0152\)</span> and is stored with
+<span class="math notranslate nohighlight">\(8(60+60+1) = 968\)</span> numbers instead of <span class="math notranslate nohighlight">\(3600\)</span>.</p>
+</section>
+</div><figure class="align-default" id="ch02-fig-low-rank">
+<a class="reference internal image-reference" href="../_images/ch02-low-rank.png"><img alt="Left, singular values of the noisy rank-8 matrix with a large gap after the eighth. Right, computed 2-norm and Frobenius errors of the truncated SVD, which lie exactly on the curves sigma k plus 1 and the square root of the tail sum." src="../_images/ch02-low-rank.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2.3 </span><span class="caption-text">Left: singular values of the matrix of <a class="reference internal" href="#ch02-exa-noisy-low-rank">Example 2.5</a>.
+Right: the errors <span class="math notranslate nohighlight">\(\|A-A_k\|_2\)</span> and <span class="math notranslate nohighlight">\(\|A-A_k\|_F\)</span> computed from the actual
+differences <span class="math notranslate nohighlight">\(A-A_k\)</span> (markers), compared with <span class="math notranslate nohighlight">\(\sigma_{k+1}\)</span> and
+<span class="math notranslate nohighlight">\((\sum_{i&gt;k}\sigma_i^2)^{1/2}\)</span> (lines).</span><a class="headerlink" href="#ch02-fig-low-rank" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="computing-a-low-rank-approximation">
+<h3><span class="section-number">2.4.5. </span>Computing a low-rank approximation<a class="headerlink" href="#computing-a-low-rank-approximation" title="Link to this heading">#</a></h3>
+<div class="proof algorithm admonition" id="ch02-alg-truncated">
+<p class="admonition-title"><span class="caption-number">Algorithm 2.1 </span> (Best rank-<span class="math notranslate nohighlight">\(k\)</span> approximation by the truncated SVD)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> with <span class="math notranslate nohighlight">\(m\ge n\)</span>, a target rank <span class="math notranslate nohighlight">\(k\le n\)</span> (or a
+tolerance <span class="math notranslate nohighlight">\(\tau\)</span>).</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(U_k\in\R^{m\times k}\)</span>, <span class="math notranslate nohighlight">\(\sigma_1,\dots,\sigma_k\)</span>,
+<span class="math notranslate nohighlight">\(V_k\in\R^{n\times k}\)</span> with <span class="math notranslate nohighlight">\(A_k = U_k\Sigma_kV_k^T\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Compute the thin SVD <span class="math notranslate nohighlight">\(A = U_n\Sigma_nV^T\)</span>.</p></li>
+<li><p>If a tolerance is given, set <span class="math notranslate nohighlight">\(k\leftarrow\rank_\tau(A)\)</span>.</p></li>
+<li><p>Return the first <span class="math notranslate nohighlight">\(k\)</span> columns of <span class="math notranslate nohighlight">\(U_n\)</span> and <span class="math notranslate nohighlight">\(V\)</span> and the first <span class="math notranslate nohighlight">\(k\)</span> singular
+values.</p></li>
+<li><p>(Optional) Report <span class="math notranslate nohighlight">\(\|A-A_k\|_2 = \sigma_{k+1}\)</span> and
+<span class="math notranslate nohighlight">\(\|A-A_k\|_F = (\sum_{i&gt;k}\sigma_i^2)^{1/2}\)</span>.</p></li>
+</ol>
+</section>
+</div><p><em>Cost.</em> Step 1 costs <span class="math notranslate nohighlight">\(\bigO(mn^2)\)</span> flops; the first stage of standard
+algorithms, reduction to bidiagonal form, alone takes about
+<span class="math notranslate nohighlight">\(4mn^2-\tfrac43n^3\)</span> flops <span class="bibtex-citation" id="id10">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span> (Lecture 31), and the
+details are in <a class="reference internal" href="../ch10-qr-algorithm/notes.html#ch10"><span class="std std-numref">Chapter 10</span></a>. Storing the result takes
+<span class="math notranslate nohighlight">\(k(m+n+1)\)</span> numbers, and forming <span class="math notranslate nohighlight">\(A_k\)</span> explicitly, if needed, another <span class="math notranslate nohighlight">\(2mnk\)</span>
+flops. When only <span class="math notranslate nohighlight">\(k\ll n\)</span> singular triplets are wanted, randomized methods
+(<a class="reference internal" href="../ch12-randomized/notes.html#ch12"><span class="std std-numref">Chapter 12</span></a>) and Krylov methods (<a class="reference internal" href="../ch11-krylov/notes.html#ch11"><span class="std std-numref">Chapter 11</span></a>)
+need only <span class="math notranslate nohighlight">\(\bigO(mnk)\)</span> flops or a modest number of products with <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<p><em>Stability.</em> A backward stable SVD returns (up to a departure from
+orthogonality of order <span class="math notranslate nohighlight">\(u\)</span> in the computed factors) the exact truncated SVD
+<span class="math notranslate nohighlight">\(\widetilde A_k\)</span> of a matrix <span class="math notranslate nohighlight">\(\widetilde A = A+E\)</span> with <span class="math notranslate nohighlight">\(\|E\|_2 = \bigO(u\|A\|_2)\)</span>.
+By the triangle inequality and <a class="reference internal" href="#ch02-cor-perturbation">Corollary 2.1</a>,</p>
+<div class="math notranslate nohighlight">
+\[
+\|A-\widetilde A_k\|_2\le\|\widetilde A-\widetilde A_k\|_2+\|E\|_2
+= \sigma_{k+1}(\widetilde A)+\|E\|_2\le\sigma_{k+1}(A)+2\|E\|_2 ,
+\]</div>
+<p>so the computed approximation is optimal up to an additive term of order
+<span class="math notranslate nohighlight">\(u\sigma_1\)</span>. In the lab we verify this by computing the errors from the
+actual differences <span class="math notranslate nohighlight">\(A-A_k\)</span> rather than assuming Eckart–Young.</p>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>A matrix <span class="math notranslate nohighlight">\(A\in\R^{100\times100}\)</span> has singular values <span class="math notranslate nohighlight">\(\sigma_i = 2^{-i}\)</span>. What
+are <span class="math notranslate nohighlight">\(\|A-A_{10}\|_2\)</span> and <span class="math notranslate nohighlight">\(\|A-A_{10}\|_F\)</span>, and what is the smallest <span class="math notranslate nohighlight">\(k\)</span> with
+<span class="math notranslate nohighlight">\(\|A-A_k\|_2\le10^{-6}\)</span>?</p>
+<p><em>Answer.</em> <span class="math notranslate nohighlight">\(\|A-A_{10}\|_2 = \sigma_{11} = 2^{-11}\approx4.9\times10^{-4}\)</span> and
+<span class="math notranslate nohighlight">\(\|A-A_{10}\|_F = (\sum_{i=11}^{100}4^{-i})^{1/2}\approx2^{-11}/\sqrt{1-1/4}
+\approx5.6\times10^{-4}\)</span>. We need <span class="math notranslate nohighlight">\(2^{-(k+1)}\le10^{-6}\)</span>, that is,
+<span class="math notranslate nohighlight">\(k+1\ge20\)</span> (since <span class="math notranslate nohighlight">\(2^{-20}\approx9.5\times10^{-7}\)</span>), so <span class="math notranslate nohighlight">\(k = 19\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="the-pseudoinverse-and-minimum-norm-least-squares">
+<span id="ch02-sec-pseudoinverse"></span><h2><span class="section-number">2.5. </span>The pseudoinverse and minimum-norm least squares<a class="headerlink" href="#the-pseudoinverse-and-minimum-norm-least-squares" title="Link to this heading">#</a></h2>
+<section id="definition">
+<h3><span class="section-number">2.5.1. </span>Definition<a class="headerlink" href="#definition" title="Link to this heading">#</a></h3>
+<p>A rectangular or singular matrix has no inverse, but it has a unique
+“best substitute”, characterized by four algebraic conditions.</p>
+<div class="proof definition admonition" id="ch02-def-pseudoinverse">
+<p class="admonition-title"><span class="caption-number">Definition 2.4 </span> (Moore–Penrose pseudoinverse)</p>
+<section class="definition-content" id="proof-content">
+<p>A matrix <span class="math notranslate nohighlight">\(X\in\R^{n\times m}\)</span> is the <em>pseudoinverse</em> of <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>,
+written <span class="math notranslate nohighlight">\(X = A^+\)</span>, if it satisfies the four <em>Penrose conditions</em></p>
+<div class="math notranslate nohighlight" id="equation-ch02-eq-penrose">
+<span class="eqno">(2.8)<a class="headerlink" href="#equation-ch02-eq-penrose" title="Link to this equation">#</a></span>\[
+\text{(i)}\ AXA = A,\qquad \text{(ii)}\ XAX = X,\qquad
+\text{(iii)}\ (AX)^T = AX,\qquad \text{(iv)}\ (XA)^T = XA .
+\]</div>
+</section>
+</div><div class="proof theorem admonition" id="ch02-thm-pseudoinverse">
+<p class="admonition-title"><span class="caption-number">Theorem 2.8 </span> (Existence, uniqueness, and SVD formula)</p>
+<section class="theorem-content" id="proof-content">
+<p>Every <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> has exactly one pseudoinverse. If
+<span class="math notranslate nohighlight">\(A = U_r\Sigma_rV_r^T\)</span> is a compact SVD, then</p>
+<div class="math notranslate nohighlight" id="equation-ch02-eq-pinv-svd">
+<span class="eqno">(2.9)<a class="headerlink" href="#equation-ch02-eq-pinv-svd" title="Link to this equation">#</a></span>\[
+A^+ = V_r\Sigma_r^{-1}U_r^T = \sum_{i=1}^{r}\frac{1}{\sigma_i}v_iu_i^T .
+\]</div>
+<p>Equivalently <span class="math notranslate nohighlight">\(A^+ = V\Sigma^+U^T\)</span>, where
+<span class="math notranslate nohighlight">\(\Sigma^+ = \diag(1/\sigma_1,\dots,1/\sigma_r,0,\dots,0)\in\R^{n\times m}\)</span>.
+Moreover <span class="math notranslate nohighlight">\(AA^+ = U_rU_r^T\)</span> is the orthogonal projector onto <span class="math notranslate nohighlight">\(\range(A)\)</span> and
+<span class="math notranslate nohighlight">\(A^+A = V_rV_r^T\)</span> is the orthogonal projector onto <span class="math notranslate nohighlight">\(\range(A^T)\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <em>Existence.</em> Let <span class="math notranslate nohighlight">\(X = V_r\Sigma_r^{-1}U_r^T\)</span>. Using <span class="math notranslate nohighlight">\(U_r^TU_r = V_r^TV_r = I_r\)</span>,
+we get</p>
+<div class="math notranslate nohighlight">
+\[
+AX = U_r\Sigma_rV_r^TV_r\Sigma_r^{-1}U_r^T = U_rU_r^T,\qquad XA = V_rV_r^T,
+\]</div>
+<p>both symmetric, which gives (iii) and (iv). Then
+<span class="math notranslate nohighlight">\(AXA = U_rU_r^TU_r\Sigma_rV_r^T = A\)</span> and <span class="math notranslate nohighlight">\(XAX = V_rV_r^TV_r\Sigma_r^{-1}U_r^T = X\)</span>.
+The matrices <span class="math notranslate nohighlight">\(U_rU_r^T\)</span> and <span class="math notranslate nohighlight">\(V_rV_r^T\)</span> are symmetric and idempotent with ranges
+<span class="math notranslate nohighlight">\(\range(A)\)</span> and <span class="math notranslate nohighlight">\(\range(A^T)\)</span> (<a class="reference internal" href="#ch02-thm-subspaces">Theorem 2.3</a>), so they are the
+orthogonal projectors onto these subspaces.</p>
+<p><em>Uniqueness.</em> Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> both satisfy <a class="reference internal" href="#equation-ch02-eq-penrose">(2.8)</a>. Using (ii),
+(iii) for <span class="math notranslate nohighlight">\(X\)</span>, (i) for <span class="math notranslate nohighlight">\(Y\)</span> and then (iii) for <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+X = XAX = X(AX)^T = XX^TA^T = XX^TA^TY^TA^T = X(AX)^T(AY)^T = XAXAY = XAY .
+\]</div>
+<p>Symmetrically, using (ii), (iv) for <span class="math notranslate nohighlight">\(Y\)</span>, (i) for <span class="math notranslate nohighlight">\(X\)</span>, and (iv) for <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+Y = YAY = (YA)^TY = A^TY^TY = A^TX^TA^TY^TY = (XA)^T(YA)^TY = XAYAY = XAY .
+\]</div>
+<p>Hence <span class="math notranslate nohighlight">\(X = Y\)</span>.</p>
+</div>
+<p>The four conditions are due to <span class="bibtex-citation" id="id11">Penrose [<a class="reference internal" href="../back/bibliography.html#id90" title="R. Penrose. A generalized inverse for matrices. Mathematical Proceedings of the Cambridge Philosophical Society, 51(3):406–413, 1955.">1955</a>]</span>. Two special cases are
+worth remembering. If <span class="math notranslate nohighlight">\(A\)</span> is square and nonsingular, <span class="math notranslate nohighlight">\(A^+ = A^{-1}\)</span>. If <span class="math notranslate nohighlight">\(A\)</span>
+has full column rank, <span class="math notranslate nohighlight">\(A^+ = (A^TA)^{-1}A^T\)</span>, which one checks against
+<a class="reference internal" href="#equation-ch02-eq-penrose">(2.8)</a> or derives from <a class="reference internal" href="#equation-ch02-eq-pinv-svd">(2.9)</a>. The second
+formula is useful in theory but, for the reasons of
+<a class="reference internal" href="#ch02-sec-eigen"><span class="std std-numref">Section 2.3</span></a>, it should not be used to compute <span class="math notranslate nohighlight">\(A^+\)</span>.</p>
+<div class="proof example admonition" id="ch02-exa-pinv-rank-one">
+<p class="admonition-title"><span class="caption-number">Example 2.6 </span> (Pseudoinverse of a rank-one matrix)</p>
+<section class="example-content" id="proof-content">
+<p>The matrix <span class="math notranslate nohighlight">\(A = \begin{bmatrix}1&amp;2\\2&amp;4\end{bmatrix} = ww^T\)</span> with
+<span class="math notranslate nohighlight">\(w = (1,2)^T\)</span> has the compact SVD <span class="math notranslate nohighlight">\(A = 5\,qq^T\)</span> with <span class="math notranslate nohighlight">\(q = w/\sqrt5\)</span>. By
+<a class="reference internal" href="#equation-ch02-eq-pinv-svd">(2.9)</a>, <span class="math notranslate nohighlight">\(A^+ = \tfrac15qq^T = \tfrac1{25}A\)</span>. One verifies
+<span class="math notranslate nohighlight">\(AA^+ = \tfrac1{25}A^2 = \tfrac{5}{25}A = qq^T\)</span>, the projector onto
+<span class="math notranslate nohighlight">\(\Span\{w\}\)</span>.</p>
+</section>
+</div></section>
+<section id="minimum-norm-least-squares">
+<h3><span class="section-number">2.5.2. </span>Minimum-norm least squares<a class="headerlink" href="#minimum-norm-least-squares" title="Link to this heading">#</a></h3>
+<p>For <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> and <span class="math notranslate nohighlight">\(b\in\R^m\)</span> the least-squares problem asks for
+<span class="math notranslate nohighlight">\(x\)</span> minimizing <span class="math notranslate nohighlight">\(\|Ax-b\|_2\)</span>. <a class="reference internal" href="../ch08-least-squares/notes.html#ch08"><span class="std std-numref">Chapter 8</span></a> studies algorithms for
+it; here we use the SVD to describe all its solutions.</p>
+<div class="proof theorem admonition" id="ch02-thm-min-norm">
+<p class="admonition-title"><span class="caption-number">Theorem 2.9 </span> (Minimum-norm least-squares solution)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span> have rank <span class="math notranslate nohighlight">\(r\)</span> and let <span class="math notranslate nohighlight">\(b\in\R^m\)</span>. The vectors that
+minimize <span class="math notranslate nohighlight">\(\|Ax-b\|_2\)</span> are exactly</p>
+<div class="math notranslate nohighlight">
+\[
+x = \sum_{i=1}^{r}\frac{u_i^Tb}{\sigma_i}v_i+\sum_{i=r+1}^{n}c_iv_i,\qquad c_{r+1},\dots,c_n\in\R,
+\]</div>
+<p>the minimum residual is <span class="math notranslate nohighlight">\(\big(\sum_{i&gt;r}(u_i^Tb)^2\big)^{1/2}\)</span>, and among all
+minimizers the unique one of smallest 2-norm is <span class="math notranslate nohighlight">\(x^+ = A^+b\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Put <span class="math notranslate nohighlight">\(y = V^Tx\)</span> and <span class="math notranslate nohighlight">\(\beta = U^Tb\)</span>. By unitary invariance,</p>
+<div class="math notranslate nohighlight">
+\[
+\|Ax-b\|_2^2 = \|U^T(AVy-b)\|_2^2 = \|\Sigma y-\beta\|_2^2
+= \sum_{i=1}^{r}(\sigma_iy_i-\beta_i)^2+\sum_{i=r+1}^{m}\beta_i^2 .
+\]</div>
+<p>The second sum does not depend on <span class="math notranslate nohighlight">\(y\)</span>, and the first is minimized, with value
+<span class="math notranslate nohighlight">\(0\)</span>, exactly when <span class="math notranslate nohighlight">\(y_i = \beta_i/\sigma_i\)</span> for <span class="math notranslate nohighlight">\(i\le r\)</span>; the components
+<span class="math notranslate nohighlight">\(y_{r+1},\dots,y_n\)</span> are free. Since <span class="math notranslate nohighlight">\(\|x\|_2 = \|y\|_2\)</span>, the minimizer of
+smallest norm has <span class="math notranslate nohighlight">\(y_i = 0\)</span> for <span class="math notranslate nohighlight">\(i&gt;r\)</span>, which is
+<span class="math notranslate nohighlight">\(x = \sum_{i\le r}(\beta_i/\sigma_i)v_i = V_r\Sigma_r^{-1}U_r^Tb = A^+b\)</span>.</p>
+</div>
+<p>For the rank-one matrix of <a class="reference internal" href="#ch02-exa-pinv-rank-one">Example 2.6</a> and
+<span class="math notranslate nohighlight">\(b = (1,0)^T\)</span>, the minimizers are all <span class="math notranslate nohighlight">\(x\)</span> with <span class="math notranslate nohighlight">\(x_1+2x_2 = 1/5\)</span>, and the
+minimum-norm solution is <span class="math notranslate nohighlight">\(x^+ = A^+b = (1,2)^T/25\)</span>. The residual
+<span class="math notranslate nohighlight">\(b-Ax^+ = (0.8,-0.4)^T\)</span> is orthogonal to <span class="math notranslate nohighlight">\(\range(A) = \Span\{(1,2)^T\}\)</span>, as it
+must be.</p>
+</section>
+<section id="the-pseudoinverse-is-not-continuous">
+<h3><span class="section-number">2.5.3. </span>The pseudoinverse is not continuous<a class="headerlink" href="#the-pseudoinverse-is-not-continuous" title="Link to this heading">#</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The pseudoinverse does not depend continuously on <span class="math notranslate nohighlight">\(A\)</span>. For
+<span class="math notranslate nohighlight">\(A_\epsilon = \diag(1,\epsilon)\)</span> we have <span class="math notranslate nohighlight">\(A_\epsilon^+ = \diag(1,1/\epsilon)\)</span>
+for <span class="math notranslate nohighlight">\(\epsilon\neq0\)</span>, which blows up as <span class="math notranslate nohighlight">\(\epsilon\to0\)</span>, while
+<span class="math notranslate nohighlight">\(A_0^+ = \diag(1,0)\)</span>. In floating point, a matrix that “should” have rank <span class="math notranslate nohighlight">\(r\)</span>
+usually has tiny but nonzero singular values <span class="math notranslate nohighlight">\(\sigma_{r+1},\dots\)</span>, and
+<a class="reference internal" href="#equation-ch02-eq-pinv-svd">(2.9)</a> divides by them. The remedy is to decide on a
+numerical rank first and apply <a class="reference internal" href="#equation-ch02-eq-pinv-svd">(2.9)</a> to the truncated SVD
+<span class="math notranslate nohighlight">\(A_k\)</span>. <code class="docutils literal notranslate"><span class="pre">numpy.linalg.pinv</span></code> does this with a default relative cutoff of
+<span class="math notranslate nohighlight">\(10^{-15}\sigma_1\)</span> (parameter <code class="docutils literal notranslate"><span class="pre">rcond</span></code>), which only discards singular values
+at the level of rounding errors; for noisy data a larger cutoff is usually
+needed. The resulting <em>truncated SVD solution</em> <span class="math notranslate nohighlight">\(A_k^+b\)</span> is a basic
+regularization method for ill-posed problems <span class="bibtex-citation" id="id12">[<a class="reference internal" href="../back/bibliography.html#id13" title="Per Christian Hansen. Rank-Deficient and Discrete Ill-Posed Problems: Numerical Aspects of Linear Inversion. SIAM, Philadelphia, 1998.">Hansen, 1998</a>]</span>.</p>
+</div>
+</section>
+</section>
+<section id="computing-the-svd-in-practice">
+<span id="ch02-sec-computing"></span><h2><span class="section-number">2.6. </span>Computing the SVD in practice<a class="headerlink" href="#computing-the-svd-in-practice" title="Link to this heading">#</a></h2>
+<p>We close with what happens when you call <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd</span></code>. Details of the
+algorithms are in <a class="reference internal" href="../ch10-qr-algorithm/notes.html#ch10"><span class="std std-numref">Chapter 10</span></a>.</p>
+<p><em>The standard approach</em> has two stages. First, Householder reflectors applied
+alternately from the left and the right reduce <span class="math notranslate nohighlight">\(A\)</span> to an upper bidiagonal
+matrix <span class="math notranslate nohighlight">\(B = Q_1^TAQ_2\)</span> with the same singular values, as proposed by
+<span class="bibtex-citation" id="id13">Golub and Kahan [<a class="reference internal" href="../back/bibliography.html#id50" title="G. Golub and W. Kahan. Calculating the singular values and pseudo-inverse of a matrix. Journal of the Society for Industrial and Applied Mathematics, Series B: Numerical Analysis, 2(2):205–224, 1965.">1965</a>]</span>. Second, the SVD of the bidiagonal matrix is computed
+iteratively. The classical choice for the second stage is an implicitly
+shifted QR iteration, the Golub–Kahan–Reinsch algorithm
+<span class="bibtex-citation" id="id14">[<a class="reference internal" href="../back/bibliography.html#id51" title="G. H. Golub and C. Reinsch. Singular value decomposition and least squares solutions. Numerische Mathematik, 14(5):403–420, 1970.">Golub and Reinsch, 1970</a>]</span>, implemented in LAPACK’s <code class="docutils literal notranslate"><span class="pre">gesvd</span></code>. A newer choice is a
+divide-and-conquer method <span class="bibtex-citation" id="id15">[<a class="reference internal" href="../back/bibliography.html#id92" title="Ming Gu and Stanley C. Eisenstat. A divide-and-conquer algorithm for the bidiagonal SVD. SIAM Journal on Matrix Analysis and Applications, 16(1):79–92, 1995.">Gu and Eisenstat, 1995</a>]</span>, implemented in LAPACK’s <code class="docutils literal notranslate"><span class="pre">gesdd</span></code>,
+which is usually faster when singular vectors are wanted
+<span class="bibtex-citation" id="id16">[<a class="reference internal" href="../back/bibliography.html#id24" title="E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen. LAPACK Users' Guide. SIAM, Philadelphia, 3rd edition, 1999.">Anderson <em>et al.</em>, 1999</a>]</span>. Neither stage forms <span class="math notranslate nohighlight">\(A^TA\)</span>.</p>
+<p><em>NumPy and SciPy.</em> <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd</span></code> calls LAPACK’s <code class="docutils literal notranslate"><span class="pre">gesdd</span></code>
+(divide-and-conquer); it has no option to choose another driver.
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.svd</span></code> also defaults to <code class="docutils literal notranslate"><span class="pre">gesdd</span></code> and accepts
+<code class="docutils literal notranslate"><span class="pre">lapack_driver='gesvd'</span></code>. Both drivers are backward stable: the computed
+singular values are the exact singular values of <span class="math notranslate nohighlight">\(A+E\)</span> with
+<span class="math notranslate nohighlight">\(\|E\|_2 = \bigO(u\|A\|_2)\)</span> <span class="bibtex-citation" id="id17">[<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">Golub and Van Loan, 2013</a>]</span> (Section 8.6), which is what
+the arguments of <a class="reference internal" href="#ch02-sec-low-rank"><span class="std std-numref">Section 2.4</span></a> require.</p>
+<p><em>Cost.</em> For <span class="math notranslate nohighlight">\(m\ge n\)</span> the cost is <span class="math notranslate nohighlight">\(\bigO(mn^2)\)</span> flops, and the constant
+depends on which factors are requested: singular values alone are much
+cheaper than the full <span class="math notranslate nohighlight">\(U\)</span>. <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd(A,</span> <span class="pre">compute_uv=False)</span></code> computes
+only the singular values, and <code class="docutils literal notranslate"><span class="pre">numpy.linalg.norm(A,</span> <span class="pre">2)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.cond(A)</span></code> call it internally.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some older course materials and web pages state that NumPy computes the SVD
+with the Golub–Reinsch algorithm. It does not: <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd</span></code> calls the
+divide-and-conquer driver <code class="docutils literal notranslate"><span class="pre">gesdd</span></code>. The distinction is rarely important for
+accuracy, but it matters when comparing run times and on the rare occasions
+when <code class="docutils literal notranslate"><span class="pre">gesdd</span></code> reports a convergence failure, in which case
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.svd</span></code> with <code class="docutils literal notranslate"><span class="pre">lapack_driver='gesvd'</span></code> offers an alternative.</p>
+</div>
+<p><em>Large and sparse matrices.</em> When <span class="math notranslate nohighlight">\(A\)</span> is too large for a dense SVD, or when
+only a few singular triplets are needed, one uses iterative methods that
+access <span class="math notranslate nohighlight">\(A\)</span> only through products <span class="math notranslate nohighlight">\(Ax\)</span> and <span class="math notranslate nohighlight">\(A^Ty\)</span>, such as
+<code class="docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds</span></code>, or randomized methods <span class="bibtex-citation" id="id18">[<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">Halko <em>et al.</em>, 2011</a>]</span>.
+<a class="reference internal" href="../ch11-krylov/notes.html#ch11"><span class="std std-numref">Chapter 11</span></a> develops the Krylov subspace processes (Arnoldi
+and Lanczos) on which such iterative methods are built, and
+<a class="reference internal" href="../ch12-randomized/notes.html#ch12"><span class="std std-numref">Chapter 12</span></a> treats randomized low-rank approximation.</p>
+</section>
+<section id="computational-laboratory">
+<h2><span class="section-number">2.7. </span>Computational laboratory<a class="headerlink" href="#computational-laboratory" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="lab.html"><span class="std std-doc">The lab notebook for this chapter</span></a> computes full, thin and
+compact SVDs with NumPy, verifies orthogonality and the reconstruction
+<span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span> against tolerances derived from backward stability, checks
+the hand computation of <a class="reference internal" href="#ch02-exa-svd-by-hand">Example 2.1</a> up to signs, and
+draws the image of the unit circle. It extracts bases of the four fundamental
+subspaces, confirms the norm formulas of <a class="reference internal" href="#ch02-thm-norms">Theorem 2.4</a> and the
+eigenvalues of the augmented matrix, including its <span class="math notranslate nohighlight">\(|m-n|\)</span> zero eigenvalues.
+It reproduces the loss of small singular values when they are computed from
+<span class="math notranslate nohighlight">\(A^TA\)</span> (<a class="reference internal" href="#ch02-exa-lauchli">Example 2.3</a> and <a class="reference internal" href="#ch02-fig-eig-vs-svd"><span class="std std-numref">Figure 2.2</span></a>),
+verifies Eckart–Young–Mirsky from the actual errors <span class="math notranslate nohighlight">\(A-A_k\)</span>, tests Weyl’s
+perturbation bound on random perturbations, computes numerical ranks with
+different tolerances, and builds the pseudoinverse and minimum-norm solutions
+from the SVD, comparing them with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.pinv</span></code> and
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.lstsq</span></code>. <a class="reference internal" href="case-study-image-compression.html"><span class="std std-doc">The case study</span></a>
+compresses a <span class="math notranslate nohighlight">\(512\times512\)</span> photograph by truncated SVDs. For <span class="math notranslate nohighlight">\(k = 50\)</span> the
+factors contain about <span class="math notranslate nohighlight">\(20\%\)</span> as many numbers as the image, and the relative
+errors are about <span class="math notranslate nohighlight">\(0.022\)</span> in the 2-norm and <span class="math notranslate nohighlight">\(0.124\)</span> in the Frobenius norm,
+matching <span class="math notranslate nohighlight">\(\sigma_{51}/\sigma_1\)</span> and the tail sum. The case study also
+explains why this is not a competitive image compression method.</p>
+</section>
+<section id="summary">
+<h2><span class="section-number">2.8. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Every matrix has a singular value decomposition <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span>, which
+diagonalizes it with orthogonal changes of basis on both sides and describes
+it geometrically as a map from the unit sphere to an ellipsoid. The singular
+values are unique, determine the rank, the 2-norm, the Frobenius norm and the
+2-norm condition number, and are the square roots of the <span class="math notranslate nohighlight">\(p\)</span> largest
+eigenvalues of <span class="math notranslate nohighlight">\(A^TA\)</span>; the singular vectors give orthonormal bases of the four fundamental
+subspaces. Truncating the SVD gives the best approximation of lower rank in
+both the 2-norm and the Frobenius norm, with errors <span class="math notranslate nohighlight">\(\sigma_{k+1}\)</span> and
+<span class="math notranslate nohighlight">\((\sum_{i&gt;k}\sigma_i^2)^{1/2}\)</span>. Weyl’s inequality implies that each singular
+value moves by at most <span class="math notranslate nohighlight">\(\|E\|_2\)</span> under a perturbation <span class="math notranslate nohighlight">\(E\)</span>, which is why
+backward stable SVD algorithms deliver singular values with absolute
+accuracy <span class="math notranslate nohighlight">\(\bigO(u\sigma_1)\)</span>, and why rank must be decided numerically with a
+tolerance. Computing singular values from the eigenvalues of <span class="math notranslate nohighlight">\(A^TA\)</span> destroys
+this accuracy. The pseudoinverse, defined by the Penrose conditions and
+computed from the SVD, gives the minimum-norm least-squares solution but is
+discontinuous, which is another reason to truncate.</p>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">2.9. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id19">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> present the SVD geometrically in Lectures 4 and 5
+and discuss its computation, including the danger of forming <span class="math notranslate nohighlight">\(A^TA\)</span>, in
+Lecture 31. <span class="bibtex-citation" id="id20">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span> cover the SVD and its properties in
+Section 2.4, rank-deficient least squares and the complete orthogonal
+decomposition in Sections 5.4 and 5.5, and the algorithms in Section 8.6.
+<span class="bibtex-citation" id="id21">Demmel [<a class="reference internal" href="../back/bibliography.html#id5" title="James W. Demmel. Applied Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> treats the SVD in Chapter 3 (in connection with least
+squares) and its algorithms and perturbation theory in Chapter 5.
+<span class="bibtex-citation" id="id22">Horn and Johnson [<a class="reference internal" href="../back/bibliography.html#id6" title="Roger A. Horn and Charles R. Johnson. Matrix Analysis. Cambridge University Press, Cambridge, 2nd edition, 2013.">2013</a>]</span> (Chapter 7) and <span class="bibtex-citation" id="id23">Stewart and Sun [<a class="reference internal" href="../back/bibliography.html#id7" title="G. W. Stewart and Ji-guang Sun. Matrix Perturbation Theory. Academic Press, Boston, 1990.">1990</a>]</span> (Chapter IV)
+contain many more inequalities for singular values. The original papers
+<span class="bibtex-citation" id="id24">[<a class="reference internal" href="../back/bibliography.html#id49" title="Carl Eckart and Gale Young. The approximation of one matrix by another of lower rank. Psychometrika, 1(3):211–218, 1936.">Eckart and Young, 1936</a>, <a class="reference internal" href="../back/bibliography.html#id50" title="G. Golub and W. Kahan. Calculating the singular values and pseudo-inverse of a matrix. Journal of the Society for Industrial and Applied Mathematics, Series B: Numerical Analysis, 2(2):205–224, 1965.">Golub and Kahan, 1965</a>, <a class="reference internal" href="../back/bibliography.html#id51" title="G. H. Golub and C. Reinsch. Singular value decomposition and least squares solutions. Numerische Mathematik, 14(5):403–420, 1970.">Golub and Reinsch, 1970</a>, <a class="reference internal" href="../back/bibliography.html#id91" title="L. Mirsky. Symmetric gauge functions and unitarily invariant norms. The Quarterly Journal of Mathematics, 11(1):50–59, 1960.">Mirsky, 1960</a>, <a class="reference internal" href="../back/bibliography.html#id90" title="R. Penrose. A generalized inverse for matrices. Mathematical Proceedings of the Cambridge Philosophical Society, 51(3):406–413, 1955.">Penrose, 1955</a>]</span> remain
+readable. For numerical rank and the truncated SVD as a regularization method
+see <span class="bibtex-citation" id="id25">Hansen [<a class="reference internal" href="../back/bibliography.html#id13" title="Per Christian Hansen. Rank-Deficient and Discrete Ill-Posed Problems: Numerical Aspects of Linear Inversion. SIAM, Philadelphia, 1998.">1998</a>]</span>, and for the SVD in image processing
+<span class="bibtex-citation" id="id26">Hansen <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id14" title="Per Christian Hansen, James G. Nagy, and Dianne P. O'Leary. Deblurring Images: Matrices, Spectra, and Filtering. SIAM, Philadelphia, 2006.">2006</a>]</span> (Chapters 5 and 6).</p>
+</section>
+<section id="exercises">
+<span id="ch02-sec-exercises"></span><h2><span class="section-number">2.10. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<div class="exercise admonition" id="ch02-ex-by-hand">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.1 </span> (Concept: SVDs by hand)</p>
+<section id="exercise-content">
+<p>Write down an SVD (full or compact, as convenient) of each matrix without
+using a computer: (a) <span class="math notranslate nohighlight">\(xy^T\)</span> for nonzero <span class="math notranslate nohighlight">\(x\in\R^m\)</span>, <span class="math notranslate nohighlight">\(y\in\R^n\)</span>;
+(b) an orthogonal <span class="math notranslate nohighlight">\(Q\in\R^{n\times n}\)</span>; (c)
+<span class="math notranslate nohighlight">\(D = \begin{bmatrix}-3&amp;0\\0&amp;0\\0&amp;2\end{bmatrix}\)</span>; (d)
+<span class="math notranslate nohighlight">\(J = \begin{bmatrix}1&amp;1\\0&amp;1\end{bmatrix}\)</span> (singular values only).</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch02-svd/notes-solution-25">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch02-ex-by-hand"> Exercise 2.1 (Concept: SVDs by hand)</a></p>
+<section id="solution-content">
+<p>(a) <span class="math notranslate nohighlight">\(xy^T = \|x\|_2\|y\|_2\,\hat x\hat y^T\)</span> with <span class="math notranslate nohighlight">\(\hat x = x/\|x\|_2\)</span> and
+<span class="math notranslate nohighlight">\(\hat y = y/\|y\|_2\)</span> is a compact SVD with the single singular value
+<span class="math notranslate nohighlight">\(\|x\|_2\|y\|_2\)</span>. (b) <span class="math notranslate nohighlight">\(Q = Q\,I\,I^T\)</span>: all singular values are <span class="math notranslate nohighlight">\(1\)</span>. (c) The
+singular values are <span class="math notranslate nohighlight">\(3\)</span> and <span class="math notranslate nohighlight">\(2\)</span>. Take <span class="math notranslate nohighlight">\(v_1 = e_1\)</span>, <span class="math notranslate nohighlight">\(u_1 = -e_1\)</span> (to absorb the
+sign), <span class="math notranslate nohighlight">\(v_2 = e_2\)</span>, <span class="math notranslate nohighlight">\(u_2 = e_3\)</span> and <span class="math notranslate nohighlight">\(u_3 = e_2\)</span>, so <span class="math notranslate nohighlight">\(U = [-e_1,e_3,e_2]\)</span>,
+<span class="math notranslate nohighlight">\(\Sigma = \begin{bmatrix}3&amp;0\\0&amp;2\\0&amp;0\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(V = I_2\)</span>. (d)
+<span class="math notranslate nohighlight">\(J^TJ = \begin{bmatrix}1&amp;1\\1&amp;2\end{bmatrix}\)</span> has trace <span class="math notranslate nohighlight">\(3\)</span> and determinant
+<span class="math notranslate nohighlight">\(1\)</span>, so its eigenvalues are <span class="math notranslate nohighlight">\((3\pm\sqrt5)/2\)</span> and
+<span class="math notranslate nohighlight">\(\sigma_{1,2} = \sqrt{(3\pm\sqrt5)/2} = (\sqrt5\pm1)/2\)</span>, because
+<span class="math notranslate nohighlight">\(((\sqrt5\pm1)/2)^2 = (6\pm2\sqrt5)/4\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-symmetric">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.2 </span> (Theory: symmetric matrices)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(S\in\R^{n\times n}\)</span> be symmetric with eigendecomposition
+<span class="math notranslate nohighlight">\(S = Q\Lambda Q^T\)</span>. Show that the singular values of <span class="math notranslate nohighlight">\(S\)</span> are the numbers
+<span class="math notranslate nohighlight">\(|\lambda_i|\)</span> sorted in decreasing order, and construct an SVD of <span class="math notranslate nohighlight">\(S\)</span> from
+<span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(\Lambda\)</span>. When is <span class="math notranslate nohighlight">\(S = Q\Lambda Q^T\)</span> itself an SVD?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch02-svd/notes-solution-27">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch02-ex-symmetric"> Exercise 2.2 (Theory: symmetric matrices)</a></p>
+<section id="solution-content">
+<p>Write <span class="math notranslate nohighlight">\(\lambda_i = s_i|\lambda_i|\)</span> with <span class="math notranslate nohighlight">\(s_i = \sign(\lambda_i)\)</span> (and
+<span class="math notranslate nohighlight">\(\sign(0) = 1\)</span>), and let <span class="math notranslate nohighlight">\(P\)</span> be the permutation that sorts <span class="math notranslate nohighlight">\(|\lambda_i|\)</span> in
+decreasing order. Then <span class="math notranslate nohighlight">\(S = (QD_sP^T)(P|\Lambda|P^T)(QP^T)^T\)</span> with
+<span class="math notranslate nohighlight">\(D_s = \diag(s_i)\)</span>, and <span class="math notranslate nohighlight">\(U = QD_sP^T\)</span>, <span class="math notranslate nohighlight">\(V = QP^T\)</span> are orthogonal while
+<span class="math notranslate nohighlight">\(P|\Lambda|P^T\)</span> is diagonal with decreasing nonnegative entries. So the
+singular values are the sorted <span class="math notranslate nohighlight">\(|\lambda_i|\)</span>. The eigendecomposition is
+itself an SVD exactly when <span class="math notranslate nohighlight">\(S\)</span> is positive semidefinite and the eigenvalues
+are listed in decreasing order.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-uniqueness">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.3 </span> (Theory: how unique is the SVD?)</p>
+<section id="exercise-content">
+<p>(a) Show that if <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span> and <span class="math notranslate nohighlight">\(\sigma_k = \sigma_{k+1} = \dots =
+\sigma_{k+\ell-1}&gt;0\)</span> is a singular value of multiplicity <span class="math notranslate nohighlight">\(\ell\)</span>, then
+replacing the corresponding columns <span class="math notranslate nohighlight">\([u_k,\dots,u_{k+\ell-1}]\)</span> by
+<span class="math notranslate nohighlight">\([u_k,\dots,u_{k+\ell-1}]W\)</span> and <span class="math notranslate nohighlight">\([v_k,\dots,v_{k+\ell-1}]\)</span> by
+<span class="math notranslate nohighlight">\([v_k,\dots,v_{k+\ell-1}]W\)</span> for any orthogonal <span class="math notranslate nohighlight">\(W\in\R^{\ell\times\ell}\)</span>
+gives another SVD. (b) Show that every SVD of <span class="math notranslate nohighlight">\(I_n\)</span> has the form <span class="math notranslate nohighlight">\(QIQ^T\)</span>.
+(c) Give a <span class="math notranslate nohighlight">\(3\times1\)</span> matrix with a positive singular value for which <span class="math notranslate nohighlight">\(U\)</span> is
+not unique up to signs of its columns.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-rank-deficient-image">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.4 </span> (Theory: the image of the sphere under a rank-deficient matrix)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> have rank <span class="math notranslate nohighlight">\(r&lt;n\)</span>. Show that
+<span class="math notranslate nohighlight">\(\{Ax:\|x\|_2 = 1\} = \{y\in\range(A):\sum_{i=1}^{r}(u_i^Ty)^2/\sigma_i^2\le1\}\)</span>.
+Draw the picture for <span class="math notranslate nohighlight">\(A = \begin{bmatrix}1&amp;0&amp;0\\0&amp;1&amp;0\end{bmatrix}\)</span> and for
+<span class="math notranslate nohighlight">\(A = \begin{bmatrix}1&amp;1\end{bmatrix}\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-minmax">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.5 </span> (Theory: the max-min characterization)</p>
+<section id="exercise-content">
+<p>Prove that for <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> and <span class="math notranslate nohighlight">\(1\le k\le n\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma_k(A) = \max_{\dim\mathcal S = k}\ \min_{x\in\mathcal S,\ \|x\|_2 = 1}\|Ax\|_2 ,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal S\)</span> ranges over subspaces of <span class="math notranslate nohighlight">\(\R^n\)</span>. Deduce the interlacing
+inequalities <span class="math notranslate nohighlight">\(\sigma_{i+1}(A)\le\sigma_i(\widetilde A)\le\sigma_i(A)\)</span> for the
+matrix <span class="math notranslate nohighlight">\(\widetilde A\)</span> obtained by deleting one column of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-distance-singular">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.6 </span> (Theory: distance to singularity)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> be nonsingular. Show that
+<span class="math notranslate nohighlight">\(\min\{\|E\|_2 : A+E\text{ singular}\} = \sigma_n\)</span>, find a minimizing <span class="math notranslate nohighlight">\(E\)</span> of
+rank one, and deduce that</p>
+<div class="math notranslate nohighlight">
+\[
+\min\Big\{\frac{\|E\|_2}{\|A\|_2} : A+E\text{ singular}\Big\} = \frac{1}{\kappa_2(A)} .
+\]</div>
+<p>Is the minimum the same in the Frobenius norm? Evaluate
+everything for the matrix <span class="math notranslate nohighlight">\(B\)</span> of <a class="reference internal" href="#ch02-exa-svd-by-hand">Example 2.1</a>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-eckart-nonunique">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.7 </span> (Concept: best approximations are not unique)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A = \diag(2,1)\)</span>. Find all matrices <span class="math notranslate nohighlight">\(\diag(c,0)\)</span> that are best rank-one
+approximations of <span class="math notranslate nohighlight">\(A\)</span> in the 2-norm, and show that only one of them is best
+in the Frobenius norm. Then show that <span class="math notranslate nohighlight">\(I_2\)</span> has infinitely many best rank-one
+approximations in the Frobenius norm.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch02-svd/notes-solution-33">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch02-ex-eckart-nonunique"> Exercise 2.7 (Concept: best approximations are not unique)</a></p>
+<section id="solution-content">
+<p>The minimum 2-norm error is <span class="math notranslate nohighlight">\(\sigma_2 = 1\)</span>. For <span class="math notranslate nohighlight">\(B = \diag(c,0)\)</span>,
+<span class="math notranslate nohighlight">\(\|A-B\|_2 = \max(|2-c|,1)\)</span>, which equals <span class="math notranslate nohighlight">\(1\)</span> exactly when <span class="math notranslate nohighlight">\(1\le c\le3\)</span>. In
+the Frobenius norm <span class="math notranslate nohighlight">\(\|A-B\|_F^2 = (2-c)^2+1\)</span>, minimized only at <span class="math notranslate nohighlight">\(c = 2\)</span>, which
+is <span class="math notranslate nohighlight">\(A_1\)</span>. For <span class="math notranslate nohighlight">\(I_2\)</span>, every <span class="math notranslate nohighlight">\(qq^T\)</span> with <span class="math notranslate nohighlight">\(\|q\|_2 = 1\)</span> is a best rank-one
+approximation, since <span class="math notranslate nohighlight">\(I_2 = qq^T+q_\perp q_\perp^T\)</span> is an SVD and
+<span class="math notranslate nohighlight">\(\|I_2-qq^T\|_F = 1 = \sigma_2\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-penrose">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.8 </span> (Theory: properties of the pseudoinverse)</p>
+<section id="exercise-content">
+<p>Prove that <span class="math notranslate nohighlight">\((A^+)^+ = A\)</span>, <span class="math notranslate nohighlight">\((A^T)^+ = (A^+)^T\)</span> and <span class="math notranslate nohighlight">\(A^+ = (A^TA)^+A^T\)</span> for all
+<span class="math notranslate nohighlight">\(A\)</span>. Then find <span class="math notranslate nohighlight">\(2\times2\)</span> matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> with <span class="math notranslate nohighlight">\((AB)^+\neq B^+A^+\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-min-norm">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.9 </span> (Computation: a minimum-norm solution by hand)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A = \begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(b = (1,3)^T\)</span>. Find all
+least-squares solutions, the minimum residual, and the minimum-norm solution
+using the SVD. Check your answer with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.pinv</span></code> and
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.lstsq</span></code>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch02-svd/notes-solution-36">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch02-ex-min-norm"> Exercise 2.9 (Computation: a minimum-norm solution by hand)</a></p>
+<section id="solution-content">
+<p><span class="math notranslate nohighlight">\(A = 2\,qq^T\)</span> with <span class="math notranslate nohighlight">\(q = (1,1)^T/\sqrt2\)</span>, so <span class="math notranslate nohighlight">\(\sigma_1 = 2\)</span>, <span class="math notranslate nohighlight">\(\sigma_2 = 0\)</span>
+and <span class="math notranslate nohighlight">\(A^+ = \tfrac12qq^T = \tfrac14A\)</span>. Here <span class="math notranslate nohighlight">\(u_1^Tb = v_1^Tb = 4/\sqrt2\)</span>, so
+the least-squares solutions are <span class="math notranslate nohighlight">\(x = \tfrac{4/\sqrt2}{2}q+c\,q_\perp =
+(1,1)^T+c(1,-1)^T/\sqrt2\)</span>, that is, all <span class="math notranslate nohighlight">\(x\)</span> with <span class="math notranslate nohighlight">\(x_1+x_2 = 2\)</span>. The minimum
+residual is <span class="math notranslate nohighlight">\(|u_2^Tb| = |1-3|/\sqrt2 = \sqrt2\)</span>, attained with <span class="math notranslate nohighlight">\(Ax = (2,2)^T\)</span>
+and <span class="math notranslate nohighlight">\(b-Ax = (-1,1)^T\)</span>. The minimum-norm solution is <span class="math notranslate nohighlight">\(x^+ = A^+b = (1,1)^T\)</span>.
+Both NumPy functions return <span class="math notranslate nohighlight">\((1,1)^T\)</span> to rounding error.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-norm-smoothness">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.10 </span> (Theory: differentiability of matrix norms)</p>
+<section id="exercise-content">
+<p>(a) Show that <span class="math notranslate nohighlight">\(A\mapsto\|A\|_F\)</span> is differentiable at every <span class="math notranslate nohighlight">\(A\neq0\)</span>, with
+gradient <span class="math notranslate nohighlight">\(A/\|A\|_F\)</span>, and that it is not differentiable at <span class="math notranslate nohighlight">\(A = 0\)</span>.
+(b) Show that <span class="math notranslate nohighlight">\(A\mapsto\|A\|_2\)</span> is not differentiable at <span class="math notranslate nohighlight">\(A = I_2\)</span> by
+considering <span class="math notranslate nohighlight">\(t\mapsto\|I_2+t\,\diag(1,-1)\|_2\)</span>. (c) Explain why statements
+such as “the Frobenius norm is differentiable everywhere” are false, and why
+the failure at <span class="math notranslate nohighlight">\(0\)</span> matters in optimization problems that minimize a
+residual norm.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-lauchli">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.11 </span> (Computation: the Läuchli matrix)</p>
+<section id="exercise-content">
+<p>For the matrix of <a class="reference internal" href="#ch02-exa-lauchli">Example 2.3</a> with <span class="math notranslate nohighlight">\(\delta = 10^{-4}\)</span>,
+<span class="math notranslate nohighlight">\(10^{-6}\)</span>, <span class="math notranslate nohighlight">\(10^{-8}\)</span> and <span class="math notranslate nohighlight">\(10^{-10}\)</span>, compute <span class="math notranslate nohighlight">\(\sigma_2\)</span> in double precision
+(i) as the square root of the smaller eigenvalue of the computed <span class="math notranslate nohighlight">\(A^TA\)</span>,
+(ii) with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.svd</span></code>, and (iii) with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.eigvalsh</span></code> applied
+to the augmented matrix. Tabulate the relative errors and explain them using
+the error estimates <span class="math notranslate nohighlight">\(u\sigma_1^2/\sigma_2\)</span> and <span class="math notranslate nohighlight">\(u\sigma_1\)</span> of
+<a class="reference internal" href="#ch02-sec-eigen"><span class="std std-numref">Section 2.3</span></a>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-numerical-rank">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.12 </span> (Computation: numerical rank of Hilbert matrices)</p>
+<section id="exercise-content">
+<p>For the Hilbert matrices <span class="math notranslate nohighlight">\(H_n\)</span>, <span class="math notranslate nohighlight">\(n = 4,\dots,16\)</span>, compute
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.matrix_rank(H)</span></code> and the numerical rank with the tolerance
+<span class="math notranslate nohighlight">\(\tau = 10^{-8}\|H_n\|_2\)</span>. Every <span class="math notranslate nohighlight">\(H_n\)</span> is nonsingular. Explain why the
+default rank falls below <span class="math notranslate nohighlight">\(n\)</span> from <span class="math notranslate nohighlight">\(n = 11\)</span> on, why the computed smallest
+singular values of <span class="math notranslate nohighlight">\(H_n\)</span> for <span class="math notranslate nohighlight">\(n\ge12\)</span> should not be trusted, and what the
+second tolerance models.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch02-ex-block-svd">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2.13 </span> (Project: blockwise SVD compression)</p>
+<section id="exercise-content">
+<p>The case study compresses a whole image with one truncated SVD. Instead,
+split the <span class="math notranslate nohighlight">\(512\times512\)</span> image into square blocks of size <span class="math notranslate nohighlight">\(b\)</span>
+(<span class="math notranslate nohighlight">\(b = 16, 32, 64\)</span>), and replace each block by its best rank-<span class="math notranslate nohighlight">\(k\)</span>
+approximation. For each <span class="math notranslate nohighlight">\((b,k)\)</span> record the number of stored values and the
+relative Frobenius error of the whole image, and plot error against storage
+together with the global truncated SVD. Explain the trade-off in terms of the
+Eckart–Young–Mirsky theorem (which is optimal for what?), and relate your
+findings to the fact that JPEG works on <span class="math notranslate nohighlight">\(8\times8\)</span> blocks with a fixed basis.</p>
+</section>
+</div>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch02-svd"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../ch01-matrix-computations/lab.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">1.9. </span>Lab 1: Matrix computations, orthogonality, and norms</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lab.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2.11. </span>Lab 2: The singular value decomposition</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#existence-uniqueness-and-geometry">2.1. Existence, uniqueness, and geometry</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-idea">2.1.1. The idea</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#existence">2.1.2. Existence</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniqueness">2.1.3. Uniqueness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#full-thin-and-compact-forms">2.1.4. Full, thin, and compact forms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometry-the-image-of-the-unit-sphere">2.1.5. Geometry: the image of the unit sphere</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-svd-reveals">2.2. What the SVD reveals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-and-the-four-fundamental-subspaces">2.2.1. Rank and the four fundamental subspaces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#norms-and-the-condition-number">2.2.2. Norms and the condition number</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#singular-values-and-eigenvalues">2.3. Singular values and eigenvalues</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-symmetric-matrices">2.3.1. Three symmetric matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#singular-values-are-not-eigenvalues">2.3.2. Singular values are not eigenvalues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-not-compute-singular-values-from-a-ta">2.3.3. Why not compute singular values from <span class="math notranslate nohighlight">\(A^TA\)</span>?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#low-rank-approximation-and-perturbation-theory">2.4. Low-rank approximation and perturbation theory</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">2.4.1. Motivation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-eckart-young-mirsky-theorem">2.4.2. The Eckart–Young–Mirsky theorem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perturbation-of-singular-values">2.4.3. Perturbation of singular values</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-rank">2.4.4. Numerical rank</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-a-low-rank-approximation">2.4.5. Computing a low-rank approximation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-pseudoinverse-and-minimum-norm-least-squares">2.5. The pseudoinverse and minimum-norm least squares</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">2.5.1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimum-norm-least-squares">2.5.2. Minimum-norm least squares</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-pseudoinverse-is-not-continuous">2.5.3. The pseudoinverse is not continuous</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-the-svd-in-practice">2.6. Computing the SVD in practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">2.7. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">2.8. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">2.9. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">2.10. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

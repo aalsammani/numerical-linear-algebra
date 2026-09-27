@@ -1,0 +1,2163 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>12. Randomized numerical linear algebra &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch12-randomized/notes';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="12.14. Lab 12: Randomized numerical linear algebra" href="lab.html" />
+    <link rel="prev" title="11.18. Case study: conjugate gradients on a structural stiffness matrix" href="../ch11-krylov/case-study-structural-cg.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">12. Randomized numerical linear algebra</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch12-randomized/notes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch12-randomized/notes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Randomized numerical linear algebra</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-randomize">12.1. Why randomize?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-obstacles-for-classical-algorithms">12.1.1. Three obstacles for classical algorithms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-benchmark-eckart-young">12.1.2. The benchmark: Eckart–Young</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-a-sketch-is">12.1.3. What a sketch is</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-embeddings-and-the-johnson-lindenstrauss-lemma">12.2. Random embeddings and the Johnson–Lindenstrauss lemma</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#norms-of-sketched-vectors">12.2.1. Norms of sketched vectors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-johnson-lindenstrauss-lemma">12.2.2. The Johnson–Lindenstrauss lemma</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subspace-embeddings">12.3. Subspace embeddings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-randomized-range-finder-and-the-randomized-svd">12.4. The randomized range finder and the randomized SVD</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formulation">12.4.1. Formulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-analysis">12.4.2. Error analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example">12.4.3. A worked example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-experiment">12.4.4. The experiment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-iterations">12.5. Power iterations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation-and-algorithm">12.5.1. Motivation and algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-bound">12.5.2. Error bound</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-posteriori-error-estimation-and-adaptivity">12.6. A posteriori error estimation and adaptivity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#randomized-least-squares">12.7. Randomized least squares</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting">12.7.1. Setting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sketch-and-solve">12.7.2. Sketch-and-solve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sketch-and-precondition">12.7.3. Sketch-and-precondition</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#randomized-trace-estimation">12.8. Randomized trace estimation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations">12.9. Limitations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">12.10. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">12.11. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">12.12. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">12.13. Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="randomized-numerical-linear-algebra">
+<span id="ch12"></span><h1><span class="section-number">12. </span>Randomized numerical linear algebra<a class="headerlink" href="#randomized-numerical-linear-algebra" title="Link to this heading">#</a></h1>
+<p>The algorithms of the previous chapters are deterministic and, with few
+exceptions, touch every entry of the matrix many times. A Householder QR
+factorization of <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> costs <span class="math notranslate nohighlight">\(2mn^2-\tfrac23n^3\)</span> flops, and a
+dense SVD costs <span class="math notranslate nohighlight">\(\bigO(mn\min(m,n))\)</span> flops. For a matrix with <span class="math notranslate nohighlight">\(m = 10^6\)</span> rows
+and <span class="math notranslate nohighlight">\(n = 10^3\)</span> columns, QR alone is about <span class="math notranslate nohighlight">\(2\times10^{12}\)</span> flops, and the
+matrix has <span class="math notranslate nohighlight">\(10^9\)</span> entries, 8 GB in double precision. When a matrix is this
+large, the number of times the algorithm reads it from slow memory or from
+disk (the number of <em>passes</em>) can matter more than the flop count. In other
+applications the matrix is never stored at all: it is available only through
+a routine that returns <span class="math notranslate nohighlight">\(Ax\)</span> or <span class="math notranslate nohighlight">\(A^Tx\)</span>, for instance because <span class="math notranslate nohighlight">\(A\)</span> is the
+solution operator of a differential equation or a product of several
+factors.</p>
+<p>Randomized numerical linear algebra addresses these situations with a simple
+idea: multiply <span class="math notranslate nohighlight">\(A\)</span> by a random matrix with few columns (or rows), called a
+<em>sketch</em> or <em>test matrix</em>, and work with the much smaller product. A random
+linear map of a low-dimensional object into a moderately low-dimensional
+space preserves its geometry with high probability, and this is enough to
+find a near-optimal low-rank approximation or to precondition a least-squares
+problem. The benchmark for low-rank approximation is the Eckart–Young
+theorem of <a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a>: no randomized algorithm can beat the
+truncated SVD, and the question is how close it can get and at what cost.
+The price of randomization is that guarantees hold in expectation or with
+high probability rather than always, and that two runs return different
+answers.</p>
+<p>This chapter develops the three central tools: random embeddings (the
+Johnson–Lindenstrauss lemma and subspace embeddings), the randomized range
+finder and randomized SVD of <span class="bibtex-citation" id="id1">Halko <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">2011</a>]</span>, and randomized least-squares
+solvers. The surveys by <span class="bibtex-citation" id="id2">Drineas and Mahoney [<a class="reference internal" href="../back/bibliography.html#id74" title="Petros Drineas and Michael W. Mahoney. RandNLA: randomized numerical linear algebra. Communications of the ACM, 59(6):80–90, 2016.">2016</a>]</span> and <span class="bibtex-citation" id="id3">Martinsson and Tropp [<a class="reference internal" href="../back/bibliography.html#id72" title="Per-Gunnar Martinsson and Joel A. Tropp. Randomized numerical linear algebra: foundations and algorithms. Acta Numerica, 29:403–572, 2020.">2020</a>]</span> are
+good companions throughout.</p>
+<div class="admonition-learning-objectives admonition">
+<p class="admonition-title">Learning objectives</p>
+<p>After working through this chapter you should be able to:</p>
+<ol class="arabic simple">
+<li><p>explain when randomized algorithms are preferable to classical ones, in
+terms of flops, passes over the data and access to the matrix;</p></li>
+<li><p>state and prove the concentration of the norm of a Gaussian sketch of a
+vector, and deduce a Johnson–Lindenstrauss lemma with explicit constants;</p></li>
+<li><p>define subspace embeddings and relate them to the singular values of a
+sketched orthonormal basis;</p></li>
+<li><p>implement the randomized range finder, the randomized SVD and randomized
+subspace iteration, and count their flops and passes;</p></li>
+<li><p>prove the deterministic error bound for the range finder and the
+expected Frobenius-norm error bound for Gaussian test matrices, and state
+the corresponding spectral-norm bound;</p></li>
+<li><p>explain why power iterations help for slowly decaying singular values and
+why they must re-orthonormalize in floating point;</p></li>
+<li><p>analyze sketch-and-solve and sketch-and-precondition for least squares,
+and explain why only the second gives an accurate solution;</p></li>
+<li><p>judge the limitations of randomized methods: the need for spectral decay,
+the loss of determinism, and the trade-off between accuracy and cost.</p></li>
+</ol>
+</div>
+<section id="why-randomize">
+<span id="ch12-sec-motivation"></span><h2><span class="section-number">12.1. </span>Why randomize?<a class="headerlink" href="#why-randomize" title="Link to this heading">#</a></h2>
+<section id="three-obstacles-for-classical-algorithms">
+<h3><span class="section-number">12.1.1. </span>Three obstacles for classical algorithms<a class="headerlink" href="#three-obstacles-for-classical-algorithms" title="Link to this heading">#</a></h3>
+<p>We will meet three kinds of problems for which the algorithms of
+<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a> to <a class="reference internal" href="../ch10-qr-algorithm/notes.html#ch10"><span class="std std-numref">Chapter 10</span></a> are unsatisfactory.</p>
+<p><em>Too many flops.</em> A truncated SVD of rank <span class="math notranslate nohighlight">\(k\)</span> computed from a full dense SVD
+costs <span class="math notranslate nohighlight">\(\bigO(mn\min(m,n))\)</span> flops <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">Golub and Van Loan, 2013</a>]</span> (Section 8.6), however
+small <span class="math notranslate nohighlight">\(k\)</span> is. If the matrix is well approximated by a matrix of rank
+<span class="math notranslate nohighlight">\(k\ll\min(m,n)\)</span>, we would like to pay something like <span class="math notranslate nohighlight">\(\bigO(mnk)\)</span>, the cost
+of a few products of <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(k\)</span> vectors.</p>
+<p><em>Too many passes.</em> A Householder factorization reads and rewrites every
+column many times. If <span class="math notranslate nohighlight">\(A\)</span> is stored out of core, or is distributed over many
+machines, each pass is expensive. We want algorithms that read <span class="math notranslate nohighlight">\(A\)</span> a small,
+fixed number of times, independent of <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<p><em>No access to entries.</em> If <span class="math notranslate nohighlight">\(A\)</span> is available only as a black box that returns
+products <span class="math notranslate nohighlight">\(AX\)</span> and <span class="math notranslate nohighlight">\(A^TX\)</span> for blocks of vectors <span class="math notranslate nohighlight">\(X\)</span>, algorithms that
+manipulate rows and columns do not apply at all. Krylov methods
+(<a class="reference internal" href="../ch11-krylov/notes.html#ch11"><span class="std std-numref">Chapter 11</span></a>) work in this setting, but they process one
+vector at a time. Randomized methods process blocks, which is efficient on
+modern hardware because blocks lead to level-3 BLAS operations
+(<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01"><span class="std std-numref">Chapter 1</span></a>).</p>
+</section>
+<section id="the-benchmark-eckart-young">
+<h3><span class="section-number">12.1.2. </span>The benchmark: Eckart–Young<a class="headerlink" href="#the-benchmark-eckart-young" title="Link to this heading">#</a></h3>
+<p>Throughout, the singular values of <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> are
+<span class="math notranslate nohighlight">\(\sigma_1\ge\sigma_2\ge\dots\ge\sigma_{\min(m,n)}\ge0\)</span>, and <span class="math notranslate nohighlight">\(A_k\)</span> denotes the
+truncated SVD of rank <span class="math notranslate nohighlight">\(k\)</span>. We recall the optimality result proved in
+<a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a>.</p>
+<div class="proof theorem admonition" id="ch12-thm-eckart-young">
+<p class="admonition-title"><span class="caption-number">Theorem 12.1 </span> (Eckart–Young)</p>
+<section class="theorem-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(0\le k&lt;\min(m,n)\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-eckart-young">
+<span class="eqno">(12.1)<a class="headerlink" href="#equation-ch12-eq-eckart-young" title="Link to this equation">#</a></span>\[
+\min_{\rank(X)\le k}\|A - X\|_2 = \sigma_{k+1},\qquad
+\min_{\rank(X)\le k}\|A - X\|_F = \Big(\sum_{j&gt;k}\sigma_j^2\Big)^{1/2},
+\]</div>
+<p>and both minima are attained by <span class="math notranslate nohighlight">\(X = A_k\)</span>.</p>
+</section>
+</div><p>See <span class="bibtex-citation" id="id5">Eckart and Young [<a class="reference internal" href="../back/bibliography.html#id49" title="Carl Eckart and Gale Young. The approximation of one matrix by another of lower rank. Psychometrika, 1(3):211–218, 1936.">1936</a>]</span> and <span class="bibtex-citation" id="id6">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Lecture 5). The theorem
+tells us what is achievable: a matrix admits an accurate low-rank
+approximation exactly when its singular values decay. It also gives the
+yardstick for every error bound below, which will have the form
+“randomized error <span class="math notranslate nohighlight">\(\le\)</span> modest factor <span class="math notranslate nohighlight">\(\times\)</span> optimal error”.</p>
+</section>
+<section id="what-a-sketch-is">
+<h3><span class="section-number">12.1.3. </span>What a sketch is<a class="headerlink" href="#what-a-sketch-is" title="Link to this heading">#</a></h3>
+<p>A random matrix <span class="math notranslate nohighlight">\(\Omega\in\R^{n\times\ell}\)</span> with <span class="math notranslate nohighlight">\(\ell\ll n\)</span> is used to
+compress <span class="math notranslate nohighlight">\(A\)</span> from the right, <span class="math notranslate nohighlight">\(Y = A\Omega\in\R^{m\times\ell}\)</span>, or a random
+<span class="math notranslate nohighlight">\(S\in\R^{s\times m}\)</span> with <span class="math notranslate nohighlight">\(s\ll m\)</span> compresses it from the left, <span class="math notranslate nohighlight">\(SA\)</span>. The
+columns of <span class="math notranslate nohighlight">\(A\Omega\)</span> are random linear combinations of the columns of <span class="math notranslate nohighlight">\(A\)</span>, so
+they lie in <span class="math notranslate nohighlight">\(\range(A)\)</span>; when <span class="math notranslate nohighlight">\(A\)</span> is close to a matrix of rank <span class="math notranslate nohighlight">\(k\)</span> and
+<span class="math notranslate nohighlight">\(\ell\)</span> is a little larger than <span class="math notranslate nohighlight">\(k\)</span>, they capture the dominant part of
+<span class="math notranslate nohighlight">\(\range(A)\)</span>. The most important example is the Gaussian matrix.</p>
+<div class="proof definition admonition" id="ch12-def-gaussian">
+<p class="admonition-title"><span class="caption-number">Definition 12.1 </span> (Standard Gaussian matrix)</p>
+<section class="definition-content" id="proof-content">
+<p>A random matrix <span class="math notranslate nohighlight">\(G\in\R^{s\times d}\)</span> is a <em>standard Gaussian matrix</em> if its
+entries are independent random variables with the standard normal
+distribution <span class="math notranslate nohighlight">\(N(0,1)\)</span>.</p>
+</section>
+</div><p>Gaussian matrices are the easiest to analyze because of the following
+invariance.</p>
+<div class="proof lemma admonition" id="ch12-lem-rotation">
+<p class="admonition-title"><span class="caption-number">Lemma 12.1 </span> (Rotational invariance)</p>
+<section class="lemma-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(G\in\R^{s\times m}\)</span> be a standard Gaussian matrix and let
+<span class="math notranslate nohighlight">\(W = [W_1,\ W_2]\in\R^{m\times(d_1+d_2)}\)</span> have orthonormal columns. Then
+<span class="math notranslate nohighlight">\(GW_1\in\R^{s\times d_1}\)</span> and <span class="math notranslate nohighlight">\(GW_2\in\R^{s\times d_2}\)</span> are independent
+standard Gaussian matrices.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The rows <span class="math notranslate nohighlight">\(g_i^T\)</span> of <span class="math notranslate nohighlight">\(G\)</span> are independent, and each <span class="math notranslate nohighlight">\(g_i\)</span> is a Gaussian vector
+with mean zero and covariance <span class="math notranslate nohighlight">\(I_m\)</span>. A linear image of a Gaussian vector is
+Gaussian, so <span class="math notranslate nohighlight">\(W^Tg_i\)</span> is Gaussian with mean zero and covariance
+<span class="math notranslate nohighlight">\(W^TI_mW = I_{d_1+d_2}\)</span>. Its entries are therefore independent <span class="math notranslate nohighlight">\(N(0,1)\)</span>
+variables, because uncorrelated jointly Gaussian variables are independent.
+The rows <span class="math notranslate nohighlight">\(g_i^TW\)</span>, <span class="math notranslate nohighlight">\(i = 1,\dots,s\)</span>, are independent because the <span class="math notranslate nohighlight">\(g_i\)</span> are.
+Hence <span class="math notranslate nohighlight">\(GW = [GW_1,\ GW_2]\)</span> has independent <span class="math notranslate nohighlight">\(N(0,1)\)</span> entries.</p>
+</div>
+<p>In words: a Gaussian sketch does not see the orientation of the subspace it
+is applied to. A second useful fact is that a Gaussian matrix has full rank
+with probability one: the set of <span class="math notranslate nohighlight">\(r\times\ell\)</span> matrices (<span class="math notranslate nohighlight">\(r\le\ell\)</span>) of rank
+less than <span class="math notranslate nohighlight">\(r\)</span> is the zero set of the sum of squares of all <span class="math notranslate nohighlight">\(r\times r\)</span>
+minors, a nonzero polynomial, and such a set has Lebesgue measure zero, so a
+distribution with a density assigns it probability zero.</p>
+</section>
+</section>
+<section id="random-embeddings-and-the-johnson-lindenstrauss-lemma">
+<span id="ch12-sec-jl"></span><h2><span class="section-number">12.2. </span>Random embeddings and the Johnson–Lindenstrauss lemma<a class="headerlink" href="#random-embeddings-and-the-johnson-lindenstrauss-lemma" title="Link to this heading">#</a></h2>
+<section id="norms-of-sketched-vectors">
+<h3><span class="section-number">12.2.1. </span>Norms of sketched vectors<a class="headerlink" href="#norms-of-sketched-vectors" title="Link to this heading">#</a></h3>
+<p>We start with a single vector. Let <span class="math notranslate nohighlight">\(S = G/\sqrt k\)</span> with <span class="math notranslate nohighlight">\(G\in\R^{k\times d}\)</span>
+standard Gaussian. For a fixed <span class="math notranslate nohighlight">\(x\ne0\)</span>, the scaled vector <span class="math notranslate nohighlight">\(Gx/\|x\|_2\)</span> is a
+standard Gaussian vector in <span class="math notranslate nohighlight">\(\R^k\)</span> (<a class="reference internal" href="#ch12-lem-rotation">Lemma 12.1</a> with the
+single column <span class="math notranslate nohighlight">\(W = x/\|x\|_2\)</span>), so</p>
+<div class="math notranslate nohighlight">
+\[
+Z = \frac{k\,\|Sx\|_2^2}{\|x\|_2^2} = \sum_{i=1}^k z_i^2,\qquad z_i \text{ independent } N(0,1),
+\]</div>
+<p>has the <span class="math notranslate nohighlight">\(\chi^2\)</span> distribution with <span class="math notranslate nohighlight">\(k\)</span> degrees of freedom. Since
+<span class="math notranslate nohighlight">\(\mathbb{E}z_i^2 = 1\)</span>, we get <span class="math notranslate nohighlight">\(\mathbb{E}\|Sx\|_2^2 = \|x\|_2^2\)</span>: the sketch
+preserves squared norms on average. The key point is that it preserves them
+with high probability, with fluctuations of relative size about
+<span class="math notranslate nohighlight">\(\sqrt{2/k}\)</span> (<a class="reference internal" href="#ch12-ex-chi-square"><span class="std std-numref">Exercise 12.2</span></a>) and exponentially small tails.</p>
+<div class="proof lemma admonition" id="ch12-lem-concentration">
+<p class="admonition-title"><span class="caption-number">Lemma 12.2 </span> (Concentration of the norm of a Gaussian sketch)</p>
+<section class="lemma-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(S = G/\sqrt k\)</span> with <span class="math notranslate nohighlight">\(G\in\R^{k\times d}\)</span> standard Gaussian, let
+<span class="math notranslate nohighlight">\(x\in\R^d\)</span> be fixed and <span class="math notranslate nohighlight">\(0&lt;\varepsilon&lt;1\)</span>. Then</p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-concentration">
+<span class="eqno">(12.2)<a class="headerlink" href="#equation-ch12-eq-concentration" title="Link to this equation">#</a></span>\[
+\mathbb{P}\Big(\big|\|Sx\|_2^2 - \|x\|_2^2\big| \ge \varepsilon\|x\|_2^2\Big)
+\le 2\exp\Big(-\frac{k\,\varepsilon^2(3-2\varepsilon)}{12}\Big).
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. We may assume <span class="math notranslate nohighlight">\(x\neq 0\)</span>, and we write <span class="math notranslate nohighlight">\(Z\)</span> as above. For a single standard
+normal <span class="math notranslate nohighlight">\(z\)</span> and <span class="math notranslate nohighlight">\(t&lt;1/2\)</span>, <span class="math notranslate nohighlight">\(\mathbb{E}e^{tz^2} = (1-2t)^{-1/2}\)</span> (a Gaussian
+integral), so by independence <span class="math notranslate nohighlight">\(\mathbb{E}e^{tZ} = (1-2t)^{-k/2}\)</span>.</p>
+<p><em>Upper tail.</em> For <span class="math notranslate nohighlight">\(0&lt;t&lt;1/2\)</span>, Markov’s inequality applied to <span class="math notranslate nohighlight">\(e^{tZ}\)</span> gives</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{P}\big(Z\ge(1+\varepsilon)k\big)\le e^{-t(1+\varepsilon)k}(1-2t)^{-k/2}.
+\]</div>
+<p>The choice <span class="math notranslate nohighlight">\(t = \varepsilon/(2(1+\varepsilon))\)</span> gives <span class="math notranslate nohighlight">\(1-2t = 1/(1+\varepsilon)\)</span>
+and the bound <span class="math notranslate nohighlight">\(\exp\big(-\tfrac k2(\varepsilon-\ln(1+\varepsilon))\big)\)</span>. The
+inequality <span class="math notranslate nohighlight">\(\ln(1+\varepsilon)\le\varepsilon-\varepsilon^2/2+\varepsilon^3/3\)</span> for
+<span class="math notranslate nohighlight">\(\varepsilon\ge0\)</span> (both sides vanish at <span class="math notranslate nohighlight">\(0\)</span> and the derivative of the
+right-hand side minus the left-hand side is <span class="math notranslate nohighlight">\(\varepsilon^3/(1+\varepsilon)\ge0\)</span>)
+turns this into <span class="math notranslate nohighlight">\(\exp\big(-k(\varepsilon^2/4-\varepsilon^3/6)\big)\)</span>.</p>
+<p><em>Lower tail.</em> For <span class="math notranslate nohighlight">\(t&gt;0\)</span>, Markov’s inequality applied to <span class="math notranslate nohighlight">\(e^{-tZ}\)</span> gives
+<span class="math notranslate nohighlight">\(\mathbb{P}(Z\le(1-\varepsilon)k)\le e^{t(1-\varepsilon)k}(1+2t)^{-k/2}\)</span>. The
+choice <span class="math notranslate nohighlight">\(t = \varepsilon/(2(1-\varepsilon))\)</span> gives <span class="math notranslate nohighlight">\(1+2t = 1/(1-\varepsilon)\)</span> and
+the bound <span class="math notranslate nohighlight">\(\exp\big(-\tfrac k2(-\varepsilon-\ln(1-\varepsilon))\big)\)</span>. Since
+<span class="math notranslate nohighlight">\(-\ln(1-\varepsilon) = \varepsilon+\varepsilon^2/2+\varepsilon^3/3+\dots\ge
+\varepsilon+\varepsilon^2/2\)</span>, this is at most <span class="math notranslate nohighlight">\(\exp(-k\varepsilon^2/4)\)</span>, which is
+smaller than the upper-tail bound.</p>
+<p>Adding the two tails and using
+<span class="math notranslate nohighlight">\(\varepsilon^2/4-\varepsilon^3/6 = \varepsilon^2(3-2\varepsilon)/12\)</span> gives
+<a class="reference internal" href="#equation-ch12-eq-concentration">(12.2)</a>.</p>
+</div>
+</section>
+<section id="the-johnson-lindenstrauss-lemma">
+<h3><span class="section-number">12.2.2. </span>The Johnson–Lindenstrauss lemma<a class="headerlink" href="#the-johnson-lindenstrauss-lemma" title="Link to this heading">#</a></h3>
+<p>A random map is unlikely to distort any one vector much. A union bound turns
+this into a statement about all the pairwise distances of a finite set.</p>
+<div class="proof theorem admonition" id="ch12-thm-jl">
+<p class="admonition-title"><span class="caption-number">Theorem 12.2 </span> (Johnson–Lindenstrauss lemma)</p>
+<section class="theorem-content" id="proof-content">
+<p>There is an absolute constant <span class="math notranslate nohighlight">\(C\)</span> such that for every <span class="math notranslate nohighlight">\(0&lt;\varepsilon&lt;1\)</span>, every
+<span class="math notranslate nohighlight">\(N\ge2\)</span> and every set of <span class="math notranslate nohighlight">\(N\)</span> points <span class="math notranslate nohighlight">\(x_1,\dots,x_N\in\R^d\)</span>, if
+<span class="math notranslate nohighlight">\(k\ge C\varepsilon^{-2}\ln N\)</span> then there is a linear map
+<span class="math notranslate nohighlight">\(f:\R^d\to\R^k\)</span> with</p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-jl">
+<span class="eqno">(12.3)<a class="headerlink" href="#equation-ch12-eq-jl" title="Link to this equation">#</a></span>\[
+(1-\varepsilon)\|x_i-x_j\|_2^2\le\|f(x_i)-f(x_j)\|_2^2\le(1+\varepsilon)\|x_i-x_j\|_2^2
+\quad\text{for all } i,j.
+\]</div>
+</section>
+</div><p><span class="bibtex-citation" id="id7">Johnson and Lindenstrauss [<a class="reference internal" href="../back/bibliography.html#id78" title="William B. Johnson and Joram Lindenstrauss. Extensions of Lipschitz mappings into a Hilbert space. Contemporary Mathematics, 26:189–206, 1984.">1984</a>]</span> proved this, as a lemma in a paper on extensions of
+Lipschitz maps, with a random projection onto a <span class="math notranslate nohighlight">\(k\)</span>-dimensional subspace. The
+important feature is that <span class="math notranslate nohighlight">\(k\)</span> depends on the number of points and the
+accuracy but not on the ambient dimension <span class="math notranslate nohighlight">\(d\)</span>. With a Gaussian map we can make
+the constant explicit and the statement constructive.</p>
+<div class="proof theorem admonition" id="ch12-thm-jl-gaussian">
+<p class="admonition-title"><span class="caption-number">Theorem 12.3 </span> (Johnson–Lindenstrauss with a Gaussian map)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(x_1,\dots,x_N\in\R^d\)</span>, <span class="math notranslate nohighlight">\(0&lt;\varepsilon&lt;1\)</span>, <span class="math notranslate nohighlight">\(0&lt;\delta&lt;1\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[
+k\ \ge\ \frac{12\,\big(2\ln N+\ln(1/\delta)\big)}{\varepsilon^2(3-2\varepsilon)} .
+\]</div>
+<p>If <span class="math notranslate nohighlight">\(S = G/\sqrt k\)</span> with <span class="math notranslate nohighlight">\(G\in\R^{k\times d}\)</span> standard Gaussian, then with
+probability at least <span class="math notranslate nohighlight">\(1-\delta\)</span> the map <span class="math notranslate nohighlight">\(f(x) = Sx\)</span> satisfies
+<a class="reference internal" href="#equation-ch12-eq-jl">(12.3)</a> for all pairs <span class="math notranslate nohighlight">\(i,j\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Apply <a class="reference internal" href="#ch12-lem-concentration">Lemma 12.2</a> to each of the <span class="math notranslate nohighlight">\(N(N-1)/2\)</span> difference
+vectors <span class="math notranslate nohighlight">\(x_i-x_j\)</span>; by linearity <span class="math notranslate nohighlight">\(Sx_i - Sx_j = S(x_i-x_j)\)</span>. The probability that
+at least one of them violates <a class="reference internal" href="#equation-ch12-eq-jl">(12.3)</a> is at most the sum of the
+individual probabilities,</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{N(N-1)}{2}\cdot2\exp\Big(-\frac{k\varepsilon^2(3-2\varepsilon)}{12}\Big)
+&lt; N^2\exp\Big(-\frac{k\varepsilon^2(3-2\varepsilon)}{12}\Big)\le\delta,
+\]</div>
+<p>where the last inequality is the assumption on <span class="math notranslate nohighlight">\(k\)</span>.</p>
+</div>
+<p>Letting <span class="math notranslate nohighlight">\(\delta\to1\)</span> shows that <span class="math notranslate nohighlight">\(k\ge 24\ln N/(\varepsilon^2(3-2\varepsilon))\)</span>
+suffices for existence, which proves <a class="reference internal" href="#ch12-thm-jl">Theorem 12.2</a> with an explicit
+constant.</p>
+<div class="proof example admonition" id="ch12-exa-jl">
+<p class="admonition-title"><span class="caption-number">Example 12.1 </span> (How large must <span class="math notranslate nohighlight">\(k\)</span> be?)</p>
+<section class="example-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(N = 1000\)</span> points and <span class="math notranslate nohighlight">\(\varepsilon = 0.1\)</span>, the existence bound is
+<span class="math notranslate nohighlight">\(k\ge 24\ln(1000)/(0.01\cdot2.8)\approx5920.9\)</span>, so <span class="math notranslate nohighlight">\(k = 5921\)</span> suffices, and
+<span class="math notranslate nohighlight">\(k\ge7895\)</span> guarantees success with probability at least <span class="math notranslate nohighlight">\(0.99\)</span>. These numbers
+are the same for points in <span class="math notranslate nohighlight">\(\R^{10^4}\)</span> and in <span class="math notranslate nohighlight">\(\R^{10^9}\)</span>. They are useful
+only when <span class="math notranslate nohighlight">\(d\)</span> is much larger than <span class="math notranslate nohighlight">\(k\)</span>: for <span class="math notranslate nohighlight">\(d = 5000\)</span> the “embedding” would
+increase the dimension. The dependence on <span class="math notranslate nohighlight">\(\varepsilon\)</span> is severe: halving
+<span class="math notranslate nohighlight">\(\varepsilon\)</span> roughly quadruples <span class="math notranslate nohighlight">\(k\)</span>.</p>
+</section>
+</div><p>The Gaussian map costs <span class="math notranslate nohighlight">\(2kd\)</span> flops per point. The lab shows that for a
+random point set the union bound is only moderately pessimistic: the largest
+observed distortion is somewhat smaller than the guaranteed one, but of the
+same order. Faster maps with similar guarantees, using structured or sparse
+random matrices, are surveyed by <span class="bibtex-citation" id="id8">Woodruff [<a class="reference internal" href="../back/bibliography.html#id73" title="David P. Woodruff. Sketching as a tool for numerical linear algebra. Foundations and Trends in Theoretical Computer Science, 10(1–2):1–157, 2014.">2014</a>]</span> and
+<span class="bibtex-citation" id="id9">Martinsson and Tropp [<a class="reference internal" href="../back/bibliography.html#id72" title="Per-Gunnar Martinsson and Joel A. Tropp. Randomized numerical linear algebra: foundations and algorithms. Acta Numerica, 29:403–572, 2020.">2020</a>]</span>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The Johnson–Lindenstrauss lemma is about a <em>finite</em> set of vectors fixed
+before <span class="math notranslate nohighlight">\(S\)</span> is drawn. No linear map <span class="math notranslate nohighlight">\(\R^d\to\R^k\)</span> with <span class="math notranslate nohighlight">\(k&lt;d\)</span> preserves the
+norms of <em>all</em> vectors, because it has a nontrivial null space
+(<a class="reference internal" href="#ch12-ex-jl-linear"><span class="std std-numref">Exercise 12.1</span></a>). Likewise, the guarantee fails if the points are
+chosen after seeing <span class="math notranslate nohighlight">\(S\)</span>, for instance adaptively by an algorithm that uses
+<span class="math notranslate nohighlight">\(S\)</span>.</p>
+</div>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>Why does the embedding dimension in <a class="reference internal" href="#ch12-thm-jl-gaussian">Theorem 12.3</a> not depend
+on <span class="math notranslate nohighlight">\(d\)</span>, although <span class="math notranslate nohighlight">\(S\)</span> has <span class="math notranslate nohighlight">\(d\)</span> columns?</p>
+<p><em>Answer.</em> By rotational invariance, <span class="math notranslate nohighlight">\(S(x_i-x_j)/\|x_i-x_j\|_2\)</span> is distributed
+as <span class="math notranslate nohighlight">\(G e_1/\sqrt k\)</span> whatever the dimension <span class="math notranslate nohighlight">\(d\)</span> is: the sketch of a fixed unit
+vector is a <span class="math notranslate nohighlight">\(k\)</span>-dimensional standard Gaussian vector scaled by <span class="math notranslate nohighlight">\(1/\sqrt k\)</span>. The
+only place where the problem enters is the number of vectors, <span class="math notranslate nohighlight">\(N(N-1)/2\)</span>, in
+the union bound.</p>
+</div>
+</section>
+</section>
+<section id="subspace-embeddings">
+<span id="ch12-sec-embeddings"></span><h2><span class="section-number">12.3. </span>Subspace embeddings<a class="headerlink" href="#subspace-embeddings" title="Link to this heading">#</a></h2>
+<p>For linear algebra we need more than finitely many vectors: we want a sketch
+that preserves the norms of <em>all</em> vectors in a subspace, such as
+<span class="math notranslate nohighlight">\(\range(A)\)</span> for a tall matrix <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<div class="proof definition admonition" id="ch12-def-subspace-embedding">
+<p class="admonition-title"><span class="caption-number">Definition 12.2 </span> (Subspace embedding)</p>
+<section class="definition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(\mathcal V\subseteq\R^m\)</span> be a subspace and <span class="math notranslate nohighlight">\(0\le\varepsilon&lt;1\)</span>. A matrix
+<span class="math notranslate nohighlight">\(S\in\R^{s\times m}\)</span> is an <em><span class="math notranslate nohighlight">\(\varepsilon\)</span>-subspace embedding</em> for <span class="math notranslate nohighlight">\(\mathcal V\)</span> if</p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-embedding">
+<span class="eqno">(12.4)<a class="headerlink" href="#equation-ch12-eq-embedding" title="Link to this equation">#</a></span>\[
+(1-\varepsilon)\|y\|_2^2\le\|Sy\|_2^2\le(1+\varepsilon)\|y\|_2^2
+\qquad\text{for all } y\in\mathcal V.
+\]</div>
+<p>A random <span class="math notranslate nohighlight">\(S\)</span> is an <em>oblivious</em> subspace embedding for dimension <span class="math notranslate nohighlight">\(d\)</span> with
+failure probability <span class="math notranslate nohighlight">\(\delta\)</span> if, for every fixed subspace of dimension <span class="math notranslate nohighlight">\(d\)</span>,
+<a class="reference internal" href="#equation-ch12-eq-embedding">(12.4)</a> holds with probability at least <span class="math notranslate nohighlight">\(1-\delta\)</span>.</p>
+</section>
+</div><p>“Oblivious” means that the distribution of <span class="math notranslate nohighlight">\(S\)</span> is chosen without looking at
+<span class="math notranslate nohighlight">\(\mathcal V\)</span>; in algorithms, <span class="math notranslate nohighlight">\(S\)</span> is drawn without looking at <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<div class="proof proposition admonition" id="ch12-prop-embedding-sv">
+<p class="admonition-title"><span class="caption-number">Proposition 12.1 </span> (Subspace embeddings and singular values)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(U\in\R^{m\times d}\)</span> have orthonormal columns and <span class="math notranslate nohighlight">\(\mathcal V = \range(U)\)</span>.
+Then <span class="math notranslate nohighlight">\(S\)</span> is an <span class="math notranslate nohighlight">\(\varepsilon\)</span>-subspace embedding for <span class="math notranslate nohighlight">\(\mathcal V\)</span> if and only if
+all singular values of <span class="math notranslate nohighlight">\(SU\in\R^{s\times d}\)</span> lie in the interval
+<span class="math notranslate nohighlight">\([\sqrt{1-\varepsilon},\ \sqrt{1+\varepsilon}]\)</span>. In particular this requires
+<span class="math notranslate nohighlight">\(s\ge d\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Every <span class="math notranslate nohighlight">\(y\in\mathcal V\)</span> is <span class="math notranslate nohighlight">\(y = Uz\)</span> with <span class="math notranslate nohighlight">\(\|y\|_2^2 = z^TU^TUz = \|z\|_2^2\)</span>, so <a class="reference internal" href="#equation-ch12-eq-embedding">(12.4)</a> says
+<span class="math notranslate nohighlight">\(1-\varepsilon\le\|SUz\|_2^2/\|z\|_2^2\le1+\varepsilon\)</span> for all <span class="math notranslate nohighlight">\(z\ne0\)</span>. The
+extreme values of this Rayleigh quotient are <span class="math notranslate nohighlight">\(\sigma_{\min}(SU)^2\)</span> and
+<span class="math notranslate nohighlight">\(\sigma_{\max}(SU)^2\)</span>. If <span class="math notranslate nohighlight">\(s&lt;d\)</span>, then <span class="math notranslate nohighlight">\(SU\)</span> has a nontrivial null space and
+<span class="math notranslate nohighlight">\(\sigma_{\min}(SU) = 0\)</span>.</p>
+</div>
+<p><strong>Gaussian embeddings.</strong> For <span class="math notranslate nohighlight">\(S = G/\sqrt s\)</span> with <span class="math notranslate nohighlight">\(G\)</span> standard Gaussian,
+<a class="reference internal" href="#ch12-lem-rotation">Lemma 12.1</a> shows that <span class="math notranslate nohighlight">\(SU\)</span> is itself a standard Gaussian
+<span class="math notranslate nohighlight">\(s\times d\)</span> matrix divided by <span class="math notranslate nohighlight">\(\sqrt s\)</span>, whatever the subspace. The quality of
+the embedding is therefore governed entirely by the extreme singular values of
+a rectangular Gaussian matrix. A classical result of random matrix theory
+states that these concentrate near <span class="math notranslate nohighlight">\(\sqrt s\pm\sqrt d\)</span>, so that the singular
+values of <span class="math notranslate nohighlight">\(SU\)</span> lie close to the interval <span class="math notranslate nohighlight">\([1-\sqrt{d/s},\ 1+\sqrt{d/s}]\)</span>
+(see the discussion of Gaussian embeddings in <span class="bibtex-citation" id="id10">Martinsson and Tropp [<a class="reference internal" href="../back/bibliography.html#id72" title="Per-Gunnar Martinsson and Joel A. Tropp. Randomized numerical linear algebra: foundations and algorithms. Acta Numerica, 29:403–572, 2020.">2020</a>]</span>); the
+lab confirms this numerically. Squaring, the distortion is
+<span class="math notranslate nohighlight">\(\varepsilon\approx2\sqrt{d/s}\)</span>, so <span class="math notranslate nohighlight">\(s\)</span> of order <span class="math notranslate nohighlight">\(d/\varepsilon^2\)</span> rows are
+needed. A rigorous version, obtained by applying
+<a class="reference internal" href="#ch12-lem-concentration">Lemma 12.2</a> to a finite net of the unit sphere of
+<span class="math notranslate nohighlight">\(\mathcal V\)</span>, shows that <span class="math notranslate nohighlight">\(s\)</span> of order <span class="math notranslate nohighlight">\((d+\ln(1/\delta))/\varepsilon^2\)</span>
+suffices for failure probability <span class="math notranslate nohighlight">\(\delta\)</span> <span class="bibtex-citation" id="id11">[<a class="reference internal" href="../back/bibliography.html#id73" title="David P. Woodruff. Sketching as a tool for numerical linear algebra. Foundations and Trends in Theoretical Computer Science, 10(1–2):1–157, 2014.">Woodruff, 2014</a>]</span>.</p>
+<p>In practice the distortion need not be small. For preconditioning, an
+embedding with <span class="math notranslate nohighlight">\(\varepsilon = 1/2\)</span> is sufficient, and it is obtained with
+<span class="math notranslate nohighlight">\(s\)</span> a small multiple of <span class="math notranslate nohighlight">\(d\)</span>.</p>
+<p><strong>Structured and sparse embeddings.</strong> Forming <span class="math notranslate nohighlight">\(SA\)</span> with a dense Gaussian <span class="math notranslate nohighlight">\(S\)</span>
+costs <span class="math notranslate nohighlight">\(2smn\)</span> flops for <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>, which for least squares is no
+cheaper than a QR factorization. Two families of sketches are much cheaper to
+apply <span class="bibtex-citation" id="id12">[<a class="reference internal" href="../back/bibliography.html#id72" title="Per-Gunnar Martinsson and Joel A. Tropp. Randomized numerical linear algebra: foundations and algorithms. Acta Numerica, 29:403–572, 2020.">Martinsson and Tropp, 2020</a>, <a class="reference internal" href="../back/bibliography.html#id73" title="David P. Woodruff. Sketching as a tool for numerical linear algebra. Foundations and Trends in Theoretical Computer Science, 10(1–2):1–157, 2014.">Woodruff, 2014</a>]</span>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Sketch</p></th>
+<th class="head"><p>Form</p></th>
+<th class="head"><p>Cost of forming <span class="math notranslate nohighlight">\(SA\)</span>, <span class="math notranslate nohighlight">\(A\)</span> dense <span class="math notranslate nohighlight">\(m\times n\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Gaussian</p></td>
+<td><p><span class="math notranslate nohighlight">\(G/\sqrt s\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2smn\)</span> flops</p></td>
+</tr>
+<tr class="row-odd"><td><p>Subsampled randomized trigonometric transform (SRFT, SRHT)</p></td>
+<td><p><span class="math notranslate nohighlight">\(\sqrt{m/s}\,PFD\)</span>: random signs <span class="math notranslate nohighlight">\(D\)</span>, a fast orthogonal transform <span class="math notranslate nohighlight">\(F\)</span> (Fourier, cosine or Hadamard), <span class="math notranslate nohighlight">\(s\)</span> sampled rows <span class="math notranslate nohighlight">\(P\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\bigO(mn\log m)\)</span> flops</p></td>
+</tr>
+<tr class="row-even"><td><p>Sparse sign embedding (CountSketch when <span class="math notranslate nohighlight">\(\zeta=1\)</span>)</p></td>
+<td><p><span class="math notranslate nohighlight">\(\zeta\)</span> nonzero entries <span class="math notranslate nohighlight">\(\pm1/\sqrt\zeta\)</span> in random positions of each column</p></td>
+<td><p><span class="math notranslate nohighlight">\(\bigO(\zeta\cdot\mathrm{nnz}(A))\)</span> flops</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The fast transform mixes the rows so that no single row carries a large
+share of the information, after which uniform sampling works. Sparse
+embeddings cost time proportional to the number of nonzeros of <span class="math notranslate nohighlight">\(A\)</span>, which is
+ideal for sparse data, but with only one nonzero per column they need <span class="math notranslate nohighlight">\(s\)</span> of
+order <span class="math notranslate nohighlight">\(d^2\)</span> rows; a few nonzeros per column bring <span class="math notranslate nohighlight">\(s\)</span> back to nearly linear in
+<span class="math notranslate nohighlight">\(d\)</span>. Structured sketches need somewhat more rows than Gaussian ones for the
+same distortion, and their analysis is harder; in practice they behave much
+like Gaussian sketches <span class="bibtex-citation" id="id13">[<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">Halko <em>et al.</em>, 2011</a>, <a class="reference internal" href="../back/bibliography.html#id72" title="Per-Gunnar Martinsson and Joel A. Tropp. Randomized numerical linear algebra: foundations and algorithms. Acta Numerica, 29:403–572, 2020.">Martinsson and Tropp, 2020</a>]</span>.</p>
+</section>
+<section id="the-randomized-range-finder-and-the-randomized-svd">
+<span id="ch12-sec-range-finder"></span><h2><span class="section-number">12.4. </span>The randomized range finder and the randomized SVD<a class="headerlink" href="#the-randomized-range-finder-and-the-randomized-svd" title="Link to this heading">#</a></h2>
+<section id="formulation">
+<h3><span class="section-number">12.4.1. </span>Formulation<a class="headerlink" href="#formulation" title="Link to this heading">#</a></h3>
+<p>Given <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> and a target rank <span class="math notranslate nohighlight">\(k\)</span>, we look for a matrix
+<span class="math notranslate nohighlight">\(Q\in\R^{m\times\ell}\)</span> with orthonormal columns, <span class="math notranslate nohighlight">\(\ell\)</span> slightly larger than
+<span class="math notranslate nohighlight">\(k\)</span>, such that</p>
+<div class="math notranslate nohighlight">
+\[
+A\approx QQ^TA .
+\]</div>
+<p>This is the <em>range-finding problem</em>. Once <span class="math notranslate nohighlight">\(Q\)</span> is known, any factorization of
+<span class="math notranslate nohighlight">\(A\)</span> restricted to <span class="math notranslate nohighlight">\(\range(Q)\)</span> is cheap: with <span class="math notranslate nohighlight">\(B = Q^TA\in\R^{\ell\times n}\)</span> we
+have <span class="math notranslate nohighlight">\(A\approx QB\)</span>, and an SVD of the small matrix <span class="math notranslate nohighlight">\(B\)</span> yields an approximate
+SVD of <span class="math notranslate nohighlight">\(A\)</span>. This two-stage structure, random range finding followed by
+deterministic post-processing, is the framework of <span class="bibtex-citation" id="id14">Halko <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">2011</a>]</span>
+(Sections 4 and 5).</p>
+<p>The range finder takes <span class="math notranslate nohighlight">\(\ell = k+p\)</span> random combinations of the columns of <span class="math notranslate nohighlight">\(A\)</span>.
+The <em>oversampling parameter</em> <span class="math notranslate nohighlight">\(p\)</span> is a small integer such as 5 or 10; we will
+see that <span class="math notranslate nohighlight">\(p\ge2\)</span> is needed for the expected-error bound and that <span class="math notranslate nohighlight">\(p\)</span> between
+5 and 10 is enough for a modest constant.</p>
+<div class="proof algorithm admonition" id="ch12-alg-range-finder">
+<p class="admonition-title"><span class="caption-number">Algorithm 12.1 </span> (Randomized range finder)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> (or routines for <span class="math notranslate nohighlight">\(X\mapsto AX\)</span> and
+<span class="math notranslate nohighlight">\(X\mapsto A^TX\)</span>), target rank <span class="math notranslate nohighlight">\(k\)</span>, oversampling <span class="math notranslate nohighlight">\(p\)</span>, with
+<span class="math notranslate nohighlight">\(\ell = k+p\le\min(m,n)\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(Q\in\R^{m\times\ell}\)</span> with orthonormal columns.</p>
+<ol class="arabic simple">
+<li><p>Draw a standard Gaussian test matrix <span class="math notranslate nohighlight">\(\Omega\in\R^{n\times\ell}\)</span>.</p></li>
+<li><p>Form the sample matrix <span class="math notranslate nohighlight">\(Y = A\Omega\)</span>.</p></li>
+<li><p>Compute a thin QR factorization <span class="math notranslate nohighlight">\(Y = QR\)</span> (Householder QR,
+<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a>) and return <span class="math notranslate nohighlight">\(Q\)</span>.</p></li>
+</ol>
+</section>
+</div><div class="proof algorithm admonition" id="ch12-alg-rsvd">
+<p class="admonition-title"><span class="caption-number">Algorithm 12.2 </span> (Randomized SVD)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>, target rank <span class="math notranslate nohighlight">\(k\)</span>, oversampling <span class="math notranslate nohighlight">\(p\)</span>, number of
+power iterations <span class="math notranslate nohighlight">\(q\ge0\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(U_k\in\R^{m\times k}\)</span>, <span class="math notranslate nohighlight">\(\Sigma_k\in\R^{k\times k}\)</span>,
+<span class="math notranslate nohighlight">\(V_k\in\R^{n\times k}\)</span> with <span class="math notranslate nohighlight">\(A\approx\widehat A_k = U_k\Sigma_kV_k^T\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Compute <span class="math notranslate nohighlight">\(Q\in\R^{m\times\ell}\)</span> by <a class="reference internal" href="#ch12-alg-range-finder">Algorithm 12.1</a> (if
+<span class="math notranslate nohighlight">\(q=0\)</span>) or by <a class="reference internal" href="#ch12-alg-subspace-iteration">Algorithm 12.3</a> (if <span class="math notranslate nohighlight">\(q&gt;0\)</span>).</p></li>
+<li><p>Form <span class="math notranslate nohighlight">\(B = Q^TA\in\R^{\ell\times n}\)</span>.</p></li>
+<li><p>Compute the thin SVD <span class="math notranslate nohighlight">\(B = \widetilde U\,\widehat\Sigma\,\widehat V^T\)</span>.</p></li>
+<li><p>Set <span class="math notranslate nohighlight">\(U_k = Q\widetilde U(:,1{:}k)\)</span>, <span class="math notranslate nohighlight">\(\Sigma_k = \widehat\Sigma(1{:}k,1{:}k)\)</span>
+and <span class="math notranslate nohighlight">\(V_k = \widehat V(:,1{:}k)\)</span>.</p></li>
+</ol>
+</section>
+</div><p><strong>Cost.</strong> For a dense <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(q = 0\)</span>, forming <span class="math notranslate nohighlight">\(Y\)</span> costs <span class="math notranslate nohighlight">\(2mn\ell\)</span> flops, the
+QR factorization <span class="math notranslate nohighlight">\(\bigO(m\ell^2)\)</span>, forming <span class="math notranslate nohighlight">\(B\)</span> another <span class="math notranslate nohighlight">\(2mn\ell\)</span>, the SVD of
+<span class="math notranslate nohighlight">\(B\)</span> <span class="math notranslate nohighlight">\(\bigO(n\ell^2)\)</span>, and forming <span class="math notranslate nohighlight">\(U_k\)</span> <span class="math notranslate nohighlight">\(2m\ell k\)</span>. The total is</p>
+<div class="math notranslate nohighlight">
+\[
+4mn\ell + \bigO\big((m+n)\ell^2\big)\ \text{flops}
+\]</div>
+<p>and two passes over <span class="math notranslate nohighlight">\(A\)</span>. When <span class="math notranslate nohighlight">\(\ell\ll\min(m,n)\)</span> this is much less than the
+<span class="math notranslate nohighlight">\(\bigO(mn\min(m,n))\)</span> of a dense SVD, and the dominant work consists of two
+matrix-matrix products, the most efficient operation on modern hardware
+(<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-sec-products"><span class="std std-numref">Section 1.1</span></a>). For a matrix available only through products,
+the algorithm needs <span class="math notranslate nohighlight">\(\ell\)</span> products with <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(\ell\)</span> with <span class="math notranslate nohighlight">\(A^T\)</span>, organized as
+two block products.</p>
+<p><strong>Exactness for low-rank matrices.</strong> The first theorem explains why the
+method works at all.</p>
+<div class="proof proposition admonition" id="ch12-prop-exact-rank">
+<p class="admonition-title"><span class="caption-number">Proposition 12.2 </span> (Exact recovery of low-rank matrices)</p>
+<section class="proposition-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(\rank(A) = r\le\ell\)</span>, then with probability one the matrix <span class="math notranslate nohighlight">\(Q\)</span> of
+<a class="reference internal" href="#ch12-alg-range-finder">Algorithm 12.1</a> (computed in exact arithmetic) satisfies
+<span class="math notranslate nohighlight">\(\range(A)\subseteq\range(Q)\)</span>, and hence <span class="math notranslate nohighlight">\(A = QQ^TA\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Write the thin SVD <span class="math notranslate nohighlight">\(A = U_r\Sigma_rV_r^T\)</span> with <span class="math notranslate nohighlight">\(\Sigma_r\)</span> invertible. Then
+<span class="math notranslate nohighlight">\(Y = U_r\Sigma_r(V_r^T\Omega)\)</span>, and <span class="math notranslate nohighlight">\(V_r^T\Omega\)</span> is an <span class="math notranslate nohighlight">\(r\times\ell\)</span> standard
+Gaussian matrix by <a class="reference internal" href="#ch12-lem-rotation">Lemma 12.1</a>. It has full row rank <span class="math notranslate nohighlight">\(r\)</span>
+with probability one, so <span class="math notranslate nohighlight">\(\range(Y) = \range(U_r) = \range(A)\)</span>. Since
+<span class="math notranslate nohighlight">\(Y = QR\)</span>, <span class="math notranslate nohighlight">\(\range(Y)\subseteq\range(Q)\)</span>. Hence <span class="math notranslate nohighlight">\(QQ^T\)</span> acts as the identity on
+<span class="math notranslate nohighlight">\(\range(A)\)</span>, that is, <span class="math notranslate nohighlight">\(QQ^TA = A\)</span>.</p>
+</div>
+<p>When <span class="math notranslate nohighlight">\(\ell&gt;r\)</span>, the columns of <span class="math notranslate nohighlight">\(Q\)</span> beyond the first <span class="math notranslate nohighlight">\(r\)</span> directions are
+determined by rounding errors; they do no harm. In floating point, the lab
+observes for a <span class="math notranslate nohighlight">\(500\times300\)</span> matrix of rank 15 a relative error
+<span class="math notranslate nohighlight">\(\|A-QQ^TA\|_2/\|A\|_2\)</span> at the level of rounding errors, a modest multiple of
+<span class="math notranslate nohighlight">\(nu\)</span>.</p>
+</section>
+<section id="error-analysis">
+<h3><span class="section-number">12.4.2. </span>Error analysis<a class="headerlink" href="#error-analysis" title="Link to this heading">#</a></h3>
+<p>Real matrices are rarely of exactly low rank. We now bound the error
+<span class="math notranslate nohighlight">\(\|(I-QQ^T)A\|\)</span> in terms of the singular values. Let <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span> be a
+full SVD and partition, for the target rank <span class="math notranslate nohighlight">\(k\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\Sigma = \begin{bmatrix}\Sigma_1 &amp; 0\\ 0 &amp; \Sigma_2\end{bmatrix},\qquad
+V = \begin{bmatrix}V_1 &amp; V_2\end{bmatrix},\qquad
+\Omega_1 = V_1^T\Omega\in\R^{k\times\ell},\quad
+\Omega_2 = V_2^T\Omega\in\R^{(n-k)\times\ell},
+\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(\Sigma_1 = \diag(\sigma_1,\dots,\sigma_k)\)</span> and <span class="math notranslate nohighlight">\(\Sigma_2\)</span> containing the
+remaining singular values. Note that <span class="math notranslate nohighlight">\(\|\Sigma_2\|_2 = \sigma_{k+1}\)</span> and
+<span class="math notranslate nohighlight">\(\|\Sigma_2\|_F = (\sum_{j&gt;k}\sigma_j^2)^{1/2}\)</span> are the optimal errors of
+<a class="reference internal" href="#ch12-thm-eckart-young">Theorem 12.1</a>. The matrix <span class="math notranslate nohighlight">\(\Omega_1\)</span> measures how well the
+test matrix sees the dominant right singular vectors, and <span class="math notranslate nohighlight">\(\Omega_2\)</span> how much
+it picks up from the rest.</p>
+<div class="proof theorem admonition" id="ch12-thm-deterministic">
+<p class="admonition-title"><span class="caption-number">Theorem 12.4 </span> (Deterministic error bound)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(\Omega\in\R^{n\times\ell}\)</span> be any matrix such that <span class="math notranslate nohighlight">\(\Omega_1 = V_1^T\Omega\)</span>
+has full row rank <span class="math notranslate nohighlight">\(k\)</span>, let <span class="math notranslate nohighlight">\(Y = A\Omega\)</span>, and let <span class="math notranslate nohighlight">\(P_Y\)</span> be the orthogonal
+projector onto <span class="math notranslate nohighlight">\(\range(Y)\)</span>. Then, for both the 2-norm and the Frobenius norm,</p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-deterministic">
+<span class="eqno">(12.5)<a class="headerlink" href="#equation-ch12-eq-deterministic" title="Link to this equation">#</a></span>\[
+\|(I-P_Y)A\|^2\le\|\Sigma_2\|^2+\|\Sigma_2\Omega_2\Omega_1^{\dagger}\|^2 ,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Omega_1^\dagger = \Omega_1^T(\Omega_1\Omega_1^T)^{-1}\)</span> is the
+pseudoinverse of <span class="math notranslate nohighlight">\(\Omega_1\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Let <span class="math notranslate nohighlight">\(Z = Y\Omega_1^\dagger\in\R^{m\times k}\)</span>. Since <span class="math notranslate nohighlight">\(\Omega_1\Omega_1^\dagger = I_k\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+Z = U\Sigma V^T\Omega\,\Omega_1^\dagger
+= U\begin{bmatrix}\Sigma_1\Omega_1\\ \Sigma_2\Omega_2\end{bmatrix}\Omega_1^\dagger
+= U\begin{bmatrix}\Sigma_1\\ F\end{bmatrix},\qquad F = \Sigma_2\Omega_2\Omega_1^\dagger .
+\end{split}\]</div>
+<p>Because <span class="math notranslate nohighlight">\(\range(Z)\subseteq\range(Y)\)</span>, we have <span class="math notranslate nohighlight">\((I-P_Y) = (I-P_Y)(I-P_Z)\)</span>, so
+<span class="math notranslate nohighlight">\(\|(I-P_Y)A\|\le\|(I-P_Z)A\|\)</span>. For every <span class="math notranslate nohighlight">\(W\)</span>, <span class="math notranslate nohighlight">\((I-P_Z)A = (I-P_Z)(A-ZW)\)</span>
+because <span class="math notranslate nohighlight">\((I-P_Z)Z = 0\)</span>, and <span class="math notranslate nohighlight">\(\|I-P_Z\|_2\le1\)</span>; hence
+<span class="math notranslate nohighlight">\(\|(I-P_Z)A\|\le\|A-ZW\|\)</span> in both norms (<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-frobenius">Theorem 1.5</a>). Choose
+<span class="math notranslate nohighlight">\(W = V_1^T\)</span>. Using <span class="math notranslate nohighlight">\(A = U\begin{bmatrix}\Sigma_1V_1^T\\ \Sigma_2V_2^T\end{bmatrix}\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A - ZV_1^T = U\begin{bmatrix}0\\ \Sigma_2V_2^T - FV_1^T\end{bmatrix}
+= U\begin{bmatrix}0 &amp; 0\\ -F &amp; \Sigma_2\end{bmatrix}V^T .
+\end{split}\]</div>
+<p>By unitary invariance (<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-unitary-invariance">Theorem 1.6</a>) its norm is
+that of <span class="math notranslate nohighlight">\([-F,\ \Sigma_2]\)</span>. In the Frobenius norm,
+<span class="math notranslate nohighlight">\(\|[-F,\ \Sigma_2]\|_F^2 = \|F\|_F^2+\|\Sigma_2\|_F^2\)</span>. In the 2-norm,
+<span class="math notranslate nohighlight">\(\|[-F,\ \Sigma_2]\|_2^2 = \|FF^T+\Sigma_2\Sigma_2^T\|_2\le\|F\|_2^2+\|\Sigma_2\|_2^2\)</span>.</p>
+</div>
+<p>This bound is the deterministic core of the analysis in <span class="bibtex-citation" id="id15">Halko <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">2011</a>]</span>
+(Section 9). It holds for any test matrix, random or not. It says that the
+range finder is nearly optimal as soon as <span class="math notranslate nohighlight">\(\Omega_1\)</span> is well conditioned (the
+test matrix “sees” all <span class="math notranslate nohighlight">\(k\)</span> dominant directions) and <span class="math notranslate nohighlight">\(\Omega_2\)</span> is not too
+large. A random test matrix achieves this with high probability.</p>
+<div class="proof theorem admonition" id="ch12-thm-frobenius-bound">
+<p class="admonition-title"><span class="caption-number">Theorem 12.5 </span> (Expected Frobenius error for Gaussian test matrices)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(k\ge1\)</span>, <span class="math notranslate nohighlight">\(p\ge2\)</span> and <span class="math notranslate nohighlight">\(\ell = k+p\le\min(m,n)\)</span>, let <span class="math notranslate nohighlight">\(\Omega\in\R^{n\times\ell}\)</span>
+be a standard Gaussian matrix, and let <span class="math notranslate nohighlight">\(Q\)</span> be an orthonormal basis of
+<span class="math notranslate nohighlight">\(\range(A\Omega)\)</span>. Then</p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-frobenius-bound">
+<span class="eqno">(12.6)<a class="headerlink" href="#equation-ch12-eq-frobenius-bound" title="Link to this equation">#</a></span>\[
+\mathbb{E}\,\|(I-QQ^T)A\|_F^2\le\Big(1+\frac{k}{p-1}\Big)\sum_{j&gt;k}\sigma_j^2,
+\qquad
+\mathbb{E}\,\|(I-QQ^T)A\|_F\le\Big(1+\frac{k}{p-1}\Big)^{1/2}\Big(\sum_{j&gt;k}\sigma_j^2\Big)^{1/2}.
+\]</div>
+</section>
+</div><p>The second inequality is Theorem 10.5 of <span class="bibtex-citation" id="id16">Halko <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">2011</a>]</span> (stated there
+for <span class="math notranslate nohighlight">\(k\ge2\)</span>).</p>
+<div class="proof admonition" id="proof">
+<p>Proof. Since <span class="math notranslate nohighlight">\(V = [V_1,\ V_2]\)</span> is orthogonal, <span class="math notranslate nohighlight">\(\Omega_1\)</span> and <span class="math notranslate nohighlight">\(\Omega_2\)</span> are
+independent standard Gaussian matrices (<a class="reference internal" href="#ch12-lem-rotation">Lemma 12.1</a>, applied
+to <span class="math notranslate nohighlight">\(\Omega^T\)</span>). With probability one <span class="math notranslate nohighlight">\(\Omega_1\)</span> has full row rank, so
+<a class="reference internal" href="#ch12-thm-deterministic">Theorem 12.4</a> applies. Fix <span class="math notranslate nohighlight">\(\Omega_1\)</span> and average over
+<span class="math notranslate nohighlight">\(\Omega_2\)</span>. For a standard Gaussian <span class="math notranslate nohighlight">\(G\)</span> and fixed <span class="math notranslate nohighlight">\(M\)</span>, <span class="math notranslate nohighlight">\(N\)</span> we have
+<span class="math notranslate nohighlight">\(\mathbb{E}\|MGN\|_F^2 = \|M\|_F^2\|N\|_F^2\)</span> (<a class="reference internal" href="#ch12-ex-gaussian-frobenius"><span class="std std-numref">Exercise 12.3</span></a>), so</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}\big[\|\Sigma_2\Omega_2\Omega_1^\dagger\|_F^2\ \big|\ \Omega_1\big]
+= \|\Sigma_2\|_F^2\,\|\Omega_1^\dagger\|_F^2 .
+\]</div>
+<p>Next, <span class="math notranslate nohighlight">\(\|\Omega_1^\dagger\|_F^2 = \trace\big((\Omega_1\Omega_1^T)^{-1}\big)\)</span>,
+and for a <span class="math notranslate nohighlight">\(k\times(k+p)\)</span> standard Gaussian matrix with <span class="math notranslate nohighlight">\(p\ge2\)</span> the mean of
+the inverse Wishart matrix <span class="math notranslate nohighlight">\((\Omega_1\Omega_1^T)^{-1}\)</span> is <span class="math notranslate nohighlight">\(I_k/(p-1)\)</span>
+<span class="bibtex-citation" id="id17">[<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">Halko <em>et al.</em>, 2011</a>]</span> (Section 10). Hence
+<span class="math notranslate nohighlight">\(\mathbb{E}\|\Omega_1^\dagger\|_F^2 = k/(p-1)\)</span>, and taking the expectation of
+<a class="reference internal" href="#equation-ch12-eq-deterministic">(12.5)</a> gives the first inequality. The second follows
+from <span class="math notranslate nohighlight">\(\mathbb{E}X\le(\mathbb{E}X^2)^{1/2}\)</span> (Jensen’s inequality).</p>
+</div>
+<p>The spectral-norm analysis is more involved; we state the result without
+proof.</p>
+<div class="proof theorem admonition" id="ch12-thm-spectral-bound">
+<p class="admonition-title"><span class="caption-number">Theorem 12.6 </span> (Expected spectral error (Halko, Martinsson and Tropp))</p>
+<section class="theorem-content" id="proof-content">
+<p>Under the hypotheses of <a class="reference internal" href="#ch12-thm-frobenius-bound">Theorem 12.5</a> with <span class="math notranslate nohighlight">\(k\ge2\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-spectral-bound">
+<span class="eqno">(12.7)<a class="headerlink" href="#equation-ch12-eq-spectral-bound" title="Link to this equation">#</a></span>\[
+\mathbb{E}\,\|(I-QQ^T)A\|_2\le\Big(1+\sqrt{\frac{k}{p-1}}\Big)\sigma_{k+1}
++\frac{e\sqrt{k+p}}{p}\Big(\sum_{j&gt;k}\sigma_j^2\Big)^{1/2}.
+\]</div>
+</section>
+</div><p>This is Theorem 10.6 of <span class="bibtex-citation" id="id18">Halko <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">2011</a>]</span>, where one also finds tail bounds
+showing that large deviations above the expectation are extremely unlikely.</p>
+<p><strong>Interpretation.</strong> For <span class="math notranslate nohighlight">\(k = 10\)</span> the Frobenius factor
+<span class="math notranslate nohighlight">\((1+k/(p-1))^{1/2}\)</span> equals <span class="math notranslate nohighlight">\(3.32\)</span> for <span class="math notranslate nohighlight">\(p = 2\)</span>, <span class="math notranslate nohighlight">\(1.87\)</span> for <span class="math notranslate nohighlight">\(p = 5\)</span> and <span class="math notranslate nohighlight">\(1.45\)</span>
+for <span class="math notranslate nohighlight">\(p = 10\)</span>. Oversampling by a handful of columns multiplies the work only by
+<span class="math notranslate nohighlight">\((k+p)/k\)</span> and removes most of the gap to the optimum. The spectral bound has
+a second term: the Frobenius norm of the whole tail, which for slowly decaying
+singular values can be much larger than <span class="math notranslate nohighlight">\(\sigma_{k+1}\)</span>. For example, for
+<span class="math notranslate nohighlight">\(\sigma_j = 1/j\)</span>, <span class="math notranslate nohighlight">\(j = 1,\dots,1000\)</span>, and <span class="math notranslate nohighlight">\(k = 10\)</span>, the tail
+<span class="math notranslate nohighlight">\((\sum_{j&gt;10}\sigma_j^2)^{1/2}\approx0.307\)</span> is about <span class="math notranslate nohighlight">\(3.4\)</span> times
+<span class="math notranslate nohighlight">\(\sigma_{11}\approx0.0909\)</span>. The remedy is the power scheme of
+<a class="reference internal" href="#ch12-sec-power"><span class="std std-numref">Section 12.5</span></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The bounds compare the rank-<span class="math notranslate nohighlight">\(\ell\)</span> matrix <span class="math notranslate nohighlight">\(QQ^TA\)</span>, <span class="math notranslate nohighlight">\(\ell = k+p\)</span>, with the
+best rank-<span class="math notranslate nohighlight">\(k\)</span> approximation, so the ratio can be smaller than one. Comparing
+the randomized method fairly with the truncated SVD requires truncating to
+rank <span class="math notranslate nohighlight">\(k\)</span>, as in step 4 of <a class="reference internal" href="#ch12-alg-rsvd">Algorithm 12.2</a>, and the following
+proposition controls what truncation costs.</p>
+</div>
+<div class="proof proposition admonition" id="ch12-prop-rsvd-truncation">
+<p class="admonition-title"><span class="caption-number">Proposition 12.3 </span> (Error of the truncated randomized SVD)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(Q\in\R^{m\times\ell}\)</span> have orthonormal columns, <span class="math notranslate nohighlight">\(B = Q^TA\)</span>, let <span class="math notranslate nohighlight">\(B_k\)</span> be
+the truncated SVD of <span class="math notranslate nohighlight">\(B\)</span> of rank <span class="math notranslate nohighlight">\(k\le\ell\)</span>, and <span class="math notranslate nohighlight">\(\widehat A_k = QB_k\)</span> (the
+output of <a class="reference internal" href="#ch12-alg-rsvd">Algorithm 12.2</a>). Then <span class="math notranslate nohighlight">\(\sigma_j(B)\le\sigma_j(A)\)</span> for all
+<span class="math notranslate nohighlight">\(j\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\|A-\widehat A_k\|_F^2 &amp;= \|(I-QQ^T)A\|_F^2+\|B-B_k\|_F^2
+\le\|(I-QQ^T)A\|_F^2+\sum_{j&gt;k}\sigma_j^2,\\
+\|A-\widehat A_k\|_2 &amp;\le\|(I-QQ^T)A\|_2+\sigma_{k+1}.
+\end{aligned}
+\end{split}\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. For any <span class="math notranslate nohighlight">\(M\)</span> with <span class="math notranslate nohighlight">\(\|M\|_2\le1\)</span> and any <span class="math notranslate nohighlight">\(j\)</span>, <a class="reference internal" href="#ch12-thm-eckart-young">Theorem 12.1</a>
+applied to <span class="math notranslate nohighlight">\(MA\)</span> gives
+<span class="math notranslate nohighlight">\(\sigma_j(MA)\le\|MA - MA_{j-1}\|_2\le\|A-A_{j-1}\|_2 = \sigma_j(A)\)</span>; with
+<span class="math notranslate nohighlight">\(M = Q^T\)</span> this is the first claim. Now
+<span class="math notranslate nohighlight">\(A-\widehat A_k = (I-QQ^T)A + Q(B-B_k)\)</span>. The columns of the first term are
+orthogonal to <span class="math notranslate nohighlight">\(\range(Q)\)</span> and those of the second lie in it, so the squared
+Frobenius norms add, and <span class="math notranslate nohighlight">\(\|Q(B-B_k)\|_F = \|B-B_k\|_F\)</span>. By Eckart–Young for
+<span class="math notranslate nohighlight">\(B\)</span>, <span class="math notranslate nohighlight">\(\|B-B_k\|_F^2 = \sum_{j&gt;k}\sigma_j(B)^2\le\sum_{j&gt;k}\sigma_j(A)^2\)</span> and
+<span class="math notranslate nohighlight">\(\|B-B_k\|_2 = \sigma_{k+1}(B)\le\sigma_{k+1}(A)\)</span>. The 2-norm bound is the
+triangle inequality.</p>
+</div>
+<p>Combining <a class="reference internal" href="#ch12-prop-rsvd-truncation">Proposition 12.3</a> with
+<a class="reference internal" href="#ch12-thm-frobenius-bound">Theorem 12.5</a> gives
+<span class="math notranslate nohighlight">\(\mathbb{E}\|A-\widehat A_k\|_F^2\le(2+k/(p-1))\sum_{j&gt;k}\sigma_j^2\)</span>. Sharper
+bounds for the truncated approximation exist <span class="bibtex-citation" id="id19">[<a class="reference internal" href="../back/bibliography.html#id72" title="Per-Gunnar Martinsson and Joel A. Tropp. Randomized numerical linear algebra: foundations and algorithms. Acta Numerica, 29:403–572, 2020.">Martinsson and Tropp, 2020</a>]</span>, and in
+practice the truncated error is usually much closer to optimal than this.</p>
+</section>
+<section id="a-worked-example">
+<h3><span class="section-number">12.4.3. </span>A worked example<a class="headerlink" href="#a-worked-example" title="Link to this heading">#</a></h3>
+<div class="proof example admonition" id="ch12-exa-range-finder">
+<p class="admonition-title"><span class="caption-number">Example 12.2 </span> (The range finder by hand)</p>
+<section class="example-content" id="proof-content">
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}3 &amp; 0\\ 0 &amp; 1\\ 0 &amp; 0\end{bmatrix},\qquad
+\omega = \begin{bmatrix}1\\ 1\end{bmatrix},
+\end{split}\]</div>
+<p>so <span class="math notranslate nohighlight">\(\sigma_1 = 3\)</span>, <span class="math notranslate nohighlight">\(\sigma_2 = 1\)</span>, and the best rank-one error is <span class="math notranslate nohighlight">\(1\)</span> in
+both norms. Take <span class="math notranslate nohighlight">\(\ell = 1\)</span> and the (non-random, for the sake of hand
+computation) test vector <span class="math notranslate nohighlight">\(\omega\)</span>. Then <span class="math notranslate nohighlight">\(y = A\omega = (3,1,0)^T\)</span> and
+<span class="math notranslate nohighlight">\(Q = y/\sqrt{10}\)</span>. A short computation gives, for any <span class="math notranslate nohighlight">\(y = (a,1,0)^T\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\|(I-P_y)A\|_F^2 = \|A\|_F^2-\frac{\|y^TA\|_2^2}{\|y\|_2^2}
+= 10-\frac{9a^2+1}{a^2+1} = \frac{a^2+9}{a^2+1}.
+\]</div>
+<p>The error matrix <span class="math notranslate nohighlight">\((I-P_y)A\)</span> has rank one (its columns lie in the
+one-dimensional space <span class="math notranslate nohighlight">\(\range(A)\cap y^\perp\)</span>), so its 2-norm equals its
+Frobenius norm. With <span class="math notranslate nohighlight">\(a = 3\)</span> the error is <span class="math notranslate nohighlight">\(\sqrt{18/10} = \sqrt{1.8}\approx1.342\)</span>,
+34 percent above optimal: the test vector has a large component along the
+second right singular vector <span class="math notranslate nohighlight">\(e_2\)</span>, which contaminates the sample.</p>
+<p>One power iteration replaces <span class="math notranslate nohighlight">\(y\)</span> by <span class="math notranslate nohighlight">\(AA^TA\omega = A\,\diag(9,1)\,\omega =
+(27,1,0)^T\)</span>, that is, <span class="math notranslate nohighlight">\(a = 27\)</span>, and the error drops to
+<span class="math notranslate nohighlight">\(\sqrt{738/730}\approx1.0055\)</span>. The contamination by <span class="math notranslate nohighlight">\(e_2\)</span> has been damped by
+the factor <span class="math notranslate nohighlight">\((\sigma_2/\sigma_1)^2 = 1/9\)</span> relative to <span class="math notranslate nohighlight">\(e_1\)</span>.</p>
+</section>
+</div></section>
+<section id="the-experiment">
+<h3><span class="section-number">12.4.4. </span>The experiment<a class="headerlink" href="#the-experiment" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="#ch12-fig-oversampling"><span class="std std-numref">Figure 12.1</span></a> shows the error of the range finder for three
+<span class="math notranslate nohighlight">\(400\times400\)</span> matrices with prescribed singular values and random singular
+vectors, averaged over 30 draws of <span class="math notranslate nohighlight">\(\Omega\)</span>, as a function of <span class="math notranslate nohighlight">\(p\)</span> for
+<span class="math notranslate nohighlight">\(k = 10\)</span>. All curves lie below the bound <a class="reference internal" href="#equation-ch12-eq-frobenius-bound">(12.6)</a>. The
+slowly decaying spectrum <span class="math notranslate nohighlight">\(\sigma_j = 1/j\)</span> is the hardest, and for it the bound
+exceeds the observed mean only by a small factor. For the
+fast and step spectra the rank-<span class="math notranslate nohighlight">\((k+p)\)</span> approximation beats the best rank-<span class="math notranslate nohighlight">\(k\)</span>
+approximation once <span class="math notranslate nohighlight">\(p\)</span> is moderately large, which illustrates the warning
+above. The lab repeats this experiment and also plots the error against <span class="math notranslate nohighlight">\(k\)</span>.</p>
+<figure class="align-default" id="ch12-fig-oversampling">
+<a class="reference internal image-reference" href="../_images/ch12-oversampling.png"><img alt="Left, singular values of three 400 by 400 test matrices with exponential, 1/j and step decay. Right, the mean Frobenius error of the range finder divided by the optimal rank-10 error, plotted against the oversampling p, together with the bound sqrt(1 + k/(p-1)), which lies above all three curves." src="../_images/ch12-oversampling.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 12.1 </span><span class="caption-text">Left: singular values of the test matrices. Right: mean of
+<span class="math notranslate nohighlight">\(\|A-QQ^TA\|_F/\|\Sigma_2\|_F\)</span> over 30 Gaussian test matrices with
+<span class="math notranslate nohighlight">\(\ell = 10+p\)</span> columns, and the bound of
+<a class="reference internal" href="#ch12-thm-frobenius-bound">Theorem 12.5</a>.</span><a class="headerlink" href="#ch12-fig-oversampling" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>A matrix has exactly rank 5. You run <a class="reference internal" href="#ch12-alg-range-finder">Algorithm 12.1</a> with
+<span class="math notranslate nohighlight">\(k = 5\)</span> and <span class="math notranslate nohighlight">\(p = 0\)</span>. What error do you expect in exact arithmetic? What
+changes if the matrix is the sum of a rank-5 matrix and a small full-rank
+perturbation?</p>
+<p><em>Answer.</em> In exact arithmetic the error is zero with probability one
+(<a class="reference internal" href="#ch12-prop-exact-rank">Proposition 12.2</a>): a <span class="math notranslate nohighlight">\(5\times5\)</span> Gaussian matrix is invertible
+with probability one. With a perturbation of size <span class="math notranslate nohighlight">\(\eta\)</span>, the error is bounded
+by <a class="reference internal" href="#ch12-thm-deterministic">Theorem 12.4</a> in terms of <span class="math notranslate nohighlight">\(\eta\|\Omega_2\Omega_1^{-1}\|\)</span>.
+A square Gaussian matrix is often badly conditioned, so <span class="math notranslate nohighlight">\(\|\Omega_1^{-1}\|\)</span> can be
+large, and indeed <span class="math notranslate nohighlight">\(\mathbb{E}\|\Omega_1^\dagger\|_F^2\)</span> is infinite for <span class="math notranslate nohighlight">\(p\le1\)</span>.
+Oversampling by a few columns makes <span class="math notranslate nohighlight">\(\Omega_1\)</span> well conditioned with high
+probability.</p>
+</div>
+</section>
+</section>
+<section id="power-iterations">
+<span id="ch12-sec-power"></span><h2><span class="section-number">12.5. </span>Power iterations<a class="headerlink" href="#power-iterations" title="Link to this heading">#</a></h2>
+<section id="motivation-and-algorithm">
+<h3><span class="section-number">12.5.1. </span>Motivation and algorithm<a class="headerlink" href="#motivation-and-algorithm" title="Link to this heading">#</a></h3>
+<p>When the singular values decay slowly, the tail term in
+<a class="reference internal" href="#equation-ch12-eq-spectral-bound">(12.7)</a> dominates and the range finder captures the
+dominant subspace poorly. The remedy is to apply the range finder to</p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-power">
+<span class="eqno">(12.8)<a class="headerlink" href="#equation-ch12-eq-power" title="Link to this equation">#</a></span>\[
+A^{(q)} = (AA^T)^qA = U\Sigma^{2q+1}V^T ,
+\]</div>
+<p>which has the same singular vectors as <span class="math notranslate nohighlight">\(A\)</span> and singular values
+<span class="math notranslate nohighlight">\(\sigma_j^{2q+1}\)</span>. The ratios <span class="math notranslate nohighlight">\(\sigma_j/\sigma_1\)</span> are raised to the power
+<span class="math notranslate nohighlight">\(2q+1\)</span>, so the tail becomes negligible after a few iterations; this is the
+block version of the power method of <a class="reference internal" href="../ch09-eigenvalues/notes.html#ch09"><span class="std std-numref">Chapter 9</span></a>, started
+from a random block. The worked example above is the case <span class="math notranslate nohighlight">\(q = 1\)</span>.</p>
+<p>Mathematically, <span class="math notranslate nohighlight">\(\range\big((AA^T)^qA\Omega\big)\)</span> could be computed by
+repeated multiplication followed by one QR factorization. Numerically this is
+a mistake. The columns of <span class="math notranslate nohighlight">\((AA^T)^qA\Omega\)</span> contain the component along the
+<span class="math notranslate nohighlight">\(j\)</span>th left singular vector with weight <span class="math notranslate nohighlight">\(\sigma_j^{2q+1}\)</span>; once
+<span class="math notranslate nohighlight">\((\sigma_j/\sigma_1)^{2q+1}\)</span> is below about <span class="math notranslate nohighlight">\(u\)</span>, that component is swamped by
+rounding errors in the dominant components, and it is lost. All directions with</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma_j\lesssim u^{1/(2q+1)}\,\sigma_1
+\]</div>
+<p>are lost in this way. For <span class="math notranslate nohighlight">\(q = 4\)</span>, <span class="math notranslate nohighlight">\(u^{1/9}\approx0.0169\)</span>, so singular values
+just two orders of magnitude below <span class="math notranslate nohighlight">\(\sigma_1\)</span> are already out of reach. The
+cure is to orthonormalize after every multiplication, which keeps all
+directions at unit scale without changing the subspace in exact arithmetic
+(<a class="reference internal" href="#ch12-ex-power-rounding"><span class="std std-numref">Exercise 12.6</span></a>).</p>
+<div class="proof algorithm admonition" id="ch12-alg-subspace-iteration">
+<p class="admonition-title"><span class="caption-number">Algorithm 12.3 </span> (Randomized subspace iteration)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>, <span class="math notranslate nohighlight">\(\ell = k+p\)</span>, number of iterations <span class="math notranslate nohighlight">\(q\ge0\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(Q\in\R^{m\times\ell}\)</span> with orthonormal columns and, in exact
+arithmetic, <span class="math notranslate nohighlight">\(\range(Q) = \range\big((AA^T)^qA\Omega\big)\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Draw a standard Gaussian <span class="math notranslate nohighlight">\(\Omega\in\R^{n\times\ell}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(Q\leftarrow\)</span> orthonormal factor of the thin QR factorization of <span class="math notranslate nohighlight">\(A\Omega\)</span>.</p></li>
+<li><p>For <span class="math notranslate nohighlight">\(i = 1,\dots,q\)</span>:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(W\leftarrow\)</span> orthonormal factor of the thin QR factorization of <span class="math notranslate nohighlight">\(A^TQ\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(Q\leftarrow\)</span> orthonormal factor of the thin QR factorization of <span class="math notranslate nohighlight">\(AW\)</span>.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p>Each iteration costs two products with <span class="math notranslate nohighlight">\(A\)</span> or <span class="math notranslate nohighlight">\(A^T\)</span> (<span class="math notranslate nohighlight">\(4mn\ell\)</span> flops) and two
+QR factorizations (<span class="math notranslate nohighlight">\(\bigO((m+n)\ell^2)\)</span> flops). The randomized SVD with <span class="math notranslate nohighlight">\(q\)</span>
+power iterations therefore costs about <span class="math notranslate nohighlight">\(4(q+1)mn\ell\)</span> flops and <span class="math notranslate nohighlight">\(2q+2\)</span> passes
+over <span class="math notranslate nohighlight">\(A\)</span>. In the experiments of this chapter <span class="math notranslate nohighlight">\(q = 1\)</span> or <span class="math notranslate nohighlight">\(2\)</span> is enough to come
+within a few percent of the optimal error.</p>
+</section>
+<section id="error-bound">
+<h3><span class="section-number">12.5.2. </span>Error bound<a class="headerlink" href="#error-bound" title="Link to this heading">#</a></h3>
+<div class="proof corollary admonition" id="ch12-cor-power">
+<p class="admonition-title"><span class="caption-number">Corollary 12.1 </span> (Power scheme)</p>
+<section class="corollary-content" id="proof-content">
+<p>Under the hypotheses of <a class="reference internal" href="#ch12-thm-spectral-bound">Theorem 12.6</a>, let <span class="math notranslate nohighlight">\(Q\)</span> be
+computed by <a class="reference internal" href="#ch12-alg-subspace-iteration">Algorithm 12.3</a> in exact arithmetic. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}\,\|(I-QQ^T)A\|_2\le
+\Big[\Big(1+\sqrt{\tfrac{k}{p-1}}\Big)\sigma_{k+1}^{2q+1}
++\frac{e\sqrt{k+p}}{p}\Big(\sum_{j&gt;k}\sigma_j^{2(2q+1)}\Big)^{1/2}\Big]^{1/(2q+1)}
+\le C_{k,p}^{1/(2q+1)}\,\sigma_{k+1},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(C_{k,p} = 1+\sqrt{k/(p-1)}+(e\sqrt{k+p}/p)\sqrt{\min(m,n)-k}\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Let <span class="math notranslate nohighlight">\(P\)</span> be the orthogonal projector <span class="math notranslate nohighlight">\(QQ^T\)</span>. For every orthogonal projector,
+<span class="math notranslate nohighlight">\(\|(I-P)A\|_2\le\|(I-P)(AA^T)^qA\|_2^{1/(2q+1)}\)</span> <span class="bibtex-citation" id="id20">[<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">Halko <em>et al.</em>, 2011</a>]</span>
+(Section 8). Since <span class="math notranslate nohighlight">\(\range(Q) = \range(A^{(q)}\Omega)\)</span>, applying
+<a class="reference internal" href="#ch12-thm-spectral-bound">Theorem 12.6</a> to <span class="math notranslate nohighlight">\(A^{(q)}\)</span>, whose singular values are
+<span class="math notranslate nohighlight">\(\sigma_j^{2q+1}\)</span>, and using Jensen’s inequality
+<span class="math notranslate nohighlight">\(\mathbb{E}X^{1/(2q+1)}\le(\mathbb{E}X)^{1/(2q+1)}\)</span> for <span class="math notranslate nohighlight">\(X\ge0\)</span> gives the first
+inequality. The second follows from <span class="math notranslate nohighlight">\(\sigma_j\le\sigma_{k+1}\)</span> for <span class="math notranslate nohighlight">\(j&gt;k\)</span>.</p>
+</div>
+<p>The constant is driven to <span class="math notranslate nohighlight">\(1\)</span> exponentially fast in <span class="math notranslate nohighlight">\(q\)</span>. For <span class="math notranslate nohighlight">\(k = 10\)</span>,
+<span class="math notranslate nohighlight">\(p = 5\)</span> and <span class="math notranslate nohighlight">\(\min(m,n) = 1000\)</span>, <span class="math notranslate nohighlight">\(C_{k,p}\approx68.8\)</span>, and
+<span class="math notranslate nohighlight">\(C_{k,p}^{1/(2q+1)}\approx4.10,\ 2.33,\ 1.83,\ 1.60\)</span> for <span class="math notranslate nohighlight">\(q = 1,2,3,4\)</span>. These
+are worst-case bounds; the observed errors are much closer to optimal, as
+<a class="reference internal" href="#ch12-fig-power"><span class="std std-numref">Figure 12.2</span></a> shows.</p>
+<figure class="align-default" id="ch12-fig-power">
+<a class="reference internal image-reference" href="../_images/ch12-power.png"><img alt="Left, spectral error of the rank-10 randomized SVD divided by the optimal error, for three polynomially decaying spectra, drops to about 1 after one or two power iterations. Right, for singular values 1/j^2 and k = 20, the re-orthonormalized scheme stays at the optimal error while the naive scheme deteriorates from q = 3 on." src="../_images/ch12-power.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 12.2 </span><span class="caption-text">Left: spectral-norm error of the rank-10 randomized SVD (<span class="math notranslate nohighlight">\(p = 5\)</span>) divided by
+<span class="math notranslate nohighlight">\(\sigma_{11}\)</span>, for <span class="math notranslate nohighlight">\(400\times400\)</span> matrices with polynomially decaying
+singular values. Right: the same ratio for <span class="math notranslate nohighlight">\(\sigma_j = j^{-2}\)</span> and <span class="math notranslate nohighlight">\(k = 20\)</span>,
+with <a class="reference internal" href="#ch12-alg-subspace-iteration">Algorithm 12.3</a> and with the naive scheme that
+forms <span class="math notranslate nohighlight">\((AA^T)^qA\Omega\)</span> before orthonormalizing.</span><a class="headerlink" href="#ch12-fig-power" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The right panel of <a class="reference internal" href="#ch12-fig-power"><span class="std std-numref">Figure 12.2</span></a> confirms the rounding analysis.
+The target is <span class="math notranslate nohighlight">\(\sigma_{21}/\sigma_1 = 1/441\approx2.27\times10^{-3}\)</span>. The
+threshold <span class="math notranslate nohighlight">\(u^{1/(2q+1)}\)</span> is about <span class="math notranslate nohighlight">\(6.4\times10^{-4}\)</span> for <span class="math notranslate nohighlight">\(q = 2\)</span> and
+<span class="math notranslate nohighlight">\(5.3\times10^{-3}\)</span> for <span class="math notranslate nohighlight">\(q = 3\)</span>, and the naive scheme fails from <span class="math notranslate nohighlight">\(q = 3\)</span> on,
+while the re-orthonormalized scheme stays at the optimal error.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not implement power iterations as <code class="docutils literal notranslate"><span class="pre">Y</span> <span class="pre">=</span> <span class="pre">A</span> <span class="pre">&#64;</span> <span class="pre">(A.T</span> <span class="pre">&#64;</span> <span class="pre">Y)</span></code> repeated <span class="math notranslate nohighlight">\(q\)</span> times
+followed by a single QR factorization. In exact arithmetic this spans the
+same subspace as <a class="reference internal" href="#ch12-alg-subspace-iteration">Algorithm 12.3</a>; in floating point
+it discards every direction with <span class="math notranslate nohighlight">\(\sigma_j/\sigma_1\)</span> below about
+<span class="math notranslate nohighlight">\(u^{1/(2q+1)}\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="a-posteriori-error-estimation-and-adaptivity">
+<span id="ch12-sec-error-estimation"></span><h2><span class="section-number">12.6. </span>A posteriori error estimation and adaptivity<a class="headerlink" href="#a-posteriori-error-estimation-and-adaptivity" title="Link to this heading">#</a></h2>
+<p>The bounds above involve the unknown singular values. In practice one
+measures the error of a computed <span class="math notranslate nohighlight">\(Q\)</span> directly, using a few extra random
+vectors.</p>
+<div class="proof proposition admonition" id="ch12-prop-error-estimator">
+<p class="admonition-title"><span class="caption-number">Proposition 12.4 </span> (An unbiased error estimator)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(Q\)</span> have orthonormal columns and let <span class="math notranslate nohighlight">\(\omega_1,\dots,\omega_r\in\R^n\)</span> be
+independent standard Gaussian vectors, independent of <span class="math notranslate nohighlight">\(Q\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}\,\frac1r\sum_{i=1}^r\|(I-QQ^T)A\omega_i\|_2^2 = \|(I-QQ^T)A\|_F^2 .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. For a fixed matrix <span class="math notranslate nohighlight">\(M\)</span> and a standard Gaussian vector <span class="math notranslate nohighlight">\(\omega\)</span>,
+<span class="math notranslate nohighlight">\(\mathbb{E}\|M\omega\|_2^2 = \mathbb{E}\,\omega^TM^TM\omega =
+\trace(M^TM\,\mathbb{E}\omega\omega^T) = \trace(M^TM) = \|M\|_F^2\)</span>. Apply this
+with <span class="math notranslate nohighlight">\(M = (I-QQ^T)A\)</span>, conditionally on <span class="math notranslate nohighlight">\(Q\)</span>.</p>
+</div>
+<p>The estimator costs <span class="math notranslate nohighlight">\(r\)</span> extra products with <span class="math notranslate nohighlight">\(A\)</span>. Its relative fluctuations
+are of order <span class="math notranslate nohighlight">\(\sqrt{2/r}\)</span> or smaller, so <span class="math notranslate nohighlight">\(r = 10\)</span> gives a useful estimate. For
+the spectral norm, <span class="bibtex-citation" id="id21">Halko <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">2011</a>]</span> (Section 4.3) show that</p>
+<div class="math notranslate nohighlight">
+\[
+\|(I-QQ^T)A\|_2\le10\sqrt{\frac2\pi}\ \max_{i=1,\dots,r}\|(I-QQ^T)A\omega_i\|_2
+\]</div>
+<p>with probability at least <span class="math notranslate nohighlight">\(1-10^{-r}\)</span>.</p>
+<p>These estimators lead to an <em>adaptive range finder</em> for problems in which the
+rank needed for a tolerance <span class="math notranslate nohighlight">\(\tau\)</span> is not known in advance.</p>
+<div class="proof algorithm admonition" id="ch12-alg-adaptive">
+<p class="admonition-title"><span class="caption-number">Algorithm 12.4 </span> (Adaptive randomized range finder (blocked))</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>, tolerance <span class="math notranslate nohighlight">\(\tau\)</span>, block size <span class="math notranslate nohighlight">\(b\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(Q\)</span> with orthonormal columns and an estimate
+<span class="math notranslate nohighlight">\(\|(I-QQ^T)A\|_F\lesssim\tau\)</span>.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(Q\leftarrow\)</span> empty <span class="math notranslate nohighlight">\(m\times0\)</span> matrix.</p></li>
+<li><p>Repeat:</p>
+<ol class="arabic simple">
+<li><p>Draw a standard Gaussian <span class="math notranslate nohighlight">\(\Omega\in\R^{n\times b}\)</span> and set
+<span class="math notranslate nohighlight">\(Y\leftarrow A\Omega - Q(Q^TA\Omega)\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(\big(\|Y\|_F^2/b\big)^{1/2}\le\tau\)</span>, stop.</p></li>
+<li><p>Orthogonalize <span class="math notranslate nohighlight">\(Y\)</span> against <span class="math notranslate nohighlight">\(Q\)</span> once more, compute its thin QR factorization
+<span class="math notranslate nohighlight">\(Y = Q_{\text{new}}R\)</span>, and set <span class="math notranslate nohighlight">\(Q\leftarrow[Q,\ Q_{\text{new}}]\)</span>.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p>The stopping test applies <a class="reference internal" href="#ch12-prop-error-estimator">Proposition 12.4</a> to the fresh
+block, which is independent of the current <span class="math notranslate nohighlight">\(Q\)</span>; the block is then reused to
+enlarge the basis, so the estimation costs nothing extra. The second
+orthogonalization in the last substep is needed because a single Gram–Schmidt pass loses orthogonality
+when <span class="math notranslate nohighlight">\(Y\)</span> is small compared with <span class="math notranslate nohighlight">\(A\Omega\)</span> (<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a>). Variants
+of this idea are discussed by <span class="bibtex-citation" id="id22">Halko <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">2011</a>]</span> and <span class="bibtex-citation" id="id23">Martinsson and Tropp [<a class="reference internal" href="../back/bibliography.html#id72" title="Per-Gunnar Martinsson and Joel A. Tropp. Randomized numerical linear algebra: foundations and algorithms. Acta Numerica, 29:403–572, 2020.">2020</a>]</span>.</p>
+</section>
+<section id="randomized-least-squares">
+<span id="ch12-sec-least-squares"></span><h2><span class="section-number">12.7. </span>Randomized least squares<a class="headerlink" href="#randomized-least-squares" title="Link to this heading">#</a></h2>
+<section id="setting">
+<h3><span class="section-number">12.7.1. </span>Setting<a class="headerlink" href="#setting" title="Link to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> with <span class="math notranslate nohighlight">\(m\gg n\)</span> have full column rank, let <span class="math notranslate nohighlight">\(b\in\R^m\)</span>,
+and let <span class="math notranslate nohighlight">\(x_\star\)</span> be the least-squares solution with residual
+<span class="math notranslate nohighlight">\(r_\star = b-Ax_\star\)</span>, which is orthogonal to <span class="math notranslate nohighlight">\(\range(A)\)</span>
+(<a class="reference internal" href="../ch08-least-squares/notes.html#ch08"><span class="std std-numref">Chapter 8</span></a>). Householder QR solves the problem in
+<span class="math notranslate nohighlight">\(2mn^2-\tfrac23n^3\)</span> flops. Randomization offers two strategies.</p>
+</section>
+<section id="sketch-and-solve">
+<h3><span class="section-number">12.7.2. </span>Sketch-and-solve<a class="headerlink" href="#sketch-and-solve" title="Link to this heading">#</a></h3>
+<p>The first strategy replaces the problem by a smaller one: draw
+<span class="math notranslate nohighlight">\(S\in\R^{s\times m}\)</span> with <span class="math notranslate nohighlight">\(n&lt;s\ll m\)</span> and compute</p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-sketch-solve">
+<span class="eqno">(12.9)<a class="headerlink" href="#equation-ch12-eq-sketch-solve" title="Link to this equation">#</a></span>\[
+\tilde x = \argmin_x\|S(Ax-b)\|_2 ,
+\]</div>
+<p>an <span class="math notranslate nohighlight">\(s\times n\)</span> least-squares problem that costs <span class="math notranslate nohighlight">\(\bigO(sn^2)\)</span> flops after the
+sketch has been applied. <span class="bibtex-citation" id="id24">Sarlós [<a class="reference internal" href="../back/bibliography.html#id77" title="Tamás Sarlós. Improved approximation algorithms for large matrices via random projections. In Proceedings of the 47th Annual IEEE Symposium on Foundations of Computer Science (FOCS), 143–152. 2006.">2006</a>]</span> introduced this approach and
+showed that, with a fast structured random projection, it produces a residual
+within a factor <span class="math notranslate nohighlight">\(1+\varepsilon\)</span> of the optimum with high probability, in
+asymptotically fewer operations than a QR factorization when <span class="math notranslate nohighlight">\(m\gg n\)</span>. The
+following deterministic statement is the heart of such results.</p>
+<div class="proof theorem admonition" id="ch12-thm-sketch-solve">
+<p class="admonition-title"><span class="caption-number">Theorem 12.7 </span> (Sketch-and-solve)</p>
+<section class="theorem-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(S\)</span> is an <span class="math notranslate nohighlight">\(\varepsilon\)</span>-subspace embedding for <span class="math notranslate nohighlight">\(\range([A,\ b])\)</span> and
+<span class="math notranslate nohighlight">\(\tilde x\)</span> is defined by <a class="reference internal" href="#equation-ch12-eq-sketch-solve">(12.9)</a>, then</p>
+<div class="math notranslate nohighlight">
+\[
+\|b-A\tilde x\|_2\le\sqrt{\frac{1+\varepsilon}{1-\varepsilon}}\,\|b-Ax_\star\|_2,
+\qquad
+\|A(\tilde x-x_\star)\|_2\le\sqrt{\frac{2\varepsilon}{1-\varepsilon}}\,\|b-Ax_\star\|_2 .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. For every <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(Ax-b\in\range([A,\ b])\)</span>, a subspace of dimension at most
+<span class="math notranslate nohighlight">\(n+1\)</span>. Using the embedding property twice and the optimality of <span class="math notranslate nohighlight">\(\tilde x\)</span>
+for the sketched problem,</p>
+<div class="math notranslate nohighlight">
+\[
+(1-\varepsilon)\|A\tilde x-b\|_2^2\le\|S(A\tilde x-b)\|_2^2\le\|S(Ax_\star-b)\|_2^2
+\le(1+\varepsilon)\|Ax_\star-b\|_2^2 .
+\]</div>
+<p>For the second inequality write <span class="math notranslate nohighlight">\(b-A\tilde x = r_\star+A(x_\star-\tilde x)\)</span>.
+Since <span class="math notranslate nohighlight">\(r_\star\perp\range(A)\)</span>, the Pythagorean theorem gives
+<span class="math notranslate nohighlight">\(\|b-A\tilde x\|_2^2 = \|r_\star\|_2^2+\|A(\tilde x-x_\star)\|_2^2\)</span>, hence
+<span class="math notranslate nohighlight">\(\|A(\tilde x-x_\star)\|_2^2\le\big(\tfrac{1+\varepsilon}{1-\varepsilon}-1\big)\|r_\star\|_2^2
+= \tfrac{2\varepsilon}{1-\varepsilon}\|r_\star\|_2^2\)</span>.</p>
+</div>
+<p>For <span class="math notranslate nohighlight">\(\varepsilon\le1/\sqrt2\)</span> the factor <span class="math notranslate nohighlight">\(\sqrt{(1+\varepsilon)/(1-\varepsilon)}\)</span>
+is at most <span class="math notranslate nohighlight">\(1+2\varepsilon\)</span>. For Gaussian sketches the expected residual can
+be computed exactly.</p>
+<div class="proof proposition admonition" id="ch12-prop-gaussian-sketch-solve">
+<p class="admonition-title"><span class="caption-number">Proposition 12.5 </span> (Gaussian sketch-and-solve)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(S = G/\sqrt s\)</span> with <span class="math notranslate nohighlight">\(G\in\R^{s\times m}\)</span> standard Gaussian and
+<span class="math notranslate nohighlight">\(s\ge n+2\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}\,\|b-A\tilde x\|_2^2 = \Big(1+\frac{n}{s-n-1}\Big)\|b-Ax_\star\|_2^2 .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. If <span class="math notranslate nohighlight">\(r_\star = 0\)</span> then <span class="math notranslate nohighlight">\(b\in\range(A)\)</span>, <span class="math notranslate nohighlight">\(SA\)</span> has full column rank with
+probability one, and <span class="math notranslate nohighlight">\(\tilde x = x_\star\)</span>. Otherwise let <span class="math notranslate nohighlight">\(A = UT\)</span> with
+<span class="math notranslate nohighlight">\(U\in\R^{m\times n}\)</span> orthonormal and <span class="math notranslate nohighlight">\(T\)</span> invertible (a thin QR factorization),
+and <span class="math notranslate nohighlight">\(w = r_\star/\|r_\star\|_2\)</span>, which is orthogonal to <span class="math notranslate nohighlight">\(\range(U)\)</span>. By
+<a class="reference internal" href="#ch12-lem-rotation">Lemma 12.1</a>, <span class="math notranslate nohighlight">\(G_1 = GU\)</span> and <span class="math notranslate nohighlight">\(g = Gw\)</span> are an independent
+<span class="math notranslate nohighlight">\(s\times n\)</span> standard Gaussian matrix and standard Gaussian vector. With
+probability one <span class="math notranslate nohighlight">\(G_1\)</span> has full column rank, and since <span class="math notranslate nohighlight">\(Sb = SAx_\star+Sr_\star\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\tilde x - x_\star = (SA)^\dagger Sr_\star = T^{-1}G_1^\dagger g\,\|r_\star\|_2,
+\qquad
+A(\tilde x-x_\star) = U G_1^\dagger g\,\|r_\star\|_2 .
+\]</div>
+<p>By the argument in the proof of <a class="reference internal" href="#ch12-prop-error-estimator">Proposition 12.4</a>,
+conditionally on <span class="math notranslate nohighlight">\(G_1\)</span> we have <span class="math notranslate nohighlight">\(\mathbb{E}\|G_1^\dagger g\|_2^2 = \|G_1^\dagger\|_F^2\)</span>.
+Moreover
+<span class="math notranslate nohighlight">\(\mathbb{E}\|G_1^\dagger\|_F^2 = \mathbb{E}\trace\big((G_1^TG_1)^{-1}\big) = n/(s-n-1)\)</span>
+by the inverse Wishart mean used in the proof of
+<a class="reference internal" href="#ch12-thm-frobenius-bound">Theorem 12.5</a> (with <span class="math notranslate nohighlight">\(k = n\)</span> and <span class="math notranslate nohighlight">\(p = s-n\)</span>). The
+Pythagorean identity from the previous proof completes the argument.</p>
+</div>
+<p>The result is independent of <span class="math notranslate nohighlight">\(m\)</span>, of <span class="math notranslate nohighlight">\(\kappa_2(A)\)</span> and of <span class="math notranslate nohighlight">\(b\)</span>. To obtain a
+root-mean-square residual within 10 percent of the optimum
+(<span class="math notranslate nohighlight">\(1+n/(s-n-1) = 1.1^2 = 1.21\)</span>) one needs <span class="math notranslate nohighlight">\(s\approx 5.8n\)</span>; within 1 percent,
+<span class="math notranslate nohighlight">\(s\approx 51n\)</span>. The left panel of
+<a class="reference internal" href="#ch12-fig-least-squares"><span class="std std-numref">Figure 12.3</span></a> confirms the formula.</p>
+<div class="proof example admonition" id="ch12-exa-sketch-solve">
+<p class="admonition-title"><span class="caption-number">Example 12.3 </span> (Sketch-and-solve by hand)</p>
+<section class="example-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A = (1,1,1)^T\)</span> and <span class="math notranslate nohighlight">\(b = (1,2,6)^T\)</span>. Then <span class="math notranslate nohighlight">\(x_\star = 3\)</span> (the mean of the
+entries of <span class="math notranslate nohighlight">\(b\)</span>), <span class="math notranslate nohighlight">\(r_\star = (-2,-1,3)^T\)</span> and <span class="math notranslate nohighlight">\(\|r_\star\|_2^2 = 14\)</span>. Take the
+sketch</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+S = \begin{bmatrix}1&amp;1&amp;0\\0&amp;0&amp;1\end{bmatrix},
+\end{split}\]</div>
+<p>which adds the first two equations (a CountSketch without random signs). Then
+<span class="math notranslate nohighlight">\(SA = (2,1)^T\)</span>, <span class="math notranslate nohighlight">\(Sb = (3,6)^T\)</span>, and
+<span class="math notranslate nohighlight">\(\tilde x = (SA)^T Sb/\|SA\|_2^2 = 12/5 = 2.4\)</span>. The residual is
+<span class="math notranslate nohighlight">\(b-A\tilde x = (-1.4,-0.4,3.6)^T\)</span> with <span class="math notranslate nohighlight">\(\|b-A\tilde x\|_2^2 = 15.08\)</span>, a factor
+<span class="math notranslate nohighlight">\(15.08/14\approx1.077\)</span> above the optimum, and indeed
+<span class="math notranslate nohighlight">\(15.08 = 14+3\cdot0.6^2 = \|r_\star\|_2^2+\|A(\tilde x-x_\star)\|_2^2\)</span>.</p>
+</section>
+</div><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Sketch-and-solve controls the <em>residual</em>, not the solution. The second
+bound of <a class="reference internal" href="#ch12-thm-sketch-solve">Theorem 12.7</a> gives
+<span class="math notranslate nohighlight">\(\|\tilde x-x_\star\|_2\le\sqrt{2\varepsilon/(1-\varepsilon)}\,\|r_\star\|_2/\sigma_n(A)\)</span>,
+which is small only if the residual is small or <span class="math notranslate nohighlight">\(A\)</span> is well conditioned. The
+error is set by the sketch, not by the unit roundoff: for a Gaussian sketch
+the proof of <a class="reference internal" href="#ch12-prop-gaussian-sketch-solve">Proposition 12.5</a> gives
+<span class="math notranslate nohighlight">\(\mathbb{E}\|A(\tilde x-x_\star)\|_2^2 = \tfrac{n}{s-n-1}\|r_\star\|_2^2\)</span>, so
+reducing it by a factor 10 requires about 100 times more rows. In
+the lab, sketch-and-solve on a problem with <span class="math notranslate nohighlight">\(\kappa_2(A) = 10^6\)</span> returns a
+residual within 10 percent of optimal and a solution that is completely
+wrong.</p>
+</div>
+</section>
+<section id="sketch-and-precondition">
+<h3><span class="section-number">12.7.3. </span>Sketch-and-precondition<a class="headerlink" href="#sketch-and-precondition" title="Link to this heading">#</a></h3>
+<p>The second strategy uses the sketch only to build a preconditioner, and then
+solves the original problem to full accuracy with an iterative method
+<span class="bibtex-citation" id="id25">[<a class="reference internal" href="../back/bibliography.html#id76" title="Haim Avron, Petar Maymounkov, and Sivan Toledo. Blendenpik: supercharging LAPACK's least-squares solver. SIAM Journal on Scientific Computing, 32(3):1217–1236, 2010.">Avron <em>et al.</em>, 2010</a>, <a class="reference internal" href="../back/bibliography.html#id75" title="Vladimir Rokhlin and Mark Tygert. A fast randomized algorithm for overdetermined linear least-squares regression. Proceedings of the National Academy of Sciences, 105(36):13212–13217, 2008.">Rokhlin and Tygert, 2008</a>]</span>. Let <span class="math notranslate nohighlight">\(SA = Q_SR\)</span> be a thin QR factorization
+of the sketched matrix. The idea is that <span class="math notranslate nohighlight">\(R\)</span>, the triangular factor of a
+matrix whose column space geometry mimics that of <span class="math notranslate nohighlight">\(A\)</span>, nearly
+orthogonalizes <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<div class="proof theorem admonition" id="ch12-thm-precondition">
+<p class="admonition-title"><span class="caption-number">Theorem 12.8 </span> (Sketch-and-precondition)</p>
+<section class="theorem-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(S\)</span> is an <span class="math notranslate nohighlight">\(\varepsilon\)</span>-subspace embedding for <span class="math notranslate nohighlight">\(\range(A)\)</span> and <span class="math notranslate nohighlight">\(SA = Q_SR\)</span>
+is a thin QR factorization, then <span class="math notranslate nohighlight">\(R\)</span> is invertible and</p>
+<div class="math notranslate nohighlight">
+\[
+\kappa_2(AR^{-1})\le\sqrt{\frac{1+\varepsilon}{1-\varepsilon}} .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. If <span class="math notranslate nohighlight">\(SAz = 0\)</span> then <span class="math notranslate nohighlight">\(\|Az\|_2^2\le\|SAz\|_2^2/(1-\varepsilon) = 0\)</span>, so <span class="math notranslate nohighlight">\(z = 0\)</span>
+because <span class="math notranslate nohighlight">\(A\)</span> has full column rank; hence <span class="math notranslate nohighlight">\(SA\)</span> has full column rank and <span class="math notranslate nohighlight">\(R\)</span> is
+invertible. For every <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(SAR^{-1}y = Q_Sy\)</span> has norm <span class="math notranslate nohighlight">\(\|y\|_2\)</span>, and
+<span class="math notranslate nohighlight">\(AR^{-1}y\in\range(A)\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[
+(1-\varepsilon)\|AR^{-1}y\|_2^2\le\|y\|_2^2\le(1+\varepsilon)\|AR^{-1}y\|_2^2 .
+\]</div>
+<p>Thus <span class="math notranslate nohighlight">\(\sigma_{\max}(AR^{-1})\le1/\sqrt{1-\varepsilon}\)</span> and
+<span class="math notranslate nohighlight">\(\sigma_{\min}(AR^{-1})\ge1/\sqrt{1+\varepsilon}\)</span>.</p>
+</div>
+<p>For Gaussian sketches the preconditioned matrix has an even simpler
+description.</p>
+<div class="proof proposition admonition" id="ch12-prop-gaussian-precondition">
+<p class="admonition-title"><span class="caption-number">Proposition 12.6 </span> (Gaussian preconditioning is independent of <span class="math notranslate nohighlight">\(A\)</span>)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A = UT\)</span> with <span class="math notranslate nohighlight">\(U\)</span> orthonormal and <span class="math notranslate nohighlight">\(T\)</span> invertible, and let <span class="math notranslate nohighlight">\(SA = Q_SR\)</span>.
+Then the singular values of <span class="math notranslate nohighlight">\(AR^{-1}\)</span> are the reciprocals of the singular
+values of <span class="math notranslate nohighlight">\(SU\)</span>. In particular <span class="math notranslate nohighlight">\(\kappa_2(AR^{-1}) = \kappa_2(SU)\)</span>, and for a
+Gaussian <span class="math notranslate nohighlight">\(S\)</span> its distribution does not depend on <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. From <span class="math notranslate nohighlight">\(SUT = Q_SR\)</span> we get <span class="math notranslate nohighlight">\(SU = Q_SM\)</span> with <span class="math notranslate nohighlight">\(M = RT^{-1}\)</span> invertible, so the
+singular values of <span class="math notranslate nohighlight">\(SU\)</span> are those of <span class="math notranslate nohighlight">\(M\)</span>. Moreover
+<span class="math notranslate nohighlight">\(AR^{-1} = UTR^{-1} = UM^{-1}\)</span>, whose singular values are those of <span class="math notranslate nohighlight">\(M^{-1}\)</span>.
+For Gaussian <span class="math notranslate nohighlight">\(S\)</span>, <span class="math notranslate nohighlight">\(\sqrt s\,SU\)</span> is a standard Gaussian matrix by
+<a class="reference internal" href="#ch12-lem-rotation">Lemma 12.1</a>.</p>
+</div>
+<p>With the approximation <span class="math notranslate nohighlight">\(\sigma(SU)\in[1-\sqrt{n/s},\ 1+\sqrt{n/s}]\)</span> from
+<a class="reference internal" href="#ch12-sec-embeddings"><span class="std std-numref">Section 12.3</span></a>, we expect
+<span class="math notranslate nohighlight">\(\kappa_2(AR^{-1})\approx(\sqrt s+\sqrt n)/(\sqrt s-\sqrt n)\)</span>: about <span class="math notranslate nohighlight">\(5.83\)</span>
+for <span class="math notranslate nohighlight">\(s = 2n\)</span> and <span class="math notranslate nohighlight">\(3\)</span> for <span class="math notranslate nohighlight">\(s = 4n\)</span>, whether <span class="math notranslate nohighlight">\(\kappa_2(A)\)</span> is <span class="math notranslate nohighlight">\(1\)</span> or <span class="math notranslate nohighlight">\(10^{8}\)</span>.
+The right panel of <a class="reference internal" href="#ch12-fig-least-squares"><span class="std std-numref">Figure 12.3</span></a> confirms this.</p>
+<p>We then solve <span class="math notranslate nohighlight">\(\min_y\|AR^{-1}y-b\|_2\)</span> by LSQR <span class="bibtex-citation" id="id26">[<a class="reference internal" href="../back/bibliography.html#id48" title="Christopher C. Paige and Michael A. Saunders. LSQR: an algorithm for sparse linear equations and sparse least squares. ACM Transactions on Mathematical Software, 8(1):43–71, 1982.">Paige and Saunders, 1982</a>]</span>, which is
+mathematically equivalent to the conjugate gradient method applied to the
+normal equations, and set <span class="math notranslate nohighlight">\(x = R^{-1}y\)</span>. The conjugate gradient convergence
+bound (<a class="reference internal" href="../ch11-krylov/notes.html#ch11"><span class="std std-numref">Chapter 11</span></a>; <span class="bibtex-citation" id="id27">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span>, Chapter 11) applied
+to <span class="math notranslate nohighlight">\((AR^{-1})^T(AR^{-1})\)</span>, whose condition number is <span class="math notranslate nohighlight">\(\kappa^2\)</span> with
+<span class="math notranslate nohighlight">\(\kappa = \kappa_2(AR^{-1})\)</span>, gives for the iterates <span class="math notranslate nohighlight">\(r^{(j)} = b-AR^{-1}y^{(j)}\)</span></p>
+<div class="math notranslate nohighlight" id="equation-ch12-eq-lsqr-rate">
+<span class="eqno">(12.10)<a class="headerlink" href="#equation-ch12-eq-lsqr-rate" title="Link to this equation">#</a></span>\[
+\|r^{(j)}-r_\star\|_2\le2\Big(\frac{\kappa-1}{\kappa+1}\Big)^j\|r^{(0)}-r_\star\|_2 .
+\]</div>
+<p>With <span class="math notranslate nohighlight">\(\kappa\le3\)</span> the error is halved at every step, and about 40 iterations
+reduce it by <span class="math notranslate nohighlight">\(10^{-12}\)</span> (<a class="reference internal" href="#ch12-ex-lsqr-iterations"><span class="std std-numref">Exercise 12.8</span></a>), independently of
+<span class="math notranslate nohighlight">\(\kappa_2(A)\)</span>.</p>
+<div class="proof algorithm admonition" id="ch12-alg-sketch-precondition">
+<p class="admonition-title"><span class="caption-number">Algorithm 12.5 </span> (Sketch-and-precondition with LSQR)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> of full column rank, <span class="math notranslate nohighlight">\(b\in\R^m\)</span>, sketch size
+<span class="math notranslate nohighlight">\(s\)</span> (for example <span class="math notranslate nohighlight">\(s = 4n\)</span>), tolerance.</p>
+<p><strong>Output:</strong> an approximation <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(x_\star\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Draw a sketch <span class="math notranslate nohighlight">\(S\in\R^{s\times m}\)</span> (in practice an SRHT or a sparse sign
+embedding) and form <span class="math notranslate nohighlight">\(SA\)</span> and <span class="math notranslate nohighlight">\(Sb\)</span>.</p></li>
+<li><p>Compute the thin QR factorization <span class="math notranslate nohighlight">\(SA = Q_SR\)</span>.</p></li>
+<li><p>Compute the sketch-and-solve initial guess <span class="math notranslate nohighlight">\(x^{(0)} = R^{-1}Q_S^T(Sb)\)</span>.</p></li>
+<li><p>Apply LSQR to <span class="math notranslate nohighlight">\(\min_y\|AR^{-1}y-(b-Ax^{(0)})\|_2\)</span>, applying <span class="math notranslate nohighlight">\(AR^{-1}\)</span> and
+its transpose by triangular solves and products with <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(A^T\)</span>.</p></li>
+<li><p>Return <span class="math notranslate nohighlight">\(x = x^{(0)}+R^{-1}y\)</span>.</p></li>
+</ol>
+</section>
+</div><p><strong>Cost.</strong> With an SRHT, step 1 costs <span class="math notranslate nohighlight">\(\bigO(mn\log m)\)</span> flops, step 2
+<span class="math notranslate nohighlight">\(2sn^2-\tfrac23n^3\)</span>, and each LSQR iteration about <span class="math notranslate nohighlight">\(4mn+2n^2\)</span> flops. The
+number of iterations depends only on the tolerance and on <span class="math notranslate nohighlight">\(s/n\)</span>. For
+<span class="math notranslate nohighlight">\(m\gg n\)</span> the total, <span class="math notranslate nohighlight">\(\bigO(mn\log m+n^3+mn\log(1/\text{tol}))\)</span>, is well below
+the <span class="math notranslate nohighlight">\(2mn^2\)</span> of Householder QR; <span class="bibtex-citation" id="id28">Avron <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id76" title="Haim Avron, Petar Maymounkov, and Sivan Toledo. Blendenpik: supercharging LAPACK's least-squares solver. SIAM Journal on Scientific Computing, 32(3):1217–1236, 2010.">2010</a>]</span> reported that their
+implementation, Blendenpik, outperformed LAPACK’s direct least-squares solver
+on large, strongly overdetermined dense problems, and <span class="bibtex-citation" id="id29">Rokhlin and Tygert [<a class="reference internal" href="../back/bibliography.html#id75" title="Vladimir Rokhlin and Mark Tygert. A fast randomized algorithm for overdetermined linear least-squares regression. Proceedings of the National Academy of Sciences, 105(36):13212–13217, 2008.">2008</a>]</span>
+analyze a closely related method based on the SRFT. With a dense Gaussian
+sketch, step 1 alone costs <span class="math notranslate nohighlight">\(2smn\ge2mn^2\)</span> flops, so a Gaussian sketch is
+useful for analysis and experiments but not for speed.</p>
+<p><strong>Accuracy.</strong> Unlike sketch-and-solve, sketch-and-precondition solves the
+original problem, so its accuracy is limited by the conditioning of the
+least-squares problem and by rounding errors rather than by the distortion
+of the sketch. In the lab, on a problem with <span class="math notranslate nohighlight">\(\kappa_2(A) = 10^6\)</span>, its forward
+error lies below the first-order sensitivity
+<span class="math notranslate nohighlight">\(\kappa_2(A)u+\kappa_2(A)^2u\,\|r_\star\|_2/(\|A\|_2\|x_\star\|_2)\)</span> of the
+problem (<a class="reference internal" href="../ch08-least-squares/notes.html#ch08"><span class="std std-numref">Chapter 8</span></a>), as does the error of Householder QR
+(which, in that experiment, is smaller by up to an order of magnitude),
+whereas sketch-and-solve with the same sketch size is wrong in every digit.
+The floating-point stability analysis of sketch-and-precondition is more
+delicate than that of QR, and implementation details such as the initial
+guess of step 3 matter.</p>
+<figure class="align-default" id="ch12-fig-least-squares">
+<a class="reference internal image-reference" href="../_images/ch12-least-squares.png"><img alt="Left, the excess squared residual of Gaussian sketch-and-solve plotted against the sketch size on log-log axes, following the curve n/(s-n-1). Right, the condition number of A R inverse against s/n for two matrices with condition numbers 1 and 1e8; both follow the same curve." src="../_images/ch12-least-squares.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 12.3 </span><span class="caption-text">Left: excess squared residual of Gaussian sketch-and-solve for <span class="math notranslate nohighlight">\(m = 3000\)</span>,
+<span class="math notranslate nohighlight">\(n = 50\)</span> (mean of 20 sketches) and the expectation of
+<a class="reference internal" href="#ch12-prop-gaussian-sketch-solve">Proposition 12.5</a>. Right: <span class="math notranslate nohighlight">\(\kappa_2(AR^{-1})\)</span> for
+<span class="math notranslate nohighlight">\(\kappa_2(A) = 1\)</span> and <span class="math notranslate nohighlight">\(\kappa_2(A) = 10^8\)</span>, and the approximation
+<span class="math notranslate nohighlight">\((\sqrt s+\sqrt n)/(\sqrt s-\sqrt n)\)</span>.</span><a class="headerlink" href="#ch12-fig-least-squares" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>Why is it not a good idea to improve a sketch-and-solve solution by
+“iterative refinement” with the same sketch, that is, by computing the
+correction <span class="math notranslate nohighlight">\(d = \argmin_d\|S(Ad-(b-A\tilde x))\|_2\)</span> and replacing <span class="math notranslate nohighlight">\(\tilde x\)</span>
+by <span class="math notranslate nohighlight">\(\tilde x+d\)</span>?</p>
+<p><em>Answer.</em> The correction is <span class="math notranslate nohighlight">\(d = (SA)^\dagger S(b-A\tilde x) =
+(SA)^\dagger Sb-\tilde x\)</span> because <span class="math notranslate nohighlight">\((SA)^\dagger SA = I\)</span>. Hence <span class="math notranslate nohighlight">\(\tilde x+d =
+(SA)^\dagger Sb = \tilde x\)</span>: the iteration is stuck at its starting point. The
+sketched problem has a different minimizer from the original one, and
+refinement with the same sketch converges to the former. Sketch-and-precondition
+avoids this by using <span class="math notranslate nohighlight">\(S\)</span> only in the preconditioner and computing residuals
+with the full matrix <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="randomized-trace-estimation">
+<span id="ch12-sec-trace"></span><h2><span class="section-number">12.8. </span>Randomized trace estimation<a class="headerlink" href="#randomized-trace-estimation" title="Link to this heading">#</a></h2>
+<p>Randomization also estimates scalar quantities of a matrix available only
+through products. The simplest is the trace.</p>
+<div class="proof proposition admonition" id="ch12-prop-hutchinson">
+<p class="admonition-title"><span class="caption-number">Proposition 12.7 </span> (Girard–Hutchinson estimator)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> and let <span class="math notranslate nohighlight">\(\omega_1,\dots,\omega_r\)</span> be independent
+random vectors with <span class="math notranslate nohighlight">\(\mathbb{E}\,\omega_i\omega_i^T = I\)</span>. Then
+<span class="math notranslate nohighlight">\(T_r = \frac1r\sum_{i=1}^r\omega_i^TA\omega_i\)</span> satisfies
+<span class="math notranslate nohighlight">\(\mathbb{E}T_r = \trace(A)\)</span>. If <span class="math notranslate nohighlight">\(A\)</span> is symmetric, then
+<span class="math notranslate nohighlight">\(\operatorname{Var}(T_r) = 2\|A\|_F^2/r\)</span> when the <span class="math notranslate nohighlight">\(\omega_i\)</span> are standard
+Gaussian, and
+<span class="math notranslate nohighlight">\(\operatorname{Var}(T_r) = \frac2r\big(\|A\|_F^2-\sum_ia_{ii}^2\big)\)</span> when they
+have independent entries <span class="math notranslate nohighlight">\(\pm1\)</span> with equal probability (Rademacher vectors).</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <span class="math notranslate nohighlight">\(\mathbb{E}\,\omega^TA\omega = \mathbb{E}\trace(A\omega\omega^T) =
+\trace(A\,\mathbb{E}\omega\omega^T) = \trace(A)\)</span>. The variances are
+<a class="reference internal" href="#ch12-ex-hutchinson"><span class="std std-numref">Exercise 12.9</span></a>.</p>
+</div>
+<p>For a symmetric positive semidefinite <span class="math notranslate nohighlight">\(A\)</span> with eigenvalues <span class="math notranslate nohighlight">\(\lambda_i\ge0\)</span>,
+<span class="math notranslate nohighlight">\(\|A\|_F = (\sum\lambda_i^2)^{1/2}\le\sum\lambda_i = \trace(A)\)</span>, so the relative
+standard deviation of the Gaussian estimator is at most <span class="math notranslate nohighlight">\(\sqrt{2/r}\)</span>. This is
+useful for a few digits (applications include <span class="math notranslate nohighlight">\(\trace(A^{-1})\)</span> and
+<span class="math notranslate nohighlight">\(\log\det A = \trace(\log A)\)</span>, where each product requires a linear solve or
+a Krylov approximation) but expensive for many: every additional digit costs
+100 times more samples. Variance-reduced estimators that combine
+Hutchinson’s idea with a randomized low-rank approximation are surveyed by
+<span class="bibtex-citation" id="id30">Martinsson and Tropp [<a class="reference internal" href="../back/bibliography.html#id72" title="Per-Gunnar Martinsson and Joel A. Tropp. Randomized numerical linear algebra: foundations and algorithms. Acta Numerica, 29:403–572, 2020.">2020</a>]</span>.</p>
+</section>
+<section id="limitations">
+<span id="ch12-sec-limitations"></span><h2><span class="section-number">12.9. </span>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">#</a></h2>
+<p>Randomized algorithms are not a universal replacement for the classical ones,
+and it is important to know when not to use them.</p>
+<p><em>They need decay.</em> The randomized SVD is compared against the Eckart–Young
+optimum, so it is only as useful as the best low-rank approximation. If the
+singular values do not decay, no rank-<span class="math notranslate nohighlight">\(k\)</span> approximation is accurate and the
+question of computing one efficiently is moot. If they decay slowly, power
+iterations are needed, which multiplies the number of passes by <span class="math notranslate nohighlight">\(q+1\)</span>.</p>
+<p><em>They give up determinism.</em> Two runs give different answers unless the
+random seed is fixed; bitwise reproducibility across machines additionally
+requires the same random number generator and the same order of floating-point
+operations. Error guarantees hold in expectation or with a probability
+<span class="math notranslate nohighlight">\(1-\delta\)</span>; the failure probabilities can be made extremely small, but
+not zero. Tests of randomized software must be statistical, as in the lab.</p>
+<p><em>Accuracy costs more than approximation.</em> Random embeddings give a distortion
+of order <span class="math notranslate nohighlight">\((d/s)^{1/2}\)</span>, so sketch-based estimates converge at the Monte Carlo
+rate. Sketch-and-solve and trace estimation are therefore good for a few
+digits only. High accuracy requires using the randomness inside a convergent
+deterministic method, as in sketch-and-precondition or power iterations.</p>
+<p><em>Constants and overheads matter.</em> For small or moderately sized dense
+matrices (the <span class="math notranslate nohighlight">\(512\times512\)</span> image of the lab, for example), a dense SVD from
+LAPACK is fast, and the advantage of the randomized SVD in observed run time
+can be much smaller than the flop counts suggest. Structured sketches have
+larger constants than their <span class="math notranslate nohighlight">\(\bigO\)</span> bounds reveal, and Gaussian sketches make
+least-squares solvers slower, not faster.</p>
+</section>
+<section id="computational-laboratory">
+<h2><span class="section-number">12.10. </span>Computational laboratory<a class="headerlink" href="#computational-laboratory" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="lab.html"><span class="std std-doc">The lab notebook for this chapter</span></a> implements the randomized
+range finder, the randomized SVD and randomized subspace iteration from
+scratch with a NumPy <code class="docutils literal notranslate"><span class="pre">Generator</span></code>, and verifies them with assertions derived
+from <a class="reference internal" href="#ch12-prop-exact-rank">Proposition 12.2</a>, <a class="reference internal" href="#ch12-prop-rsvd-truncation">Proposition 12.3</a>
+and the Eckart–Young theorem. It compares their errors with the optimal
+errors of the truncated SVD for matrices with fast, slow and step-like
+singular value decay, as functions of the target rank, of the oversampling
+parameter (against the bound <a class="reference internal" href="#equation-ch12-eq-frobenius-bound">(12.6)</a>) and of the number of power
+iterations, and reproduces the failure of the naive power scheme. It tests the
+a posteriori error estimator and an adaptive range finder, applies the
+randomized SVD to the “ascent” photograph and compares accuracy and observed
+run time with the full SVD. Finally it measures pairwise distance distortion in
+a Johnson–Lindenstrauss experiment, the singular values of sketched
+orthonormal bases, the residual of sketch-and-solve against
+<a class="reference internal" href="#ch12-prop-gaussian-sketch-solve">Proposition 12.5</a>, the condition number of <span class="math notranslate nohighlight">\(AR^{-1}\)</span>
+and the accuracy of sketch-and-precondition with LSQR, and the variance of
+the Hutchinson trace estimator.</p>
+</section>
+<section id="summary">
+<h2><span class="section-number">12.11. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>A random matrix with slightly more columns than the dimension of the object
+it acts on preserves that object’s geometry with high probability: the
+distances among <span class="math notranslate nohighlight">\(N\)</span> points with <span class="math notranslate nohighlight">\(\bigO(\varepsilon^{-2}\ln N)\)</span> rows
+(Johnson–Lindenstrauss), all vectors of a <span class="math notranslate nohighlight">\(d\)</span>-dimensional subspace with
+<span class="math notranslate nohighlight">\(\bigO(d/\varepsilon^2)\)</span> rows (subspace embeddings). Applied to low-rank
+approximation, this gives the randomized range finder: <span class="math notranslate nohighlight">\(\ell = k+p\)</span> random
+samples of the range of <span class="math notranslate nohighlight">\(A\)</span> and one QR factorization produce a basis whose
+error is, in expectation, within a factor <span class="math notranslate nohighlight">\((1+k/(p-1))^{1/2}\)</span> of the
+Eckart–Young optimum in the Frobenius norm, using two passes over <span class="math notranslate nohighlight">\(A\)</span> and
+about <span class="math notranslate nohighlight">\(4mn\ell\)</span> flops. Power iterations with re-orthonormalization handle
+slowly decaying spectra, a few extra samples estimate the error a posteriori,
+and a blocked adaptive scheme chooses the rank. For least squares, a sketch
+either yields a quick solution with a residual within a controlled factor of
+optimal (sketch-and-solve) or a triangular preconditioner that makes LSQR
+converge in a number of iterations independent of <span class="math notranslate nohighlight">\(\kappa_2(A)\)</span>
+(sketch-and-precondition), and only the latter gives an accurate solution.</p>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">12.12. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id31">Halko <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">2011</a>]</span> is the standard reference for the randomized range finder
+and randomized SVD: Section 4 presents the range finders, power iterations,
+error estimation and structured test matrices, Section 5 the post-processing
+into factorizations, and Sections 9 and 10 the deterministic and probabilistic
+error analysis used in this chapter. <span class="bibtex-citation" id="id32">Martinsson and Tropp [<a class="reference internal" href="../back/bibliography.html#id72" title="Per-Gunnar Martinsson and Joel A. Tropp. Randomized numerical linear algebra: foundations and algorithms. Acta Numerica, 29:403–572, 2020.">2020</a>]</span> is a
+comprehensive modern survey that covers embeddings, low-rank approximation,
+trace estimation and randomized solvers for linear systems and least squares.
+<span class="bibtex-citation" id="id33">Woodruff [<a class="reference internal" href="../back/bibliography.html#id73" title="David P. Woodruff. Sketching as a tool for numerical linear algebra. Foundations and Trends in Theoretical Computer Science, 10(1–2):1–157, 2014.">2014</a>]</span> develops subspace embeddings, including sparse ones,
+from the point of view of theoretical computer science, and
+<span class="bibtex-citation" id="id34">Drineas and Mahoney [<a class="reference internal" href="../back/bibliography.html#id74" title="Petros Drineas and Michael W. Mahoney. RandNLA: randomized numerical linear algebra. Communications of the ACM, 59(6):80–90, 2016.">2016</a>]</span> give a short overview of the field. The original
+papers on randomized least squares are <span class="bibtex-citation" id="id35">Sarlós [<a class="reference internal" href="../back/bibliography.html#id77" title="Tamás Sarlós. Improved approximation algorithms for large matrices via random projections. In Proceedings of the 47th Annual IEEE Symposium on Foundations of Computer Science (FOCS), 143–152. 2006.">2006</a>]</span> (sketch-and-solve),
+<span class="bibtex-citation" id="id36">Rokhlin and Tygert [<a class="reference internal" href="../back/bibliography.html#id75" title="Vladimir Rokhlin and Mark Tygert. A fast randomized algorithm for overdetermined linear least-squares regression. Proceedings of the National Academy of Sciences, 105(36):13212–13217, 2008.">2008</a>]</span> and <span class="bibtex-citation" id="id37">Avron <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id76" title="Haim Avron, Petar Maymounkov, and Sivan Toledo. Blendenpik: supercharging LAPACK's least-squares solver. SIAM Journal on Scientific Computing, 32(3):1217–1236, 2010.">2010</a>]</span> (sketch-and-precondition), and
+the lemma of <span class="bibtex-citation" id="id38">Johnson and Lindenstrauss [<a class="reference internal" href="../back/bibliography.html#id78" title="William B. Johnson and Joram Lindenstrauss. Extensions of Lipschitz mappings into a Hilbert space. Contemporary Mathematics, 26:189–206, 1984.">1984</a>]</span> started the theory of random embeddings.
+LSQR is described by <span class="bibtex-citation" id="id39">Paige and Saunders [<a class="reference internal" href="../back/bibliography.html#id48" title="Christopher C. Paige and Michael A. Saunders. LSQR: an algorithm for sparse linear equations and sparse least squares. ACM Transactions on Mathematical Software, 8(1):43–71, 1982.">1982</a>]</span>.</p>
+</section>
+<section id="exercises">
+<span id="ch12-sec-exercises"></span><h2><span class="section-number">12.13. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<div class="exercise admonition" id="ch12-ex-jl-linear">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.1 </span> (Concept: no linear map preserves all distances)</p>
+<section id="exercise-content">
+<p>Show that for <span class="math notranslate nohighlight">\(k&lt;d\)</span> no linear map <span class="math notranslate nohighlight">\(f:\R^d\to\R^k\)</span> satisfies
+<span class="math notranslate nohighlight">\((1-\varepsilon)\|x\|_2^2\le\|f(x)\|_2^2\)</span> for all <span class="math notranslate nohighlight">\(x\in\R^d\)</span>, whatever
+<span class="math notranslate nohighlight">\(\varepsilon&lt;1\)</span>. Explain why this does not contradict
+<a class="reference internal" href="#ch12-thm-jl">Theorem 12.2</a>, and deduce that a subspace embedding for a
+<span class="math notranslate nohighlight">\(d\)</span>-dimensional subspace must have at least <span class="math notranslate nohighlight">\(d\)</span> rows.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch12-randomized/notes-solution-29">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch12-ex-jl-linear"> Exercise 12.1 (Concept: no linear map preserves all distances)</a></p>
+<section id="solution-content">
+<p>A linear map <span class="math notranslate nohighlight">\(f(x) = Sx\)</span> with <span class="math notranslate nohighlight">\(S\in\R^{k\times d}\)</span>, <span class="math notranslate nohighlight">\(k&lt;d\)</span>, has rank at most
+<span class="math notranslate nohighlight">\(k&lt;d\)</span>, so there is <span class="math notranslate nohighlight">\(x\ne0\)</span> with <span class="math notranslate nohighlight">\(Sx = 0\)</span>, and then
+<span class="math notranslate nohighlight">\(\|f(x)\|_2^2 = 0&lt;(1-\varepsilon)\|x\|_2^2\)</span>. The Johnson–Lindenstrauss lemma
+concerns only the finitely many vectors <span class="math notranslate nohighlight">\(x_i-x_j\)</span>; a random <span class="math notranslate nohighlight">\(S\)</span> has a null
+space of dimension <span class="math notranslate nohighlight">\(d-k\)</span>, but with high probability that null space (indeed,
+the set of directions that <span class="math notranslate nohighlight">\(S\)</span> shrinks by more than the factor
+<span class="math notranslate nohighlight">\(1-\varepsilon\)</span>) avoids all of these finitely many directions. For a
+<span class="math notranslate nohighlight">\(d\)</span>-dimensional subspace <span class="math notranslate nohighlight">\(\mathcal V\)</span> and <span class="math notranslate nohighlight">\(S\in\R^{s\times m}\)</span> with <span class="math notranslate nohighlight">\(s&lt;d\)</span>, the
+restriction of <span class="math notranslate nohighlight">\(S\)</span> to <span class="math notranslate nohighlight">\(\mathcal V\)</span> is a linear map from a <span class="math notranslate nohighlight">\(d\)</span>-dimensional
+space to <span class="math notranslate nohighlight">\(\R^s\)</span>, which has a nonzero kernel by the same argument.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-chi-square">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.2 </span> (Theory: mean and variance of a sketched norm)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(S = G/\sqrt k\)</span> with <span class="math notranslate nohighlight">\(G\in\R^{k\times d}\)</span> standard Gaussian, and
+<span class="math notranslate nohighlight">\(x\in\R^d\)</span>. Show that <span class="math notranslate nohighlight">\(\mathbb{E}\|Sx\|_2^2 = \|x\|_2^2\)</span> and
+<span class="math notranslate nohighlight">\(\operatorname{Var}\|Sx\|_2^2 = 2\|x\|_2^4/k\)</span>. Use Chebyshev’s inequality to
+bound the probability in <a class="reference internal" href="#equation-ch12-eq-concentration">(12.2)</a>, and compare with the
+exponential bound for <span class="math notranslate nohighlight">\(\varepsilon = 0.1\)</span> and <span class="math notranslate nohighlight">\(k = 1000\)</span> and <span class="math notranslate nohighlight">\(k = 5921\)</span>. Why
+would Chebyshev’s inequality be useless in the proof of
+<a class="reference internal" href="#ch12-thm-jl-gaussian">Theorem 12.3</a> for <span class="math notranslate nohighlight">\(N = 1000\)</span>?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch12-randomized/notes-solution-31">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch12-ex-chi-square"> Exercise 12.2 (Theory: mean and variance of a sketched norm)</a></p>
+<section id="solution-content">
+<p>By <a class="reference internal" href="#ch12-lem-rotation">Lemma 12.1</a>, <span class="math notranslate nohighlight">\(k\|Sx\|_2^2/\|x\|_2^2 = \sum_{i=1}^kz_i^2\)</span>
+with independent <span class="math notranslate nohighlight">\(z_i\sim N(0,1)\)</span>. Since <span class="math notranslate nohighlight">\(\mathbb{E}z^2 = 1\)</span> and
+<span class="math notranslate nohighlight">\(\mathbb{E}z^4 = 3\)</span>, each <span class="math notranslate nohighlight">\(z_i^2\)</span> has mean <span class="math notranslate nohighlight">\(1\)</span> and variance <span class="math notranslate nohighlight">\(2\)</span>, so the sum
+has mean <span class="math notranslate nohighlight">\(k\)</span> and variance <span class="math notranslate nohighlight">\(2k\)</span>. Dividing by <span class="math notranslate nohighlight">\(k\)</span> and multiplying by
+<span class="math notranslate nohighlight">\(\|x\|_2^2\)</span> gives the claims. Chebyshev’s inequality gives
+<span class="math notranslate nohighlight">\(\mathbb{P}(|\|Sx\|_2^2-\|x\|_2^2|\ge\varepsilon\|x\|_2^2)\le2/(k\varepsilon^2)\)</span>.
+For <span class="math notranslate nohighlight">\(\varepsilon = 0.1\)</span>: with <span class="math notranslate nohighlight">\(k = 1000\)</span>, Chebyshev gives <span class="math notranslate nohighlight">\(0.2\)</span> and
+<a class="reference internal" href="#equation-ch12-eq-concentration">(12.2)</a> gives <span class="math notranslate nohighlight">\(2e^{-7/3}\approx0.194\)</span>, about the same;
+with <span class="math notranslate nohighlight">\(k = 5921\)</span>, Chebyshev gives <span class="math notranslate nohighlight">\(0.0338\)</span> but the exponential bound gives
+about <span class="math notranslate nohighlight">\(2.0\times10^{-6}\)</span>. The union bound over <span class="math notranslate nohighlight">\(N(N-1)/2\approx5\times10^5\)</span>
+pairs needs a failure probability per pair below about <span class="math notranslate nohighlight">\(1/N^2 = 10^{-6}\)</span>,
+which Chebyshev’s inequality delivers only for <span class="math notranslate nohighlight">\(k\ge2N^2/\varepsilon^2 =
+2\times10^8\)</span>. The exponential tail is what makes the logarithmic dependence
+on <span class="math notranslate nohighlight">\(N\)</span> possible.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-gaussian-frobenius">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.3 </span> (Theory: Frobenius norms of Gaussian products)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(G\in\R^{s\times t}\)</span> be standard Gaussian and let <span class="math notranslate nohighlight">\(M\in\R^{r\times s}\)</span>,
+<span class="math notranslate nohighlight">\(N\in\R^{t\times q}\)</span> be fixed. Show that <span class="math notranslate nohighlight">\(\mathbb{E}\,G^TCG = \trace(C)\,I_t\)</span>
+for every symmetric <span class="math notranslate nohighlight">\(C\in\R^{s\times s}\)</span>, and deduce that
+<span class="math notranslate nohighlight">\(\mathbb{E}\|MGN\|_F^2 = \|M\|_F^2\|N\|_F^2\)</span>. This fact was used in the proof
+of <a class="reference internal" href="#ch12-thm-frobenius-bound">Theorem 12.5</a>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-embedding-rank">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.4 </span> (Theory: subspace embeddings and ranks)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(S\)</span> be an <span class="math notranslate nohighlight">\(\varepsilon\)</span>-subspace embedding for <span class="math notranslate nohighlight">\(\range(A)\)</span>, with
+<span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> and <span class="math notranslate nohighlight">\(\varepsilon&lt;1\)</span>. Show that
+<span class="math notranslate nohighlight">\(\nullsp(SA) = \nullsp(A)\)</span> and hence <span class="math notranslate nohighlight">\(\rank(SA) = \rank(A)\)</span>. Show also that
+<span class="math notranslate nohighlight">\(\sqrt{1-\varepsilon}\,\sigma_j(A)\le\sigma_j(SA)\le\sqrt{1+\varepsilon}\,\sigma_j(A)\)</span>
+for all <span class="math notranslate nohighlight">\(j\)</span>. (<em>Hint:</em> use the minimax characterization
+<span class="math notranslate nohighlight">\(\sigma_j(M) = \max_{\dim\mathcal W = j}\min_{0\ne z\in\mathcal W}\|Mz\|_2/\|z\|_2\)</span>.)</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-power-example">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.5 </span> (Computation: more power iterations by hand)</p>
+<section id="exercise-content">
+<p>In <a class="reference internal" href="#ch12-exa-range-finder">Example 12.2</a>, compute the sample vector and the
+error after <span class="math notranslate nohighlight">\(q = 2\)</span> power iterations. Show that after <span class="math notranslate nohighlight">\(q\)</span> iterations the
+error is <span class="math notranslate nohighlight">\(\big(1+8/(9^{2q+1}+1)\big)^{1/2}\)</span> and that the excess over the
+optimal error decreases asymptotically by the factor
+<span class="math notranslate nohighlight">\((\sigma_1/\sigma_2)^4 = 81\)</span> per iteration.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch12-randomized/notes-solution-35">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch12-ex-power-example"> Exercise 12.5 (Computation: more power iterations by hand)</a></p>
+<section id="solution-content">
+<p>Since <span class="math notranslate nohighlight">\(A^TA = \diag(9,1)\)</span>, after <span class="math notranslate nohighlight">\(q\)</span> iterations the sample is
+<span class="math notranslate nohighlight">\(A(A^TA)^q\omega = A\,(9^q,1)^T = (3^{2q+1},1,0)^T\)</span>, so <span class="math notranslate nohighlight">\(a = 3^{2q+1}\)</span> in the
+formula of the example. For <span class="math notranslate nohighlight">\(q = 2\)</span>, <span class="math notranslate nohighlight">\(a = 243\)</span> and the error is
+<span class="math notranslate nohighlight">\(\sqrt{(243^2+9)/(243^2+1)} = \sqrt{59058/59050}\approx1.0000677\)</span>. In general
+<span class="math notranslate nohighlight">\((a^2+9)/(a^2+1) = 1+8/(a^2+1)\)</span> with <span class="math notranslate nohighlight">\(a^2 = 9^{2q+1}\)</span>. The excess
+<span class="math notranslate nohighlight">\(\sqrt{1+8/(a^2+1)}-1\approx4/a^2 = 4\cdot9^{-(2q+1)}\)</span> is multiplied by
+<span class="math notranslate nohighlight">\(9^{-2} = 1/81\)</span> when <span class="math notranslate nohighlight">\(q\)</span> increases by one.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-power-rounding">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.6 </span> (Theory: power iterations in exact and floating-point arithmetic)</p>
+<section id="exercise-content">
+<p>(a) Show that, in exact arithmetic and provided all matrices involved have
+full column rank <span class="math notranslate nohighlight">\(\ell\)</span>, <a class="reference internal" href="#ch12-alg-subspace-iteration">Algorithm 12.3</a> produces a
+<span class="math notranslate nohighlight">\(Q\)</span> with <span class="math notranslate nohighlight">\(\range(Q) = \range\big((AA^T)^qA\Omega\big)\)</span>.
+(b) Tabulate <span class="math notranslate nohighlight">\(u^{1/(2q+1)}\)</span> for <span class="math notranslate nohighlight">\(q = 1,2,3,4\)</span>. For <span class="math notranslate nohighlight">\(\sigma_j = j^{-2}\)</span> and
+<span class="math notranslate nohighlight">\(k = 20\)</span>, predict for which <span class="math notranslate nohighlight">\(q\)</span> the naive power scheme fails, and compare with
+<a class="reference internal" href="#ch12-fig-power"><span class="std std-numref">Figure 12.2</span></a>.
+(c) Explain why orthonormalizing after every product does not suffer from
+this loss.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-flops">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.7 </span> (Computation: flops and passes)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{10^4\times10^4}\)</span> be dense, <span class="math notranslate nohighlight">\(k = 100\)</span>, <span class="math notranslate nohighlight">\(p = 10\)</span> and <span class="math notranslate nohighlight">\(q = 1\)</span>.
+Count the leading-order flops and the passes over <span class="math notranslate nohighlight">\(A\)</span> of
+<a class="reference internal" href="#ch12-alg-rsvd">Algorithm 12.2</a>. Compare with the cost of reducing <span class="math notranslate nohighlight">\(A\)</span> to
+bidiagonal form by Householder transformations, <span class="math notranslate nohighlight">\(4mn^2-\tfrac43n^3\)</span> flops
+<span class="bibtex-citation" id="id40">[<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">Golub and Van Loan, 2013</a>]</span> (Section 5.4), which is the first phase of every dense
+SVD algorithm. Which quantity, flops or passes, is more relevant if <span class="math notranslate nohighlight">\(A\)</span> is
+stored on disk?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-lsqr-iterations">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.8 </span> (Computation: how many LSQR iterations?)</p>
+<section id="exercise-content">
+<p>Using <a class="reference internal" href="#equation-ch12-eq-lsqr-rate">(12.10)</a>, find the number of LSQR iterations that
+guarantees <span class="math notranslate nohighlight">\(\|r^{(j)}-r_\star\|_2\le10^{-12}\|r^{(0)}-r_\star\|_2\)</span> when
+(a) <span class="math notranslate nohighlight">\(\kappa_2(AR^{-1})\le3\)</span> and (b) <span class="math notranslate nohighlight">\(S\)</span> is a <span class="math notranslate nohighlight">\(\tfrac12\)</span>-subspace embedding.
+Estimate the total flops of <a class="reference internal" href="#ch12-alg-sketch-precondition">Algorithm 12.5</a> for
+<span class="math notranslate nohighlight">\(m = 10^6\)</span>, <span class="math notranslate nohighlight">\(n = 10^3\)</span>, <span class="math notranslate nohighlight">\(s = 4n\)</span> in case (a), ignoring the cost of the sketch,
+and compare with Householder QR.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch12-randomized/notes-solution-39">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch12-ex-lsqr-iterations"> Exercise 12.8 (Computation: how many LSQR iterations?)</a></p>
+<section id="solution-content">
+<p>(a) With <span class="math notranslate nohighlight">\(\kappa\le3\)</span>, <span class="math notranslate nohighlight">\((\kappa-1)/(\kappa+1)\le1/2\)</span>, and we need
+<span class="math notranslate nohighlight">\(2\cdot2^{-j}\le10^{-12}\)</span>, that is <span class="math notranslate nohighlight">\(j\ge\log_2(2\times10^{12})\approx40.9\)</span>, so
+41 iterations. (b) By <a class="reference internal" href="#ch12-thm-precondition">Theorem 12.8</a>,
+<span class="math notranslate nohighlight">\(\kappa\le\sqrt{1.5/0.5} = \sqrt3\)</span>, the rate is
+<span class="math notranslate nohighlight">\((\sqrt3-1)/(\sqrt3+1) = 2-\sqrt3\approx0.268\)</span>, and <span class="math notranslate nohighlight">\(j\ge
+\ln(2\times10^{12})/\ln(1/(2-\sqrt3))\approx21.5\)</span>, so 22 iterations suffice.
+For (a): the QR factorization of <span class="math notranslate nohighlight">\(SA\)</span> costs <span class="math notranslate nohighlight">\(2sn^2-\tfrac23n^3\approx
+7.3\times10^9\)</span> flops, and 41 iterations at <span class="math notranslate nohighlight">\(4mn+2n^2\approx4\times10^9\)</span> flops
+cost about <span class="math notranslate nohighlight">\(1.6\times10^{11}\)</span> flops, for a total of about
+<span class="math notranslate nohighlight">\(1.7\times10^{11}\)</span>, compared with <span class="math notranslate nohighlight">\(2mn^2-\tfrac23n^3\approx2.0\times10^{12}\)</span>
+for Householder QR, roughly a factor 12 fewer. With an SRHT the sketch adds
+<span class="math notranslate nohighlight">\(\bigO(mn\log m)\)</span> flops, of the order of <span class="math notranslate nohighlight">\(2\times10^{10}\)</span> times a modest
+constant.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-hutchinson">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.9 </span> (Theory: variance of the Hutchinson estimator)</p>
+<section id="exercise-content">
+<p>Prove the two variance formulas of <a class="reference internal" href="#ch12-prop-hutchinson">Proposition 12.7</a>. For which
+matrices is the Rademacher estimator exact with a single sample? Show that
+for a symmetric positive semidefinite <span class="math notranslate nohighlight">\(A\)</span> the Gaussian estimator satisfies
+<span class="math notranslate nohighlight">\(\mathbb{P}(|T_r-\trace A|\ge t\,\trace A)\le2/(rt^2)\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-refinement">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.10 </span> (Theory: refinement with a fixed sketch)</p>
+<section id="exercise-content">
+<p>(a) Show that if <span class="math notranslate nohighlight">\(b\in\range(A)\)</span> and <span class="math notranslate nohighlight">\(SA\)</span> has full column rank, then
+sketch-and-solve returns <span class="math notranslate nohighlight">\(x_\star\)</span> exactly. (b) Show that iterative
+refinement of sketch-and-solve with the same sketch cannot improve
+<span class="math notranslate nohighlight">\(\tilde x\)</span> (see the Check your understanding box in
+<a class="reference internal" href="#ch12-sec-least-squares"><span class="std std-numref">Section 12.7</span></a>). (c) Now compute the correction from
+<span class="math notranslate nohighlight">\(\min_d\|S_i(Ad-r^{(i)})\|_2\)</span>, <span class="math notranslate nohighlight">\(r^{(i)} = b-Ax^{(i)}\)</span>, with a <em>fresh</em>
+independent Gaussian sketch <span class="math notranslate nohighlight">\(S_i\)</span> at every step. Show that
+<span class="math notranslate nohighlight">\(x^{(i+1)}-x_\star\)</span> does not depend on <span class="math notranslate nohighlight">\(x^{(i)}\)</span>, and use
+<a class="reference internal" href="#ch12-prop-gaussian-sketch-solve">Proposition 12.5</a> to compute
+<span class="math notranslate nohighlight">\(\mathbb{E}\|A(x^{(i+1)}-x_\star)\|_2^2\)</span>. Does the iteration converge?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-adaptive">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.11 </span> (Computation: the adaptive range finder)</p>
+<section id="exercise-content">
+<p>Implement <a class="reference internal" href="#ch12-alg-adaptive">Algorithm 12.4</a> with block size <span class="math notranslate nohighlight">\(b = 10\)</span> and apply it
+to the <span class="math notranslate nohighlight">\(400\times400\)</span> matrix with <span class="math notranslate nohighlight">\(\sigma_j = 1/j\)</span> of the lab for
+<span class="math notranslate nohighlight">\(\tau = 0.5, 0.2, 0.1\)</span>. Compare the number of columns produced with the
+smallest rank <span class="math notranslate nohighlight">\(k\)</span> for which the optimal Frobenius error is at most <span class="math notranslate nohighlight">\(\tau\)</span>.
+Explain the difference, and modify the algorithm so that it ends with a
+rank-<span class="math notranslate nohighlight">\(k\)</span> approximation whose error is at most <span class="math notranslate nohighlight">\(\tau\)</span> with high probability.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-matrix-free">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.12 </span> (Project: low-rank approximation of an inverse)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(L\in\R^{n\times n}\)</span> be the tridiagonal matrix with <span class="math notranslate nohighlight">\(2\)</span> on the diagonal
+and <span class="math notranslate nohighlight">\(-1\)</span> on the off-diagonals, <span class="math notranslate nohighlight">\(n = 2000\)</span>. Compute a rank-10 approximation of
+<span class="math notranslate nohighlight">\(L^{-1}\)</span> with the randomized SVD, accessing <span class="math notranslate nohighlight">\(L^{-1}\)</span> only through sparse
+solves (factor <span class="math notranslate nohighlight">\(L\)</span> once with <code class="docutils literal notranslate"><span class="pre">scipy.sparse.linalg.splu</span></code>). Use the known
+eigenvalues <span class="math notranslate nohighlight">\(\lambda_j = 4\sin^2\big(j\pi/(2(n+1))\big)\)</span> to compute the
+optimal error, and study the ratio to the optimal error as a function of
+<span class="math notranslate nohighlight">\(q\)</span> and <span class="math notranslate nohighlight">\(p\)</span>. Report the cost in solves, and compare with computing the
+eigenvalues of the dense inverse.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch12-ex-sparse-sketch">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12.13 </span> (Project: a Blendenpik-style solver)</p>
+<section id="exercise-content">
+<p>Implement <a class="reference internal" href="#ch12-alg-sketch-precondition">Algorithm 12.5</a> with a sparse sign
+embedding with <span class="math notranslate nohighlight">\(\zeta = 8\)</span> nonzeros per column (use <code class="docutils literal notranslate"><span class="pre">scipy.sparse</span></code>), and test
+it on dense problems with <span class="math notranslate nohighlight">\(m = 2\times10^5\)</span>, <span class="math notranslate nohighlight">\(n = 200\)</span> and
+<span class="math notranslate nohighlight">\(\kappa_2(A) = 10^{8}\)</span>. Measure <span class="math notranslate nohighlight">\(\kappa_2(AR^{-1})\)</span>, the number of LSQR
+iterations, the forward error, and the median run time for <span class="math notranslate nohighlight">\(s = 2n, 4n, 8n\)</span>,
+and compare with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.lstsq</span></code> and with Householder QR. State which of
+your observations depend on the machine.</p>
+</section>
+</div>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch12-randomized"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../ch11-krylov/case-study-structural-cg.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">11.18. </span>Case study: conjugate gradients on a structural stiffness matrix</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lab.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">12.14. </span>Lab 12: Randomized numerical linear algebra</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-randomize">12.1. Why randomize?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-obstacles-for-classical-algorithms">12.1.1. Three obstacles for classical algorithms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-benchmark-eckart-young">12.1.2. The benchmark: Eckart–Young</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-a-sketch-is">12.1.3. What a sketch is</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-embeddings-and-the-johnson-lindenstrauss-lemma">12.2. Random embeddings and the Johnson–Lindenstrauss lemma</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#norms-of-sketched-vectors">12.2.1. Norms of sketched vectors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-johnson-lindenstrauss-lemma">12.2.2. The Johnson–Lindenstrauss lemma</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subspace-embeddings">12.3. Subspace embeddings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-randomized-range-finder-and-the-randomized-svd">12.4. The randomized range finder and the randomized SVD</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formulation">12.4.1. Formulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-analysis">12.4.2. Error analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example">12.4.3. A worked example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-experiment">12.4.4. The experiment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-iterations">12.5. Power iterations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation-and-algorithm">12.5.1. Motivation and algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-bound">12.5.2. Error bound</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-posteriori-error-estimation-and-adaptivity">12.6. A posteriori error estimation and adaptivity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#randomized-least-squares">12.7. Randomized least squares</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting">12.7.1. Setting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sketch-and-solve">12.7.2. Sketch-and-solve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sketch-and-precondition">12.7.3. Sketch-and-precondition</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#randomized-trace-estimation">12.8. Randomized trace estimation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations">12.9. Limitations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">12.10. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">12.11. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">12.12. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">12.13. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

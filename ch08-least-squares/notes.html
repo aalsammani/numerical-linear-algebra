@@ -1,0 +1,1963 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8. Linear least-squares problems &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch08-least-squares/notes';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.13. Lab 8: Linear least-squares problems" href="lab.html" />
+    <link rel="prev" title="7.12. Lab 7: QR factorization" href="../ch07-qr/lab.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">8. Linear least-squares problems</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch08-least-squares/notes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch08-least-squares/notes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Linear least-squares problems</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-least-squares-problem-and-its-geometry">8.1. The least-squares problem and its geometry</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formulation">8.1.1. Formulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#characterization-projection-and-normal-equations">8.1.2. Characterization: projection and normal equations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-algorithms">8.2. Three algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-equations-and-cholesky">8.2.1. The normal equations and Cholesky</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#householder-qr">8.2.2. Householder QR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-singular-value-decomposition">8.2.3. The singular value decomposition</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-of-least-squares-problems">8.3. Sensitivity of least-squares problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rounding-errors-and-the-stability-of-the-three-methods">8.4. Rounding errors and the stability of the three methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#householder-qr-is-backward-stable">8.4.1. Householder QR is backward stable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-equations-are-not-backward-stable">8.4.2. The normal equations are not backward stable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gram-schmidt-and-the-right-hand-side">8.4.3. Gram–Schmidt and the right-hand side</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#column-scaling">8.4.4. Column scaling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-deficient-and-nearly-rank-deficient-problems">8.5. Rank-deficient and nearly rank-deficient problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-minimum-norm-solution">8.5.1. The minimum-norm solution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-rank">8.5.2. Numerical rank</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#truncated-svd">8.5.3. Truncated SVD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qr-with-column-pivoting">8.5.4. QR with column pivoting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tikhonov-regularization">8.6. Tikhonov regularization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#discrete-ill-posed-problems">8.6.1. Discrete ill-posed problems</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-and-filter-factors">8.6.2. Definition and filter factors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-the-regularization-parameter">8.6.3. Choosing the regularization parameter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weighted-least-squares-and-large-problems">8.7. Weighted least squares and large problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#case-study-the-mauna-loa-carbon-dioxide-record">8.8. Case study: the Mauna Loa carbon dioxide record</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">8.9. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">8.10. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">8.11. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">8.12. Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-least-squares-problems">
+<span id="ch08"></span><h1><span class="section-number">8. </span>Linear least-squares problems<a class="headerlink" href="#linear-least-squares-problems" title="Link to this heading">#</a></h1>
+<p>A linear system <span class="math notranslate nohighlight">\(Ax = b\)</span> with more equations than unknowns usually has no
+solution. This is the normal situation in data fitting: we measure <span class="math notranslate nohighlight">\(m\)</span>
+quantities, we believe that they depend linearly on <span class="math notranslate nohighlight">\(n\ll m\)</span> parameters, and
+the measurements are contaminated by errors, so no choice of the parameters
+reproduces them exactly. The method of least squares chooses the parameters
+that make the residual <span class="math notranslate nohighlight">\(b - Ax\)</span> as small as possible in the Euclidean norm.
+It is the most widely used way of fitting models to data, and it appears
+inside many other algorithms, from Gauss–Newton iterations for nonlinear
+fitting to the Krylov subspace methods of <a class="reference internal" href="../ch11-krylov/notes.html#ch11"><span class="std std-numref">Chapter 11</span></a>.</p>
+<p>This chapter brings together three earlier threads. The QR factorization of
+<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a> gives the standard algorithm. The singular value
+decomposition and the pseudoinverse of <a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a> describe
+the solution completely, including the rank-deficient case. The notions of
+conditioning and backward stability from <a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a> explain
+why the classical method of the normal equations, which is correct in exact
+arithmetic and cheaper, can lose twice as many digits as necessary, and why
+this matters only for some problems. A striking feature of least squares is
+that its condition number depends not only on <span class="math notranslate nohighlight">\(\kappa(A)\)</span> but also on how
+well the model fits the data: when the residual is large, <span class="math notranslate nohighlight">\(\kappa(A)^2\)</span>
+enters even for the best algorithms.</p>
+<div class="admonition-learning-objectives admonition">
+<p class="admonition-title">Learning objectives</p>
+<p>After working through this chapter you should be able to:</p>
+<ol class="arabic simple">
+<li><p>characterize least-squares solutions geometrically (orthogonal projection)
+and algebraically (normal equations), and prove existence, and uniqueness
+exactly when <span class="math notranslate nohighlight">\(A\)</span> has full column rank;</p></li>
+<li><p>solve least-squares problems by the normal equations with Cholesky, by
+Householder QR and by the SVD, and state the cost of each;</p></li>
+<li><p>state and interpret the condition numbers of the least-squares problem,
+and explain when <span class="math notranslate nohighlight">\(\kappa(A)^2\)</span> governs the sensitivity of the solution;</p></li>
+<li><p>distinguish the sensitivity of the problem from the rounding errors of an
+algorithm, and compare the accuracy of the three methods (and of modified
+Gram–Schmidt) correctly;</p></li>
+<li><p>compute minimum-norm solutions of rank-deficient problems and make
+numerical rank decisions with the truncated SVD or column-pivoted QR;</p></li>
+<li><p>regularize ill-posed problems by Tikhonov regularization, interpret it
+through filter factors, compute it stably, and choose the parameter with
+the L-curve;</p></li>
+<li><p>apply all of this to a real data set, including the centering and scaling
+of the variables.</p></li>
+</ol>
+</div>
+<section id="the-least-squares-problem-and-its-geometry">
+<span id="ch08-sec-problem"></span><h2><span class="section-number">8.1. </span>The least-squares problem and its geometry<a class="headerlink" href="#the-least-squares-problem-and-its-geometry" title="Link to this heading">#</a></h2>
+<section id="formulation">
+<h3><span class="section-number">8.1.1. </span>Formulation<a class="headerlink" href="#formulation" title="Link to this heading">#</a></h3>
+<p>Suppose we want to fit a straight line <span class="math notranslate nohighlight">\(f(t) = x_1 + x_2t\)</span> to data
+<span class="math notranslate nohighlight">\((t_i, b_i)\)</span>, <span class="math notranslate nohighlight">\(i = 1,\dots,m\)</span>. Each data point gives one equation
+<span class="math notranslate nohighlight">\(x_1 + x_2t_i = b_i\)</span>, and in matrix form</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix} 1 &amp; t_1\\ 1 &amp; t_2\\ \vdots &amp; \vdots\\ 1 &amp; t_m\end{bmatrix}
+\begin{bmatrix} x_1\\ x_2\end{bmatrix} \approx
+\begin{bmatrix} b_1\\ b_2\\ \vdots\\ b_m\end{bmatrix}.
+\end{split}\]</div>
+<p>More generally, a model <span class="math notranslate nohighlight">\(f(t) = \sum_{j=1}^n x_j\phi_j(t)\)</span> that is linear in
+its parameters leads to a matrix <span class="math notranslate nohighlight">\(A\)</span> with entries <span class="math notranslate nohighlight">\(a_{ij} = \phi_j(t_i)\)</span>. For
+polynomials <span class="math notranslate nohighlight">\(\phi_j(t) = t^{j-1}\)</span> this is a Vandermonde matrix; in the case
+study of this chapter the basis also contains sines and cosines.</p>
+<div class="proof definition admonition" id="ch08-def-ls">
+<p class="admonition-title"><span class="caption-number">Definition 8.1 </span> (Linear least-squares problem)</p>
+<section class="definition-content" id="proof-content">
+<p>Given <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> and <span class="math notranslate nohighlight">\(b\in\R^m\)</span>, the <em>linear least-squares
+problem</em> is to find <span class="math notranslate nohighlight">\(x\in\R^n\)</span> that minimizes <span class="math notranslate nohighlight">\(\|b - Ax\|_2\)</span>. A minimizer is
+called a <em>least-squares solution</em>, and <span class="math notranslate nohighlight">\(r = b - Ax\)</span> is its <em>residual</em>. The
+problem is <em>overdetermined</em> when <span class="math notranslate nohighlight">\(m&gt;n\)</span>.</p>
+</section>
+</div><p>Minimizing <span class="math notranslate nohighlight">\(\|b-Ax\|_2\)</span> and <span class="math notranslate nohighlight">\(\|b-Ax\|_2^2\)</span> is the same thing; the square is
+a smooth quadratic function of <span class="math notranslate nohighlight">\(x\)</span>, which is why the 2-norm leads to linear
+equations. (Minimizing the 1- or <span class="math notranslate nohighlight">\(\infty\)</span>-norm of the residual leads to linear
+programming problems instead.) When the errors in <span class="math notranslate nohighlight">\(b\)</span> are independent and
+normally distributed with equal variances, the least-squares solution is also
+the maximum-likelihood estimate of the parameters <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../back/bibliography.html#id12" title="Åke Björck. Numerical Methods for Least Squares Problems. SIAM, Philadelphia, 1996.">Björck, 1996</a>]</span>.</p>
+</section>
+<section id="characterization-projection-and-normal-equations">
+<h3><span class="section-number">8.1.2. </span>Characterization: projection and normal equations<a class="headerlink" href="#characterization-projection-and-normal-equations" title="Link to this heading">#</a></h3>
+<p>The picture to keep in mind is <a class="reference internal" href="#ch08-fig-geometry"><span class="std std-numref">Figure 8.1</span></a>. As <span class="math notranslate nohighlight">\(x\)</span> ranges over
+<span class="math notranslate nohighlight">\(\R^n\)</span>, <span class="math notranslate nohighlight">\(Ax\)</span> ranges over the subspace <span class="math notranslate nohighlight">\(\range(A)\)</span>. The closest point of
+<span class="math notranslate nohighlight">\(\range(A)\)</span> to <span class="math notranslate nohighlight">\(b\)</span> is the orthogonal projection of <span class="math notranslate nohighlight">\(b\)</span>, and the residual is
+then orthogonal to the subspace.</p>
+<figure class="align-default" id="ch08-fig-geometry">
+<a class="reference internal image-reference" href="../_images/ch08-geometry.png"><img alt="A plane through the origin spanned by two column vectors, a vector b above the plane, its orthogonal projection Ax in the plane, and the vertical residual joining them." src="../_images/ch08-geometry.png" style="width: 55%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 8.1 </span><span class="caption-text">Geometry of least squares. The solution <span class="math notranslate nohighlight">\(x\)</span> makes <span class="math notranslate nohighlight">\(Ax\)</span> the orthogonal
+projection <span class="math notranslate nohighlight">\(Pb\)</span> of <span class="math notranslate nohighlight">\(b\)</span> onto <span class="math notranslate nohighlight">\(\range(A)\)</span>, and the residual <span class="math notranslate nohighlight">\(r = b - Ax\)</span> is
+orthogonal to every column of <span class="math notranslate nohighlight">\(A\)</span>.</span><a class="headerlink" href="#ch08-fig-geometry" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="proof theorem admonition" id="ch08-thm-normal-equations">
+<p class="admonition-title"><span class="caption-number">Theorem 8.1 </span> (Characterization of least-squares solutions)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> and <span class="math notranslate nohighlight">\(b\in\R^m\)</span>, and let <span class="math notranslate nohighlight">\(P\)</span> be the orthogonal
+projector onto <span class="math notranslate nohighlight">\(\range(A)\)</span>. For <span class="math notranslate nohighlight">\(x\in\R^n\)</span> the following are equivalent:</p>
+<ol class="arabic">
+<li><p><span class="math notranslate nohighlight">\(x\)</span> is a least-squares solution;</p></li>
+<li><p>the residual is orthogonal to the range of <span class="math notranslate nohighlight">\(A\)</span>: <span class="math notranslate nohighlight">\(A^T(b - Ax) = 0\)</span>, that
+is, <span class="math notranslate nohighlight">\(x\)</span> solves the <em>normal equations</em></p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-normal">
+<span class="eqno">(8.1)<a class="headerlink" href="#equation-ch08-eq-normal" title="Link to this equation">#</a></span>\[
+   A^TAx = A^Tb ;
+   \]</div>
+</li>
+<li><p><span class="math notranslate nohighlight">\(Ax = Pb\)</span>.</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Let <span class="math notranslate nohighlight">\(r = b - Ax\)</span>. For every <span class="math notranslate nohighlight">\(z\in\R^n\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\|b - A(x+z)\|_2^2 = \|r - Az\|_2^2 = \|r\|_2^2 - 2z^TA^Tr + \|Az\|_2^2 .
+\]</div>
+<p>(1)<span class="math notranslate nohighlight">\(\Leftrightarrow\)</span>(2). If <span class="math notranslate nohighlight">\(A^Tr = 0\)</span>, the right-hand side is
+<span class="math notranslate nohighlight">\(\|r\|_2^2 + \|Az\|_2^2\ge\|r\|_2^2\)</span> for every <span class="math notranslate nohighlight">\(z\)</span>, so <span class="math notranslate nohighlight">\(x\)</span> is a minimizer.
+If <span class="math notranslate nohighlight">\(A^Tr\ne0\)</span>, take <span class="math notranslate nohighlight">\(z = tA^Tr\)</span> with <span class="math notranslate nohighlight">\(t&gt;0\)</span>: the right-hand side is
+<span class="math notranslate nohighlight">\(\|r\|_2^2 - 2t\|A^Tr\|_2^2 + t^2\|AA^Tr\|_2^2\)</span>, which is smaller than
+<span class="math notranslate nohighlight">\(\|r\|_2^2\)</span> for small <span class="math notranslate nohighlight">\(t\)</span>, so <span class="math notranslate nohighlight">\(x\)</span> is not a minimizer.</p>
+<p>(2)<span class="math notranslate nohighlight">\(\Leftrightarrow\)</span>(3). Every <span class="math notranslate nohighlight">\(b\)</span> decomposes uniquely as <span class="math notranslate nohighlight">\(b = y + w\)</span> with
+<span class="math notranslate nohighlight">\(y\in\range(A)\)</span> and <span class="math notranslate nohighlight">\(w\in\range(A)^\perp = \nullsp(A^T)\)</span>, and <span class="math notranslate nohighlight">\(y = Pb\)</span>
+(<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a>). Condition (2) says that
+<span class="math notranslate nohighlight">\(b = Ax + (b - Ax)\)</span> is such a decomposition, and by uniqueness this holds
+exactly when <span class="math notranslate nohighlight">\(Ax = Pb\)</span>.</p>
+</div>
+<div class="proof theorem admonition" id="ch08-thm-existence">
+<p class="admonition-title"><span class="caption-number">Theorem 8.2 </span> (Existence and uniqueness)</p>
+<section class="theorem-content" id="proof-content">
+<p>For every <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> and <span class="math notranslate nohighlight">\(b\in\R^m\)</span> the least-squares problem has
+a solution. If <span class="math notranslate nohighlight">\(x_0\)</span> is one solution, the set of all solutions is
+<span class="math notranslate nohighlight">\(x_0 + \nullsp(A)\)</span>, and all solutions have the same residual <span class="math notranslate nohighlight">\(b - Pb\)</span>. The
+solution is unique if and only if <span class="math notranslate nohighlight">\(A\)</span> has full column rank,
+<span class="math notranslate nohighlight">\(\rank(A) = n\)</span>; in that case <span class="math notranslate nohighlight">\(A^TA\)</span> is symmetric positive definite and</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-unique">
+<span class="eqno">(8.2)<a class="headerlink" href="#equation-ch08-eq-unique" title="Link to this equation">#</a></span>\[
+x = (A^TA)^{-1}A^Tb .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Since <span class="math notranslate nohighlight">\(Pb\in\range(A)\)</span>, there is an <span class="math notranslate nohighlight">\(x_0\)</span> with <span class="math notranslate nohighlight">\(Ax_0 = Pb\)</span>, and <span class="math notranslate nohighlight">\(x_0\)</span> is a
+solution by <a class="reference internal" href="#ch08-thm-normal-equations">Theorem 8.1</a>. Another vector <span class="math notranslate nohighlight">\(x\)</span> is a
+solution if and only if <span class="math notranslate nohighlight">\(Ax = Pb = Ax_0\)</span>, that is, <span class="math notranslate nohighlight">\(x - x_0\in\nullsp(A)\)</span>;
+the residual of every solution is <span class="math notranslate nohighlight">\(b - Pb\)</span>. The solution set is a single
+point exactly when <span class="math notranslate nohighlight">\(\nullsp(A) = \{0\}\)</span>, which means <span class="math notranslate nohighlight">\(\rank(A) = n\)</span>. Finally,
+<span class="math notranslate nohighlight">\(A^TA\)</span> is symmetric, and <span class="math notranslate nohighlight">\(z^TA^TAz = \|Az\|_2^2 &gt; 0\)</span> for <span class="math notranslate nohighlight">\(z\ne0\)</span> when
+<span class="math notranslate nohighlight">\(\nullsp(A) = \{0\}\)</span>, so <span class="math notranslate nohighlight">\(A^TA\)</span> is positive definite and
+<a class="reference internal" href="#equation-ch08-eq-normal">(8.1)</a> has the unique solution <a class="reference internal" href="#equation-ch08-eq-unique">(8.2)</a>.</p>
+</div>
+<p>Full column rank requires <span class="math notranslate nohighlight">\(m\ge n\)</span>. In <a class="reference internal" href="#equation-ch08-eq-unique">(8.2)</a> we recognize the
+pseudoinverse of a matrix of full column rank,
+<span class="math notranslate nohighlight">\(A^+ = (A^TA)^{-1}A^T\)</span> (<a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a>), so <span class="math notranslate nohighlight">\(x = A^+b\)</span>, and the
+projector is <span class="math notranslate nohighlight">\(P = AA^+ = A(A^TA)^{-1}A^T\)</span>. Formula <a class="reference internal" href="#equation-ch08-eq-unique">(8.2)</a> is a
+statement about the solution, not a recommendation for computing it.</p>
+<p>Because <span class="math notranslate nohighlight">\(Pb\perp b - Pb\)</span>, the Pythagorean theorem gives</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-pythagoras">
+<span class="eqno">(8.3)<a class="headerlink" href="#equation-ch08-eq-pythagoras" title="Link to this equation">#</a></span>\[
+\|b\|_2^2 = \|Ax\|_2^2 + \|r\|_2^2 .
+\]</div>
+<p>This suggests measuring the quality of the fit by the angle <span class="math notranslate nohighlight">\(\theta\)</span> between
+<span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(\range(A)\)</span>, defined by <span class="math notranslate nohighlight">\(\cos\theta = \|Ax\|_2/\|b\|_2\)</span> with
+<span class="math notranslate nohighlight">\(0\le\theta\le\pi/2\)</span>. A small <span class="math notranslate nohighlight">\(\theta\)</span> means a small residual; <span class="math notranslate nohighlight">\(\theta = 0\)</span>
+means <span class="math notranslate nohighlight">\(b\in\range(A)\)</span>, so that <span class="math notranslate nohighlight">\(Ax = b\)</span> is consistent; <span class="math notranslate nohighlight">\(\theta = \pi/2\)</span> means
+<span class="math notranslate nohighlight">\(b\perp\range(A)\)</span> and <span class="math notranslate nohighlight">\(x = 0\)</span>. The angle will appear in the condition number
+of the problem in <a class="reference internal" href="#ch08-sec-sensitivity"><span class="std std-numref">Section 8.3</span></a>.</p>
+<div class="proof example admonition" id="ch08-exa-line">
+<p class="admonition-title"><span class="caption-number">Example 8.1 </span> (Fitting a line to three points)</p>
+<section class="example-content" id="proof-content">
+<p>Fit <span class="math notranslate nohighlight">\(f(t) = x_1 + x_2t\)</span> to the data <span class="math notranslate nohighlight">\((0,1)\)</span>, <span class="math notranslate nohighlight">\((1,2)\)</span>, <span class="math notranslate nohighlight">\((2,4)\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}1&amp;0\\1&amp;1\\1&amp;2\end{bmatrix},\quad
+b = \begin{bmatrix}1\\2\\4\end{bmatrix},\quad
+A^TA = \begin{bmatrix}3&amp;3\\3&amp;5\end{bmatrix},\quad
+A^Tb = \begin{bmatrix}7\\10\end{bmatrix}.
+\end{split}\]</div>
+<p>The determinant of <span class="math notranslate nohighlight">\(A^TA\)</span> is <span class="math notranslate nohighlight">\(6\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+x = \frac16\begin{bmatrix}5&amp;-3\\-3&amp;3\end{bmatrix}\begin{bmatrix}7\\10\end{bmatrix}
+= \begin{bmatrix}5/6\\3/2\end{bmatrix},\qquad
+r = b - Ax = \begin{bmatrix}1/6\\-1/3\\1/6\end{bmatrix}.
+\end{split}\]</div>
+<p>As <a class="reference internal" href="#ch08-thm-normal-equations">Theorem 8.1</a> predicts, <span class="math notranslate nohighlight">\(A^Tr = (1/6 - 1/3 + 1/6,\;
+-1/3 + 2/6)^T = 0\)</span>. The minimal residual norm is
+<span class="math notranslate nohighlight">\(\|r\|_2 = \sqrt{6/36} = 1/\sqrt6\approx0.408\)</span>, and <a class="reference internal" href="#equation-ch08-eq-pythagoras">(8.3)</a>
+checks: <span class="math notranslate nohighlight">\(\|b\|_2^2 = 21\)</span>, <span class="math notranslate nohighlight">\(\|Ax\|_2^2 = 21 - 1/6 = 125/6\)</span>.</p>
+</section>
+</div><div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>The data of <a class="reference internal" href="#ch08-exa-line">Example 8.1</a> are changed to <span class="math notranslate nohighlight">\(b = (1, 2, 3)^T\)</span>. What
+are the least-squares solution and the residual, and what is <span class="math notranslate nohighlight">\(\theta\)</span>?</p>
+<p><em>Answer.</em> Now <span class="math notranslate nohighlight">\(b = A(1,1)^T\)</span> lies in <span class="math notranslate nohighlight">\(\range(A)\)</span>, so <span class="math notranslate nohighlight">\(x = (1,1)^T\)</span> solves
+<span class="math notranslate nohighlight">\(Ax = b\)</span> exactly, <span class="math notranslate nohighlight">\(r = 0\)</span> and <span class="math notranslate nohighlight">\(\theta = 0\)</span>. A least-squares solver applied to
+a consistent overdetermined system returns its exact solution.</p>
+</div>
+</section>
+</section>
+<section id="three-algorithms">
+<span id="ch08-sec-methods"></span><h2><span class="section-number">8.2. </span>Three algorithms<a class="headerlink" href="#three-algorithms" title="Link to this heading">#</a></h2>
+<p>We now assume that <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> has full column rank, so the solution
+is unique, and describe the three standard algorithms. Their costs are
+compared in the table at the end of the section.</p>
+<section id="the-normal-equations-and-cholesky">
+<h3><span class="section-number">8.2.1. </span>The normal equations and Cholesky<a class="headerlink" href="#the-normal-equations-and-cholesky" title="Link to this heading">#</a></h3>
+<p>By <a class="reference internal" href="#ch08-thm-existence">Theorem 8.2</a>, <span class="math notranslate nohighlight">\(A^TA\)</span> is symmetric positive definite, so
+<a class="reference internal" href="#equation-ch08-eq-normal">(8.1)</a> can be solved by the Cholesky factorization of
+<a class="reference internal" href="../ch06-cholesky/notes.html#ch06"><span class="std std-numref">Chapter 6</span></a>.</p>
+<div class="proof algorithm admonition" id="ch08-alg-normal">
+<p class="admonition-title"><span class="caption-number">Algorithm 8.1 </span> (Least squares by the normal equations)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> of full column rank, <span class="math notranslate nohighlight">\(b\in\R^m\)</span>.</p>
+<p><strong>Output:</strong> the least-squares solution <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Form <span class="math notranslate nohighlight">\(C = A^TA\)</span> (only the lower triangle) and <span class="math notranslate nohighlight">\(c = A^Tb\)</span>.</p></li>
+<li><p>Compute the Cholesky factorization <span class="math notranslate nohighlight">\(C = LL^T\)</span>.</p></li>
+<li><p>Solve <span class="math notranslate nohighlight">\(Ly = c\)</span> by forward substitution and <span class="math notranslate nohighlight">\(L^Tx = y\)</span> by back
+substitution.</p></li>
+</ol>
+</section>
+</div><p><em>Cost.</em> The lower triangle of <span class="math notranslate nohighlight">\(C\)</span> consists of <span class="math notranslate nohighlight">\(n(n+1)/2\)</span> inner products of
+length <span class="math notranslate nohighlight">\(m\)</span>, about <span class="math notranslate nohighlight">\(mn^2\)</span> flops. Forming <span class="math notranslate nohighlight">\(c\)</span> costs <span class="math notranslate nohighlight">\(2mn\)</span> flops, Cholesky
+<span class="math notranslate nohighlight">\(n^3/3\)</span> and the two triangular solves <span class="math notranslate nohighlight">\(2n^2\)</span>. The total is</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-cost-normal">
+<span class="eqno">(8.4)<a class="headerlink" href="#equation-ch08-eq-cost-normal" title="Link to this equation">#</a></span>\[
+\text{about } mn^2 + \tfrac13n^3 \text{ flops}.
+\]</div>
+<p>The method is simple, fast, and uses only the <span class="math notranslate nohighlight">\(n\times n\)</span> matrix <span class="math notranslate nohighlight">\(C\)</span>, which
+can be accumulated row by row if <span class="math notranslate nohighlight">\(A\)</span> is too large to store. Its weakness is
+that <span class="math notranslate nohighlight">\(\kappa_2(A^TA) = \kappa_2(A)^2\)</span> (<a class="reference internal" href="#ch08-ex-kappa-squared"><span class="std std-numref">Exercise 8.3</span></a>): the
+matrix actually factored is much worse conditioned than <span class="math notranslate nohighlight">\(A\)</span>. We will see in
+<a class="reference internal" href="#ch08-sec-stability"><span class="std std-numref">Section 8.4</span></a> exactly when this matters.</p>
+</section>
+<section id="householder-qr">
+<span id="ch08-sec-householder"></span><h3><span class="section-number">8.2.2. </span>Householder QR<a class="headerlink" href="#householder-qr" title="Link to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(A = QR\)</span> be a full QR factorization (<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a>), with
+<span class="math notranslate nohighlight">\(Q\in\R^{m\times m}\)</span> orthogonal and
+<span class="math notranslate nohighlight">\(R = \begin{bmatrix}R_1\\0\end{bmatrix}\)</span>, where <span class="math notranslate nohighlight">\(R_1\in\R^{n\times n}\)</span> is
+upper triangular and nonsingular because <span class="math notranslate nohighlight">\(A\)</span> has full column rank. Since
+multiplication by <span class="math notranslate nohighlight">\(Q^T\)</span> preserves the 2-norm, with
+<span class="math notranslate nohighlight">\(Q^Tb = \begin{bmatrix}c_1\\c_2\end{bmatrix}\)</span> (<span class="math notranslate nohighlight">\(c_1\in\R^n\)</span>),</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-qr-split">
+<span class="eqno">(8.5)<a class="headerlink" href="#equation-ch08-eq-qr-split" title="Link to this equation">#</a></span>\[
+\|b - Ax\|_2^2 = \|Q^Tb - Rx\|_2^2 = \|c_1 - R_1x\|_2^2 + \|c_2\|_2^2 .
+\]</div>
+<p>The second term does not depend on <span class="math notranslate nohighlight">\(x\)</span>, and the first vanishes for
+<span class="math notranslate nohighlight">\(x = R_1^{-1}c_1\)</span>. So the solution is obtained from one triangular solve, and
+the minimal residual norm <span class="math notranslate nohighlight">\(\|c_2\|_2\)</span> comes for free. Only <span class="math notranslate nohighlight">\(Q^Tb\)</span> is needed,
+never <span class="math notranslate nohighlight">\(Q\)</span> itself.</p>
+<div class="proof algorithm admonition" id="ch08-alg-householder">
+<p class="admonition-title"><span class="caption-number">Algorithm 8.2 </span> (Least squares by Householder QR)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> of full column rank, <span class="math notranslate nohighlight">\(b\in\R^m\)</span>.</p>
+<p><strong>Output:</strong> the least-squares solution <span class="math notranslate nohighlight">\(x\)</span> and the residual norm <span class="math notranslate nohighlight">\(\rho\)</span>.</p>
+<ol class="arabic simple">
+<li><p>For <span class="math notranslate nohighlight">\(k = 1,\dots,n\)</span>:</p>
+<ol class="arabic simple">
+<li><p>compute the Householder reflector <span class="math notranslate nohighlight">\(H_k\)</span> that zeros the entries
+<span class="math notranslate nohighlight">\(k+1,\dots,m\)</span> of column <span class="math notranslate nohighlight">\(k\)</span> of the current <span class="math notranslate nohighlight">\(A\)</span>;</p></li>
+<li><p>apply it to the remaining columns of <span class="math notranslate nohighlight">\(A\)</span> and to <span class="math notranslate nohighlight">\(b\)</span>:
+<span class="math notranslate nohighlight">\(A\leftarrow H_kA\)</span>, <span class="math notranslate nohighlight">\(b\leftarrow H_kb\)</span>.</p></li>
+</ol>
+</li>
+<li><p>Now <span class="math notranslate nohighlight">\(A\)</span> holds <span class="math notranslate nohighlight">\(R\)</span> and <span class="math notranslate nohighlight">\(b\)</span> holds <span class="math notranslate nohighlight">\(c = Q^Tb = H_n\cdots H_1b\)</span>.</p></li>
+<li><p>Solve <span class="math notranslate nohighlight">\(R_1x = c_{1:n}\)</span> by back substitution; <span class="math notranslate nohighlight">\(\rho = \|c_{n+1:m}\|_2\)</span>.</p></li>
+</ol>
+</section>
+</div><p><em>Cost.</em> The Householder QR factorization costs <span class="math notranslate nohighlight">\(2mn^2 - \tfrac23n^3\)</span> flops
+(<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a>). Applying the reflectors to <span class="math notranslate nohighlight">\(b\)</span> costs <span class="math notranslate nohighlight">\(\bigO(mn)\)</span>
+and the back substitution <span class="math notranslate nohighlight">\(n^2\)</span>, so the total is</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-cost-qr">
+<span class="eqno">(8.6)<a class="headerlink" href="#equation-ch08-eq-cost-qr" title="Link to this equation">#</a></span>\[
+\text{about } 2mn^2 - \tfrac23 n^3 \text{ flops},
+\]</div>
+<p>roughly twice the cost of the normal equations when <span class="math notranslate nohighlight">\(m\gg n\)</span> and the same
+when <span class="math notranslate nohighlight">\(m = n\)</span> (<a class="reference internal" href="#ch08-ex-flops"><span class="std std-numref">Exercise 8.4</span></a>). Forming <span class="math notranslate nohighlight">\(Q\)</span> explicitly (as
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.qr</span></code> does) costs extra <span class="math notranslate nohighlight">\(\bigO(mn^2)\)</span> flops and is unnecessary;
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.lstsq</span></code> and <code class="docutils literal notranslate"><span class="pre">scipy.linalg.lstsq</span></code> use LAPACK drivers based on the
+SVD or on a complete orthogonal factorization instead.</p>
+<p>The same derivation works for any QR factorization, in particular for the
+thin factorization <span class="math notranslate nohighlight">\(A = Q_1R_1\)</span> produced by Gram–Schmidt: then
+<span class="math notranslate nohighlight">\(x = R_1^{-1}Q_1^Tb\)</span>. Mathematically this is identical; numerically it
+depends on how <span class="math notranslate nohighlight">\(Q_1^Tb\)</span> is computed, as we will see in
+<a class="reference internal" href="#ch08-sec-stability"><span class="std std-numref">Section 8.4</span></a>.</p>
+</section>
+<section id="the-singular-value-decomposition">
+<h3><span class="section-number">8.2.3. </span>The singular value decomposition<a class="headerlink" href="#the-singular-value-decomposition" title="Link to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(A = U\Sigma V^T = \sum_{i=1}^n\sigma_iu_iv_i^T\)</span> be a thin SVD
+(<a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a>) with <span class="math notranslate nohighlight">\(\sigma_1\ge\dots\ge\sigma_n&gt;0\)</span>. Since
+<span class="math notranslate nohighlight">\(\|b - Ax\|_2^2 = \|U^Tb - \Sigma V^Tx\|_2^2 + \|(I - UU^T)b\|_2^2\)</span>, the
+solution is</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-svd-solution">
+<span class="eqno">(8.7)<a class="headerlink" href="#equation-ch08-eq-svd-solution" title="Link to this equation">#</a></span>\[
+x = V\Sigma^{-1}U^Tb = \sum_{i=1}^n\frac{u_i^Tb}{\sigma_i}\,v_i .
+\]</div>
+<p>Computing the SVD is more expensive than a QR factorization. A typical
+estimate for the whole algorithm is about <span class="math notranslate nohighlight">\(2mn^2 + 11n^3\)</span> flops
+<span class="bibtex-citation" id="id2">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span> (Lecture 11): comparable to QR when <span class="math notranslate nohighlight">\(m\gg n\)</span>, but
+considerably more when <span class="math notranslate nohighlight">\(m\approx n\)</span>. What the SVD buys is information. The
+expansion <a class="reference internal" href="#equation-ch08-eq-svd-solution">(8.7)</a> shows how each component of the data is
+amplified by <span class="math notranslate nohighlight">\(1/\sigma_i\)</span>, and it extends directly to rank-deficient and
+ill-posed problems (<a class="reference internal" href="#ch08-sec-rank-deficient"><span class="std std-numref">Section 8.5</span></a> and
+<a class="reference internal" href="#ch08-sec-regularization"><span class="std std-numref">Section 8.6</span></a>).</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Flops (leading terms)</p></th>
+<th class="head"><p>Rank-deficient <span class="math notranslate nohighlight">\(A\)</span></p></th>
+<th class="head"><p>Accuracy (see <a class="reference internal" href="#ch08-sec-stability"><span class="std std-numref">Section 8.4</span></a>)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Normal equations + Cholesky</p></td>
+<td><p><span class="math notranslate nohighlight">\(mn^2 + n^3/3\)</span></p></td>
+<td><p>fails</p></td>
+<td><p>error about <span class="math notranslate nohighlight">\(\kappa^2u\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Householder QR</p></td>
+<td><p><span class="math notranslate nohighlight">\(2mn^2 - 2n^3/3\)</span></p></td>
+<td><p>needs column pivoting</p></td>
+<td><p>backward stable</p></td>
+</tr>
+<tr class="row-even"><td><p>SVD</p></td>
+<td><p>about <span class="math notranslate nohighlight">\(2mn^2 + 11n^3\)</span></p></td>
+<td><p>yes (truncate)</p></td>
+<td><p>backward stable</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="proof example admonition" id="ch08-exa-line-qr">
+<p class="admonition-title"><span class="caption-number">Example 8.2 </span> (The line fit by QR)</p>
+<section class="example-content" id="proof-content">
+<p>For <a class="reference internal" href="#ch08-exa-line">Example 8.1</a>, Gram–Schmidt on the columns of <span class="math notranslate nohighlight">\(A\)</span> gives
+<span class="math notranslate nohighlight">\(q_1 = (1,1,1)^T/\sqrt3\)</span>, <span class="math notranslate nohighlight">\(r_{11} = \sqrt3\)</span>, <span class="math notranslate nohighlight">\(r_{12} = q_1^Ta_2 = \sqrt3\)</span>,
+<span class="math notranslate nohighlight">\(a_2 - r_{12}q_1 = (-1,0,1)^T\)</span>, <span class="math notranslate nohighlight">\(r_{22} = \sqrt2\)</span> and
+<span class="math notranslate nohighlight">\(q_2 = (-1,0,1)^T/\sqrt2\)</span>. Then <span class="math notranslate nohighlight">\(Q_1^Tb = (7/\sqrt3,\ 3/\sqrt2)^T\)</span>, and the
+triangular system</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix}\sqrt3&amp;\sqrt3\\0&amp;\sqrt2\end{bmatrix}
+\begin{bmatrix}x_1\\x_2\end{bmatrix} =
+\begin{bmatrix}7/\sqrt3\\3/\sqrt2\end{bmatrix}
+\end{split}\]</div>
+<p>gives <span class="math notranslate nohighlight">\(x_2 = 3/2\)</span> and <span class="math notranslate nohighlight">\(x_1 = 7/3 - 3/2 = 5/6\)</span>, as before. The residual norm
+is <span class="math notranslate nohighlight">\(\sqrt{\|b\|_2^2 - \|Q_1^Tb\|_2^2} = \sqrt{21 - 49/3 - 9/2} = 1/\sqrt6\)</span>.</p>
+</section>
+</div></section>
+</section>
+<section id="sensitivity-of-least-squares-problems">
+<span id="ch08-sec-sensitivity"></span><h2><span class="section-number">8.3. </span>Sensitivity of least-squares problems<a class="headerlink" href="#sensitivity-of-least-squares-problems" title="Link to this heading">#</a></h2>
+<p>Before comparing algorithms we must know how much the exact solution itself
+changes when the data <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(b\)</span> change. This is a property of the problem
+alone (<a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>). For a square nonsingular system the
+answer is <span class="math notranslate nohighlight">\(\kappa(A)\)</span>. For least squares, three quantities are involved. Let
+<span class="math notranslate nohighlight">\(A\)</span> have full column rank, let <span class="math notranslate nohighlight">\(x = A^+b\)</span> and <span class="math notranslate nohighlight">\(y = Ax = Pb\)</span>, and define</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-kappa-theta-eta">
+<span class="eqno">(8.8)<a class="headerlink" href="#equation-ch08-eq-kappa-theta-eta" title="Link to this equation">#</a></span>\[
+\kappa = \kappa_2(A) = \|A\|_2\|A^+\|_2 = \frac{\sigma_1}{\sigma_n},\qquad
+\cos\theta = \frac{\|y\|_2}{\|b\|_2},\qquad
+\eta = \frac{\|A\|_2\|x\|_2}{\|y\|_2} .
+\]</div>
+<p>The angle <span class="math notranslate nohighlight">\(\theta\in[0,\pi/2]\)</span> measures the size of the residual
+(<span class="math notranslate nohighlight">\(\|r\|_2 = \|b\|_2\sin\theta = \|y\|_2\tan\theta\)</span>), and <span class="math notranslate nohighlight">\(\eta\)</span> satisfies
+<span class="math notranslate nohighlight">\(1\le\eta\le\kappa\)</span>, because <span class="math notranslate nohighlight">\(\|y\|_2 = \|Ax\|_2\le\|A\|_2\|x\|_2\)</span> and
+<span class="math notranslate nohighlight">\(\|x\|_2 = \|A^+y\|_2\le\|A^+\|_2\|y\|_2\)</span>. The value of <span class="math notranslate nohighlight">\(\eta\)</span> depends on how
+<span class="math notranslate nohighlight">\(x\)</span> is oriented relative to the right singular vectors:
+<span class="math notranslate nohighlight">\(\eta = 1\)</span> when <span class="math notranslate nohighlight">\(x\)</span> is parallel to <span class="math notranslate nohighlight">\(v_1\)</span> and <span class="math notranslate nohighlight">\(\eta = \kappa\)</span> when it is
+parallel to <span class="math notranslate nohighlight">\(v_n\)</span> (<a class="reference internal" href="#ch08-ex-eta"><span class="std std-numref">Exercise 8.7</span></a>).</p>
+<p>We use relative normwise condition numbers in the 2-norm, as in
+<a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>: for perturbations of <span class="math notranslate nohighlight">\(b\)</span>, for example,
+<span class="math notranslate nohighlight">\(\kappa_b = \lim_{\epsilon\to0}\sup_{\|\delta b\|_2\le\epsilon\|b\|_2}
+\big(\|\delta x\|_2/\|x\|_2\big)/\epsilon\)</span>.</p>
+<div class="proof theorem admonition" id="ch08-thm-conditioning">
+<p class="admonition-title"><span class="caption-number">Theorem 8.3 </span> (Condition numbers of the least-squares problem)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> have full column rank, let <span class="math notranslate nohighlight">\(b\in\R^m\)</span> with
+<span class="math notranslate nohighlight">\(\theta&lt;\pi/2\)</span>, and let <span class="math notranslate nohighlight">\(\kappa\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(\eta\)</span> be defined by
+<a class="reference internal" href="#equation-ch08-eq-kappa-theta-eta">(8.8)</a>. The relative condition numbers of the
+least-squares solution <span class="math notranslate nohighlight">\(x\)</span> with respect to perturbations of <span class="math notranslate nohighlight">\(b\)</span> and of <span class="math notranslate nohighlight">\(A\)</span>
+are</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-ls-condition">
+<span class="eqno">(8.9)<a class="headerlink" href="#equation-ch08-eq-ls-condition" title="Link to this equation">#</a></span>\[
+\kappa_b = \frac{\kappa}{\eta\cos\theta},\qquad
+\kappa_A \le \kappa + \frac{\kappa^2\tan\theta}{\eta} .
+\]</div>
+<p>The first is an equality, the second an upper bound
+<span class="bibtex-citation" id="id3">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span> (Theorem 18.1). Moreover
+<span class="math notranslate nohighlight">\(\kappa_A\ge\max\{\kappa,\ \kappa^2\tan\theta/\eta\}\)</span>, so the bound is sharp
+to within a factor <span class="math notranslate nohighlight">\(2\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <em>Perturbations of <span class="math notranslate nohighlight">\(b\)</span>.</em> Since <span class="math notranslate nohighlight">\(x = A^+b\)</span> is linear in <span class="math notranslate nohighlight">\(b\)</span>, a perturbation
+<span class="math notranslate nohighlight">\(\delta b\)</span> changes <span class="math notranslate nohighlight">\(x\)</span> by exactly <span class="math notranslate nohighlight">\(\delta x = A^+\delta b\)</span>, and
+<span class="math notranslate nohighlight">\(\sup_{\delta b\ne0}\|A^+\delta b\|_2/\|\delta b\|_2 = \|A^+\|_2 = 1/\sigma_n\)</span>,
+attained for <span class="math notranslate nohighlight">\(\delta b\)</span> parallel to <span class="math notranslate nohighlight">\(u_n\)</span>. Hence</p>
+<div class="math notranslate nohighlight">
+\[
+\kappa_b = \frac{\|A^+\|_2\|b\|_2}{\|x\|_2}
+= \frac{\kappa\,\|b\|_2}{\|A\|_2\|x\|_2}
+= \frac{\kappa\,\|y\|_2/\cos\theta}{\eta\,\|y\|_2} = \frac{\kappa}{\eta\cos\theta}.
+\]</div>
+<p><em>Perturbations of <span class="math notranslate nohighlight">\(A\)</span>, upper bound.</em> For <span class="math notranslate nohighlight">\(\|\delta A\|_2&lt;\sigma_n\)</span> the matrix
+<span class="math notranslate nohighlight">\(A+\delta A\)</span> has full column rank and the solution
+<span class="math notranslate nohighlight">\(x(A) = (A^TA)^{-1}A^Tb\)</span> is a differentiable function of <span class="math notranslate nohighlight">\(A\)</span>. Using
+<span class="math notranslate nohighlight">\(\delta\big[(A^TA)^{-1}\big] = -(A^TA)^{-1}(\delta A^TA + A^T\delta A)(A^TA)^{-1} +
+\bigO(\|\delta A\|^2)\)</span> and <span class="math notranslate nohighlight">\(r = b - Ax\)</span>, the first-order change is</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-first-order">
+<span class="eqno">(8.10)<a class="headerlink" href="#equation-ch08-eq-first-order" title="Link to this equation">#</a></span>\[
+\delta x = (A^TA)^{-1}\delta A^T r - A^+\delta A\,x .
+\]</div>
+<p>Since <span class="math notranslate nohighlight">\(\|(A^TA)^{-1}\|_2 = 1/\sigma_n^2\)</span> and <span class="math notranslate nohighlight">\(\|A^+\|_2 = 1/\sigma_n\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\|\delta x\|_2}{\|x\|_2} \le
+\frac{\|\delta A\|_2}{\|A\|_2}\left(\frac{\|A\|_2}{\sigma_n}
++ \frac{\|A\|_2^2}{\sigma_n^2}\,\frac{\|r\|_2}{\|A\|_2\|x\|_2}\right)
+= \frac{\|\delta A\|_2}{\|A\|_2}\left(\kappa + \frac{\kappa^2\tan\theta}{\eta}\right),
+\]</div>
+<p>because <span class="math notranslate nohighlight">\(\|r\|_2/(\|A\|_2\|x\|_2) = \|y\|_2\tan\theta/(\eta\|y\|_2)\)</span>.</p>
+<p><em>Lower bounds.</em> Let <span class="math notranslate nohighlight">\(\epsilon&gt;0\)</span>. The perturbation
+<span class="math notranslate nohighlight">\(\delta A = \epsilon\|A\|_2\,u_nx^T/\|x\|_2\)</span> has <span class="math notranslate nohighlight">\(\|\delta A\|_2 = \epsilon\|A\|_2\)</span>
+and <span class="math notranslate nohighlight">\(\delta A^Tr = 0\)</span> (because <span class="math notranslate nohighlight">\(u_n\in\range(A)\perp r\)</span>), so
+<a class="reference internal" href="#equation-ch08-eq-first-order">(8.10)</a> gives <span class="math notranslate nohighlight">\(\delta x = -\epsilon\|A\|_2\|x\|_2\,v_n/\sigma_n\)</span>
+and <span class="math notranslate nohighlight">\(\|\delta x\|_2/\|x\|_2 = \epsilon\kappa\)</span>. The perturbation
+<span class="math notranslate nohighlight">\(\delta A = \epsilon\|A\|_2\,rv_n^T/\|r\|_2\)</span> (for <span class="math notranslate nohighlight">\(r\ne0\)</span>) has <span class="math notranslate nohighlight">\(A^+\delta A = 0\)</span>
+(because <span class="math notranslate nohighlight">\(A^+r = (A^TA)^{-1}A^Tr = 0\)</span>) and <span class="math notranslate nohighlight">\(\delta A^Tr = \epsilon\|A\|_2\|r\|_2v_n\)</span>,
+so <span class="math notranslate nohighlight">\(\delta x = \epsilon\|A\|_2\|r\|_2v_n/\sigma_n^2\)</span> and
+<span class="math notranslate nohighlight">\(\|\delta x\|_2/\|x\|_2 = \epsilon\kappa^2\tan\theta/\eta\)</span>.</p>
+</div>
+<p>The same theorem gives the conditioning of the fitted values <span class="math notranslate nohighlight">\(y = Ax\)</span>: with
+respect to <span class="math notranslate nohighlight">\(b\)</span> it is <span class="math notranslate nohighlight">\(1/\cos\theta\)</span> (<a class="reference internal" href="#ch08-ex-y-condition"><span class="std std-numref">Exercise 8.6</span></a>), and with
+respect to <span class="math notranslate nohighlight">\(A\)</span> it is at most <span class="math notranslate nohighlight">\(\kappa/\cos\theta\)</span> <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span>
+(Theorem 18.1). Perturbation bounds that hold for finite (not only
+infinitesimal) perturbations, and for the pseudoinverse in general, go back to
+<span class="bibtex-citation" id="id5">Wedin [<a class="reference internal" href="../back/bibliography.html#id46" title="Per-Åke Wedin. Perturbation theory for pseudo-inverses. BIT Numerical Mathematics, 13(2):217–232, 1973.">1973</a>]</span>; see also <span class="bibtex-citation" id="id6">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> (Chapter 20).</p>
+<p><strong>Interpretation.</strong> Three regimes follow from <a class="reference internal" href="#equation-ch08-eq-ls-condition">(8.9)</a>.</p>
+<ul class="simple">
+<li><p><em>Consistent or small-residual problems</em> (<span class="math notranslate nohighlight">\(\tan\theta\ll1/\kappa\)</span>, say). Then
+<span class="math notranslate nohighlight">\(\kappa_A\approx\kappa\)</span> and <span class="math notranslate nohighlight">\(\kappa_b\le\kappa/\cos\theta\approx\kappa\)</span>: the
+problem behaves like a square linear system with condition number <span class="math notranslate nohighlight">\(\kappa\)</span>.</p></li>
+<li><p><em>Large-residual problems</em> (<span class="math notranslate nohighlight">\(\tan\theta\)</span> of order one). If <span class="math notranslate nohighlight">\(\eta\)</span> is modest,
+which is typical, <span class="math notranslate nohighlight">\(\kappa_A\)</span> is of order <span class="math notranslate nohighlight">\(\kappa^2\)</span>. The square of the
+condition number is then an intrinsic property of the problem, not an
+artifact of an algorithm.</p></li>
+<li><p><em><span class="math notranslate nohighlight">\(x\)</span> aligned with <span class="math notranslate nohighlight">\(v_n\)</span></em> (<span class="math notranslate nohighlight">\(\eta\approx\kappa\)</span>). Then even the large-residual
+term reduces to <span class="math notranslate nohighlight">\(\kappa\tan\theta\)</span>.</p></li>
+</ul>
+<p>The dependence on <span class="math notranslate nohighlight">\(\theta\)</span> is the essential new feature. Fitting a model that
+describes the data well is a better-conditioned problem than fitting one that
+does not.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The sensitivity of the exact solution to a perturbation <span class="math notranslate nohighlight">\(\delta b\)</span> or
+<span class="math notranslate nohighlight">\(\delta A\)</span> is a property of the problem, and it is the same whatever
+algorithm is used afterwards. An earlier version of these notes claimed that
+a perturbation <span class="math notranslate nohighlight">\(\delta b\)</span> with <span class="math notranslate nohighlight">\(\|\delta b\|_2/\|b\|_2 = 10^{-10}\)</span> changes the
+solution by a relative amount <span class="math notranslate nohighlight">\(\kappa^2\cdot10^{-10}\)</span> “via the normal
+equations” and <span class="math notranslate nohighlight">\(\kappa\cdot10^{-10}\)</span> “via QR”. That is wrong: the exact
+solutions of the two perturbed problems coincide, and both move by at most
+<span class="math notranslate nohighlight">\(\kappa_b\cdot10^{-10}\)</span>. What differs between the methods is the additional
+error caused by rounding <em>during</em> the computation, which is the subject of
+the next section.</p>
+</div>
+</section>
+<section id="rounding-errors-and-the-stability-of-the-three-methods">
+<span id="ch08-sec-stability"></span><h2><span class="section-number">8.4. </span>Rounding errors and the stability of the three methods<a class="headerlink" href="#rounding-errors-and-the-stability-of-the-three-methods" title="Link to this heading">#</a></h2>
+<p>Recall that <span class="math notranslate nohighlight">\(u = 2^{-53}\approx1.11\times10^{-16}\)</span> is the unit roundoff and
+that an algorithm is backward stable if its computed result is the exact
+result for slightly perturbed data (<a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>).
+<span class="bibtex-citation" id="id7">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> call <span class="math notranslate nohighlight">\(u\)</span> “<span class="math notranslate nohighlight">\(\epsilon_{\text{machine}}\)</span>”; we translate
+their results to <span class="math notranslate nohighlight">\(u\)</span>.</p>
+<section id="householder-qr-is-backward-stable">
+<h3><span class="section-number">8.4.1. </span>Householder QR is backward stable<a class="headerlink" href="#householder-qr-is-backward-stable" title="Link to this heading">#</a></h3>
+<div class="proof theorem admonition" id="ch08-thm-householder-stable">
+<p class="admonition-title"><span class="caption-number">Theorem 8.4 </span> (Backward stability of Householder least squares)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>, <span class="math notranslate nohighlight">\(m\ge n\)</span>, have full rank, and suppose the
+least-squares problem is solved by Householder QR as in
+<a class="reference internal" href="#ch08-alg-householder">Algorithm 8.2</a>, with the reflectors applied to <span class="math notranslate nohighlight">\(b\)</span>. The
+computed solution <span class="math notranslate nohighlight">\(\hat x\)</span> is the exact least-squares solution of</p>
+<div class="math notranslate nohighlight">
+\[
+\min_x\|(b+\Delta b) - (A+\Delta A)x\|_2,\qquad
+\|\Delta a_j\|_2\le\tilde\gamma_{mn}\|a_j\|_2\ (j = 1,\dots,n),\qquad
+\|\Delta b\|_2\le\tilde\gamma_{mn}\|b\|_2 ,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tilde\gamma_{mn} = cmnu/(1 - cmnu)\)</span> with a small integer constant <span class="math notranslate nohighlight">\(c\)</span>
+<span class="bibtex-citation" id="id8">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Theorem 20.3).</p>
+</section>
+</div><p>The backward error is small column by column, which is stronger than a
+normwise statement. Combining the theorem with
+<a class="reference internal" href="#ch08-thm-conditioning">Theorem 8.3</a> (and <span class="math notranslate nohighlight">\(\|\Delta A\|_2\le\sqrt n\max_j\|\Delta
+a_j\|_2\le\sqrt n\,\tilde\gamma_{mn}\|A\|_2\)</span>), the forward error satisfies,
+to first order,</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-qr-forward">
+<span class="eqno">(8.11)<a class="headerlink" href="#equation-ch08-eq-qr-forward" title="Link to this equation">#</a></span>\[
+\frac{\|\hat x - x\|_2}{\|x\|_2}\lesssim c(m,n)\,u\left(\kappa + \frac{\kappa}{\eta\cos\theta}
++ \frac{\kappa^2\tan\theta}{\eta}\right)
+\]</div>
+<p>with a modest factor <span class="math notranslate nohighlight">\(c(m,n)\)</span>. This is the best we can expect of any
+algorithm, since rounding the data alone perturbs them by a relative amount
+<span class="math notranslate nohighlight">\(u\)</span>. The least-squares solver based on the SVD is backward stable as well
+<span class="bibtex-citation" id="id9">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span> (Lecture 19).</p>
+<p>Because the Householder <span class="math notranslate nohighlight">\(Q\)</span> is orthogonal to working accuracy, forming the
+thin <span class="math notranslate nohighlight">\(Q\)</span> explicitly and computing <span class="math notranslate nohighlight">\(Q^Tb\)</span> from it (as is done when one writes
+<code class="docutils literal notranslate"><span class="pre">Q,</span> <span class="pre">R</span> <span class="pre">=</span> <span class="pre">numpy.linalg.qr(A)</span></code>) also gives errors of the size
+<a class="reference internal" href="#equation-ch08-eq-qr-forward">(8.11)</a> in practice, as the lab confirms; it only costs more.</p>
+</section>
+<section id="the-normal-equations-are-not-backward-stable">
+<h3><span class="section-number">8.4.2. </span>The normal equations are not backward stable<a class="headerlink" href="#the-normal-equations-are-not-backward-stable" title="Link to this heading">#</a></h3>
+<p>The normal equations lose information in the very first step. Forming
+<span class="math notranslate nohighlight">\(C = \fl(A^TA)\)</span> commits errors <span class="math notranslate nohighlight">\(|\fl(A^TA) - A^TA|\le\gamma_m|A^T||A|\)</span> (the
+bound for matrix products from <a class="reference internal" href="../ch03-floating-point/notes.html#ch03"><span class="std std-numref">Chapter 3</span></a>). In the 2-norm this
+is an error of order <span class="math notranslate nohighlight">\(mnu\|A\|_2^2 = mnu\|A^TA\|_2\)</span>, a perturbation of <span class="math notranslate nohighlight">\(C\)</span>
+that is small relative to <span class="math notranslate nohighlight">\(C\)</span> but that need not correspond to any small
+perturbation of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<p><em>Sketch of the forward error.</em> Even if everything after forming <span class="math notranslate nohighlight">\(C\)</span> and
+<span class="math notranslate nohighlight">\(c = \fl(A^Tb)\)</span> were exact, the perturbation <span class="math notranslate nohighlight">\(E = \fl(A^TA) - A^TA\)</span> changes
+the solution by about <span class="math notranslate nohighlight">\(C^{-1}Ex\)</span>, which is bounded by
+<span class="math notranslate nohighlight">\(\kappa_2(A^TA)\,\|E\|_2/\|C\|_2\,\|x\|_2\approx c(m,n)u\kappa^2\|x\|_2\)</span>; the
+error in <span class="math notranslate nohighlight">\(c\)</span> and the backward error of Cholesky contribute terms of the same
+kind. The result is a forward error of order</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-normal-forward">
+<span class="eqno">(8.12)<a class="headerlink" href="#equation-ch08-eq-normal-forward" title="Link to this equation">#</a></span>\[
+\frac{\|\hat x - x\|_2}{\|x\|_2}\lesssim c(m,n)\,u\,\kappa^2\left(1 + \frac{1}{\eta\cos\theta}\right),
+\]</div>
+<p>whatever the size of the residual. When <span class="math notranslate nohighlight">\(\kappa^2u\)</span> approaches one, that is,
+<span class="math notranslate nohighlight">\(\kappa\gtrsim u^{-1/2}\approx10^8\)</span>, the computed <span class="math notranslate nohighlight">\(\fl(A^TA)\)</span> may not even be
+positive definite, and Cholesky may break down (<a class="reference internal" href="#ch08-ex-lauchli"><span class="std std-numref">Exercise 8.5</span></a>).</p>
+<p>Comparing <a class="reference internal" href="#equation-ch08-eq-qr-forward">(8.11)</a> with <a class="reference internal" href="#equation-ch08-eq-normal-forward">(8.12)</a> gives
+the precise comparison of the two methods:</p>
+<ul class="simple">
+<li><p>for <em>small residuals</em>, QR gives an error of order <span class="math notranslate nohighlight">\(\kappa u\)</span> and the normal
+equations of order <span class="math notranslate nohighlight">\(\kappa^2u\)</span>: the normal equations lose twice as many
+digits as the problem requires;</p></li>
+<li><p>for <em>large residuals</em> with modest <span class="math notranslate nohighlight">\(\eta\)</span>, both errors are of order
+<span class="math notranslate nohighlight">\(\kappa^2u\)</span>, because the problem itself has condition number of order
+<span class="math notranslate nohighlight">\(\kappa^2\)</span>. The normal equations are then no less accurate than QR.</p></li>
+</ul>
+<p>In the language of <span class="bibtex-citation" id="id10">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Lecture 19), the normal equations
+are unstable in general, but stable for a class of problems in which <span class="math notranslate nohighlight">\(\kappa\)</span>
+is bounded or <span class="math notranslate nohighlight">\(\tan\theta/\eta\)</span> is bounded below. They remain a good
+choice when <span class="math notranslate nohighlight">\(A\)</span> is well conditioned, or when speed and memory matter more
+than the last digits, and they are often used with a posteriori checks.</p>
+<p><a class="reference internal" href="#ch08-fig-accuracy"><span class="std std-numref">Figure 8.2</span></a> shows the forward errors of the three methods for
+test matrices with prescribed <span class="math notranslate nohighlight">\(\kappa\)</span> and residual size. Each computed
+solution is compared with the <em>exact</em> least-squares solution of the stored
+floating-point data, computed in rational arithmetic, so that the plotted
+quantity is the effect of rounding in the algorithm and nothing else.</p>
+<figure class="align-default" id="ch08-fig-accuracy">
+<a class="reference internal image-reference" href="../_images/ch08-accuracy.png"><img alt="Two log-log panels of relative error against condition number. Left, zero residual: normal equations follow the u kappa squared line while QR and SVD follow the u kappa line. Right, residual as large as the fitted values: all three methods follow the u kappa squared line." src="../_images/ch08-accuracy.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 8.2 </span><span class="caption-text">Relative forward errors of the normal equations (with Cholesky), Householder
+QR and the SVD, for <span class="math notranslate nohighlight">\(40\times8\)</span> matrices with prescribed <span class="math notranslate nohighlight">\(\kappa(A)\)</span> (median of
+three random problems), measured against the exact least-squares solution.
+Left: <span class="math notranslate nohighlight">\(b = Ax\)</span> (zero residual). Right: <span class="math notranslate nohighlight">\(\|r\|_2 = \|Ax\|_2\)</span>
+(<span class="math notranslate nohighlight">\(\theta = 45^\circ\)</span>). Missing points on the left mean that Cholesky of the
+computed <span class="math notranslate nohighlight">\(A^TA\)</span> failed.</span><a class="headerlink" href="#ch08-fig-accuracy" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>To measure the error of a least-squares algorithm, compare with the exact
+least-squares solution of the same data, not with the vector <span class="math notranslate nohighlight">\(x_{\rm gen}\)</span>
+that was used to generate noisy data <span class="math notranslate nohighlight">\(b = Ax_{\rm gen} + e\)</span>. The difference
+<span class="math notranslate nohighlight">\(A^+e\)</span> between the least-squares solution and <span class="math notranslate nohighlight">\(x_{\rm gen}\)</span> is a statistical
+error of the model that no algorithm can remove, and it can hide the rounding
+errors completely. An earlier version of these notes compared the normal
+equations and QR for <span class="math notranslate nohighlight">\(m = 40\)</span>, <span class="math notranslate nohighlight">\(n = 8\)</span>, <span class="math notranslate nohighlight">\(\kappa = 10^7\)</span> and noise of size
+<span class="math notranslate nohighlight">\(10^{-8}\)</span> in this way and found “no difference”. In one repetition of that
+experiment with our own random data, both methods are about <span class="math notranslate nohighlight">\(2\times10^{-2}\)</span>
+away from <span class="math notranslate nohighlight">\(x_{\rm gen}\)</span> (in the relative sense), while their relative errors
+with respect to the exact least-squares solution are about <span class="math notranslate nohighlight">\(2\times10^{-4}\)</span>
+for the normal equations and <span class="math notranslate nohighlight">\(2\times10^{-11}\)</span> for Householder QR. The lab
+repeats the experiment with other random data.</p>
+</div>
+</section>
+<section id="gram-schmidt-and-the-right-hand-side">
+<h3><span class="section-number">8.4.3. </span>Gram–Schmidt and the right-hand side<a class="headerlink" href="#gram-schmidt-and-the-right-hand-side" title="Link to this heading">#</a></h3>
+<p>Modified Gram–Schmidt (MGS) computes a thin factorization <span class="math notranslate nohighlight">\(A\approx\hat Q_1\hat R_1\)</span>
+in <span class="math notranslate nohighlight">\(2mn^2\)</span> flops, but the computed <span class="math notranslate nohighlight">\(\hat Q_1\)</span> loses orthogonality in
+proportion to <span class="math notranslate nohighlight">\(\kappa u\)</span> (<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a>). If we form
+<span class="math notranslate nohighlight">\(\hat Q_1^Tb\)</span> from this matrix, the error in the solution can be of order
+<span class="math notranslate nohighlight">\(\kappa^2u\)</span> even for a zero residual, as bad as the normal equations. The
+remedy is not to abandon MGS but to treat <span class="math notranslate nohighlight">\(b\)</span> as an extra column: run MGS on
+the augmented matrix <span class="math notranslate nohighlight">\([A,\ b]\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+[A,\ b] = [Q_1,\ q_{n+1}]\begin{bmatrix}R_1 &amp; z\\ 0 &amp; \rho\end{bmatrix},
+\end{split}\]</div>
+<p>and solve <span class="math notranslate nohighlight">\(R_1x = z\)</span>; then <span class="math notranslate nohighlight">\(\rho = \|b - Ax\|_2\)</span> in exact arithmetic. The
+vector <span class="math notranslate nohighlight">\(z\)</span> is computed by the same sequence of projections as the columns of
+<span class="math notranslate nohighlight">\(R_1\)</span>, <span class="math notranslate nohighlight">\(z_k = q_k^Tb^{(k)}\)</span> with <span class="math notranslate nohighlight">\(b^{(k+1)} = b^{(k)} - z_kq_k\)</span>, rather than
+from inner products with the original <span class="math notranslate nohighlight">\(b\)</span>. This algorithm is backward
+stable: <span class="bibtex-citation" id="id11">Björck [<a class="reference internal" href="../back/bibliography.html#id42" title="Åke Björck. Solving linear least squares problems by Gram–Schmidt orthogonalization. BIT Numerical Mathematics, 7(1):1–21, 1967.">1967</a>]</span> analyzed it, and <span class="bibtex-citation" id="id12">Björck and Paige [<a class="reference internal" href="../back/bibliography.html#id43" title="Åke Björck and Christopher C. Paige. Loss and recapture of orthogonality in the modified Gram–Schmidt algorithm. SIAM Journal on Matrix Analysis and Applications, 13(1):176–190, 1992.">1992</a>]</span> showed
+that MGS is numerically equivalent to Householder QR applied to <span class="math notranslate nohighlight">\(A\)</span> with <span class="math notranslate nohighlight">\(n\)</span>
+rows of zeros placed on top, from which the backward stability of MGS least
+squares follows (see also <span class="bibtex-citation" id="id13">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Chapter 20, and
+<span class="bibtex-citation" id="id14">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span>, Lecture 19). The lab confirms that its errors are of
+the same size as those of Householder QR.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is not true that MGS least squares “may be far from optimal” whereas
+Householder QR is safe. What is unsafe is the combination of MGS with an
+explicit product <span class="math notranslate nohighlight">\(\hat Q_1^Tb\)</span>. MGS applied to <span class="math notranslate nohighlight">\([A,\ b]\)</span> is backward stable;
+the loss of orthogonality of <span class="math notranslate nohighlight">\(\hat Q_1\)</span> does not harm the least-squares
+solution.</p>
+</div>
+</section>
+<section id="column-scaling">
+<h3><span class="section-number">8.4.4. </span>Column scaling<a class="headerlink" href="#column-scaling" title="Link to this heading">#</a></h3>
+<p>A remark that is important in applications such as the case study below:
+scaling the columns of <span class="math notranslate nohighlight">\(A\)</span> changes <span class="math notranslate nohighlight">\(\kappa(A)\)</span> but does not change the
+problem in any essential way, since <span class="math notranslate nohighlight">\(\min\|b - (AD)z\|_2\)</span> with <span class="math notranslate nohighlight">\(D\)</span> diagonal
+and nonsingular is solved by <span class="math notranslate nohighlight">\(z = D^{-1}x\)</span>.</p>
+<div class="proof remark admonition" id="ch08-rem-scaling">
+<p class="admonition-title"><span class="caption-number">Remark 8.1 </span> (Householder QR is insensitive to column scaling)</p>
+<section class="remark-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(D\)</span> be diagonal with powers of <span class="math notranslate nohighlight">\(2\)</span> on the diagonal. In the absence of
+underflow and overflow, multiplication by <span class="math notranslate nohighlight">\(D\)</span> is exact, and one checks step by
+step that <a class="reference internal" href="#ch08-alg-householder">Algorithm 8.2</a> applied to <span class="math notranslate nohighlight">\(AD\)</span> performs exactly the
+same rounding errors as when applied to <span class="math notranslate nohighlight">\(A\)</span>: the reflectors are the same, the
+computed <span class="math notranslate nohighlight">\(R\)</span> is multiplied by <span class="math notranslate nohighlight">\(D\)</span>, and the computed solution is exactly
+<span class="math notranslate nohighlight">\(D^{-1}\hat x\)</span>. The same holds for the normal equations. Consequently, the
+accuracy of these methods, measured in the scaled variables, is governed by
+<span class="math notranslate nohighlight">\(\min_D\kappa(AD)\)</span> rather than by <span class="math notranslate nohighlight">\(\kappa(A)\)</span>. This is consistent with the
+columnwise backward error of <a class="reference internal" href="#ch08-thm-householder-stable">Theorem 8.4</a>; see
+<span class="bibtex-citation" id="id15">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> (Chapters 19 and 20). Algorithms that mix the columns,
+such as the SVD, and every decision based on the singular values of <span class="math notranslate nohighlight">\(A\)</span>
+itself, such as numerical rank, are <em>not</em> invariant under column scaling.</p>
+</section>
+</div><div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>A colleague solves a least-squares problem with <span class="math notranslate nohighlight">\(\kappa(A) = 10^6\)</span> by the
+normal equations and reports a relative residual <span class="math notranslate nohighlight">\(\|b - A\hat x\|_2/\|b\|_2\)</span>
+equal to the one obtained by QR to six digits. Does this show that the normal
+equations gave an accurate <span class="math notranslate nohighlight">\(\hat x\)</span>?</p>
+<p><em>Answer.</em> No. The residual is insensitive to errors in <span class="math notranslate nohighlight">\(x\)</span> along directions
+that <span class="math notranslate nohighlight">\(A\)</span> shrinks: an error <span class="math notranslate nohighlight">\(\delta x = \epsilon v_n\)</span> changes <span class="math notranslate nohighlight">\(Ax\)</span> by only
+<span class="math notranslate nohighlight">\(\epsilon\sigma_n\)</span>. Equal residuals say that both vectors fit the data
+equally well, not that they are close to each other or to the exact
+solution; for a small-residual problem the forward error of the normal
+equations can still be of order <span class="math notranslate nohighlight">\(\kappa^2u\approx10^{-4}\)</span>, compared with
+<span class="math notranslate nohighlight">\(\kappa u\approx10^{-10}\)</span> for QR.</p>
+</div>
+</section>
+</section>
+<section id="rank-deficient-and-nearly-rank-deficient-problems">
+<span id="ch08-sec-rank-deficient"></span><h2><span class="section-number">8.5. </span>Rank-deficient and nearly rank-deficient problems<a class="headerlink" href="#rank-deficient-and-nearly-rank-deficient-problems" title="Link to this heading">#</a></h2>
+<section id="the-minimum-norm-solution">
+<h3><span class="section-number">8.5.1. </span>The minimum-norm solution<a class="headerlink" href="#the-minimum-norm-solution" title="Link to this heading">#</a></h3>
+<p>If <span class="math notranslate nohighlight">\(\rank(A) = r&lt;n\)</span>, the solution set <span class="math notranslate nohighlight">\(x_0 + \nullsp(A)\)</span> is an affine subspace
+(<a class="reference internal" href="#ch08-thm-existence">Theorem 8.2</a>), and we must specify which solution we want.
+The standard choice is the one of smallest norm.</p>
+<div class="proof theorem admonition" id="ch08-thm-min-norm">
+<p class="admonition-title"><span class="caption-number">Theorem 8.5 </span> (Minimum-norm least-squares solution)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> have rank <span class="math notranslate nohighlight">\(r\ge1\)</span> and SVD
+<span class="math notranslate nohighlight">\(A = \sum_{i=1}^r\sigma_iu_iv_i^T\)</span> with <span class="math notranslate nohighlight">\(\sigma_1\ge\dots\ge\sigma_r&gt;0\)</span>. Then</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-min-norm">
+<span class="eqno">(8.13)<a class="headerlink" href="#equation-ch08-eq-min-norm" title="Link to this equation">#</a></span>\[
+x_+ = A^+b = \sum_{i=1}^r\frac{u_i^Tb}{\sigma_i}\,v_i
+\]</div>
+<p>is a least-squares solution, it is the only least-squares solution that lies
+in <span class="math notranslate nohighlight">\(\range(A^T) = \nullsp(A)^\perp\)</span>, and every other least-squares solution
+<span class="math notranslate nohighlight">\(x\)</span> satisfies <span class="math notranslate nohighlight">\(\|x\|_2&gt;\|x_+\|_2\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. We have <span class="math notranslate nohighlight">\(Ax_+ = \sum_{i=1}^ru_iu_i^Tb\)</span>. The matrix <span class="math notranslate nohighlight">\(\sum_{i\le r}u_iu_i^T\)</span> is
+the orthogonal projector onto the range of <span class="math notranslate nohighlight">\(A\)</span>, which is
+<span class="math notranslate nohighlight">\(\Span\{u_1,\dots,u_r\}\)</span>, so <span class="math notranslate nohighlight">\(x_+\)</span> is a solution by
+<a class="reference internal" href="#ch08-thm-normal-equations">Theorem 8.1</a>. It lies in
+<span class="math notranslate nohighlight">\(\Span\{v_1,\dots,v_r\} = \range(A^T)\)</span>, which is the orthogonal complement of
+<span class="math notranslate nohighlight">\(\nullsp(A) = \Span\{v_{r+1},\dots,v_n\}\)</span>. Every solution is <span class="math notranslate nohighlight">\(x = x_+ + z\)</span> with
+<span class="math notranslate nohighlight">\(z\in\nullsp(A)\)</span>, and <span class="math notranslate nohighlight">\(\|x\|_2^2 = \|x_+\|_2^2 + \|z\|_2^2\)</span> because
+<span class="math notranslate nohighlight">\(z\perp x_+\)</span>. This exceeds <span class="math notranslate nohighlight">\(\|x_+\|_2^2\)</span> unless <span class="math notranslate nohighlight">\(z = 0\)</span>, and a solution in
+<span class="math notranslate nohighlight">\(\range(A^T)\)</span> must have <span class="math notranslate nohighlight">\(z\in\range(A^T)\cap\nullsp(A) = \{0\}\)</span>.</p>
+</div>
+<div class="proof example admonition" id="ch08-exa-rank-one">
+<p class="admonition-title"><span class="caption-number">Example 8.3 </span> (A rank-one problem)</p>
+<section class="example-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A = \begin{bmatrix}1&amp;1\\1&amp;1\\0&amp;0\end{bmatrix}\)</span> and <span class="math notranslate nohighlight">\(b = (1,3,1)^T\)</span>. Here
+<span class="math notranslate nohighlight">\(A = \sigma_1u_1v_1^T\)</span> with <span class="math notranslate nohighlight">\(\sigma_1 = 2\)</span>, <span class="math notranslate nohighlight">\(u_1 = (1,1,0)^T/\sqrt2\)</span> and
+<span class="math notranslate nohighlight">\(v_1 = (1,1)^T/\sqrt2\)</span>. The least-squares solutions are all <span class="math notranslate nohighlight">\(x\)</span> with
+<span class="math notranslate nohighlight">\(x_1 + x_2 = 2\)</span> (the average of the first two data), that is,
+<span class="math notranslate nohighlight">\(x = (1,1)^T + t(1,-1)^T\)</span>, and the residual is <span class="math notranslate nohighlight">\((-1, 1, 1)^T\)</span> for all of them.
+The minimum-norm solution is</p>
+<div class="math notranslate nohighlight">
+\[
+x_+ = \frac{u_1^Tb}{\sigma_1}\,v_1 = \frac{4/\sqrt2}{2}\cdot\frac{(1,1)^T}{\sqrt2} = (1,1)^T .
+\]</div>
+</section>
+</div></section>
+<section id="numerical-rank">
+<h3><span class="section-number">8.5.2. </span>Numerical rank<a class="headerlink" href="#numerical-rank" title="Link to this heading">#</a></h3>
+<p>In floating point, exact rank deficiency is almost never observed: the
+computed singular values of a matrix of rank <span class="math notranslate nohighlight">\(r\)</span> are <span class="math notranslate nohighlight">\(\sigma_{r+1},\dots\)</span> of
+order <span class="math notranslate nohighlight">\(u\sigma_1\)</span>, not zero. Formula <a class="reference internal" href="#equation-ch08-eq-min-norm">(8.13)</a> applied with all
+<span class="math notranslate nohighlight">\(n\)</span> computed singular values then divides rounding noise by numbers of order
+<span class="math notranslate nohighlight">\(u\sigma_1\)</span> and produces an enormous, meaningless solution; applied to an
+exactly zero singular value it divides by zero. (The legacy code for this
+course had exactly this defect.) We must decide which singular values to
+treat as zero.</p>
+<div class="proof definition admonition" id="ch08-def-numerical-rank">
+<p class="admonition-title"><span class="caption-number">Definition 8.2 </span> (Numerical rank)</p>
+<section class="definition-content" id="proof-content">
+<p>The <em>numerical rank</em> of <span class="math notranslate nohighlight">\(A\)</span> with respect to a tolerance <span class="math notranslate nohighlight">\(\tau&gt;0\)</span> is the number
+of singular values of <span class="math notranslate nohighlight">\(A\)</span> that exceed <span class="math notranslate nohighlight">\(\tau\)</span>.</p>
+</section>
+</div><p>The tolerance should reflect the uncertainty in <span class="math notranslate nohighlight">\(A\)</span>. If <span class="math notranslate nohighlight">\(A\)</span> is known only to
+within perturbations of norm <span class="math notranslate nohighlight">\(\delta\)</span>, then by the perturbation bound
+<span class="math notranslate nohighlight">\(|\sigma_i(A+E) - \sigma_i(A)|\le\|E\|_2\)</span> (<a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a>) no
+singular value below <span class="math notranslate nohighlight">\(\delta\)</span> can be distinguished from zero, and
+<span class="math notranslate nohighlight">\(\tau\approx\delta\)</span> is appropriate. For data that are exact up to rounding,
+<span class="math notranslate nohighlight">\(\tau\)</span> is a modest multiple of <span class="math notranslate nohighlight">\(u\sigma_1\)</span>. NumPy’s <code class="docutils literal notranslate"><span class="pre">numpy.linalg.lstsq(A,</span> <span class="pre">b,</span> <span class="pre">rcond=None)</span></code> treats singular values below <span class="math notranslate nohighlight">\(\max(m,n)\,\epsmach\,\sigma_1\)</span> as
+zero, and <code class="docutils literal notranslate"><span class="pre">rcond</span></code> sets a different relative threshold. A rank decision is
+reliable only if there is a clear gap in the singular values around <span class="math notranslate nohighlight">\(\tau\)</span>.</p>
+<p>Why is such a decision necessary at all? Because the pseudoinverse is not a
+continuous function of <span class="math notranslate nohighlight">\(A\)</span> when the rank changes.</p>
+<div class="proof proposition admonition" id="ch08-prop-discontinuity">
+<p class="admonition-title"><span class="caption-number">Proposition 8.1 </span> (Discontinuity of the pseudoinverse)</p>
+<section class="proposition-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(\rank(A+E)&gt;\rank(A)\)</span>, then <span class="math notranslate nohighlight">\(\|(A+E)^+\|_2\ge1/\|E\|_2\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Let <span class="math notranslate nohighlight">\(r = \rank(A)\)</span>. Then <span class="math notranslate nohighlight">\(\sigma_{r+1}(A) = 0\)</span>, so
+<span class="math notranslate nohighlight">\(\sigma_{r+1}(A+E)\le\|E\|_2\)</span>. Since <span class="math notranslate nohighlight">\(\rank(A+E)\ge r+1\)</span>, the matrix <span class="math notranslate nohighlight">\(A+E\)</span> has
+a nonzero singular value <span class="math notranslate nohighlight">\(\sigma_{r+1}(A+E)\le\|E\|_2\)</span>, and
+<span class="math notranslate nohighlight">\(\|(A+E)^+\|_2\)</span> is the reciprocal of the smallest nonzero singular value.</p>
+</div>
+<p>A perturbation of size <span class="math notranslate nohighlight">\(10^{-16}\)</span> that raises the rank can therefore change
+the minimum-norm solution by a factor of <span class="math notranslate nohighlight">\(10^{16}\)</span>. The general perturbation
+theory of the pseudoinverse, including the fact that it is continuous under
+perturbations that preserve the rank, is due to <span class="bibtex-citation" id="id16">Wedin [<a class="reference internal" href="../back/bibliography.html#id46" title="Per-Åke Wedin. Perturbation theory for pseudo-inverses. BIT Numerical Mathematics, 13(2):217–232, 1973.">1973</a>]</span>.</p>
+</section>
+<section id="truncated-svd">
+<h3><span class="section-number">8.5.3. </span>Truncated SVD<a class="headerlink" href="#truncated-svd" title="Link to this heading">#</a></h3>
+<div class="proof algorithm admonition" id="ch08-alg-tsvd">
+<p class="admonition-title"><span class="caption-number">Algorithm 8.3 </span> (Truncated SVD solution)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>, <span class="math notranslate nohighlight">\(b\in\R^m\)</span>, a tolerance <span class="math notranslate nohighlight">\(\tau&gt;0\)</span>.</p>
+<p><strong>Output:</strong> the minimum-norm solution of the problem with numerical rank <span class="math notranslate nohighlight">\(k\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Compute the thin SVD <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span>.</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(k\)</span> be the number of singular values larger than <span class="math notranslate nohighlight">\(\tau\)</span>.</p></li>
+<li><p>Return <span class="math notranslate nohighlight">\(x_k = \sum_{i=1}^k (u_i^Tb/\sigma_i)\,v_i\)</span>.</p></li>
+</ol>
+</section>
+</div><p>By the Eckart–Young theorem (<a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a>),
+<span class="math notranslate nohighlight">\(A_k = \sum_{i\le k}\sigma_iu_iv_i^T\)</span> is a nearest matrix of rank <span class="math notranslate nohighlight">\(k\)</span> to <span class="math notranslate nohighlight">\(A\)</span>,
+and <span class="math notranslate nohighlight">\(x_k = A_k^+b\)</span> is the minimum-norm solution of the least-squares problem
+for <span class="math notranslate nohighlight">\(A_k\)</span>. Its sensitivity is governed by <span class="math notranslate nohighlight">\(\sigma_1/\sigma_k\)</span> instead of
+<span class="math notranslate nohighlight">\(\sigma_1/\sigma_n\)</span>: truncation trades a small modification of the problem
+for a large gain in stability.</p>
+</section>
+<section id="qr-with-column-pivoting">
+<h3><span class="section-number">8.5.4. </span>QR with column pivoting<a class="headerlink" href="#qr-with-column-pivoting" title="Link to this heading">#</a></h3>
+<p>The SVD is the most reliable tool for rank decisions, but a cheaper
+alternative is often adequate. <em>QR with column pivoting</em> computes
+<span class="math notranslate nohighlight">\(AP = QR\)</span> with a permutation <span class="math notranslate nohighlight">\(P\)</span>, where at step <span class="math notranslate nohighlight">\(k\)</span> the column of largest
+norm in the remaining submatrix is moved to position <span class="math notranslate nohighlight">\(k\)</span>. The diagonal of <span class="math notranslate nohighlight">\(R\)</span>
+then satisfies <span class="math notranslate nohighlight">\(|r_{11}|\ge|r_{22}|\ge\dots\)</span>. If after <span class="math notranslate nohighlight">\(k\)</span> steps</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R = \begin{bmatrix}R_{11} &amp; R_{12}\\ 0 &amp; R_{22}\end{bmatrix},\qquad
+\|R_{22}\|_2\le\tau ,
+\end{split}\]</div>
+<p>we set <span class="math notranslate nohighlight">\(R_{22}\)</span> to zero and declare numerical rank <span class="math notranslate nohighlight">\(k\)</span>. Then <span class="math notranslate nohighlight">\(A\)</span> is within
+<span class="math notranslate nohighlight">\(\tau\)</span> of a matrix of rank <span class="math notranslate nohighlight">\(k\)</span>, and the <em>basic solution</em>
+<span class="math notranslate nohighlight">\(x = P\begin{bmatrix}R_{11}^{-1}c_1\\0\end{bmatrix}\)</span> with <span class="math notranslate nohighlight">\(c = Q^Tb\)</span> fits the
+data as well as the truncated problem allows. The basic solution has at most
+<span class="math notranslate nohighlight">\(k\)</span> nonzero entries but is in general <em>not</em> the minimum-norm solution; a
+further orthogonal transformation from the right (a complete orthogonal
+decomposition) yields the minimum-norm solution. This is what the LAPACK
+driver behind <code class="docutils literal notranslate"><span class="pre">scipy.linalg.lstsq(A,</span> <span class="pre">b,</span> <span class="pre">lapack_driver=&quot;gelsy&quot;)</span></code> does. The pivot
+search adds only lower-order work to Householder QR, because the column norms
+can be updated rather than recomputed. Column pivoting usually reveals the
+numerical rank, but not always; a classical counterexample is due to Kahan
+<span class="bibtex-citation" id="id17">[<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">Golub and Van Loan, 2013</a>]</span> (Chapter 5). The SVD is the tool of choice when the rank
+decision really matters.</p>
+</section>
+</section>
+<section id="tikhonov-regularization">
+<span id="ch08-sec-regularization"></span><h2><span class="section-number">8.6. </span>Tikhonov regularization<a class="headerlink" href="#tikhonov-regularization" title="Link to this heading">#</a></h2>
+<section id="discrete-ill-posed-problems">
+<h3><span class="section-number">8.6.1. </span>Discrete ill-posed problems<a class="headerlink" href="#discrete-ill-posed-problems" title="Link to this heading">#</a></h3>
+<p>Truncation works well when there is a gap in the singular values. Many
+problems in science and engineering have no gap. They arise from the
+discretization of integral equations of the first kind, such as
+deblurring a signal or image, or inferring a source from distant
+measurements: <span class="math notranslate nohighlight">\(b(s) = \int K(s,t)x(t)\,dt\)</span> with a smooth kernel <span class="math notranslate nohighlight">\(K\)</span>. The
+singular values of the discretized operator decay gradually to the level of
+rounding errors, and the data are noisy. In the expansion
+<a class="reference internal" href="#equation-ch08-eq-min-norm">(8.13)</a>, the coefficients <span class="math notranslate nohighlight">\(u_i^Tb\)</span> of the exact data decay
+(for a reasonable solution they must decay faster than <span class="math notranslate nohighlight">\(\sigma_i\)</span>), but the
+coefficients of the noise do not, so the terms with small <span class="math notranslate nohighlight">\(\sigma_i\)</span> are
+dominated by amplified noise <span class="bibtex-citation" id="id18">[<a class="reference internal" href="../back/bibliography.html#id13" title="Per Christian Hansen. Rank-Deficient and Discrete Ill-Posed Problems: Numerical Aspects of Linear Inversion. SIAM, Philadelphia, 1998.">Hansen, 1998</a>]</span>.</p>
+<p><a class="reference internal" href="#ch08-fig-tikhonov"><span class="std std-numref">Figure 8.3</span></a> shows an example that we construct in the lab: a
+Gaussian blurring kernel on <span class="math notranslate nohighlight">\([0,1]\)</span> discretized by the midpoint rule with
+<span class="math notranslate nohighlight">\(n = 64\)</span>, a true solution consisting of a box and a triangle, and data with
+Gaussian noise of relative size <span class="math notranslate nohighlight">\(10^{-3}\)</span>. The computed condition number of
+<span class="math notranslate nohighlight">\(K\)</span> exceeds <span class="math notranslate nohighlight">\(10^{17}\)</span>; the matrix is numerically singular. Panel (a) shows that
+the coefficients <span class="math notranslate nohighlight">\(|u_i^Tb|\)</span> level off at the noise level near <span class="math notranslate nohighlight">\(i = 20\)</span>, while
+<span class="math notranslate nohighlight">\(\sigma_i\)</span> continues to decrease. Solving <span class="math notranslate nohighlight">\(Kx = b\)</span> directly gives a relative
+error of about <span class="math notranslate nohighlight">\(5\times10^{13}\)</span>.</p>
+</section>
+<section id="definition-and-filter-factors">
+<h3><span class="section-number">8.6.2. </span>Definition and filter factors<a class="headerlink" href="#definition-and-filter-factors" title="Link to this heading">#</a></h3>
+<p>The idea of regularization is to trade a little residual for a large
+reduction in the size of the solution.</p>
+<div class="proof theorem admonition" id="ch08-thm-tikhonov">
+<p class="admonition-title"><span class="caption-number">Theorem 8.6 </span> (Tikhonov regularization)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> with thin SVD <span class="math notranslate nohighlight">\(A = \sum_{i=1}^p\sigma_iu_iv_i^T\)</span>,
+<span class="math notranslate nohighlight">\(p = \min(m,n)\)</span>, and let <span class="math notranslate nohighlight">\(\lambda&gt;0\)</span>. The problem</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-tikhonov">
+<span class="eqno">(8.14)<a class="headerlink" href="#equation-ch08-eq-tikhonov" title="Link to this equation">#</a></span>\[\begin{split}
+\min_x\ \|Ax - b\|_2^2 + \lambda^2\|x\|_2^2
+= \min_x\left\|\begin{bmatrix}A\\ \lambda I\end{bmatrix}x - \begin{bmatrix}b\\0\end{bmatrix}\right\|_2^2
+\end{split}\]</div>
+<p>has the unique solution</p>
+<div class="math notranslate nohighlight" id="equation-ch08-eq-filter">
+<span class="eqno">(8.15)<a class="headerlink" href="#equation-ch08-eq-filter" title="Link to this equation">#</a></span>\[
+x_\lambda = (A^TA + \lambda^2I)^{-1}A^Tb
+= \sum_{i:\,\sigma_i&gt;0} f_i\,\frac{u_i^Tb}{\sigma_i}\,v_i ,\qquad
+f_i = \frac{\sigma_i^2}{\sigma_i^2 + \lambda^2}.
+\]</div>
+<p>As <span class="math notranslate nohighlight">\(\lambda\to0\)</span>, <span class="math notranslate nohighlight">\(x_\lambda\to A^+b\)</span>. As <span class="math notranslate nohighlight">\(\lambda\)</span> increases, <span class="math notranslate nohighlight">\(\|x_\lambda\|_2\)</span>
+decreases and <span class="math notranslate nohighlight">\(\|Ax_\lambda - b\|_2\)</span> increases (both weakly).</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The two expressions in <a class="reference internal" href="#equation-ch08-eq-tikhonov">(8.14)</a> are equal by the definition of
+the 2-norm of a stacked vector. The stacked matrix has full column rank
+because its lower block <span class="math notranslate nohighlight">\(\lambda I\)</span> does, so by <a class="reference internal" href="#ch08-thm-existence">Theorem 8.2</a>
+the solution is unique and satisfies the normal equations
+<span class="math notranslate nohighlight">\((A^TA + \lambda^2I)x = A^Tb\)</span>. With <span class="math notranslate nohighlight">\(A^TA = \sum_i\sigma_i^2v_iv_i^T\)</span> (completing
+<span class="math notranslate nohighlight">\(v_1,\dots,v_p\)</span> to an orthonormal basis of <span class="math notranslate nohighlight">\(\R^n\)</span> with eigenvalue <span class="math notranslate nohighlight">\(0\)</span> where
+needed) and <span class="math notranslate nohighlight">\(A^Tb = \sum_i\sigma_i(u_i^Tb)v_i\)</span>, the solution is
+<span class="math notranslate nohighlight">\(\sum_i\sigma_i(u_i^Tb)/(\sigma_i^2+\lambda^2)\,v_i\)</span>, which is
+<a class="reference internal" href="#equation-ch08-eq-filter">(8.15)</a>. Each <span class="math notranslate nohighlight">\(f_i\to1\)</span> as <span class="math notranslate nohighlight">\(\lambda\to0\)</span>, which gives the limit
+<a class="reference internal" href="#equation-ch08-eq-min-norm">(8.13)</a>. Finally,
+<span class="math notranslate nohighlight">\(\|x_\lambda\|_2^2 = \sum_i f_i^2(u_i^Tb)^2/\sigma_i^2\)</span> with each <span class="math notranslate nohighlight">\(f_i\)</span>
+decreasing in <span class="math notranslate nohighlight">\(\lambda\)</span>, and
+<span class="math notranslate nohighlight">\(\|Ax_\lambda - b\|_2^2 = \sum_i(1 - f_i)^2(u_i^Tb)^2 + \|b - \sum_iu_iu_i^Tb\|_2^2\)</span>
+with each <span class="math notranslate nohighlight">\(1 - f_i = \lambda^2/(\sigma_i^2+\lambda^2)\)</span> increasing.</p>
+</div>
+<p>The <em>filter factors</em> <span class="math notranslate nohighlight">\(f_i\)</span> are close to <span class="math notranslate nohighlight">\(1\)</span> for <span class="math notranslate nohighlight">\(\sigma_i\gg\lambda\)</span> and close
+to <span class="math notranslate nohighlight">\(\sigma_i^2/\lambda^2\)</span> for <span class="math notranslate nohighlight">\(\sigma_i\ll\lambda\)</span>. Tikhonov regularization
+thus keeps the components with large singular values, damps those with small
+ones, and makes a smooth transition near <span class="math notranslate nohighlight">\(\sigma_i\approx\lambda\)</span>, whereas the
+truncated SVD uses the filter factors <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(0\)</span>. In statistics the same
+method is called ridge regression <span class="bibtex-citation" id="id19">[<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">Golub and Van Loan, 2013</a>]</span> (Section 6.1).</p>
+<p><strong>Computing <span class="math notranslate nohighlight">\(x_\lambda\)</span> stably.</strong> The second form of <a class="reference internal" href="#equation-ch08-eq-tikhonov">(8.14)</a>
+is an ordinary least-squares problem with the <span class="math notranslate nohighlight">\((m+n)\times n\)</span> matrix
+<span class="math notranslate nohighlight">\(\begin{bmatrix}A\\\lambda I\end{bmatrix}\)</span>, whose condition number is
+<span class="math notranslate nohighlight">\(\sqrt{(\sigma_1^2+\lambda^2)/(\sigma_n^2+\lambda^2)}\le\sqrt{\sigma_1^2+\lambda^2}/\lambda\)</span>.
+Solving it by Householder QR is backward stable and costs about
+<span class="math notranslate nohighlight">\(2(m+n)n^2 - \tfrac23n^3\)</span> flops. The regularized normal equations
+<span class="math notranslate nohighlight">\((A^TA+\lambda^2I)x = A^Tb\)</span> are faster but square this condition number and
+suffer from the rounding error in forming <span class="math notranslate nohighlight">\(A^TA\)</span>. When <span class="math notranslate nohighlight">\(x_\lambda\)</span> is needed
+for many values of <span class="math notranslate nohighlight">\(\lambda\)</span>, it is most economical to compute the SVD (or a
+bidiagonalization) once and evaluate <a class="reference internal" href="#equation-ch08-eq-filter">(8.15)</a>.</p>
+</section>
+<section id="choosing-the-regularization-parameter">
+<h3><span class="section-number">8.6.3. </span>Choosing the regularization parameter<a class="headerlink" href="#choosing-the-regularization-parameter" title="Link to this heading">#</a></h3>
+<p>The parameter <span class="math notranslate nohighlight">\(\lambda\)</span> balances two errors: too small, and noise is
+amplified; too large, and the solution is oversmoothed. Two classical rules
+are the following <span class="bibtex-citation" id="id20">[<a class="reference internal" href="../back/bibliography.html#id13" title="Per Christian Hansen. Rank-Deficient and Discrete Ill-Posed Problems: Numerical Aspects of Linear Inversion. SIAM, Philadelphia, 1998.">Hansen, 1998</a>]</span>.</p>
+<ul class="simple">
+<li><p>The <em>discrepancy principle</em>: if the norm <span class="math notranslate nohighlight">\(\|e\|_2\)</span> of the noise is known,
+choose <span class="math notranslate nohighlight">\(\lambda\)</span> so that <span class="math notranslate nohighlight">\(\|Ax_\lambda - b\|_2\approx\|e\|_2\)</span>. There is no
+point in fitting the data more closely than their errors.</p></li>
+<li><p>The <em>L-curve</em> <span class="bibtex-citation" id="id21">[<a class="reference internal" href="../back/bibliography.html#id47" title="Per Christian Hansen. Analysis of discrete ill-posed problems by means of the L-curve. SIAM Review, 34(4):561–580, 1992.">Hansen, 1992</a>]</span>: plot <span class="math notranslate nohighlight">\(\|x_\lambda\|_2\)</span> against
+<span class="math notranslate nohighlight">\(\|Ax_\lambda - b\|_2\)</span> on log-log axes. The curve typically has the shape of
+an L. On the vertical branch (small <span class="math notranslate nohighlight">\(\lambda\)</span>) the solution norm explodes
+while the residual barely decreases; on the horizontal branch (large
+<span class="math notranslate nohighlight">\(\lambda\)</span>) the residual grows while the solution norm barely decreases. The
+corner, located for example as the point of maximum curvature, is a
+compromise that does not require knowledge of the noise level.</p></li>
+</ul>
+<p>For the example of <a class="reference internal" href="#ch08-fig-tikhonov"><span class="std std-numref">Figure 8.3</span></a>, the corner of the L-curve is
+at <span class="math notranslate nohighlight">\(\lambda\approx6.7\times10^{-4}\)</span>, where the relative error of <span class="math notranslate nohighlight">\(x_\lambda\)</span> is
+about <span class="math notranslate nohighlight">\(20\%\)</span>. The best value on our grid, which can be found only because we
+know the true solution, is <span class="math notranslate nohighlight">\(\lambda\approx2.8\times10^{-3}\)</span> with an error of
+about <span class="math notranslate nohighlight">\(16\%\)</span>. The discrepancy principle gives <span class="math notranslate nohighlight">\(\lambda\approx1.1\times10^{-2}\)</span>
+and an error of about <span class="math notranslate nohighlight">\(18\%\)</span>. None of the rules is guaranteed to work; they
+are heuristics whose failures are well documented <span class="bibtex-citation" id="id22">[<a class="reference internal" href="../back/bibliography.html#id13" title="Per Christian Hansen. Rank-Deficient and Discrete Ill-Posed Problems: Numerical Aspects of Linear Inversion. SIAM, Philadelphia, 1998.">Hansen, 1998</a>]</span>, and
+the error that remains reflects the information destroyed by the blurring,
+not a defect of the rules.</p>
+<figure class="align-default" id="ch08-fig-tikhonov">
+<a class="reference internal image-reference" href="../_images/ch08-tikhonov.png"><img alt="Three panels. Left, singular values decaying to 1e-16 and data coefficients leveling off at a noise floor of a few times 1e-4. Middle, an L-shaped curve of solution norm against residual norm with the corner and the optimal point marked. Right, two regularized reconstructions compared with a box and triangle true solution." src="../_images/ch08-tikhonov.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 8.3 </span><span class="caption-text">Tikhonov regularization of a discretized Gaussian blurring problem
+(<span class="math notranslate nohighlight">\(n = 64\)</span>, noise of relative size <span class="math notranslate nohighlight">\(10^{-3}\)</span>). (a) Singular values and the
+coefficients <span class="math notranslate nohighlight">\(|u_i^Tb|\)</span> of the noisy data. (b) The L-curve for
+<span class="math notranslate nohighlight">\(10^{-6}\le\lambda\le1\)</span>, with its corner (maximum curvature) and the value of
+<span class="math notranslate nohighlight">\(\lambda\)</span> with the smallest error. (c) The corresponding reconstructions and
+the true solution.</span><a class="headerlink" href="#ch08-fig-tikhonov" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Regularization changes the problem. The regularized solution is a biased
+estimate: it is not the least-squares solution of the original data, and its
+error cannot be made arbitrarily small by computing more accurately.
+Regularization is appropriate when the unregularized problem is so
+ill-conditioned that its solution is dominated by noise, not as a cure for
+an unstable algorithm applied to a well-conditioned problem.</p>
+</div>
+</section>
+</section>
+<section id="weighted-least-squares-and-large-problems">
+<span id="ch08-sec-weighted"></span><h2><span class="section-number">8.7. </span>Weighted least squares and large problems<a class="headerlink" href="#weighted-least-squares-and-large-problems" title="Link to this heading">#</a></h2>
+<p><strong>Weighted least squares.</strong> If the data have different accuracies, it is
+natural to give accurate data more weight. With weights <span class="math notranslate nohighlight">\(w_i&gt;0\)</span> and
+<span class="math notranslate nohighlight">\(W = \diag(w_1,\dots,w_m)\)</span> one minimizes</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=1}^m w_i\big(b_i - (Ax)_i\big)^2 = \|W^{1/2}(b - Ax)\|_2^2 .
+\]</div>
+<p>This is the ordinary problem for the scaled data <span class="math notranslate nohighlight">\(W^{1/2}A\)</span> and <span class="math notranslate nohighlight">\(W^{1/2}b\)</span>:
+multiply row <span class="math notranslate nohighlight">\(i\)</span> by <span class="math notranslate nohighlight">\(\sqrt{w_i}\)</span> and use any of the methods above. The normal
+equations become <span class="math notranslate nohighlight">\(A^TWAx = A^TWb\)</span>. When the errors <span class="math notranslate nohighlight">\(e_i\)</span> are independent with
+variances <span class="math notranslate nohighlight">\(s_i^2\)</span>, the choice <span class="math notranslate nohighlight">\(w_i = 1/s_i^2\)</span> gives the best linear unbiased
+estimator; with a general covariance matrix <span class="math notranslate nohighlight">\(V = LL^T\)</span> one minimizes
+<span class="math notranslate nohighlight">\(\|L^{-1}(b - Ax)\|_2\)</span> (generalized least squares) <span class="bibtex-citation" id="id23">[<a class="reference internal" href="../back/bibliography.html#id12" title="Åke Björck. Numerical Methods for Least Squares Problems. SIAM, Philadelphia, 1996.">Björck, 1996</a>]</span>. If
+the weights vary over many orders of magnitude, the scaled matrix can be very
+ill-conditioned even though the problem is not, and the algorithm must be
+chosen with care <span class="bibtex-citation" id="id24">[<a class="reference internal" href="../back/bibliography.html#id12" title="Åke Björck. Numerical Methods for Least Squares Problems. SIAM, Philadelphia, 1996.">Björck, 1996</a>]</span>.</p>
+<p><strong>Large sparse problems.</strong> When <span class="math notranslate nohighlight">\(A\)</span> is large and sparse, a QR factorization
+or SVD may be too expensive in time or memory. Iterative methods need only
+the products <span class="math notranslate nohighlight">\(Av\)</span> and <span class="math notranslate nohighlight">\(A^Tw\)</span>. The method LSQR of <span class="bibtex-citation" id="id25">Paige and Saunders [<a class="reference internal" href="../back/bibliography.html#id48" title="Christopher C. Paige and Michael A. Saunders. LSQR: an algorithm for sparse linear equations and sparse least squares. ACM Transactions on Mathematical Software, 8(1):43–71, 1982.">1982</a>]</span> is based
+on the Golub–Kahan bidiagonalization; it is mathematically equivalent to the
+conjugate gradient method applied to the normal equations, without ever
+forming <span class="math notranslate nohighlight">\(A^TA\)</span>, but has better numerical properties. Its convergence depends
+on the singular values of <span class="math notranslate nohighlight">\(A\)</span>. LSQR is a Krylov subspace method; the
+Krylov methods for linear systems (GMRES and conjugate gradients) are studied
+in <a class="reference internal" href="../ch11-krylov/notes.html#ch11"><span class="std std-numref">Chapter 11</span></a>, and LSQR itself is described in
+<span class="bibtex-citation" id="id26">Paige and Saunders [<a class="reference internal" href="../back/bibliography.html#id48" title="Christopher C. Paige and Michael A. Saunders. LSQR: an algorithm for sparse linear equations and sparse least squares. ACM Transactions on Mathematical Software, 8(1):43–71, 1982.">1982</a>]</span>. SciPy provides it as
+<code class="docutils literal notranslate"><span class="pre">scipy.sparse.linalg.lsqr</span></code>, and its argument <code class="docutils literal notranslate"><span class="pre">damp</span></code> solves the Tikhonov
+problem <a class="reference internal" href="#equation-ch08-eq-tikhonov">(8.14)</a> with <span class="math notranslate nohighlight">\(\lambda\)</span> equal to <code class="docutils literal notranslate"><span class="pre">damp</span></code>.</p>
+</section>
+<section id="case-study-the-mauna-loa-carbon-dioxide-record">
+<span id="ch08-sec-case-study"></span><h2><span class="section-number">8.8. </span>Case study: the Mauna Loa carbon dioxide record<a class="headerlink" href="#case-study-the-mauna-loa-carbon-dioxide-record" title="Link to this heading">#</a></h2>
+<p>The <a class="reference internal" href="case-study-co2.html"><span class="std std-doc">case study notebook</span></a> fits the monthly mean
+atmospheric CO<span class="math notranslate nohighlight">\(_2\)</span> concentration measured at Mauna Loa since 1958
+<span class="bibtex-citation" id="id27">[<a class="reference internal" href="../back/bibliography.html#id84" title="NOAA Global Monitoring Laboratory. Monthly mean CO$_2$ at Mauna Loa observatory. https://gml.noaa.gov/ccgg/trends/, 2026. Data file https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.csv; snapshot of September 2026.">NOAA Global Monitoring Laboratory, 2026</a>]</span> (822 months, March 1958 to August 2026) with the model</p>
+<div class="math notranslate nohighlight">
+\[
+f(t) = \sum_{k=0}^{3}c_k s^k + a_1\cos2\pi t + b_1\sin2\pi t + a_2\cos4\pi t + b_2\sin4\pi t,
+\qquad s = \frac{t - t_{\rm mid}}{t_{\rm half}},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(t\)</span> is the time in decimal years, <span class="math notranslate nohighlight">\(t_{\rm mid}\)</span> is the midpoint of the
+record and <span class="math notranslate nohighlight">\(t_{\rm half}\)</span> is half its length, so that <span class="math notranslate nohighlight">\(s\in[-1,1]\)</span>. The fit is
+shown in <a class="reference internal" href="#ch08-fig-co2"><span class="std std-numref">Figure 8.4</span></a>. The case study makes three points.</p>
+<p><em>Centering and scaling matter.</em> With the raw variable <span class="math notranslate nohighlight">\(t\)</span> (<span class="math notranslate nohighlight">\(s = t\)</span>), the
+columns <span class="math notranslate nohighlight">\(1, t, t^2, t^3\)</span> have norms from about <span class="math notranslate nohighlight">\(29\)</span> to about <span class="math notranslate nohighlight">\(2\times10^{11}\)</span>
+and are nearly parallel, because the range of <span class="math notranslate nohighlight">\(t\)</span> is only about <span class="math notranslate nohighlight">\(3.4\%\)</span> of
+its mean.
+The resulting design matrix has <span class="math notranslate nohighlight">\(\kappa(A)\approx1.0\times10^{16}\)</span>. Scaling
+the columns to unit norm reduces this only to about <span class="math notranslate nohighlight">\(1.2\times10^{7}\)</span>, since
+the near collinearity remains; centering alone gives about <span class="math notranslate nohighlight">\(2.3\times10^{4}\)</span>;
+centering and scaling to <span class="math notranslate nohighlight">\([-1,1]\)</span> give <span class="math notranslate nohighlight">\(\kappa(A)\approx8.2\)</span>. With the raw
+variable, <code class="docutils literal notranslate"><span class="pre">numpy.linalg.lstsq</span></code> with its default cutoff decides that <span class="math notranslate nohighlight">\(A\)</span> has
+numerical rank <span class="math notranslate nohighlight">\(7\)</span> and returns a fit whose residual norm is <span class="math notranslate nohighlight">\(22.95\)</span> ppm
+instead of the optimal <span class="math notranslate nohighlight">\(21.96\)</span> ppm. Householder QR and even the normal
+equations do much better on the raw matrix (their fitted values differ from
+the reference by about <span class="math notranslate nohighlight">\(5\times10^{-10}\)</span> and <span class="math notranslate nohighlight">\(2\times10^{-3}\)</span> ppm), in
+agreement with <a class="reference internal" href="#ch08-rem-scaling">Remark 8.1</a>. After centering and scaling, the
+fitted values of all methods agree to about <span class="math notranslate nohighlight">\(10^{-12}\)</span> ppm, and the
+coefficients become interpretable.</p>
+<p><em>The fitted quantities have units and meaning.</em> The annual harmonic has an
+amplitude of <span class="math notranslate nohighlight">\(2.84\)</span> ppm and the semiannual one <span class="math notranslate nohighlight">\(0.80\)</span> ppm; together they give
+a seasonal cycle with a peak-to-peak range of about <span class="math notranslate nohighlight">\(6.4\)</span> ppm. The derivative
+of the cubic trend gives the growth rate, about <span class="math notranslate nohighlight">\(0.91\)</span> ppm/yr in 1960 and
+<span class="math notranslate nohighlight">\(2.48\)</span> ppm/yr in 2020.</p>
+<p><em>Residuals and extrapolation reveal the limits of the model.</em> The root mean
+square residual is <span class="math notranslate nohighlight">\(0.77\)</span> ppm, but the residuals are far from independent
+(their lag-one autocorrelation is <span class="math notranslate nohighlight">\(0.89\)</span>), and they show slow oscillations
+lasting several years that no low-degree polynomial can follow. A cubic fitted
+only to the data before 2000 misses the last twelve months of the record by
+about <span class="math notranslate nohighlight">\(37\)</span> ppm, whereas a quadratic misses by about <span class="math notranslate nohighlight">\(2\)</span> ppm, although the
+cubic fits the data before 2000 better: goodness of fit inside the data
+range says little about extrapolation.</p>
+<figure class="align-default" id="ch08-fig-co2">
+<a class="reference internal image-reference" href="../_images/ch08-co2.png"><img alt="Top, monthly CO2 values rising from about 315 to 430 ppm with a seasonal oscillation, and the fitted model. Bottom, residuals between about minus 2 and plus 2 ppm with slow multi-year oscillations." src="../_images/ch08-co2.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 8.4 </span><span class="caption-text">The Mauna Loa monthly mean CO<span class="math notranslate nohighlight">\(_2\)</span> record <span class="bibtex-citation" id="id28">[<a class="reference internal" href="../back/bibliography.html#id84" title="NOAA Global Monitoring Laboratory. Monthly mean CO$_2$ at Mauna Loa observatory. https://gml.noaa.gov/ccgg/trends/, 2026. Data file https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.csv; snapshot of September 2026.">NOAA Global Monitoring Laboratory, 2026</a>]</span> with a
+least-squares fit of a cubic trend plus annual and semiannual harmonics (top),
+and the residuals of the fit (bottom).</span><a class="headerlink" href="#ch08-fig-co2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="computational-laboratory">
+<h2><span class="section-number">8.9. </span>Computational laboratory<a class="headerlink" href="#computational-laboratory" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="lab.html"><span class="std std-doc">The lab notebook for this chapter</span></a> implements the normal
+equations with Cholesky, Householder QR with <span class="math notranslate nohighlight">\(Q^Tb\)</span> applied implicitly, the
+truncated SVD, and modified Gram–Schmidt with and without the augmented
+right-hand side, and checks them against <code class="docutils literal notranslate"><span class="pre">numpy.linalg.lstsq</span></code>. It computes
+exact least-squares solutions of floating-point data in rational arithmetic
+and uses them to redo the legacy comparison correctly, to reproduce
+<a class="reference internal" href="#ch08-fig-accuracy"><span class="std std-numref">Figure 8.2</span></a>, and to verify the condition numbers of
+<a class="reference internal" href="#ch08-thm-conditioning">Theorem 8.3</a> with the perturbations from its proof. It
+shows the failure of the normal equations on the Läuchli matrix, the effect
+of truncation on rank-deficient problems, the difference between basic and
+minimum-norm solutions, and Tikhonov regularization with filter factors and
+the L-curve. The <a class="reference internal" href="case-study-co2.html"><span class="std std-doc">case study</span></a> applies these tools to
+the Mauna Loa CO<span class="math notranslate nohighlight">\(_2\)</span> record.</p>
+</section>
+<section id="summary">
+<h2><span class="section-number">8.10. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>A least-squares solution makes the residual orthogonal to the range of <span class="math notranslate nohighlight">\(A\)</span>;
+it always exists, is unique exactly when <span class="math notranslate nohighlight">\(A\)</span> has full column rank, and in
+general the minimum-norm solution <span class="math notranslate nohighlight">\(A^+b\)</span> is the natural choice. Householder
+QR is the standard algorithm: it costs about <span class="math notranslate nohighlight">\(2mn^2 - \tfrac23n^3\)</span> flops and
+is backward stable. The normal equations cost about half as much for
+<span class="math notranslate nohighlight">\(m\gg n\)</span> and are accurate to about <span class="math notranslate nohighlight">\(\kappa^2u\)</span>, which is as good as QR for
+large-residual problems but much worse for small-residual ones, because the
+condition number of the problem is about <span class="math notranslate nohighlight">\(\kappa\)</span> when the residual is small
+and involves <span class="math notranslate nohighlight">\(\kappa^2\tan\theta/\eta\)</span> when it is not. Modified Gram–Schmidt
+is backward stable if <span class="math notranslate nohighlight">\(b\)</span> is processed as an extra column. The SVD handles
+rank deficiency through truncation, and Tikhonov regularization, computed as
+an augmented least-squares problem, handles ill-posed problems without a gap
+in the singular values. In applications, centering and scaling the variables
+is often the single most effective step.</p>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">8.11. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id29">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> give a concise treatment in Lectures 11 (algorithms
+and costs), 18 (conditioning, including <a class="reference internal" href="#ch08-thm-conditioning">Theorem 8.3</a>)
+and 19 (stability). <span class="bibtex-citation" id="id30">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span> cover the full-rank problem in
+Section 5.3, column pivoting and complete orthogonal decompositions in
+Section 5.4, the rank-deficient problem in Section 5.5, and weighting and
+regularization in Section 6.1. <span class="bibtex-citation" id="id31">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> (Chapter 20) is the
+reference for rounding error analysis and perturbation theory of least
+squares, including the Householder and MGS algorithms and the normal
+equations. <span class="bibtex-citation" id="id32">Björck [<a class="reference internal" href="../back/bibliography.html#id12" title="Åke Björck. Numerical Methods for Least Squares Problems. SIAM, Philadelphia, 1996.">1996</a>]</span> is the standard monograph on least-squares
+problems, with statistical background in Chapter 1 and the basic numerical
+methods in Chapter 2. For MGS see <span class="bibtex-citation" id="id33">Björck [<a class="reference internal" href="../back/bibliography.html#id42" title="Åke Björck. Solving linear least squares problems by Gram–Schmidt orthogonalization. BIT Numerical Mathematics, 7(1):1–21, 1967.">1967</a>]</span> and
+<span class="bibtex-citation" id="id34">Björck and Paige [<a class="reference internal" href="../back/bibliography.html#id43" title="Åke Björck and Christopher C. Paige. Loss and recapture of orthogonality in the modified Gram–Schmidt algorithm. SIAM Journal on Matrix Analysis and Applications, 13(1):176–190, 1992.">1992</a>]</span>; for perturbation theory of the pseudoinverse,
+<span class="bibtex-citation" id="id35">Wedin [<a class="reference internal" href="../back/bibliography.html#id46" title="Per-Åke Wedin. Perturbation theory for pseudo-inverses. BIT Numerical Mathematics, 13(2):217–232, 1973.">1973</a>]</span>. <span class="bibtex-citation" id="id36">Hansen [<a class="reference internal" href="../back/bibliography.html#id13" title="Per Christian Hansen. Rank-Deficient and Discrete Ill-Posed Problems: Numerical Aspects of Linear Inversion. SIAM, Philadelphia, 1998.">1998</a>]</span> treats rank-deficient and discrete
+ill-posed problems, truncated SVD, Tikhonov regularization and parameter
+choice, and <span class="bibtex-citation" id="id37">Hansen [<a class="reference internal" href="../back/bibliography.html#id47" title="Per Christian Hansen. Analysis of discrete ill-posed problems by means of the L-curve. SIAM Review, 34(4):561–580, 1992.">1992</a>]</span> introduced the L-curve analysis. LSQR is
+described in <span class="bibtex-citation" id="id38">Paige and Saunders [<a class="reference internal" href="../back/bibliography.html#id48" title="Christopher C. Paige and Michael A. Saunders. LSQR: an algorithm for sparse linear equations and sparse least squares. ACM Transactions on Mathematical Software, 8(1):43–71, 1982.">1982</a>]</span>.</p>
+</section>
+<section id="exercises">
+<span id="ch08-sec-exercises"></span><h2><span class="section-number">8.12. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<div class="exercise admonition" id="ch08-ex-residual">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.1 </span> (Theory: the residual is unique)</p>
+<section id="exercise-content">
+<p>Show directly from <a class="reference internal" href="#ch08-thm-normal-equations">Theorem 8.1</a>, without using the
+projector, that two least-squares solutions <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(x'\)</span> of the same problem
+have the same residual. Then show that <span class="math notranslate nohighlight">\(\|r\|_2 = 0\)</span> if and only if
+<span class="math notranslate nohighlight">\(b\in\range(A)\)</span>, and that <span class="math notranslate nohighlight">\(\|r\|_2 = \|b\|_2\)</span> if and only if <span class="math notranslate nohighlight">\(A^Tb = 0\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-augmented">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.2 </span> (Theory: the augmented system)</p>
+<section id="exercise-content">
+<p>Show that <span class="math notranslate nohighlight">\(x\)</span> is a least-squares solution with residual <span class="math notranslate nohighlight">\(r\)</span> if and only if</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix} I_m &amp; A\\ A^T &amp; 0\end{bmatrix}
+\begin{bmatrix} r\\ x\end{bmatrix} = \begin{bmatrix} b\\ 0\end{bmatrix},
+\end{split}\]</div>
+<p>and that this <span class="math notranslate nohighlight">\((m+n)\times(m+n)\)</span> matrix is nonsingular if and only if <span class="math notranslate nohighlight">\(A\)</span> has
+full column rank. Is it positive definite?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-kappa-squared">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.3 </span> (Theory: the condition number of the normal equations)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> have full column rank. Show that
+<span class="math notranslate nohighlight">\(\kappa_2(A^TA) = \kappa_2(A)^2\)</span>, and that <span class="math notranslate nohighlight">\(AA^T\)</span> is singular when <span class="math notranslate nohighlight">\(m&gt;n\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch08-least-squares/notes-solution-19">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch08-ex-kappa-squared"> Exercise 8.3 (Theory: the condition number of the normal equations)</a></p>
+<section id="solution-content">
+<p>With a thin SVD <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span>, <span class="math notranslate nohighlight">\(A^TA = V\Sigma U^TU\Sigma V^T = V\Sigma^2V^T\)</span>,
+which is an eigenvalue decomposition (and an SVD) of the symmetric positive
+definite matrix <span class="math notranslate nohighlight">\(A^TA\)</span> with eigenvalues <span class="math notranslate nohighlight">\(\sigma_i^2\)</span>. Hence
+<span class="math notranslate nohighlight">\(\kappa_2(A^TA) = \sigma_1^2/\sigma_n^2 = \kappa_2(A)^2\)</span>. The matrix
+<span class="math notranslate nohighlight">\(AA^T\in\R^{m\times m}\)</span> has rank <span class="math notranslate nohighlight">\(n&lt;m\)</span>, so it is singular.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-flops">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.4 </span> (Computation: flop counts)</p>
+<section id="exercise-content">
+<p>Using <a class="reference internal" href="#equation-ch08-eq-cost-normal">(8.4)</a> and <a class="reference internal" href="#equation-ch08-eq-cost-qr">(8.6)</a>, compute the ratio
+of the costs of Householder QR and the normal equations as a function of
+<span class="math notranslate nohighlight">\(\rho = m/n\)</span>. Evaluate it for <span class="math notranslate nohighlight">\(\rho = 1\)</span>, <span class="math notranslate nohighlight">\(10\)</span> and <span class="math notranslate nohighlight">\(\rho\to\infty\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch08-least-squares/notes-solution-21">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch08-ex-flops"> Exercise 8.4 (Computation: flop counts)</a></p>
+<section id="solution-content">
+<p>The ratio is</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{2mn^2 - \tfrac23n^3}{mn^2 + \tfrac13n^3} = \frac{2\rho - \tfrac23}{\rho + \tfrac13}.
+\]</div>
+<p>For <span class="math notranslate nohighlight">\(\rho = 1\)</span> it equals <span class="math notranslate nohighlight">\(1\)</span> (both cost <span class="math notranslate nohighlight">\(\tfrac43n^3\)</span>), for <span class="math notranslate nohighlight">\(\rho = 10\)</span> it is
+<span class="math notranslate nohighlight">\((58/3)/(31/3) = 58/31\approx1.87\)</span>, and it tends to <span class="math notranslate nohighlight">\(2\)</span> as <span class="math notranslate nohighlight">\(\rho\to\infty\)</span>.
+The normal equations are at most twice as fast.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-lauchli">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.5 </span> (Computation: the Läuchli matrix)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(\epsilon = 10^{-8}\)</span>,
+<span class="math notranslate nohighlight">\(A = \begin{bmatrix}1&amp;1\\\epsilon&amp;0\\0&amp;\epsilon\end{bmatrix}\)</span> and
+<span class="math notranslate nohighlight">\(b = (2,\epsilon,\epsilon)^T\)</span>. Find the exact least-squares solution and
+<span class="math notranslate nohighlight">\(\kappa_2(A)\)</span>. Compute <span class="math notranslate nohighlight">\(\fl(A^TA)\)</span> in double precision by hand and explain
+what happens to the normal equations. Then solve the problem with Householder
+QR in NumPy and report the error.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch08-least-squares/notes-solution-23">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch08-ex-lauchli"> Exercise 8.5 (Computation: the Läuchli matrix)</a></p>
+<section id="solution-content">
+<p>Since <span class="math notranslate nohighlight">\(b = A(1,1)^T\)</span>, the exact solution is <span class="math notranslate nohighlight">\(x = (1,1)^T\)</span> with zero
+residual. Next,
+<span class="math notranslate nohighlight">\(A^TA = \begin{bmatrix}1+\epsilon^2 &amp; 1\\ 1 &amp; 1+\epsilon^2\end{bmatrix}\)</span> has
+eigenvalues <span class="math notranslate nohighlight">\(2+\epsilon^2\)</span> and <span class="math notranslate nohighlight">\(\epsilon^2\)</span>, so
+<span class="math notranslate nohighlight">\(\kappa_2(A) = \sqrt{2+\epsilon^2}/\epsilon\approx1.41\times10^8\)</span>. In double
+precision <span class="math notranslate nohighlight">\(\epsilon^2 = 10^{-16}&lt;u\approx1.11\times10^{-16}\)</span>, so
+<span class="math notranslate nohighlight">\(\fl(1+\epsilon^2) = 1\)</span> and
+<span class="math notranslate nohighlight">\(\fl(A^TA) = \begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}\)</span>, which is singular: the
+Cholesky factorization breaks down (NumPy raises <code class="docutils literal notranslate"><span class="pre">LinAlgError</span></code>), and the
+information in <span class="math notranslate nohighlight">\(A\)</span> is lost before any solver is called. Householder QR is
+backward stable and the problem is consistent, so the error is of order
+<span class="math notranslate nohighlight">\(\kappa u\approx10^{-8}\)</span>; NumPy’s QR gives a relative error below
+<span class="math notranslate nohighlight">\(10^{-7}\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-y-condition">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.6 </span> (Theory: conditioning of the fitted values)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> have full column rank and <span class="math notranslate nohighlight">\(\theta&lt;\pi/2\)</span>. Show that the relative
+condition number of <span class="math notranslate nohighlight">\(y = Ax = Pb\)</span> with respect to perturbations of <span class="math notranslate nohighlight">\(b\)</span> is
+exactly <span class="math notranslate nohighlight">\(1/\cos\theta\)</span>. Why does it not depend on <span class="math notranslate nohighlight">\(\kappa(A)\)</span>?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-eta">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.7 </span> (Theory: the quantity <span class="math notranslate nohighlight">\(\eta\)</span>)</p>
+<section id="exercise-content">
+<p>Prove that <span class="math notranslate nohighlight">\(1\le\eta\le\kappa\)</span> for <span class="math notranslate nohighlight">\(\eta\)</span> in <a class="reference internal" href="#equation-ch08-eq-kappa-theta-eta">(8.8)</a>,
+with <span class="math notranslate nohighlight">\(\eta = 1\)</span> when <span class="math notranslate nohighlight">\(x\)</span> is a multiple of <span class="math notranslate nohighlight">\(v_1\)</span> and <span class="math notranslate nohighlight">\(\eta = \kappa\)</span> when <span class="math notranslate nohighlight">\(x\)</span> is
+a multiple of <span class="math notranslate nohighlight">\(v_n\)</span>. For a large-residual problem (<span class="math notranslate nohighlight">\(\theta = 45^\circ\)</span>) with
+<span class="math notranslate nohighlight">\(\kappa = 10^6\)</span>, compare <span class="math notranslate nohighlight">\(\kappa_A\)</span> in these two cases. What does this say
+about the claim “the least-squares condition number is <span class="math notranslate nohighlight">\(\kappa^2\)</span> for
+large residuals”?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-mgs">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.8 </span> (Computation: MGS and the right-hand side)</p>
+<section id="exercise-content">
+<p>Implement MGS and use it to solve least-squares problems with zero residual
+and <span class="math notranslate nohighlight">\(\kappa(A) = 10^2, 10^4,\dots,10^{10}\)</span> in two ways: (a) <span class="math notranslate nohighlight">\(x = \hat R^{-1}(\hat
+Q^Tb)\)</span> with the computed <span class="math notranslate nohighlight">\(\hat Q\)</span>; (b) MGS applied to <span class="math notranslate nohighlight">\([A,\ b]\)</span>. Measure the
+relative errors against the exact solution and against Householder QR, and
+also report <span class="math notranslate nohighlight">\(\|\hat Q^T\hat Q - I\|_2\)</span>. Explain the results.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-basic">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.9 </span> (Theory: basic versus minimum-norm solutions)</p>
+<section id="exercise-content">
+<p>For the matrix and data of <a class="reference internal" href="#ch08-exa-rank-one">Example 8.3</a>, carry out QR with
+column pivoting by hand, find the numerical rank and the basic solution, and
+compare its norm with that of <span class="math notranslate nohighlight">\(x_+\)</span>. Then show that for any <span class="math notranslate nohighlight">\(A\)</span> of rank <span class="math notranslate nohighlight">\(r\)</span>,
+the minimum-norm solution is the unique least-squares solution that is
+orthogonal to <span class="math notranslate nohighlight">\(\nullsp(A)\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-tikhonov">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.10 </span> (Theory: filter factors)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(\sigma_1 = 1\)</span>, <span class="math notranslate nohighlight">\(\sigma_2 = 10^{-1}\)</span>, <span class="math notranslate nohighlight">\(\sigma_3 = 10^{-2}\)</span> and
+<span class="math notranslate nohighlight">\(\lambda = 10^{-1}\)</span>. Compute the Tikhonov filter factors. Show that the
+function <span class="math notranslate nohighlight">\(\phi(\sigma) = \sigma/(\sigma^2 + \lambda^2)\)</span> that multiplies
+<span class="math notranslate nohighlight">\(u_i^Tb\)</span> in <a class="reference internal" href="#equation-ch08-eq-filter">(8.15)</a> is bounded by <span class="math notranslate nohighlight">\(1/(2\lambda)\)</span>, and conclude
+that <span class="math notranslate nohighlight">\(\|x_\lambda\|_2\le\|b\|_2/(2\lambda)\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch08-least-squares/notes-solution-29">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch08-ex-tikhonov"> Exercise 8.10 (Theory: filter factors)</a></p>
+<section id="solution-content">
+<p><span class="math notranslate nohighlight">\(f_1 = 1/(1+0.01) = 1/1.01\approx0.990\)</span>, <span class="math notranslate nohighlight">\(f_2 = 0.01/(0.01+0.01) = 0.5\)</span> and
+<span class="math notranslate nohighlight">\(f_3 = 10^{-4}/(10^{-4}+10^{-2}) = 1/101\approx0.0099\)</span>. For <span class="math notranslate nohighlight">\(\sigma\ge0\)</span>,
+<span class="math notranslate nohighlight">\(\sigma^2+\lambda^2\ge2\sigma\lambda\)</span> by the inequality between arithmetic and
+geometric means, so <span class="math notranslate nohighlight">\(\phi(\sigma)\le1/(2\lambda)\)</span>, with equality at
+<span class="math notranslate nohighlight">\(\sigma = \lambda\)</span>. Hence
+<span class="math notranslate nohighlight">\(\|x_\lambda\|_2^2 = \sum_i\phi(\sigma_i)^2(u_i^Tb)^2\le\|b\|_2^2/(4\lambda^2)\)</span>.
+Whatever the singular values, the regularized solution amplifies the data by
+at most <span class="math notranslate nohighlight">\(1/(2\lambda)\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-weighted">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.11 </span> (Theory: weighted least squares)</p>
+<section id="exercise-content">
+<p>Derive the normal equations <span class="math notranslate nohighlight">\(A^TWAx = A^TWb\)</span> of the weighted problem. Show that
+if <span class="math notranslate nohighlight">\(b\in\range(A)\)</span> and <span class="math notranslate nohighlight">\(A\)</span> has full column rank, the solution does not depend
+on the weights. Then fit a constant <span class="math notranslate nohighlight">\(x\)</span> to the data <span class="math notranslate nohighlight">\(b = (1, 2, 4)^T\)</span> (so
+<span class="math notranslate nohighlight">\(A = (1,1,1)^T\)</span>) with weights <span class="math notranslate nohighlight">\(W = \diag(1, 1, w)\)</span> and describe the solution
+as <span class="math notranslate nohighlight">\(w\)</span> ranges over <span class="math notranslate nohighlight">\((0,\infty)\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-rank">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.12 </span> (Computation: deciding the numerical rank)</p>
+<section id="exercise-content">
+<p>Construct <span class="math notranslate nohighlight">\(A = BC + E\)</span> where <span class="math notranslate nohighlight">\(B\in\R^{100\times5}\)</span> and <span class="math notranslate nohighlight">\(C\in\R^{5\times20}\)</span> are
+random Gaussian and <span class="math notranslate nohighlight">\(E\)</span> is Gaussian noise with entries of standard deviation
+<span class="math notranslate nohighlight">\(10^{-6}\)</span>. Plot the singular values of <span class="math notranslate nohighlight">\(A\)</span>. Compare the numerical rank
+reported by <code class="docutils literal notranslate"><span class="pre">numpy.linalg.matrix_rank</span></code> with its default tolerance and with a
+tolerance based on the noise, and the diagonal of <span class="math notranslate nohighlight">\(R\)</span> from
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.qr(A,</span> <span class="pre">pivoting=True)</span></code>. For a right-hand side <span class="math notranslate nohighlight">\(b = Ax_0 + e\)</span>,
+compare the minimum-norm solutions obtained with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.lstsq</span></code> for
+<code class="docutils literal notranslate"><span class="pre">rcond=None</span></code> and for <code class="docutils literal notranslate"><span class="pre">rcond</span></code> equal to <span class="math notranslate nohighlight">\(10^{-4}\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch08-ex-co2-project">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8.13 </span> (Project: modeling the Mauna Loa record)</p>
+<section id="exercise-content">
+<p>Extend the model of the case study. (a) Choose the degree of the trend by
+fitting to the data before 2010 and measuring the prediction error for
+2010–2026. (b) Add terms <span class="math notranslate nohighlight">\(s\cos2\pi t\)</span> and <span class="math notranslate nohighlight">\(s\sin2\pi t\)</span> that allow the
+seasonal amplitude to change linearly in time, and decide from the fit
+whether the amplitude has changed since 1958. (c) Report the growth rate in
+ppm/yr for each decade with your preferred model and compare it with the
+changes of the annual means in the data. Discuss what your model can and
+cannot say about future concentrations.</p>
+</section>
+</div>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch08-least-squares"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../ch07-qr/lab.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">7.12. </span>Lab 7: QR factorization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lab.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">8.13. </span>Lab 8: Linear least-squares problems</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-least-squares-problem-and-its-geometry">8.1. The least-squares problem and its geometry</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formulation">8.1.1. Formulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#characterization-projection-and-normal-equations">8.1.2. Characterization: projection and normal equations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-algorithms">8.2. Three algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-equations-and-cholesky">8.2.1. The normal equations and Cholesky</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#householder-qr">8.2.2. Householder QR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-singular-value-decomposition">8.2.3. The singular value decomposition</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-of-least-squares-problems">8.3. Sensitivity of least-squares problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rounding-errors-and-the-stability-of-the-three-methods">8.4. Rounding errors and the stability of the three methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#householder-qr-is-backward-stable">8.4.1. Householder QR is backward stable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normal-equations-are-not-backward-stable">8.4.2. The normal equations are not backward stable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gram-schmidt-and-the-right-hand-side">8.4.3. Gram–Schmidt and the right-hand side</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#column-scaling">8.4.4. Column scaling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-deficient-and-nearly-rank-deficient-problems">8.5. Rank-deficient and nearly rank-deficient problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-minimum-norm-solution">8.5.1. The minimum-norm solution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-rank">8.5.2. Numerical rank</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#truncated-svd">8.5.3. Truncated SVD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qr-with-column-pivoting">8.5.4. QR with column pivoting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tikhonov-regularization">8.6. Tikhonov regularization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#discrete-ill-posed-problems">8.6.1. Discrete ill-posed problems</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-and-filter-factors">8.6.2. Definition and filter factors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-the-regularization-parameter">8.6.3. Choosing the regularization parameter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weighted-least-squares-and-large-problems">8.7. Weighted least squares and large problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#case-study-the-mauna-loa-carbon-dioxide-record">8.8. Case study: the Mauna Loa carbon dioxide record</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">8.9. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">8.10. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">8.11. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">8.12. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

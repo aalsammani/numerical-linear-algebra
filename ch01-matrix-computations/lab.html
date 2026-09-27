@@ -1,0 +1,1488 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1.9. Lab 1: Matrix computations, orthogonality, and norms &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch01-matrix-computations/lab';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. The singular value decomposition" href="../ch02-svd/notes.html" />
+    <link rel="prev" title="1. Matrix computations, orthogonality, and norms" href="notes.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="notes.html">1. Matrix computations, orthogonality, and norms</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/aalsammani/Scientific-Computations-I-Notebooks/main?urlpath=lab/tree/book/ch01-matrix-computations/lab.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/aalsammani/Scientific-Computations-I-Notebooks/blob/main/book/ch01-matrix-computations/lab.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch01-matrix-computations/lab.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch01-matrix-computations/lab.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lab 1: Matrix computations, orthogonality, and norms</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-ways-to-multiply-matrices">1.9.1. 1. Three ways to multiply matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flops-versus-run-time">1.9.2. 2. Flops versus run time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-matrices">1.9.3. 3. Orthogonal matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#householder-reflectors">1.9.4. 4. Householder reflectors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#givens-rotations-and-hypot">1.9.5. 5. Givens rotations and <code class="docutils literal notranslate"><span class="pre">hypot</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-norms">1.9.6. 6. Vector norms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-norms">1.9.7. 7. Matrix norms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#frobenius-norm-and-rank">1.9.7.1. Frobenius norm and rank</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unitary-invariance">1.9.7.2. Unitary invariance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-radius-norms-and-powers">1.9.8. 8. Spectral radius, norms, and powers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-a-2-by-sampling">1.9.9. 9. Estimating <span class="math notranslate nohighlight">\(\|A\|_2\)</span> by sampling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#small-norms-large-condition-number">1.9.10. 10. Small norms, large condition number</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-mistakes">1.9.11. Common mistakes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#your-turn">1.9.12. Your turn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">1.9.13. Key takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">1.9.14. Further reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lab-1-matrix-computations-orthogonality-and-norms">
+<h1><span class="section-number">1.9. </span>Lab 1: Matrix computations, orthogonality, and norms<a class="headerlink" href="#lab-1-matrix-computations-orthogonality-and-norms" title="Link to this heading">#</a></h1>
+<p>This notebook accompanies <a class="reference internal" href="notes.html#ch01"><span class="std std-numref">Chapter 1</span></a> of the notes. Every
+experiment checks a statement from the chapter numerically.</p>
+<p><strong>Learning objectives.</strong> After working through this lab you should be able to</p>
+<ol class="arabic simple">
+<li><p>implement the inner-product, column and outer-product forms of the matrix
+product and verify them against <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">&#64;</span> <span class="pre">B</span></code> with a justified tolerance;</p></li>
+<li><p>measure run times carefully and distinguish flop counts from observed speed;</p></li>
+<li><p>construct Householder reflectors and Givens rotations and explain the
+role of the sign choice and of <code class="docutils literal notranslate"><span class="pre">hypot</span></code>;</p></li>
+<li><p>compute vector and matrix norms, and check the inequalities that relate
+them;</p></li>
+<li><p>explain why sampling random unit vectors underestimates <span class="math notranslate nohighlight">\(\|A\|_2\)</span>.</p></li>
+</ol>
+<p>Run the cells in order from a fresh kernel.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sla</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">20260927</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span> <span class="o">/</span> <span class="mi">2</span>          <span class="c1"># unit roundoff of IEEE double precision, 2**-53</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"figure.figsize"</span><span class="p">:</span> <span class="p">(</span><span class="mf">6.4</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">),</span> <span class="s2">"axes.grid"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"grid.alpha"</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"NumPy </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">; unit roundoff u = </span><span class="si">{</span><span class="n">u</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>NumPy 2.5.3; unit roundoff u = 1.110e-16
+</pre></div>
+</div>
+</div>
+</div>
+<section id="three-ways-to-multiply-matrices">
+<h2><span class="section-number">1.9.1. </span>1. Three ways to multiply matrices<a class="headerlink" href="#three-ways-to-multiply-matrices" title="Link to this heading">#</a></h2>
+<p>The entry <span class="math notranslate nohighlight">\(c_{ij}\)</span> of <span class="math notranslate nohighlight">\(C = AB\)</span> is an inner product of a row of <span class="math notranslate nohighlight">\(A\)</span> and a
+column of <span class="math notranslate nohighlight">\(B\)</span>; column <span class="math notranslate nohighlight">\(j\)</span> of <span class="math notranslate nohighlight">\(C\)</span> is <span class="math notranslate nohighlight">\(Ab_j\)</span>, a combination of the columns of
+<span class="math notranslate nohighlight">\(A\)</span>; and <span class="math notranslate nohighlight">\(C\)</span> is the sum of the <span class="math notranslate nohighlight">\(k\)</span> outer products <span class="math notranslate nohighlight">\(a_\ell\tilde b_\ell^T\)</span>
+(equations <a class="reference internal" href="notes.html#equation-ch01-eq-product">(1.1)</a>–<a class="reference internal" href="notes.html#equation-ch01-eq-outer-view">(1.3)</a>). The three
+functions below implement these views literally.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">matmul_inner</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""C[i, j] = (row i of A) . (column j of B): a triple loop."""</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">k2</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">assert</span> <span class="n">k</span> <span class="o">==</span> <span class="n">k2</span><span class="p">,</span> <span class="s2">"inner dimensions must agree"</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">for</span> <span class="n">ell</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">ell</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[</span><span class="n">ell</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+    <span class="k">return</span> <span class="n">C</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">matmul_column</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Column j of C is A @ b_j, a linear combination of the columns of A."""</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">ell</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">C</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">B</span><span class="p">[</span><span class="n">ell</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">A</span><span class="p">[:,</span> <span class="n">ell</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">C</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">matmul_outer</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""C is the sum of the rank-one matrices a_ell (row ell of B)."""</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">ell</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">C</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">A</span><span class="p">[:,</span> <span class="n">ell</span><span class="p">],</span> <span class="n">B</span><span class="p">[</span><span class="n">ell</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="k">return</span> <span class="n">C</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>How close should the results be?</strong> The three functions perform the same
+multiplications but add them in different orders, so their results differ
+by rounding errors. A standard bound (proved in <a class="reference internal" href="../ch03-floating-point/notes.html#ch03"><span class="std std-numref">Chapter 3</span></a>)
+says that any order of summation gives a computed product <span class="math notranslate nohighlight">\(\widehat C\)</span> with
+<span class="math notranslate nohighlight">\(|\widehat C - AB| \le \gamma_k |A|\,|B|\)</span> entrywise, where
+<span class="math notranslate nohighlight">\(\gamma_k = ku/(1-ku)\)</span> and <span class="math notranslate nohighlight">\(|A|\)</span> is the matrix of absolute values. Two
+computed products can therefore differ by at most <span class="math notranslate nohighlight">\(2\gamma_k|A||B|\)</span>. We test
+exactly this bound rather than an arbitrary tolerance.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">20</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+<span class="n">C_ref</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">B</span>
+<span class="n">gamma_k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">u</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="n">u</span><span class="p">)</span>
+<span class="n">bound</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gamma_k</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="n">matmul_inner</span><span class="p">,</span> <span class="n">matmul_column</span><span class="p">,</span> <span class="n">matmul_outer</span><span class="p">):</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C</span> <span class="o">-</span> <span class="n">C_ref</span><span class="p">)</span> <span class="o">/</span> <span class="n">bound</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="si">:</span><span class="s2">14s</span><span class="si">}</span><span class="s2"> max |C - C_ref| = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">C_ref</span><span class="p">))</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">; "</span>
+          <span class="sa">f</span><span class="s2">"fraction of the bound used = </span><span class="si">{</span><span class="n">ratio</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C</span> <span class="o">-</span> <span class="n">C_ref</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">bound</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>matmul_inner   max |C - C_ref| = 7.11e-15; fraction of the bound used = 0.026
+matmul_column  max |C - C_ref| = 7.11e-15; fraction of the bound used = 0.026
+matmul_outer   max |C - C_ref| = 7.11e-15; fraction of the bound used = 0.026
+</pre></div>
+</div>
+</div>
+</div>
+<p>The observed differences use only a small fraction of the worst-case bound,
+which is typical: rounding errors tend to partially cancel. The
+bound is nevertheless the right test, because it is guaranteed.</p>
+<p>The worked example of the notes (<a class="reference internal" href="notes.html#ch01-exa-three-views">Example 1.1</a>) can be
+checked exactly, since all its entries are small integers.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A_ex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+<span class="n">B_ex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matmul_outer</span><span class="p">(</span><span class="n">A_ex</span><span class="p">,</span> <span class="n">B_ex</span><span class="p">))</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">matmul_outer</span><span class="p">(</span><span class="n">A_ex</span><span class="p">,</span> <span class="n">B_ex</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">6.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">]]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[ 4.  7.]
+ [ 1.  4.]
+ [ 6. -3.]]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="flops-versus-run-time">
+<h2><span class="section-number">1.9.2. </span>2. Flops versus run time<a class="headerlink" href="#flops-versus-run-time" title="Link to this heading">#</a></h2>
+<p>All three loops and <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">&#64;</span> <span class="pre">B</span></code> perform <span class="math notranslate nohighlight">\(2n^3 - n^2\)</span> flops for square matrices
+(<a class="reference internal" href="notes.html#ch01-prop-flops">Proposition 1.2</a>). We now time them. To make timings meaningful
+we repeat each measurement and report the median, after one warm-up call.
+The absolute numbers depend on the machine, the BLAS library and the Python
+interpreter that executed this notebook; the slopes on a log-log plot are
+what the flop count predicts.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">median_time</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>                               <span class="c1"># warm-up</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeats</span><span class="p">):</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
+
+
+<span class="n">sizes_loop</span> <span class="o">=</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">64</span><span class="p">]</span>
+<span class="n">sizes_blas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">512</span><span class="p">]</span>
+<span class="n">t_inner</span> <span class="o">=</span> <span class="p">[</span><span class="n">median_time</span><span class="p">(</span><span class="n">matmul_inner</span><span class="p">,</span> <span class="o">*</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+           <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">sizes_loop</span><span class="p">]</span>
+<span class="n">t_outer</span> <span class="o">=</span> <span class="p">[</span><span class="n">median_time</span><span class="p">(</span><span class="n">matmul_outer</span><span class="p">,</span> <span class="o">*</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
+           <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">sizes_loop</span><span class="p">]</span>
+<span class="n">t_blas</span> <span class="o">=</span> <span class="p">[</span><span class="n">median_time</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">,</span> <span class="o">*</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+          <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">sizes_blas</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">sizes_loop</span><span class="p">,</span> <span class="n">t_inner</span><span class="p">,</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"triple loop (Python)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">sizes_loop</span><span class="p">,</span> <span class="n">t_outer</span><span class="p">,</span> <span class="s2">"s-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"sum of outer products (NumPy per step)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">sizes_blas</span><span class="p">,</span> <span class="n">t_blas</span><span class="p">,</span> <span class="s2">"^-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"A @ B (BLAS level 3)"</span><span class="p">)</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sizes_blas</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">t_blas</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">ref</span> <span class="o">/</span> <span class="n">ref</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">"k--"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"slope 3 ($\propto n^3$)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"matrix order $n$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"median time (s)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Same flop count, very different speed (one machine)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">n_big</span> <span class="o">=</span> <span class="n">sizes_blas</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Observed rate of A @ B at n = </span><span class="si">{</span><span class="n">n_big</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n_big</span><span class="o">**</span><span class="mi">3</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">t_blas</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> Gflop/s"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Observed rate of the Python loop at n = </span><span class="si">{</span><span class="n">sizes_loop</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sizes_loop</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">t_inner</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> Mflop/s"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a115861ad34a7ecb4911cd357311ef49d0adcb4576e79cdea56e3f11202b3703.png" src="../_images/a115861ad34a7ecb4911cd357311ef49d0adcb4576e79cdea56e3f11202b3703.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Observed rate of A @ B at n = 512: 128.3 Gflop/s
+Observed rate of the Python loop at n = 64: 9.26 Mflop/s
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Interpretation.</strong> The Python loop spends its time interpreting bytecode,
+so its rate is millions of flops per second. <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">&#64;</span> <span class="pre">B</span></code> calls an optimized BLAS
+routine that keeps blocks of the matrices in cache and uses vector
+instructions and several cores, and reaches billions of flops per second. For
+small <span class="math notranslate nohighlight">\(n\)</span> the BLAS curve is flat because fixed overheads dominate; the
+<span class="math notranslate nohighlight">\(n^3\)</span> behavior is visible only for larger <span class="math notranslate nohighlight">\(n\)</span>. None of these numbers is a
+property of the algorithms, which all perform the same arithmetic.</p>
+<p><strong>Order of evaluation.</strong> The cost of a product chain depends on where the
+parentheses go (<a class="reference internal" href="notes.html#ch01-ex-chain"><span class="std std-numref">Exercise 1.2</span></a>): <span class="math notranslate nohighlight">\((AB)x\)</span> costs about <span class="math notranslate nohighlight">\(2n^3\)</span> flops and
+<span class="math notranslate nohighlight">\(A(Bx)\)</span> about <span class="math notranslate nohighlight">\(4n^2\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">t_left</span> <span class="o">=</span> <span class="n">median_time</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="p">)</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">t_right</span> <span class="o">=</span> <span class="n">median_time</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">A</span> <span class="o">@</span> <span class="p">(</span><span class="n">B</span> <span class="o">@</span> <span class="n">x</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"(AB)x: </span><span class="si">{</span><span class="n">t_left</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e3</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> ms   A(Bx): </span><span class="si">{</span><span class="n">t_right</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e3</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> ms   ratio </span><span class="si">{</span><span class="n">t_left</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">t_right</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"flop ratio predicted: </span><span class="si">{</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="o">**</span><span class="mi">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># Both orders compute the same vector up to rounding: |difference| &lt;= 2 gamma_{2n} |A||B||x|.</span>
+<span class="n">gamma_2n</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">A</span> <span class="o">@</span> <span class="n">B</span><span class="p">)</span> <span class="o">@</span> <span class="n">x</span> <span class="o">-</span> <span class="n">A</span> <span class="o">@</span> <span class="p">(</span><span class="n">B</span> <span class="o">@</span> <span class="n">x</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gamma_2n</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(AB)x: 8.26 ms   A(Bx): 0.286 ms   ratio 29
+flop ratio predicted: 500
+</pre></div>
+</div>
+</div>
+</div>
+<p>The measured ratio is usually smaller than the flop ratio, because
+matrix-vector products run at the lower speed of level-2 BLAS: they are
+limited by memory traffic rather than arithmetic.</p>
+</section>
+<section id="orthogonal-matrices">
+<h2><span class="section-number">1.9.3. </span>3. Orthogonal matrices<a class="headerlink" href="#orthogonal-matrices" title="Link to this heading">#</a></h2>
+<p>A convenient source of random orthogonal matrices is the <span class="math notranslate nohighlight">\(Q\)</span> factor of the QR
+factorization of a Gaussian matrix (<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a>). We check the
+properties in <a class="reference internal" href="notes.html#ch01-prop-orthogonal">Proposition 1.3</a>. A computed <span class="math notranslate nohighlight">\(Q\)</span> is orthogonal
+only to within rounding errors; for Householder QR the departure
+<span class="math notranslate nohighlight">\(\|Q^TQ - I\|_2\)</span> is a modest multiple of <span class="math notranslate nohighlight">\(nu\)</span>, and we test against <span class="math notranslate nohighlight">\(10nu\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">Q</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">lam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+
+<span class="n">orth_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Q</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"||Q^T Q - I||_2          = </span><span class="si">{</span><span class="n">orth_err</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">   (n u = </span><span class="si">{</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"| ||Qx|| / ||x|| - 1 |    = </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Q</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"|(Qx)^T(Qy) - x^T y|      = </span><span class="si">{</span><span class="nb">abs</span><span class="p">((</span><span class="n">Q</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="p">(</span><span class="n">Q</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"max | |lambda| - 1 |      = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lam</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"det(Q)                    = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span><span class="si">:</span><span class="s2">+.12f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">orth_err</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span>
+<span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">Q</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>||Q^T Q - I||_2          = 2.33e-15   (n u = 2.22e-14)
+| ||Qx|| / ||x|| - 1 |    = 1.11e-16
+|(Qx)^T(Qy) - x^T y|      = 1.07e-14
+max | |lambda| - 1 |      = 1.07e-14
+det(Q)                    = -1.000000000000
+</pre></div>
+</div>
+</div>
+</div>
+<p>A rectangular matrix with orthonormal columns satisfies <span class="math notranslate nohighlight">\(Q^TQ = I_n\)</span> but not
+<span class="math notranslate nohighlight">\(QQ^T = I_m\)</span>; <span class="math notranslate nohighlight">\(QQ^T\)</span> is a projector of rank <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Q_thin</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="n">P</span> <span class="o">=</span> <span class="n">Q_thin</span> <span class="o">@</span> <span class="n">Q_thin</span><span class="o">.</span><span class="n">T</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"||Q^T Q - I_2|| = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Q_thin</span><span class="o">.</span><span class="n">T</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">Q_thin</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"||Q Q^T - I_6|| = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">P</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"P^2 = P: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">P</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">P</span><span class="p">)</span><span class="si">}</span><span class="s2">;  rank(P) = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="n">P</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>||Q^T Q - I_2|| = 8.5e-17
+||Q Q^T - I_6|| = 2.000
+P^2 = P: True;  rank(P) = 2
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="householder-reflectors">
+<h2><span class="section-number">1.9.4. </span>4. Householder reflectors<a class="headerlink" href="#householder-reflectors" title="Link to this heading">#</a></h2>
+<p>We implement <a class="reference internal" href="notes.html#ch01-alg-householder">Algorithm 1.1</a>. The function returns <span class="math notranslate nohighlight">\(v\)</span> with
+<span class="math notranslate nohighlight">\(v_1 = 1\)</span> and <span class="math notranslate nohighlight">\(\beta = 2/(v^Tv)\)</span>, and a second function applies
+<span class="math notranslate nohighlight">\(H = I - \beta vv^T\)</span> to a vector without forming <span class="math notranslate nohighlight">\(H\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">householder_vector</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return (v, beta, alpha) with (I - beta v v^T) x = alpha e_1 and v[0] = 1.</span>
+
+<span class="sd">    The sign of alpha is chosen opposite to x[0] (sign(0) = +1) so that</span>
+<span class="sd">    v[0] = x[0] - alpha is computed without cancellation.</span>
+<span class="sd">    """</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">normx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">normx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"x must be nonzero"</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="o">-</span><span class="n">s</span> <span class="o">*</span> <span class="n">normx</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span>                    <span class="c1"># = x[0] + s*||x||: no cancellation</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">/</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">v</span> <span class="o">@</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">alpha</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_householder</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Compute (I - beta v v^T) y in about 4m flops."""</span>
+    <span class="k">return</span> <span class="n">y</span> <span class="o">-</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">@</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Verification.</strong> <span class="math notranslate nohighlight">\(Hx\)</span> should equal <span class="math notranslate nohighlight">\(\alpha e_1\)</span> up to rounding errors of
+order <span class="math notranslate nohighlight">\(mu\|x\|_2\)</span>, and the explicit matrix <span class="math notranslate nohighlight">\(H\)</span> should be symmetric and
+orthogonal to working accuracy. We also compare with SciPy, whose QR routine
+uses the same reflectors internally: the first column of <code class="docutils literal notranslate"><span class="pre">scipy.linalg.qr</span></code>’s
+<span class="math notranslate nohighlight">\(R\)</span> has entry <span class="math notranslate nohighlight">\(\pm\|x\|_2\)</span> at the top.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">500</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">v</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">householder_vector</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">Hx</span> <span class="o">=</span> <span class="n">apply_householder</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">);</span> <span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span>
+    <span class="n">rel_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Hx</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="n">orth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">H</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">r11</span> <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"r"</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"m = </span><span class="si">{</span><span class="n">m</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">: ||Hx - alpha e1||/||x|| = </span><span class="si">{</span><span class="n">rel_err</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">, ||H^T H - I|| = </span><span class="si">{</span><span class="n">orth</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">, "</span>
+          <span class="sa">f</span><span class="s2">"|alpha| - |r11 (SciPy)| = </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">r11</span><span class="p">)</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">rel_err</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">m</span> <span class="o">*</span> <span class="n">u</span> <span class="ow">and</span> <span class="n">orth</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">m</span> <span class="o">*</span> <span class="n">u</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r11</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">m</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>                                   <span class="c1"># determinant of a reflector is -1</span>
+        <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">H</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">m</span> <span class="o">*</span> <span class="n">u</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>m =   2: ||Hx - alpha e1||/||x|| = 0.0e+00, ||H^T H - I|| = 2.7e-16, |alpha| - |r11 (SciPy)| = 0.0e+00
+m =  10: ||Hx - alpha e1||/||x|| = 1.9e-16, ||H^T H - I|| = 2.5e-16, |alpha| - |r11 (SciPy)| = -4.4e-16
+m = 500: ||Hx - alpha e1||/||x|| = 2.0e-16, ||H^T H - I|| = 8.9e-16, |alpha| - |r11 (SciPy)| = 0.0e+00
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>The sign matters.</strong> Now we reverse the sign choice, as in
+<a class="reference internal" href="notes.html#ch01-ex-householder-sign"><span class="std std-numref">Exercise 1.6</span></a>, for vectors <span class="math notranslate nohighlight">\(x = (1, t)^T\)</span> that are already
+close to <span class="math notranslate nohighlight">\(e_1\)</span>. With the wrong sign, <span class="math notranslate nohighlight">\(v_1 = x_1 - \|x\|_2\)</span> is computed by
+subtracting two nearly equal numbers.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">householder_wrong_sign</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>     <span class="c1"># same sign as x[0]: cancellation</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span>
+    <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">alpha</span>
+
+
+<span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
+<span class="n">err_good</span><span class="p">,</span> <span class="n">err_bad</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ts</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">t</span><span class="p">])</span>
+    <span class="n">v</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">householder_vector</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">err_good</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">apply_householder</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="p">[</span><span class="n">alpha</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">vb</span><span class="p">,</span> <span class="n">ab</span> <span class="o">=</span> <span class="n">householder_wrong_sign</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">Hx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">vb</span> <span class="o">*</span> <span class="p">(</span><span class="n">vb</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">vb</span> <span class="o">@</span> <span class="n">vb</span><span class="p">)</span>
+    <span class="n">err_bad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Hx</span> <span class="o">-</span> <span class="p">[</span><span class="n">ab</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">err_good</span><span class="p">,</span> <span class="n">u</span> <span class="o">/</span> <span class="mi">10</span><span class="p">),</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\alpha = -\mathrm</span><span class="si">{sign}</span><span class="s2">(x_1)\|x\|_2$ (Algorithm 1.1)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">err_bad</span><span class="p">,</span> <span class="s2">"s-"</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\alpha = +\mathrm</span><span class="si">{sign}</span><span class="s2">(x_1)\|x\|_2$ (cancellation)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">":"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"unit roundoff $u$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"$t$ in $x = (1, t)^T$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"$\|Hx - \alpha e_1\|_2 / \|x\|_2$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Householder reflector: effect of the sign choice"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"x = (1, 1e-9): good sign error </span><span class="si">{</span><span class="n">err_good</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">ts</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1e-9</span><span class="p">))]</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"wrong sign error </span><span class="si">{</span><span class="n">err_bad</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">ts</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1e-9</span><span class="p">))]</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cdf84f426c9369fbcc891452890e9d2816c2dfa88a4f098af5e2365ef5525309.png" src="../_images/cdf84f426c9369fbcc891452890e9d2816c2dfa88a4f098af5e2365ef5525309.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x = (1, 1e-9): good sign error 0.0e+00, wrong sign error 1.0e-09
+</pre></div>
+</div>
+</div>
+</div>
+<p>With the correct sign the error stays at the level of <span class="math notranslate nohighlight">\(u\)</span>. With the wrong
+sign it grows as <span class="math notranslate nohighlight">\(t\)</span> decreases, and once <span class="math notranslate nohighlight">\(t^2&lt;u\)</span> the computed <span class="math notranslate nohighlight">\(\|x\|_2\)</span> equals
+<span class="math notranslate nohighlight">\(1\)</span> exactly, <span class="math notranslate nohighlight">\(v_1\)</span> becomes <span class="math notranslate nohighlight">\(0\)</span>, and the reflector maps <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\((1,-t)^T\)</span>: the
+relative error is then <span class="math notranslate nohighlight">\(t\)</span> itself.</p>
+</section>
+<section id="givens-rotations-and-hypot">
+<h2><span class="section-number">1.9.5. </span>5. Givens rotations and <code class="docutils literal notranslate"><span class="pre">hypot</span></code><a class="headerlink" href="#givens-rotations-and-hypot" title="Link to this heading">#</a></h2>
+<p>A rotation that zeros <span class="math notranslate nohighlight">\(x_j\)</span> against <span class="math notranslate nohighlight">\(x_i\)</span> uses <span class="math notranslate nohighlight">\(c = x_i/r\)</span>, <span class="math notranslate nohighlight">\(s = x_j/r\)</span> with
+<span class="math notranslate nohighlight">\(r = \sqrt{x_i^2 + x_j^2}\)</span>. Computing <span class="math notranslate nohighlight">\(r\)</span> naively can overflow or underflow
+even when <span class="math notranslate nohighlight">\(r\)</span> itself is a perfectly representable number.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">givens</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return (c, s, r) with [[c, s], [-s, c]] @ [a, b] = [r, 0]."""</span>
+    <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">a</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>                      <span class="c1"># scaled internally: no overflow</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span> <span class="o">/</span> <span class="n">r</span><span class="p">,</span> <span class="n">r</span>
+
+
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="p">[(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1e200</span><span class="p">,</span> <span class="mf">1e200</span><span class="p">),</span> <span class="p">(</span><span class="mf">1e-200</span><span class="p">,</span> <span class="mf">3e-200</span><span class="p">)]:</span>
+    <span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">givens</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">]])</span>
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">over</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">):</span>
+        <span class="n">naive</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"(a, b) = (</span><span class="si">{</span><span class="n">a</span><span class="si">:</span><span class="s2">.0e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">.0e</span><span class="si">}</span><span class="s2">): G @ (a, b) = </span><span class="si">{</span><span class="n">G</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">])</span><span class="si">}</span><span class="s2">, naive r = </span><span class="si">{</span><span class="n">naive</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">, hypot r = </span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">((</span><span class="n">G</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]))[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(a, b) = (3e+00, 4e+00): G @ (a, b) = [ 5.00000000e+00 -2.22044605e-16], naive r = 5.000e+00, hypot r = 5.000e+00
+(a, b) = (1e+200, 1e+200): G @ (a, b) = [ 1.41421356e+200 -3.86166634e+182], naive r = inf, hypot r = 1.414e+200
+(a, b) = (1e-200, 3e-200): G @ (a, b) = [3.16227766e-200 5.32779048e-217], naive r = 0.000e+00, hypot r = 3.162e-200
+</pre></div>
+</div>
+</div>
+</div>
+<p>The naive formula returns <code class="docutils literal notranslate"><span class="pre">inf</span></code> for <span class="math notranslate nohighlight">\(a = b = 10^{200}\)</span> (because <span class="math notranslate nohighlight">\(a^2\)</span>
+overflows) and a wrong answer for <span class="math notranslate nohighlight">\(a, b \approx 10^{-200}\)</span> (because <span class="math notranslate nohighlight">\(a^2\)</span>
+underflows to zero or to a subnormal number), while <code class="docutils literal notranslate"><span class="pre">hypot</span></code> is accurate in
+both cases.</p>
+</section>
+<section id="vector-norms">
+<h2><span class="section-number">1.9.6. </span>6. Vector norms<a class="headerlink" href="#vector-norms" title="Link to this heading">#</a></h2>
+<p>We reproduce <a class="reference internal" href="notes.html#ch01-exa-vector-norms">Example 1.2</a> and test the inequalities of
+<a class="reference internal" href="notes.html#ch01-thm-norm-equivalence">Theorem 1.3</a> on many random vectors, including the
+vectors that attain the constants.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)])</span>
+<span class="k">assert</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)]</span> <span class="o">==</span> <span class="p">[</span><span class="mf">19.0</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">]</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">2000</span><span class="p">))</span> <span class="o">*</span> <span class="n">rng</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2000</span><span class="p">))</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">))])</span>        <span class="c1"># e_1 and the ones vector attain the bounds</span>
+<span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">ninf</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span>                                          <span class="c1"># allow rounding in the computed norms</span>
+<span class="n">checks</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"||x||_inf &lt;= ||x||_2"</span><span class="p">:</span>        <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">ninf</span> <span class="o">&lt;=</span> <span class="n">n2</span> <span class="o">*</span> <span class="n">tol</span><span class="p">),</span>
+    <span class="s2">"||x||_2 &lt;= sqrt(n)||x||_inf"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">n2</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">ninf</span> <span class="o">*</span> <span class="n">tol</span><span class="p">),</span>
+    <span class="s2">"||x||_2 &lt;= ||x||_1"</span><span class="p">:</span>          <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">n2</span> <span class="o">&lt;=</span> <span class="n">n1</span> <span class="o">*</span> <span class="n">tol</span><span class="p">),</span>
+    <span class="s2">"||x||_1 &lt;= sqrt(n)||x||_2"</span><span class="p">:</span>   <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">n1</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">n2</span> <span class="o">*</span> <span class="n">tol</span><span class="p">),</span>
+    <span class="s2">"||x||_1 &lt;= n ||x||_inf"</span><span class="p">:</span>      <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">n1</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">ninf</span> <span class="o">*</span> <span class="n">tol</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ok</span> <span class="ow">in</span> <span class="n">checks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">30s</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ok</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"ratio ||x||_1 / (sqrt(n)||x||_2) for the ones vector:"</span><span class="p">,</span> <span class="n">n1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">n2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[np.float64(19.0), np.float64(13.0), np.float64(12.0)]
+||x||_inf &lt;= ||x||_2           True
+||x||_2 &lt;= sqrt(n)||x||_inf    True
+||x||_2 &lt;= ||x||_1             True
+||x||_1 &lt;= sqrt(n)||x||_2      True
+||x||_1 &lt;= n ||x||_inf         True
+ratio ||x||_1 / (sqrt(n)||x||_2) for the ones vector: 0.9999999999999999
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="matrix-norms">
+<h2><span class="section-number">1.9.7. </span>7. Matrix norms<a class="headerlink" href="#matrix-norms" title="Link to this heading">#</a></h2>
+<p>We implement the three formulas of <a class="reference internal" href="notes.html#ch01-thm-induced-formulas">Theorem 1.4</a> and
+compare with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.norm</span></code>. Our 2-norm uses the eigenvalues of <span class="math notranslate nohighlight">\(A^TA\)</span>,
+exactly as in the proof. (This is fine for the <em>largest</em> singular value; in
+<a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a> we will see why forming <span class="math notranslate nohighlight">\(A^TA\)</span> is a bad idea for
+the small ones.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">norm_1</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>      <span class="c1"># maximum absolute column sum</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">norm_inf</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>      <span class="c1"># maximum absolute row sum</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">norm_2</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvalsh</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span><span class="p">)))</span>
+
+
+<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"B: ||B||_1 = </span><span class="si">{</span><span class="n">norm_1</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="si">}</span><span class="s2">, ||B||_inf = </span><span class="si">{</span><span class="n">norm_inf</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="si">}</span><span class="s2">, ||B||_2 = </span><span class="si">{</span><span class="n">norm_2</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> (3*sqrt(5) = </span><span class="si">{</span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">norm_1</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span> <span class="ow">and</span> <span class="n">norm_inf</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">==</span> <span class="mi">9</span>
+<span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">norm_2</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>   <span class="c1"># relative error of order u</span>
+
+<span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">40</span><span class="p">)]:</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">mine</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">norm_1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">norm_inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span> <span class="p">(</span><span class="n">norm_2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]:</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mine</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">-</span> <span class="n">ref</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">20</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">ref</span><span class="p">,</span> <span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"norm formulas agree with numpy.linalg.norm"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>B: ||B||_1 = 7.0, ||B||_inf = 9.0, ||B||_2 = 6.708204 (3*sqrt(5) = 6.708204)
+norm formulas agree with numpy.linalg.norm
+</pre></div>
+</div>
+</div>
+</div>
+<p>The maximizing vector for the 1-norm is a coordinate vector, and for the
+2-norm it is the top eigenvector of <span class="math notranslate nohighlight">\(A^TA\)</span>. We check that these vectors attain
+the norm.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1-norm attained at e_k:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">norm_1</span><span class="p">(</span><span class="n">A</span><span class="p">)))</span>
+<span class="n">w</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">A</span><span class="p">)</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="n">V</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"2-norm attained at v_1:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">v1</span><span class="p">),</span> <span class="n">norm_2</span><span class="p">(</span><span class="n">A</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1-norm attained at e_k: True
+2-norm attained at v_1: True
+</pre></div>
+</div>
+</div>
+</div>
+<section id="frobenius-norm-and-rank">
+<h3><span class="section-number">1.9.7.1. </span>Frobenius norm and rank<a class="headerlink" href="#frobenius-norm-and-rank" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="notes.html#ch01-thm-frobenius">Theorem 1.5</a> states <span class="math notranslate nohighlight">\(\|A\|_2\le\|A\|_F\le\sqrt r\,\|A\|_2\)</span>
+with <span class="math notranslate nohighlight">\(r = \operatorname{rank}(A)\)</span>. We build matrices of prescribed rank as products of thin
+factors and check where the ratio <span class="math notranslate nohighlight">\(\|A\|_F/\|A\|_2\)</span> falls.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">40</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">" r   ||A||_F/||A||_2   sqrt(r)"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">):</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span> <span class="o">@</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="s2">"fro"</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">ratio</span><span class="si">:</span><span class="s2">14.4f</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="si">:</span><span class="s2">7.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">1e-12</span> <span class="o">&lt;=</span> <span class="n">ratio</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> r   ||A||_F/||A||_2   sqrt(r)
+ 1           1.0000    1.0000
+ 2           1.2444    1.4142
+ 5           1.6748    2.2361
+10           2.0603    3.1623
+40           3.0922    6.3246
+</pre></div>
+</div>
+</div>
+</div>
+<p>For rank one the ratio is <span class="math notranslate nohighlight">\(1\)</span>, the equality case. For higher rank it is
+strictly between <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(\sqrt r\)</span> unless all nonzero singular values are
+equal, as for a matrix with orthonormal columns.</p>
+</section>
+<section id="unitary-invariance">
+<h3><span class="section-number">1.9.7.2. </span>Unitary invariance<a class="headerlink" href="#unitary-invariance" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">U</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">30</span><span class="p">)))</span>   <span class="c1"># 50 x 30 with orthonormal columns</span>
+<span class="n">V</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)))</span>   <span class="c1"># 20 x 20 orthogonal</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"fro"</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"p = </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="si">:</span><span class="s2">4s</span><span class="si">}</span><span class="s2">: ||UAV|| / ||A|| = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">U</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">V</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>p = 2   : ||UAV|| / ||A|| = 1.000000
+p = fro : ||UAV|| / ||A|| = 1.000000
+p = 1   : ||UAV|| / ||A|| = 1.200699
+p = inf : ||UAV|| / ||A|| = 0.862384
+</pre></div>
+</div>
+</div>
+</div>
+<p>The ratio is <span class="math notranslate nohighlight">\(1\)</span> to rounding error for the 2- and Frobenius norms, as
+<a class="reference internal" href="notes.html#ch01-thm-unitary-invariance">Theorem 1.6</a> asserts, but not for the 1- and
+<span class="math notranslate nohighlight">\(\infty\)</span>-norms.</p>
+</section>
+</section>
+<section id="spectral-radius-norms-and-powers">
+<h2><span class="section-number">1.9.8. </span>8. Spectral radius, norms, and powers<a class="headerlink" href="#spectral-radius-norms-and-powers" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="notes.html#ch01-thm-spectral-radius">Theorem 1.7</a> gives <span class="math notranslate nohighlight">\(\rho(A)\le\|A\|\)</span>. For a
+non-normal matrix the gap can be large, and the powers <span class="math notranslate nohighlight">\(A^k\)</span> can grow for a
+while even though <span class="math notranslate nohighlight">\(\rho(A)&lt;1\)</span> forces <span class="math notranslate nohighlight">\(A^k\to 0\)</span> (<a class="reference internal" href="notes.html#ch01-ex-powers"><span class="std std-numref">Exercise 1.10</span></a>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]])</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">A</span><span class="p">)))</span>
+<span class="n">ks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">81</span><span class="p">)</span>
+<span class="n">norms</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_power</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ks</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"rho(A) = </span><span class="si">{</span><span class="n">rho</span><span class="si">}</span><span class="s2">, ||A||_2 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">; max_k ||A^k||_2 = </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">norms</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> at k = </span><span class="si">{</span><span class="n">ks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">norms</span><span class="p">)]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">ks</span><span class="p">,</span> <span class="n">norms</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\|A^k\|_2$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">ks</span><span class="p">,</span> <span class="n">rho</span> <span class="o">**</span> <span class="n">ks</span><span class="p">,</span> <span class="s2">"--"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\rho(A)^k$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"$k$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"size"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Transient growth of powers of a non-normal matrix"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">rho</span> <span class="o">**</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">nk</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">nk</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ks</span><span class="p">,</span> <span class="n">norms</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>rho(A) = 0.9, ||A||_2 = 1.5296; max_k ||A^k||_2 = 3.913 at k = 9
+</pre></div>
+</div>
+<img alt="../_images/dc6f8c43de0eb67b50cbcf917d031d0892c71015c95ab31073d333d79ee153b8.png" src="../_images/dc6f8c43de0eb67b50cbcf917d031d0892c71015c95ab31073d333d79ee153b8.png" />
+</div>
+</div>
+</section>
+<section id="estimating-a-2-by-sampling">
+<h2><span class="section-number">1.9.9. </span>9. Estimating <span class="math notranslate nohighlight">\(\|A\|_2\)</span> by sampling<a class="headerlink" href="#estimating-a-2-by-sampling" title="Link to this heading">#</a></h2>
+<p>Every unit vector gives a lower bound <span class="math notranslate nohighlight">\(\|Ax\|_2\le\|A\|_2\)</span>. Sampling random
+directions is therefore a natural but poor estimator, especially in high
+dimension (<a class="reference internal" href="notes.html#ch01-ex-sampling"><span class="std std-numref">Exercise 1.11</span></a>). One step of the power method,
+<span class="math notranslate nohighlight">\(\|A^TAx\|_2/\|Ax\|_2\)</span>, is guaranteed to be at least as good as <span class="math notranslate nohighlight">\(\|Ax\|_2\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">50</span><span class="p">)):</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">100_000</span><span class="p">))</span>
+    <span class="n">X</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">AX</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">X</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">AX</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">power</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">AX</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">amp</span>
+    <span class="n">sigma1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\|Ax\|_2$, random unit $x$"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">sigma1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"C1"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\|A\|_2$"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"amplification"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"density"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"n = </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"n = </span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: ||A||_2 = </span><span class="si">{</span><span class="n">sigma1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, best sample = </span><span class="si">{</span><span class="n">amp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, "</span>
+          <span class="sa">f</span><span class="s2">"best after one power step = </span><span class="si">{</span><span class="n">power</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">amp</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">sigma1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">power</span> <span class="o">&gt;=</span> <span class="n">amp</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">1e-12</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n =  3: ||A||_2 = 2.9699, best sample = 2.9699, best after one power step = 2.9699
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n = 50: ||A||_2 = 13.5384, best sample = 10.0755, best after one power step = 12.4466
+</pre></div>
+</div>
+<img alt="../_images/1e28490dda3ad8bec60a7044d62836f7b0314c3c49ac2b6525680df5b32a25af.png" src="../_images/1e28490dda3ad8bec60a7044d62836f7b0314c3c49ac2b6525680df5b32a25af.png" />
+</div>
+</div>
+<p>In three dimensions a hundred thousand samples come close to the maximum;
+in fifty dimensions they do not, because a random direction is almost
+orthogonal to the maximizing one. This is an early example of a theme of
+<a class="reference internal" href="../ch12-randomized/notes.html#ch12"><span class="std std-numref">Chapter 12</span></a>: random sampling works well only when it is
+combined with the structure of the problem, here the power method.</p>
+</section>
+<section id="small-norms-large-condition-number">
+<h2><span class="section-number">1.9.10. </span>10. Small norms, large condition number<a class="headerlink" href="#small-norms-large-condition-number" title="Link to this heading">#</a></h2>
+<p>We verify the numbers quoted in <a class="reference internal" href="notes.html#ch01-exa-hilbert">Example 1.4</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">hilbert</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"||H||_1"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s2">"||H||_inf"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+    <span class="s2">"||H||_2"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="s2">"||H||_F"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="s2">"fro"</span><span class="p">),</span>
+    <span class="s2">"lambda_min"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvalsh</span><span class="p">(</span><span class="n">H</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="s2">"kappa_2"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">H</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">vals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">10s</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">.4g</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="s2">"||H||_1"</span><span class="p">]</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)))</span> <span class="o">&lt;</span> <span class="mf">1e-14</span>
+<span class="k">assert</span> <span class="nb">round</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="s2">"||H||_2"</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.752</span> <span class="ow">and</span> <span class="nb">round</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="s2">"||H||_F"</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.786</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>||H||_1    = 2.929
+||H||_inf  = 2.929
+||H||_2    = 1.752
+||H||_F    = 1.786
+lambda_min = 1.093e-13
+kappa_2    = 1.602e+13
+</pre></div>
+</div>
+</div>
+</div>
+<p>The computed <span class="math notranslate nohighlight">\(\kappa_2(H_{10})\approx1.6\times10^{13}\)</span> is itself subject to
+rounding error of relative size roughly <span class="math notranslate nohighlight">\(\kappa_2 u\approx 10^{-3}\)</span> in the
+smallest eigenvalue, so only its first two or three digits are meaningful.
+<a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a> explains why.</p>
+</section>
+<section id="common-mistakes">
+<h2><span class="section-number">1.9.11. </span>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Comparing two computed results with <code class="docutils literal notranslate"><span class="pre">==</span></code> or with a tolerance chosen by
+trial and error. Derive the tolerance from an error bound, as in Section 1.</p></li>
+<li><p>Timing a single run, or timing the first call (which includes one-time
+overheads), and reporting the result as a property of an algorithm.</p></li>
+<li><p>Forming a Householder matrix <span class="math notranslate nohighlight">\(H\)</span> explicitly to apply it. Apply
+<span class="math notranslate nohighlight">\(y - \beta v(v^Ty)\)</span> instead.</p></li>
+<li><p>Using <span class="math notranslate nohighlight">\(\sqrt{a^2+b^2}\)</span> instead of <code class="docutils literal notranslate"><span class="pre">hypot</span></code> inside rotations and norms.</p></li>
+<li><p>Assuming <span class="math notranslate nohighlight">\(\|A\|_2 = \max_i|\lambda_i(A)|\)</span> for a nonsymmetric matrix.</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">np.random.seed</span></code>; use a <code class="docutils literal notranslate"><span class="pre">Generator</span></code> from <code class="docutils literal notranslate"><span class="pre">np.random.default_rng</span></code>
+so that each notebook controls its own random stream.</p></li>
+</ul>
+</section>
+<section id="your-turn">
+<h2><span class="section-number">1.9.12. </span>Your turn<a class="headerlink" href="#your-turn" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Write <code class="docutils literal notranslate"><span class="pre">matmul_row(A,</span> <span class="pre">B)</span></code> that forms each <em>row</em> of <span class="math notranslate nohighlight">\(C\)</span> as a combination of
+rows of <span class="math notranslate nohighlight">\(B\)</span>, and verify it with the bound of Section 1.</p></li>
+<li><p>Extend <code class="docutils literal notranslate"><span class="pre">householder_vector</span></code> to complex vectors. What replaces the sign of
+<span class="math notranslate nohighlight">\(x_1\)</span>? (Use <span class="math notranslate nohighlight">\(x_1/|x_1|\)</span>.)</p></li>
+<li><p>Show numerically that <span class="math notranslate nohighlight">\(\|A\|_2\le\sqrt{\|A\|_1\|A\|_\infty}\)</span>
+(<a class="reference internal" href="notes.html#ch01-ex-two-norm-bound"><span class="std std-numref">Exercise 1.4</span></a>) for 1000 random matrices of various
+shapes. How tight is the bound typically?</p></li>
+<li><p>Repeat the sampling experiment of Section 9 with <span class="math notranslate nohighlight">\(n = 10, 20, 100\)</span> and
+plot the ratio of the best sample to <span class="math notranslate nohighlight">\(\|A\|_2\)</span> against <span class="math notranslate nohighlight">\(n\)</span>.</p></li>
+</ol>
+</section>
+<section id="key-takeaways">
+<h2><span class="section-number">1.9.13. </span>Key takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The inner-product, column and outer-product views of <span class="math notranslate nohighlight">\(AB\)</span> are the same
+arithmetic in different orders; the latter two explain range, rank and
+low-rank structure.</p></li>
+<li><p>Flop counts are machine independent; run times are not, and must be
+measured carefully and reported as observations.</p></li>
+<li><p>Householder reflectors with the sign of <a class="reference internal" href="notes.html#ch01-alg-householder">Algorithm 1.1</a> map
+a vector to a multiple of <span class="math notranslate nohighlight">\(e_1\)</span> with errors of order <span class="math notranslate nohighlight">\(u\)</span>; the other sign
+suffers cancellation.</p></li>
+<li><p>Norm inequalities, unitary invariance and <span class="math notranslate nohighlight">\(\rho(A)\le\|A\|\)</span> can all be
+checked numerically, and the checks should use tolerances derived from
+rounding error bounds.</p></li>
+</ul>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">1.9.14. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id1">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span>, Lectures 1–3, and <span class="bibtex-citation" id="id2">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span>, Chapters 1
+and 2. For the rounding error bound used in Section 1, see
+<span class="bibtex-citation" id="id3">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Section 3.5.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch01-matrix-computations"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="notes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Matrix computations, orthogonality, and norms</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../ch02-svd/notes.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>The singular value decomposition</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-ways-to-multiply-matrices">1.9.1. 1. Three ways to multiply matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flops-versus-run-time">1.9.2. 2. Flops versus run time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-matrices">1.9.3. 3. Orthogonal matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#householder-reflectors">1.9.4. 4. Householder reflectors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#givens-rotations-and-hypot">1.9.5. 5. Givens rotations and <code class="docutils literal notranslate"><span class="pre">hypot</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-norms">1.9.6. 6. Vector norms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-norms">1.9.7. 7. Matrix norms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#frobenius-norm-and-rank">1.9.7.1. Frobenius norm and rank</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unitary-invariance">1.9.7.2. Unitary invariance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-radius-norms-and-powers">1.9.8. 8. Spectral radius, norms, and powers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-a-2-by-sampling">1.9.9. 9. Estimating <span class="math notranslate nohighlight">\(\|A\|_2\)</span> by sampling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#small-norms-large-condition-number">1.9.10. 10. Small norms, large condition number</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-mistakes">1.9.11. Common mistakes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#your-turn">1.9.12. Your turn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">1.9.13. Key takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">1.9.14. Further reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

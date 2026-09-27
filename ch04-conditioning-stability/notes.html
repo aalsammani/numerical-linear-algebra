@@ -1,0 +1,2160 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. Conditioning and stability &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch04-conditioning-stability/notes';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.13. Lab 4: Conditioning and stability" href="lab.html" />
+    <link rel="prev" title="3.14. Lab 3: Floating-point arithmetic" href="../ch03-floating-point/lab.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">4. Conditioning and stability</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch04-conditioning-stability/notes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch04-conditioning-stability/notes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Conditioning and stability</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problems-and-condition-numbers">4.1. Problems and condition numbers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problems-as-maps">4.1.1. Problems as maps</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#polynomials-evaluation-near-a-root-and-roots">4.1.2. Polynomials: evaluation near a root and roots</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-condition-number-of-a-matrix">4.2. The condition number of a matrix</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-vector-multiplication-and-linear-systems">4.2.1. Matrix-vector multiplication and linear systems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perturbation-theory-for-linear-systems">4.3. Perturbation theory for linear systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-perturbation-theorem">4.3.1. The perturbation theorem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-what-sense-the-bound-is-sharp">4.3.2. In what sense the bound is sharp</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-distance-to-singularity">4.3.3. The distance to singularity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#componentwise-perturbation-theory">4.4. Componentwise perturbation theory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#forward-error-backward-error-and-stability">4.5. Forward error, backward error and stability</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definitions">4.5.1. Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#forward-error-condition-number-and-backward-error">4.5.2. Forward error, condition number and backward error</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-errors-for-linear-systems">4.6. Backward errors for linear systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stable-and-unstable-algorithms">4.7. Stable and unstable algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inner-products-are-backward-stable">4.7.1. Inner products are backward stable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outer-products-are-not-backward-stable">4.7.2. Outer products are not backward stable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bilinear-forms">4.7.3. Bilinear forms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#an-unstable-algorithm-for-a-well-conditioned-problem">4.7.4. An unstable algorithm for a well-conditioned problem</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accuracy-of-computed-solutions-of-linear-systems">4.8. Accuracy of computed solutions of linear systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hilbert-matrix">4.8.1. The Hilbert matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">4.9. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">4.10. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">4.11. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">4.12. Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="conditioning-and-stability">
+<span id="ch04"></span><h1><span class="section-number">4. </span>Conditioning and stability<a class="headerlink" href="#conditioning-and-stability" title="Link to this heading">#</a></h1>
+<p>Every computed answer is wrong. The data are measured or rounded before the
+computation starts, and every floating-point operation commits a further
+relative error of size up to <span class="math notranslate nohighlight">\(u\)</span> (<a class="reference internal" href="../ch03-floating-point/notes.html#ch03"><span class="std std-numref">Chapter 3</span></a>). The useful
+question is therefore not whether a result is exact but whether its error is
+as small as the data and the arithmetic allow. Answering it requires two
+separate ideas.</p>
+<p><em>Conditioning</em> is a property of a mathematical problem. It measures how much
+the exact answer can change when the data change a little, and it has nothing
+to do with computers or algorithms. <em>Stability</em> is a property of an algorithm.
+It asks whether the algorithm, run in floating-point arithmetic, produces an
+answer that is exact, or nearly exact, for data close to the data it was
+given. The two combine in the single most useful rule of numerical analysis:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{forward error} \;\lesssim\; \text{condition number}\times\text{backward error}.
+\]</div>
+<p>This chapter makes each piece of the rule precise. We define condition numbers
+for general problems and compute them for simple functions, for polynomial
+evaluation and root finding, and above all for linear systems, where the
+condition number <span class="math notranslate nohighlight">\(\kappa(A) = \|A\|\,\|A^{-1}\|\)</span> governs everything that
+follows in the course. We prove the classical perturbation theorem for
+<span class="math notranslate nohighlight">\(Ax = b\)</span>, characterize <span class="math notranslate nohighlight">\(1/\kappa_2(A)\)</span> as the relative distance to the nearest
+singular matrix, and introduce componentwise perturbation theory, which
+explains why some matrices with enormous <span class="math notranslate nohighlight">\(\kappa(A)\)</span> nevertheless give
+accurate solutions. We then define forward and backward errors and backward
+stability, derive computable formulas for the backward error of an
+approximate solution of <span class="math notranslate nohighlight">\(Ax = b\)</span>, and study algorithms that are stable and
+algorithms that are not. The chapter ends with the Hilbert matrix, which
+separates the error caused by rounding the data from the error caused by the
+algorithm.</p>
+<p>Throughout, <span class="math notranslate nohighlight">\(u = 2^{-53}\approx1.11\times10^{-16}\)</span> is the unit roundoff of
+IEEE double precision. <span class="bibtex-citation" id="id1">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> write
+<span class="math notranslate nohighlight">\(\epsilon_{\text{machine}}\)</span> for the same quantity; when we quote their results
+we translate them to <span class="math notranslate nohighlight">\(u\)</span>.</p>
+<div class="admonition-learning-objectives admonition">
+<p class="admonition-title">Learning objectives</p>
+<p>After working through this chapter you should be able to:</p>
+<ol class="arabic simple">
+<li><p>define the absolute and relative condition numbers of a problem, compute
+them from the Jacobian, and use the componentwise relative condition number
+for problems whose data have independent relative errors;</p></li>
+<li><p>explain why subtraction of nearly equal numbers, evaluation of a polynomial
+near a root, and computation of clustered roots are ill-conditioned;</p></li>
+<li><p>state and prove the perturbation theorem for <span class="math notranslate nohighlight">\(Ax = b\)</span> with perturbations in
+both <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(b\)</span>, and explain precisely in what sense it is sharp;</p></li>
+<li><p>prove that <span class="math notranslate nohighlight">\(1/\kappa_2(A)\)</span> is the relative distance from <span class="math notranslate nohighlight">\(A\)</span> to the
+singular matrices;</p></li>
+<li><p>compute Skeel’s condition number and explain when it is much smaller than
+<span class="math notranslate nohighlight">\(\kappa(A)\)</span>;</p></li>
+<li><p>define forward error, backward error, backward stability and stability, and
+derive the rule “forward error <span class="math notranslate nohighlight">\(\lesssim\)</span> condition number <span class="math notranslate nohighlight">\(\times\)</span>
+backward error”;</p></li>
+<li><p>compute the normwise (Rigal–Gaches) and componentwise (Oettli–Prager)
+backward errors of an approximate solution of <span class="math notranslate nohighlight">\(Ax = b\)</span>, and explain why the
+relative residual <span class="math notranslate nohighlight">\(\|r\|/\|b\|\)</span> is not the backward error;</p></li>
+<li><p>decide whether simple algorithms are backward stable, and replace unstable
+algorithms by stable ones.</p></li>
+</ol>
+</div>
+<section id="problems-and-condition-numbers">
+<span id="ch04-sec-problems"></span><h2><span class="section-number">4.1. </span>Problems and condition numbers<a class="headerlink" href="#problems-and-condition-numbers" title="Link to this heading">#</a></h2>
+<section id="problems-as-maps">
+<h3><span class="section-number">4.1.1. </span>Problems as maps<a class="headerlink" href="#problems-as-maps" title="Link to this heading">#</a></h3>
+<p>We model a <em>problem</em> as a function <span class="math notranslate nohighlight">\(f: X\to Y\)</span> from a normed space of data to
+a normed space of solutions. The same computation can be described by
+different problems depending on what we regard as data: solving <span class="math notranslate nohighlight">\(Ax = b\)</span> is
+the map <span class="math notranslate nohighlight">\(b\mapsto A^{-1}b\)</span> if <span class="math notranslate nohighlight">\(A\)</span> is fixed and exact, the map
+<span class="math notranslate nohighlight">\((A,b)\mapsto A^{-1}b\)</span> if both are uncertain, and the map
+<span class="math notranslate nohighlight">\(A\mapsto A^{-1}b\)</span> if only <span class="math notranslate nohighlight">\(A\)</span> is. The condition number depends on this
+choice, and also on the norms used to measure the data and the solution.</p>
+<p>The question conditioning answers is: if the data <span class="math notranslate nohighlight">\(x\)</span> are replaced by
+<span class="math notranslate nohighlight">\(x + \Delta x\)</span> with <span class="math notranslate nohighlight">\(\Delta x\)</span> small, how large can
+<span class="math notranslate nohighlight">\(f(x+\Delta x) - f(x)\)</span> be? We use <span class="math notranslate nohighlight">\(\Delta\)</span> for perturbations of data and
+solutions and <span class="math notranslate nohighlight">\(t\)</span> for the size of a perturbation. The letter <span class="math notranslate nohighlight">\(\delta\)</span> is
+reserved for individual rounding errors, <span class="math notranslate nohighlight">\(\fl(a\circ b) = (a\circ b)(1+\delta)\)</span>
+with <span class="math notranslate nohighlight">\(|\delta|\le u\)</span>.</p>
+<div class="proof definition admonition" id="ch04-def-condition">
+<p class="admonition-title"><span class="caption-number">Definition 4.1 </span> (Condition numbers)</p>
+<section class="definition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(f: X\to Y\)</span> and <span class="math notranslate nohighlight">\(x\in X\)</span>. The <em>absolute condition number</em> of <span class="math notranslate nohighlight">\(f\)</span> at <span class="math notranslate nohighlight">\(x\)</span>
+is</p>
+<div class="math notranslate nohighlight">
+\[
+\hat\kappa(x) = \lim_{h\to0}\ \sup_{0&lt;\|\Delta x\|\le h}
+\frac{\|f(x+\Delta x) - f(x)\|}{\|\Delta x\|} .
+\]</div>
+<p>If <span class="math notranslate nohighlight">\(x\neq0\)</span> and <span class="math notranslate nohighlight">\(f(x)\neq0\)</span>, the <em>relative condition number</em> is</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-rel-cond">
+<span class="eqno">(4.1)<a class="headerlink" href="#equation-ch04-eq-rel-cond" title="Link to this equation">#</a></span>\[
+\kappa(x) = \lim_{h\to0}\ \sup_{0&lt;\|\Delta x\|\le h}
+\frac{\|f(x+\Delta x) - f(x)\|/\|f(x)\|}{\|\Delta x\|/\|x\|} .
+\]</div>
+<p>A problem is <em>well-conditioned</em> at <span class="math notranslate nohighlight">\(x\)</span> if <span class="math notranslate nohighlight">\(\kappa(x)\)</span> is small (say <span class="math notranslate nohighlight">\(1\)</span>,
+<span class="math notranslate nohighlight">\(10\)</span> or <span class="math notranslate nohighlight">\(100\)</span>) and <em>ill-conditioned</em> if it is large (say <span class="math notranslate nohighlight">\(10^{6}\)</span> or
+<span class="math notranslate nohighlight">\(10^{16}\)</span>).</p>
+</section>
+</div><p>The relative condition number is the one that matters in floating-point
+arithmetic, because rounding errors are relative. Informally, <span class="math notranslate nohighlight">\(\kappa(x)\)</span> is
+the factor by which a small relative change of the data can be amplified in
+the solution. The limit <span class="math notranslate nohighlight">\(h\to0\)</span> makes it a statement about infinitesimal
+perturbations; for perturbations of finite size, bounds such as
+<a class="reference internal" href="#ch04-thm-perturbation">Theorem 4.2</a> below carry an extra factor that tends to
+<span class="math notranslate nohighlight">\(1\)</span> as the perturbation tends to zero.</p>
+<div class="proof theorem admonition" id="ch04-thm-jacobian">
+<p class="admonition-title"><span class="caption-number">Theorem 4.1 </span> (Condition numbers of differentiable problems)</p>
+<section class="theorem-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(f:\R^n\to\R^m\)</span> is differentiable at <span class="math notranslate nohighlight">\(x\)</span> with Jacobian <span class="math notranslate nohighlight">\(J(x)\)</span>, then
+<span class="math notranslate nohighlight">\(\hat\kappa(x) = \|J(x)\|\)</span>, the matrix norm induced by the norms on <span class="math notranslate nohighlight">\(\R^n\)</span>
+and <span class="math notranslate nohighlight">\(\R^m\)</span>, and</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-jacobian-cond">
+<span class="eqno">(4.2)<a class="headerlink" href="#equation-ch04-eq-jacobian-cond" title="Link to this equation">#</a></span>\[
+\kappa(x) = \frac{\|J(x)\|\,\|x\|}{\|f(x)\|}.
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Differentiability means <span class="math notranslate nohighlight">\(f(x+\Delta x) - f(x) = J(x)\Delta x + e(\Delta x)\)</span>
+with <span class="math notranslate nohighlight">\(\|e(\Delta x)\|/\|\Delta x\|\to0\)</span> as <span class="math notranslate nohighlight">\(\Delta x\to0\)</span>. Hence for
+<span class="math notranslate nohighlight">\(0&lt;\|\Delta x\|\le h\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\|f(x+\Delta x) - f(x)\|}{\|\Delta x\|}\le\|J(x)\| + \sup_{0&lt;\|\Delta x\|\le h}\frac{\|e(\Delta x)\|}{\|\Delta x\|},
+\]</div>
+<p>and the right-hand side tends to <span class="math notranslate nohighlight">\(\|J(x)\|\)</span>. Conversely, let <span class="math notranslate nohighlight">\(w\)</span> be a unit
+vector with <span class="math notranslate nohighlight">\(\|J(x)w\| = \|J(x)\|\)</span> and take <span class="math notranslate nohighlight">\(\Delta x = hw\)</span>. Then the quotient
+is at least <span class="math notranslate nohighlight">\(\|J(x)\| - \|e(hw)\|/h\to\|J(x)\|\)</span>. So the limit exists and
+equals <span class="math notranslate nohighlight">\(\|J(x)\|\)</span>. The relative condition number is
+<span class="math notranslate nohighlight">\(\hat\kappa(x)\,\|x\|/\|f(x)\|\)</span> by definition.</p>
+</div>
+<p>Normwise condition numbers treat the data as one vector. When the entries of
+the data carry independent relative errors, for instance because each was
+rounded to floating point, it is more natural to allow perturbations with
+<span class="math notranslate nohighlight">\(|\Delta x_i|\le t|x_i|\)</span> for every <span class="math notranslate nohighlight">\(i\)</span>. For a differentiable scalar function
+<span class="math notranslate nohighlight">\(f:\R^n\to\R\)</span> the same argument as in the proof above gives the
+<em>componentwise relative condition number</em></p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-comp-cond">
+<span class="eqno">(4.3)<a class="headerlink" href="#equation-ch04-eq-comp-cond" title="Link to this equation">#</a></span>\[
+\kappa_{\rm c}(x) = \lim_{t\to0}\ \sup_{|\Delta x_i|\le t|x_i|}
+\frac{|f(x+\Delta x) - f(x)|}{t\,|f(x)|}
+= \frac{\sum_{i=1}^n |x_i|\,|\partial f/\partial x_i(x)|}{|f(x)|}.
+\]</div>
+<p>For a function of one variable both definitions reduce to
+<span class="math notranslate nohighlight">\(\kappa(x) = |x f'(x)/f(x)|\)</span>.</p>
+<div class="proof example admonition" id="ch04-exa-scalar">
+<p class="admonition-title"><span class="caption-number">Example 4.1 </span> (Condition numbers of elementary operations)</p>
+<section class="example-content" id="proof-content">
+<p><em>Square root.</em> For <span class="math notranslate nohighlight">\(f(x) = \sqrt x\)</span> with <span class="math notranslate nohighlight">\(x&gt;0\)</span>,
+<span class="math notranslate nohighlight">\(\kappa(x) = |x\cdot\tfrac12x^{-1/2}/\sqrt x| = \tfrac12\)</span>. Taking a square root
+halves relative errors; it is perfectly conditioned.</p>
+<p><em>Multiplication.</em> For <span class="math notranslate nohighlight">\(f(x_1,x_2) = x_1x_2\)</span> we get
+<span class="math notranslate nohighlight">\(\kappa_{\rm c} = (|x_1||x_2| + |x_2||x_1|)/|x_1x_2| = 2\)</span> from
+<a class="reference internal" href="#equation-ch04-eq-comp-cond">(4.3)</a>: relative errors in the factors at most add. (If we
+measured the data normwise in the <span class="math notranslate nohighlight">\(\infty\)</span>-norm instead, we would get
+<span class="math notranslate nohighlight">\((|x_1|+|x_2|)\max(|x_1|,|x_2|)/|x_1x_2|\)</span>, which is large when <span class="math notranslate nohighlight">\(|x_1|\gg|x_2|\)</span>.
+This is an artifact of the norm, which allows a perturbation of the small
+factor as large as the big one.)</p>
+<p><em>Subtraction.</em> For <span class="math notranslate nohighlight">\(f(x_1,x_2) = x_1 - x_2\)</span> the Jacobian is <span class="math notranslate nohighlight">\([1,\,-1]\)</span>, whose
+norm as a map from <span class="math notranslate nohighlight">\((\R^2,\|\cdot\|_\infty)\)</span> to <span class="math notranslate nohighlight">\(\R\)</span> is <span class="math notranslate nohighlight">\(2\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[
+\kappa(x) = \frac{2\max(|x_1|,|x_2|)}{|x_1-x_2|},\qquad
+\kappa_{\rm c}(x) = \frac{|x_1|+|x_2|}{|x_1-x_2|}.
+\]</div>
+<p>Both are large exactly when <span class="math notranslate nohighlight">\(x_1\approx x_2\)</span>. For <span class="math notranslate nohighlight">\(x_1 = 1\)</span> and
+<span class="math notranslate nohighlight">\(x_2 = 0.999\)</span> we get <span class="math notranslate nohighlight">\(\kappa = 2/0.001 = 2000\)</span> and
+<span class="math notranslate nohighlight">\(\kappa_{\rm c} = 1999\)</span>: the subtraction magnifies relative errors already
+present in <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span> by about three orders of magnitude. This is
+<em>cancellation</em>. The subtraction itself commits at most one rounding error of
+relative size <span class="math notranslate nohighlight">\(u\)</span>; what it does is expose errors made earlier.</p>
+</section>
+</div></section>
+<section id="polynomials-evaluation-near-a-root-and-roots">
+<span id="ch04-sec-polynomials"></span><h3><span class="section-number">4.1.2. </span>Polynomials: evaluation near a root and roots<a class="headerlink" href="#polynomials-evaluation-near-a-root-and-roots" title="Link to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(p(x) = \sum_{k=0}^n a_kx^k\)</span>. As a function of <span class="math notranslate nohighlight">\(x\)</span> with fixed exact
+coefficients, <span class="math notranslate nohighlight">\(\kappa(x) = |xp'(x)/p(x)|\)</span>, which is infinite at a root and
+large near one. More relevant for computation is the condition number with
+respect to the coefficients, because rounding errors in Horner’s rule act
+like perturbations of the coefficients. By <a class="reference internal" href="#equation-ch04-eq-comp-cond">(4.3)</a>, with
+<span class="math notranslate nohighlight">\(\partial p/\partial a_k = x^k\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-poly-cond">
+<span class="eqno">(4.4)<a class="headerlink" href="#equation-ch04-eq-poly-cond" title="Link to this equation">#</a></span>\[
+\kappa_{\rm c}(a;x) = \frac{\sum_{k=0}^n|a_k||x|^k}{|p(x)|}.
+\]</div>
+<p>Horner’s rule computes a value <span class="math notranslate nohighlight">\(\hat p(x)\)</span> with
+<span class="math notranslate nohighlight">\(|\hat p(x) - p(x)|\le\gamma_{2n}\sum_k|a_k||x|^k\)</span>, where
+<span class="math notranslate nohighlight">\(\gamma_{2n} = 2nu/(1-2nu)\)</span> <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Section 5.1). The relative
+error is therefore bounded by <span class="math notranslate nohighlight">\(\gamma_{2n}\,\kappa_{\rm c}(a;x)\)</span>, a first
+instance of the rule “condition number <span class="math notranslate nohighlight">\(\times\)</span> backward error”.</p>
+<div class="proof example admonition" id="ch04-exa-polynomial">
+<p class="admonition-title"><span class="caption-number">Example 4.2 </span> (Evaluating <span class="math notranslate nohighlight">\((x-2)^9\)</span> from its expanded coefficients)</p>
+<section class="example-content" id="proof-content">
+<p>The polynomial <span class="math notranslate nohighlight">\(p(x) = (x-2)^9 = \sum_{k=0}^{9}\binom9k(-2)^{9-k}x^k\)</span> has
+integer coefficients that are exactly representable. For <span class="math notranslate nohighlight">\(x\ge0\)</span> the terms
+alternate in sign and <span class="math notranslate nohighlight">\(\sum_k|a_k||x|^k = (x+2)^9\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[
+\kappa_{\rm c}(a;x) = \left(\frac{x+2}{|x-2|}\right)^9 .
+\]</div>
+<p>At <span class="math notranslate nohighlight">\(x = 2.1\)</span> this is <span class="math notranslate nohighlight">\(41^9\approx3.3\times10^{14}\)</span>, and at <span class="math notranslate nohighlight">\(x = 2.05\)</span> it is
+<span class="math notranslate nohighlight">\(81^9\approx1.5\times10^{17}\)</span>. Near <span class="math notranslate nohighlight">\(x = 2\)</span> the bound
+<span class="math notranslate nohighlight">\(\gamma_{18}\sum_k|a_k||x|^k\approx\gamma_{18}\,4^9\)</span> is about
+<span class="math notranslate nohighlight">\(5.2\times10^{-10}\)</span>, while <span class="math notranslate nohighlight">\(|p(x)|\le 0.05^9\approx2.0\times10^{-12}\)</span> on
+<span class="math notranslate nohighlight">\([1.95, 2.05]\)</span>. <a class="reference internal" href="#ch04-fig-horner"><span class="std std-numref">Figure 4.1</span></a> shows the result: Horner’s rule
+returns rounding noise of amplitude about <span class="math notranslate nohighlight">\(10^{-11}\)</span> (the largest observed
+error on a grid of 4001 points is about <span class="math notranslate nohighlight">\(1.3\times10^{-11}\)</span>, well within the
+bound), and the sign of the computed value is essentially random. Evaluating
+the factored form <span class="math notranslate nohighlight">\((x-2)^9\)</span> instead is accurate, because <span class="math notranslate nohighlight">\(x - 2\)</span> is computed
+exactly for <span class="math notranslate nohighlight">\(x\in[1,4]\)</span> and the remaining eight multiplications are
+backward stable. The problem “evaluate <span class="math notranslate nohighlight">\(p\)</span> from its coefficients” and the
+problem “evaluate <span class="math notranslate nohighlight">\((x-2)^9\)</span> from <span class="math notranslate nohighlight">\(x\)</span>” have the same exact answer and very
+different condition numbers.</p>
+</section>
+</div><figure class="align-default" id="ch04-fig-horner">
+<a class="reference internal image-reference" href="../_images/ch04-horner-noise.png"><img alt="Horner's rule on the expanded coefficients of (x-2)^9 produces a noisy band of width about 1e-11 around zero for x between 1.95 and 2.05, while the factored form is a smooth curve." src="../_images/ch04-horner-noise.png" style="width: 85%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4.1 </span><span class="caption-text">Evaluating <span class="math notranslate nohighlight">\((x-2)^9\)</span> at 4001 points of <span class="math notranslate nohighlight">\([1.95,2.05]\)</span>. Horner’s rule on the
+expanded coefficients (dots) produces rounding noise that is larger than the
+function itself; the factored form (curve) is accurate. The condition number
+<a class="reference internal" href="#equation-ch04-eq-poly-cond">(4.4)</a> explains the difference.</span><a class="headerlink" href="#ch04-fig-horner" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Roots are even more sensitive. Let <span class="math notranslate nohighlight">\(r\)</span> be a simple root of <span class="math notranslate nohighlight">\(p\)</span> and perturb
+the coefficients to <span class="math notranslate nohighlight">\(a_k + \Delta a_k\)</span>. By the implicit function theorem the
+perturbed polynomial has a root <span class="math notranslate nohighlight">\(r + \Delta r\)</span> with, to first order,
+<span class="math notranslate nohighlight">\(p'(r)\Delta r + \sum_k\Delta a_kr^k = 0\)</span>. If only the coefficient <span class="math notranslate nohighlight">\(a_k\)</span> is
+perturbed, with <span class="math notranslate nohighlight">\(|\Delta a_k|\le t|a_k|\)</span>, the relative condition number of
+the root is</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-root-cond">
+<span class="eqno">(4.5)<a class="headerlink" href="#equation-ch04-eq-root-cond" title="Link to this equation">#</a></span>\[
+\kappa_k(r) = \frac{|a_k|\,|r|^{k-1}}{|p'(r)|}.
+\]</div>
+<p>A multiple root has <span class="math notranslate nohighlight">\(p'(r) = 0\)</span>, and its condition number is infinite: the
+roots of <span class="math notranslate nohighlight">\((x-1)^2 - t\)</span> are <span class="math notranslate nohighlight">\(1\pm\sqrt t\)</span>, so a perturbation of size
+<span class="math notranslate nohighlight">\(t = 10^{-16}\)</span> of one coefficient moves the roots by <span class="math notranslate nohighlight">\(10^{-8}\)</span>. A perturbation
+of order <span class="math notranslate nohighlight">\(u\)</span> in the data therefore limits a computed double root to about
+half the available digits, whatever the algorithm.</p>
+<div class="proof remark admonition" id="ch04-rem-wilkinson">
+<p class="admonition-title"><span class="caption-number">Remark 4.1 </span> (Wilkinson’s polynomial)</p>
+<section class="remark-content" id="proof-content">
+<p>Simple, well-separated roots can also be extremely ill-conditioned. Wilkinson’s
+polynomial <span class="math notranslate nohighlight">\(w(x) = \prod_{k=1}^{20}(x-k) = x^{20} - 210x^{19} + \dots +
+20!\)</span> has the integer roots <span class="math notranslate nohighlight">\(1,\dots,20\)</span>, but its coefficients vary from <span class="math notranslate nohighlight">\(1\)</span> to
+<span class="math notranslate nohighlight">\(20!\approx2.4\times10^{18}\)</span> in magnitude and alternate in sign. Evaluating
+<a class="reference internal" href="#equation-ch04-eq-root-cond">(4.5)</a> in exact integer arithmetic, the root <span class="math notranslate nohighlight">\(r = 15\)</span> has
+condition number about <span class="math notranslate nohighlight">\(4.7\times10^{12}\)</span> with respect to the coefficient
+<span class="math notranslate nohighlight">\(a_{15} = -1672280820\)</span>, and the largest of the 420 condition numbers
+<span class="math notranslate nohighlight">\(\kappa_k(r)\)</span> is about <span class="math notranslate nohighlight">\(1.0\times10^{13}\)</span>, for <span class="math notranslate nohighlight">\(r = 14\)</span> and <span class="math notranslate nohighlight">\(k = 12\)</span>
+(<a class="reference internal" href="#ch04-ex-wilkinson"><span class="std std-numref">Exercise 4.9</span></a>). <a class="reference internal" href="#ch04-fig-wilkinson"><span class="std std-numref">Figure 4.2</span></a> shows the roots of
+60 polynomials whose coefficients were perturbed randomly by relative amounts
+of order <span class="math notranslate nohighlight">\(10^{-10}\)</span>: most of the roots move by amounts of order one and many
+become complex. <span class="bibtex-citation" id="id3">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Lecture 12) show a similar
+experiment.</p>
+</section>
+</div><figure class="align-default" id="ch04-fig-wilkinson">
+<a class="reference internal image-reference" href="../_images/ch04-wilkinson-roots.png"><img alt="Roots of perturbed Wilkinson polynomials in the complex plane. The roots 1 to 4 stay put; the others spread into complex conjugate pairs with imaginary parts up to about 5." src="../_images/ch04-wilkinson-roots.png" style="width: 85%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4.2 </span><span class="caption-text">Roots of <span class="math notranslate nohighlight">\(\prod_{k=1}^{20}(x-k)\)</span> after each coefficient <span class="math notranslate nohighlight">\(a_k\)</span>,
+<span class="math notranslate nohighlight">\(0\le k\le19\)</span>, is replaced by <span class="math notranslate nohighlight">\(a_k(1+10^{-10}r_k)\)</span> with independent standard
+normal <span class="math notranslate nohighlight">\(r_k\)</span> (the leading coefficient stays <span class="math notranslate nohighlight">\(1\)</span>), for 60 samples. The roots were computed with <code class="docutils literal notranslate"><span class="pre">numpy.roots</span></code> and refined in 60-digit
+decimal arithmetic, so the picture shows the exact roots of the perturbed
+polynomials.</span><a class="headerlink" href="#ch04-fig-wilkinson" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="the-condition-number-of-a-matrix">
+<span id="ch04-sec-matrix-condition"></span><h2><span class="section-number">4.2. </span>The condition number of a matrix<a class="headerlink" href="#the-condition-number-of-a-matrix" title="Link to this heading">#</a></h2>
+<section id="matrix-vector-multiplication-and-linear-systems">
+<h3><span class="section-number">4.2.1. </span>Matrix-vector multiplication and linear systems<a class="headerlink" href="#matrix-vector-multiplication-and-linear-systems" title="Link to this heading">#</a></h3>
+<p>Fix <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> nonsingular and consider the problem <span class="math notranslate nohighlight">\(f(x) = Ax\)</span>.
+It is linear, so <span class="math notranslate nohighlight">\(J = A\)</span>, and <a class="reference internal" href="#equation-ch04-eq-jacobian-cond">(4.2)</a> gives</p>
+<div class="math notranslate nohighlight">
+\[
+\kappa(x) = \frac{\|A\|\,\|x\|}{\|Ax\|}\le\|A\|\,\|A^{-1}\|,
+\]</div>
+<p>because <span class="math notranslate nohighlight">\(\|x\| = \|A^{-1}Ax\|\le\|A^{-1}\|\,\|Ax\|\)</span>. Solving <span class="math notranslate nohighlight">\(Ax = b\)</span> for
+fixed <span class="math notranslate nohighlight">\(A\)</span> is the problem <span class="math notranslate nohighlight">\(b\mapsto A^{-1}b\)</span>, with condition number</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-cond-rhs">
+<span class="eqno">(4.6)<a class="headerlink" href="#equation-ch04-eq-cond-rhs" title="Link to this equation">#</a></span>\[
+\kappa(b) = \frac{\|A^{-1}\|\,\|b\|}{\|x\|}\le\|A^{-1}\|\,\|A\|,
+\]</div>
+<p>because <span class="math notranslate nohighlight">\(\|b\|\le\|A\|\,\|x\|\)</span>. Finally, for fixed <span class="math notranslate nohighlight">\(b\)</span> the problem
+<span class="math notranslate nohighlight">\(A\mapsto A^{-1}b\)</span> has derivative <span class="math notranslate nohighlight">\(\Delta A\mapsto -A^{-1}\Delta A\,x\)</span>, whose
+norm is at most <span class="math notranslate nohighlight">\(\|A^{-1}\|\,\|x\|\)</span>; the relative condition number is
+therefore at most <span class="math notranslate nohighlight">\(\|A^{-1}\|\,\|A\|\)</span>, with equality in the 2-norm (take
+<span class="math notranslate nohighlight">\(\Delta A = u_nx^T\)</span> in the notation of <a class="reference internal" href="#ch04-prop-kappa">Proposition 4.1</a>).
+The same quantity bounds all three problems <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span>
+(Lecture 12).</p>
+<div class="proof definition admonition" id="ch04-def-kappa">
+<p class="admonition-title"><span class="caption-number">Definition 4.2 </span> (Condition number of a matrix)</p>
+<section class="definition-content" id="proof-content">
+<p>The <em>condition number</em> of a nonsingular <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> with respect to
+an induced norm is <span class="math notranslate nohighlight">\(\kappa(A) = \|A\|\,\|A^{-1}\|\)</span>. We write <span class="math notranslate nohighlight">\(\kappa_p(A)\)</span> for
+the <span class="math notranslate nohighlight">\(p\)</span>-norm. By convention <span class="math notranslate nohighlight">\(\kappa(A) = \infty\)</span> if <span class="math notranslate nohighlight">\(A\)</span> is singular.</p>
+</section>
+</div><div class="proof proposition admonition" id="ch04-prop-kappa">
+<p class="admonition-title"><span class="caption-number">Proposition 4.1 </span> (Properties of the condition number)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> be nonsingular with singular value decomposition
+<span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span>, <span class="math notranslate nohighlight">\(U = [u_1,\dots,u_n]\)</span>, <span class="math notranslate nohighlight">\(V = [v_1,\dots,v_n]\)</span>,
+<span class="math notranslate nohighlight">\(\sigma_1\ge\dots\ge\sigma_n&gt;0\)</span>. For every induced norm,</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\kappa(A)\ge1\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\kappa(\alpha A) = \kappa(A)\)</span> for every scalar <span class="math notranslate nohighlight">\(\alpha\neq0\)</span>, and
+<span class="math notranslate nohighlight">\(\kappa(A^{-1}) = \kappa(A)\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\kappa(A)\ge|\lambda|_{\max}/|\lambda|_{\min}\)</span>, the ratio of the largest to
+the smallest modulus of an eigenvalue of <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+</ol>
+<p>Moreover <span class="math notranslate nohighlight">\(\kappa_2(A) = \sigma_1/\sigma_n\)</span>, and <span class="math notranslate nohighlight">\(\kappa_2(QAZ) = \kappa_2(A)\)</span>
+for orthogonal <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(Z\)</span>; in particular <span class="math notranslate nohighlight">\(\kappa_2(Q) = 1\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1) <span class="math notranslate nohighlight">\(1 = \|I\| = \|AA^{-1}\|\le\|A\|\,\|A^{-1}\|\)</span> by
+<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-prop-induced">Proposition 1.5</a>. (2) <span class="math notranslate nohighlight">\((\alpha A)^{-1} = \alpha^{-1}A^{-1}\)</span> and the
+factors <span class="math notranslate nohighlight">\(|\alpha|\)</span> and <span class="math notranslate nohighlight">\(|\alpha|^{-1}\)</span> cancel; the second statement is
+symmetric in <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(A^{-1}\)</span>. (3) By <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-spectral-radius">Theorem 1.7</a>,
+<span class="math notranslate nohighlight">\(\|A\|\ge\rho(A) = |\lambda|_{\max}\)</span> and
+<span class="math notranslate nohighlight">\(\|A^{-1}\|\ge\rho(A^{-1}) = 1/|\lambda|_{\min}\)</span>. For the 2-norm,
+<span class="math notranslate nohighlight">\(\|A\|_2 = \sigma_1\)</span> and <span class="math notranslate nohighlight">\(A^{-1} = V\Sigma^{-1}U^T\)</span> has largest singular value
+<span class="math notranslate nohighlight">\(1/\sigma_n\)</span> (<a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a>). Unitary invariance of the 2-norm
+(<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-unitary-invariance">Theorem 1.6</a>) gives the last statement.</p>
+</div>
+<p>Geometrically, <span class="math notranslate nohighlight">\(\kappa_2(A)\)</span> is the ratio of the longest to the shortest
+semi-axis of the ellipsoid <span class="math notranslate nohighlight">\(\{Ax:\|x\|_2 = 1\}\)</span> (compare
+<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-fig-induced-norm"><span class="std std-numref">Figure 1.2</span></a>). For normal matrices, in particular
+symmetric ones, equality holds in (3), so <span class="math notranslate nohighlight">\(\kappa_2(A)\)</span> is the ratio of the
+extreme eigenvalue moduli. For nonnormal matrices the eigenvalues can be
+completely misleading: <span class="math notranslate nohighlight">\(A = \begin{bmatrix}1&amp;M\\0&amp;1\end{bmatrix}\)</span> has both
+eigenvalues equal to <span class="math notranslate nohighlight">\(1\)</span>, but
+<span class="math notranslate nohighlight">\(A^{-1} = \begin{bmatrix}1&amp;-M\\0&amp;1\end{bmatrix}\)</span> and
+<span class="math notranslate nohighlight">\(\kappa_\infty(A) = (1+|M|)^2\)</span>.</p>
+<p>Different norms give different condition numbers, but not very different
+ones: from the norm equivalences of <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-ex-matrix-equivalence"><span class="std std-numref">Exercise 1.5</span></a>,
+<span class="math notranslate nohighlight">\(\kappa_2(A)/n\le\kappa_1(A)\le n\,\kappa_2(A)\)</span>, and similarly for the
+<span class="math notranslate nohighlight">\(\infty\)</span>-norm (<a class="reference internal" href="#ch04-ex-kappa-properties"><span class="std std-numref">Exercise 4.2</span></a>). A matrix is ill-conditioned
+or not independently of the norm, up to factors of <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The determinant does not measure conditioning. The matrix <span class="math notranslate nohighlight">\(0.1\,I_{100}\)</span> has
+determinant <span class="math notranslate nohighlight">\(10^{-100}\)</span> and condition number <span class="math notranslate nohighlight">\(1\)</span>; the matrix
+<span class="math notranslate nohighlight">\(\begin{bmatrix}1&amp;M\\0&amp;1\end{bmatrix}\)</span> has determinant <span class="math notranslate nohighlight">\(1\)</span> and condition
+number about <span class="math notranslate nohighlight">\(M^2\)</span>. The determinant scales like the <span class="math notranslate nohighlight">\(n\)</span>th power of the
+matrix, while <span class="math notranslate nohighlight">\(\kappa(A)\)</span> is invariant under scaling.</p>
+</div>
+</section>
+</section>
+<section id="perturbation-theory-for-linear-systems">
+<span id="ch04-sec-perturbation"></span><h2><span class="section-number">4.3. </span>Perturbation theory for linear systems<a class="headerlink" href="#perturbation-theory-for-linear-systems" title="Link to this heading">#</a></h2>
+<section id="the-perturbation-theorem">
+<h3><span class="section-number">4.3.1. </span>The perturbation theorem<a class="headerlink" href="#the-perturbation-theorem" title="Link to this heading">#</a></h3>
+<p>We now allow errors in both <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(b\)</span> and look for a bound that holds for
+perturbations of finite size, not only to first order. The key tool is a
+bound for the inverse of a perturbation of the identity.</p>
+<div class="proof lemma admonition" id="ch04-lem-neumann">
+<p class="admonition-title"><span class="caption-number">Lemma 4.1 </span> (Perturbations of the identity)</p>
+<section class="lemma-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(\|\cdot\|\)</span> be an induced norm and <span class="math notranslate nohighlight">\(F\in\R^{n\times n}\)</span> with <span class="math notranslate nohighlight">\(\|F\|&lt;1\)</span>.
+Then <span class="math notranslate nohighlight">\(I + F\)</span> is nonsingular and
+<span class="math notranslate nohighlight">\(\|(I+F)^{-1}\|\le1/(1-\|F\|)\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. If <span class="math notranslate nohighlight">\((I+F)z = 0\)</span> then <span class="math notranslate nohighlight">\(\|z\| = \|Fz\|\le\|F\|\,\|z\|\)</span>, which forces <span class="math notranslate nohighlight">\(z = 0\)</span>;
+so <span class="math notranslate nohighlight">\(I+F\)</span> is nonsingular. For any <span class="math notranslate nohighlight">\(w\)</span>, the vector <span class="math notranslate nohighlight">\(z = (I+F)^{-1}w\)</span> satisfies
+<span class="math notranslate nohighlight">\(z = w - Fz\)</span>, so <span class="math notranslate nohighlight">\(\|z\|\le\|w\| + \|F\|\,\|z\|\)</span>, that is,
+<span class="math notranslate nohighlight">\(\|z\|\le\|w\|/(1-\|F\|)\)</span>. Take the maximum over <span class="math notranslate nohighlight">\(\|w\| = 1\)</span>.</p>
+</div>
+<div class="proof theorem admonition" id="ch04-thm-perturbation">
+<p class="admonition-title"><span class="caption-number">Theorem 4.2 </span> (Perturbation of linear systems)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> be nonsingular, <span class="math notranslate nohighlight">\(b\neq0\)</span>, and <span class="math notranslate nohighlight">\(Ax = b\)</span>. Let
+<span class="math notranslate nohighlight">\(\|\cdot\|\)</span> be a vector norm with its induced matrix norm and
+<span class="math notranslate nohighlight">\(\kappa = \kappa(A)\)</span>. If <span class="math notranslate nohighlight">\(\|A^{-1}\|\,\|\Delta A\|&lt;1\)</span>, then <span class="math notranslate nohighlight">\(A + \Delta A\)</span> is
+nonsingular, and the solution of <span class="math notranslate nohighlight">\((A+\Delta A)(x+\Delta x) = b + \Delta b\)</span>
+satisfies</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-perturbation">
+<span class="eqno">(4.7)<a class="headerlink" href="#equation-ch04-eq-perturbation" title="Link to this equation">#</a></span>\[
+\frac{\|\Delta x\|}{\|x\|}\le
+\frac{\kappa}{1-\kappa\,\|\Delta A\|/\|A\|}
+\left(\frac{\|\Delta A\|}{\|A\|} + \frac{\|\Delta b\|}{\|b\|}\right).
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Write <span class="math notranslate nohighlight">\(A + \Delta A = A(I + A^{-1}\Delta A)\)</span>. Since
+<span class="math notranslate nohighlight">\(\|A^{-1}\Delta A\|\le\|A^{-1}\|\,\|\Delta A\|&lt;1\)</span>,
+<a class="reference internal" href="#ch04-lem-neumann">Lemma 4.1</a> shows that <span class="math notranslate nohighlight">\(A+\Delta A\)</span> is nonsingular with</p>
+<div class="math notranslate nohighlight">
+\[
+\|(A+\Delta A)^{-1}\| \le \|(I+A^{-1}\Delta A)^{-1}\|\,\|A^{-1}\|
+\le\frac{\|A^{-1}\|}{1-\|A^{-1}\|\,\|\Delta A\|}.
+\]</div>
+<p>Subtracting <span class="math notranslate nohighlight">\(Ax = b\)</span> from <span class="math notranslate nohighlight">\((A+\Delta A)(x+\Delta x) = b+\Delta b\)</span> gives
+<span class="math notranslate nohighlight">\((A+\Delta A)\Delta x = \Delta b - \Delta A\,x\)</span>, hence</p>
+<div class="math notranslate nohighlight">
+\[
+\|\Delta x\|\le\frac{\|A^{-1}\|}{1-\|A^{-1}\|\,\|\Delta A\|}
+\big(\|\Delta b\| + \|\Delta A\|\,\|x\|\big).
+\]</div>
+<p>Divide by <span class="math notranslate nohighlight">\(\|x\|\)</span> and use <span class="math notranslate nohighlight">\(\|b\|\le\|A\|\,\|x\|\)</span>, which gives
+<span class="math notranslate nohighlight">\(\|\Delta b\|/\|x\|\le\|A\|\,\|\Delta b\|/\|b\|\)</span>. Finally,
+<span class="math notranslate nohighlight">\(\|A^{-1}\|\,\|\Delta A\| = \kappa\,\|\Delta A\|/\|A\|\)</span> and
+<span class="math notranslate nohighlight">\(\|A^{-1}\|\,\|A\| = \kappa\)</span>.</p>
+</div>
+<p>If the relative perturbations of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are both at most <span class="math notranslate nohighlight">\(t\)</span> and
+<span class="math notranslate nohighlight">\(\kappa t&lt;1\)</span>, the theorem gives <span class="math notranslate nohighlight">\(\|\Delta x\|/\|x\|\le2\kappa t/(1-\kappa t)\)</span>,
+which is <span class="math notranslate nohighlight">\(2\kappa t + \bigO(t^2)\)</span>. The special cases are worth remembering:
+with <span class="math notranslate nohighlight">\(\Delta A = 0\)</span> the bound is exactly <span class="math notranslate nohighlight">\(\kappa\,\|\Delta b\|/\|b\|\)</span>, and with
+<span class="math notranslate nohighlight">\(\Delta b = 0\)</span> it is <span class="math notranslate nohighlight">\(\kappa\,\|\Delta A\|/\|A\|\)</span> to first order. Another
+useful form, with no smallness assumption, is
+<span class="math notranslate nohighlight">\(\|\Delta x\|/\|x+\Delta x\|\le\kappa\,\|\Delta A\|/\|A\|\)</span> when
+<span class="math notranslate nohighlight">\(\Delta b = 0\)</span> (<a class="reference internal" href="#ch04-ex-perturbed-denominator"><span class="std std-numref">Exercise 4.3</span></a>).</p>
+</section>
+<section id="in-what-sense-the-bound-is-sharp">
+<h3><span class="section-number">4.3.2. </span>In what sense the bound is sharp<a class="headerlink" href="#in-what-sense-the-bound-is-sharp" title="Link to this heading">#</a></h3>
+<p>The bound <a class="reference internal" href="#equation-ch04-eq-perturbation">(4.7)</a> is a worst case over all perturbations
+of a given size. It is attained, or attained to first order, for suitably
+aligned data and perturbations. In the 2-norm, with the notation of
+<a class="reference internal" href="#ch04-prop-kappa">Proposition 4.1</a>:</p>
+<ul class="simple">
+<li><p><em>Perturbations of <span class="math notranslate nohighlight">\(b\)</span>.</em> Take <span class="math notranslate nohighlight">\(x = v_1\)</span>, so that <span class="math notranslate nohighlight">\(b = \sigma_1u_1\)</span> and
+<span class="math notranslate nohighlight">\(\|b\|_2 = \|A\|_2\|x\|_2\)</span>, and <span class="math notranslate nohighlight">\(\Delta b = t\|b\|_2\,u_n\)</span>. Then
+<span class="math notranslate nohighlight">\(\Delta x = A^{-1}\Delta b = (t\sigma_1/\sigma_n)v_n\)</span>, and
+<span class="math notranslate nohighlight">\(\|\Delta x\|_2/\|x\|_2 = \kappa_2(A)\,t\)</span> exactly.</p></li>
+<li><p><em>Perturbations of <span class="math notranslate nohighlight">\(A\)</span>.</em> For any <span class="math notranslate nohighlight">\(x\)</span>, take
+<span class="math notranslate nohighlight">\(\Delta A = t\|A\|_2\,u_nx^T/\|x\|_2\)</span>, a rank-one matrix with
+<span class="math notranslate nohighlight">\(\|\Delta A\|_2 = t\|A\|_2\)</span>. To first order
+<span class="math notranslate nohighlight">\(\Delta x\approx-A^{-1}\Delta A\,x = -t\sigma_1\|x\|_2\,v_n/\sigma_n\)</span>, so
+<span class="math notranslate nohighlight">\(\|\Delta x\|_2/\|x\|_2 = \kappa_2(A)\,t + \bigO(t^2)\)</span>.</p></li>
+</ul>
+<p>So no smaller constant than <span class="math notranslate nohighlight">\(\kappa\)</span> can replace <span class="math notranslate nohighlight">\(\kappa\)</span> in a bound that
+holds for all data and all perturbations. That is <em>all</em> the sharpness says.
+For a particular right-hand side the relevant condition number is
+<a class="reference internal" href="#equation-ch04-eq-cond-rhs">(4.6)</a>, which can be as small as <span class="math notranslate nohighlight">\(1\)</span> (take <span class="math notranslate nohighlight">\(x = v_n\)</span>). For a
+particular perturbation the error can be much smaller than the bound, and
+random perturbations typically are not aligned with the worst direction. The
+lab measures the ratio of actual error to bound for aligned and for random
+perturbations.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A common statement is “if <span class="math notranslate nohighlight">\(\kappa(A)\approx10^k\)</span> then <span class="math notranslate nohighlight">\(k\)</span> digits are lost, and
+no algorithm can do better.” The precise statement is weaker and more useful.
+If the data are known only to relative accuracy <span class="math notranslate nohighlight">\(t\)</span>, then the data determine
+the solution only to relative accuracy about <span class="math notranslate nohighlight">\(\kappa t\)</span> in the worst case,
+because there are admissible data (aligned perturbations) whose solutions
+differ by that much. A backward stable algorithm (<a class="reference internal" href="#ch04-sec-stability"><span class="std std-numref">Section 4.5</span></a>)
+introduces a perturbation of relative size <span class="math notranslate nohighlight">\(\bigO(u)\)</span>, so its forward error is
+guaranteed to be <span class="math notranslate nohighlight">\(\bigO(\kappa u)\)</span>, and no better guarantee is possible for
+algorithms that are only known to be backward stable. For a given <span class="math notranslate nohighlight">\(b\)</span>, or
+for perturbations with structure (for example small relative perturbations of
+each entry, <a class="reference internal" href="#ch04-sec-componentwise"><span class="std std-numref">Section 4.4</span></a>), the actual loss of accuracy
+can be far smaller than <span class="math notranslate nohighlight">\(\log_{10}\kappa\)</span> digits.</p>
+</div>
+<div class="proof example admonition" id="ch04-exa-two-by-two">
+<p class="admonition-title"><span class="caption-number">Example 4.3 </span> (A <span class="math notranslate nohighlight">\(2\times2\)</span> system where the bound is attained)</p>
+<section class="example-content" id="proof-content">
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}1&amp;1\\1&amp;1.0001\end{bmatrix},\qquad
+A^{-1} = 10^4\begin{bmatrix}1.0001&amp;-1\\-1&amp;1\end{bmatrix}.
+\end{split}\]</div>
+<p>In the <span class="math notranslate nohighlight">\(\infty\)</span>-norm, <span class="math notranslate nohighlight">\(\|A\|_\infty = 2.0001\)</span> and
+<span class="math notranslate nohighlight">\(\|A^{-1}\|_\infty = 2.0001\times10^4\)</span>, so
+<span class="math notranslate nohighlight">\(\kappa_\infty(A) = 2.0001^2\times10^4\approx4.0004\times10^4\)</span>. Take
+<span class="math notranslate nohighlight">\(x = (1,1)^T\)</span>, so <span class="math notranslate nohighlight">\(b = (2, 2.0001)^T\)</span> and <span class="math notranslate nohighlight">\(\|b\|_\infty = \|A\|_\infty\|x\|_\infty\)</span>.
+Perturb <span class="math notranslate nohighlight">\(b\)</span> by <span class="math notranslate nohighlight">\(\Delta b = t(1,-1)^T\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta x = A^{-1}\Delta b = 10^4t\,(2.0001, -2)^T,\qquad
+\frac{\|\Delta x\|_\infty}{\|x\|_\infty} = 2.0001\times10^4\,t,\qquad
+\frac{\|\Delta b\|_\infty}{\|b\|_\infty} = \frac{t}{2.0001},
+\]</div>
+<p>and the amplification factor is exactly <span class="math notranslate nohighlight">\(2.0001^2\times10^4 = \kappa_\infty(A)\)</span>.
+With <span class="math notranslate nohighlight">\(t = 10^{-4}\)</span> a change in the fifth significant digit of <span class="math notranslate nohighlight">\(b\)</span> changes the
+solution from <span class="math notranslate nohighlight">\((1,1)^T\)</span> to <span class="math notranslate nohighlight">\((3.0001,-1)^T\)</span>. By contrast, the perturbation
+<span class="math notranslate nohighlight">\(\Delta b = t(1,1)^T\)</span> gives <span class="math notranslate nohighlight">\(\Delta x = t(1,0)^T\)</span>, an amplification of only
+<span class="math notranslate nohighlight">\(2.0001\)</span>.</p>
+</section>
+</div><div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>For the matrix of <a class="reference internal" href="#ch04-exa-two-by-two">Example 4.3</a>, is the problem of computing
+<span class="math notranslate nohighlight">\(Ax\)</span> for <span class="math notranslate nohighlight">\(x = (1,-1)^T\)</span> well-conditioned? Is solving <span class="math notranslate nohighlight">\(Ay = b\)</span> for
+<span class="math notranslate nohighlight">\(b = (1,-1)^T\)</span> well-conditioned?</p>
+<p><em>Answer.</em> <span class="math notranslate nohighlight">\(Ax = (0, -0.0001)^T\)</span>, so the condition number of multiplication
+is <span class="math notranslate nohighlight">\(\|A\|_\infty\|x\|_\infty/\|Ax\|_\infty = 2.0001/10^{-4}\approx2\times10^4\)</span>:
+the product is ill-conditioned because it involves cancellation. For the
+solve, <span class="math notranslate nohighlight">\(y = A^{-1}b = 10^4(2.0001,-2)^T\)</span> and the condition number
+<a class="reference internal" href="#equation-ch04-eq-cond-rhs">(4.6)</a> is
+<span class="math notranslate nohighlight">\(\|A^{-1}\|_\infty\|b\|_\infty/\|y\|_\infty = 2.0001\times10^4/(2.0001\times10^4) = 1\)</span>
+with respect to perturbations of <span class="math notranslate nohighlight">\(b\)</span>, although <span class="math notranslate nohighlight">\(\kappa_\infty(A)\approx4\times10^4\)</span>.
+With respect to perturbations of <span class="math notranslate nohighlight">\(A\)</span> the solve remains ill-conditioned.</p>
+</div>
+</section>
+<section id="the-distance-to-singularity">
+<span id="ch04-sec-distance"></span><h3><span class="section-number">4.3.3. </span>The distance to singularity<a class="headerlink" href="#the-distance-to-singularity" title="Link to this heading">#</a></h3>
+<p>The hypothesis <span class="math notranslate nohighlight">\(\|A^{-1}\|\,\|\Delta A\|&lt;1\)</span> of the perturbation theorem is
+not a technicality. It says that the relative perturbation
+<span class="math notranslate nohighlight">\(\|\Delta A\|/\|A\|\)</span> is smaller than <span class="math notranslate nohighlight">\(1/\kappa(A)\)</span>, and the next theorem shows
+that perturbations of that size can make <span class="math notranslate nohighlight">\(A\)</span> singular.</p>
+<div class="proof theorem admonition" id="ch04-thm-distance">
+<p class="admonition-title"><span class="caption-number">Theorem 4.3 </span> (Distance to the nearest singular matrix)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> be nonsingular. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\min\left\{\frac{\|\Delta A\|_2}{\|A\|_2} : A + \Delta A \text{ singular}\right\}
+= \frac{1}{\kappa_2(A)} .
+\]</div>
+<p>The minimum is attained by the rank-one matrix
+<span class="math notranslate nohighlight">\(\Delta A = -\sigma_nu_nv_n^T\)</span>. For any induced norm, every <span class="math notranslate nohighlight">\(\Delta A\)</span> with
+<span class="math notranslate nohighlight">\(A+\Delta A\)</span> singular satisfies <span class="math notranslate nohighlight">\(\|\Delta A\|/\|A\|\ge1/\kappa(A)\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Suppose <span class="math notranslate nohighlight">\(A + \Delta A\)</span> is singular, and let <span class="math notranslate nohighlight">\(z\neq0\)</span> with
+<span class="math notranslate nohighlight">\((A+\Delta A)z = 0\)</span>. Then <span class="math notranslate nohighlight">\(z = -A^{-1}\Delta A\,z\)</span>, so
+<span class="math notranslate nohighlight">\(\|z\|\le\|A^{-1}\|\,\|\Delta A\|\,\|z\|\)</span> and
+<span class="math notranslate nohighlight">\(\|\Delta A\|\ge1/\|A^{-1}\|\)</span>. Dividing by <span class="math notranslate nohighlight">\(\|A\|\)</span> gives the lower bound in
+any induced norm; in the 2-norm, <span class="math notranslate nohighlight">\(1/\|A^{-1}\|_2 = \sigma_n\)</span>. For the matrix
+<span class="math notranslate nohighlight">\(\Delta A = -\sigma_nu_nv_n^T\)</span> we have <span class="math notranslate nohighlight">\(\|\Delta A\|_2 = \sigma_n\)</span> and
+<span class="math notranslate nohighlight">\((A+\Delta A)v_n = \sigma_nu_n - \sigma_nu_n = 0\)</span>, so <span class="math notranslate nohighlight">\(A + \Delta A\)</span> is
+singular and the bound is attained.</p>
+</div>
+<p>In words, <span class="math notranslate nohighlight">\(1/\kappa_2(A)\)</span> is the relative distance from <span class="math notranslate nohighlight">\(A\)</span> to the set of
+singular matrices. The equality in fact holds for every induced norm (a
+theorem of Gastinel and Kahan, see <span class="bibtex-citation" id="id5">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Chapter 6), but the
+2-norm case, which uses the SVD, is the one we need. The theorem explains the
+practical meaning of <span class="math notranslate nohighlight">\(\kappa(A)u\gtrsim1\)</span>: such a matrix is within rounding
+distance of a singular matrix, and a computation that commits errors of
+relative size <span class="math notranslate nohighlight">\(u\)</span> in <span class="math notranslate nohighlight">\(A\)</span> cannot distinguish it from a singular one. We call
+it <em>numerically singular</em>. The Hilbert matrix <span class="math notranslate nohighlight">\(H_{12}\)</span>, with
+<span class="math notranslate nohighlight">\(\kappa_2(H_{12})\approx1.7\times10^{16}\)</span> (<a class="reference internal" href="#ch04-sec-hilbert"><span class="std std-numref">Section 4.8.1</span></a>), is an
+example.</p>
+</section>
+</section>
+<section id="componentwise-perturbation-theory">
+<span id="ch04-sec-componentwise"></span><h2><span class="section-number">4.4. </span>Componentwise perturbation theory<a class="headerlink" href="#componentwise-perturbation-theory" title="Link to this heading">#</a></h2>
+<p>Normwise perturbations <span class="math notranslate nohighlight">\(\|\Delta A\|\le t\|A\|\)</span> allow tiny entries of <span class="math notranslate nohighlight">\(A\)</span> to
+change by amounts comparable to its largest entries. That is often
+unrealistic. Rounding the data to floating point, for example, changes each
+entry by a relative amount at most <span class="math notranslate nohighlight">\(u\)</span>: <span class="math notranslate nohighlight">\(\fl(A) = A + \Delta A\)</span> with
+<span class="math notranslate nohighlight">\(|\Delta A|\le u|A|\)</span>, where <span class="math notranslate nohighlight">\(|A|\)</span> denotes the matrix of absolute values and
+the inequality holds entrywise. Perturbations of this form preserve zeros and
+are invariant under scaling of rows and columns.</p>
+<div class="proof theorem admonition" id="ch04-thm-componentwise">
+<p class="admonition-title"><span class="caption-number">Theorem 4.4 </span> (Componentwise perturbation bound)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> be nonsingular, <span class="math notranslate nohighlight">\(Ax = b\)</span> with <span class="math notranslate nohighlight">\(x\ne0\)</span>, and suppose
+<span class="math notranslate nohighlight">\((A+\Delta A)(x+\Delta x) = b+\Delta b\)</span> with <span class="math notranslate nohighlight">\(|\Delta A|\le t|A|\)</span> and
+<span class="math notranslate nohighlight">\(|\Delta b|\le t|b|\)</span>. If <span class="math notranslate nohighlight">\(t\,\||A^{-1}||A|\|_\infty&lt;1\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\|\Delta x\|_\infty}{\|x\|_\infty}\le
+\frac{t}{1-t\,\||A^{-1}||A|\|_\infty}\cdot
+\frac{\big\||A^{-1}|\,(|A||x| + |b|)\big\|_\infty}{\|x\|_\infty}
+\le\frac{2t\,\mathrm{cond}(A,x)}{1-t\,\mathrm{cond}(A)},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathrm{cond}(A,x)\)</span> and <span class="math notranslate nohighlight">\(\mathrm{cond}(A)\)</span> are defined in
+<a class="reference internal" href="#equation-ch04-eq-skeel">(4.8)</a>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. From <span class="math notranslate nohighlight">\(A\Delta x = \Delta b - \Delta A\,x - \Delta A\,\Delta x\)</span> we get
+<span class="math notranslate nohighlight">\(\Delta x = A^{-1}(\Delta b - \Delta A\,x - \Delta A\,\Delta x)\)</span>, and taking
+absolute values entrywise,</p>
+<div class="math notranslate nohighlight">
+\[
+|\Delta x|\le t\,|A^{-1}|\big(|b| + |A||x|\big) + t\,|A^{-1}||A||\Delta x| .
+\]</div>
+<p>Taking <span class="math notranslate nohighlight">\(\infty\)</span>-norms and using <span class="math notranslate nohighlight">\(\||A^{-1}||A||\Delta x|\|_\infty\le
+\||A^{-1}||A|\|_\infty\|\Delta x\|_\infty\)</span> gives the first inequality after
+rearranging. For the second, <span class="math notranslate nohighlight">\(|b| = |Ax|\le|A||x|\)</span>, so
+<span class="math notranslate nohighlight">\(|A^{-1}|(|A||x|+|b|)\le2|A^{-1}||A||x|\)</span>.</p>
+</div>
+<div class="proof definition admonition" id="ch04-def-skeel">
+<p class="admonition-title"><span class="caption-number">Definition 4.3 </span> (Skeel’s condition number)</p>
+<section class="definition-content" id="proof-content">
+<p>For nonsingular <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(x\neq0\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-skeel">
+<span class="eqno">(4.8)<a class="headerlink" href="#equation-ch04-eq-skeel" title="Link to this equation">#</a></span>\[
+\mathrm{cond}(A,x) = \frac{\big\||A^{-1}||A||x|\big\|_\infty}{\|x\|_\infty},
+\qquad
+\mathrm{cond}(A) = \mathrm{cond}(A, e) = \big\||A^{-1}||A|\big\|_\infty ,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(e = (1,\dots,1)^T\)</span> <span class="bibtex-citation" id="id6">[<a class="reference internal" href="../back/bibliography.html#id33" title="Robert D. Skeel. Iterative refinement implies numerical stability for Gaussian elimination. Mathematics of Computation, 35(151):817–832, 1980.">Skeel, 1980</a>]</span>.</p>
+</section>
+</div><div class="proof proposition admonition" id="ch04-prop-skeel">
+<p class="admonition-title"><span class="caption-number">Proposition 4.2 </span> (Properties of Skeel’s condition number)</p>
+<section class="proposition-content" id="proof-content">
+<p>For nonsingular <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(x\neq0\)</span> and nonsingular diagonal <span class="math notranslate nohighlight">\(D\)</span>,</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\mathrm{cond}(A,x)\le\mathrm{cond}(A)\le\kappa_\infty(A)\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathrm{cond}(DA) = \mathrm{cond}(A)\)</span> and <span class="math notranslate nohighlight">\(\mathrm{cond}(DA,x) = \mathrm{cond}(A,x)\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathrm{cond}(A)\ge1\)</span>.</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1) By submultiplicativity,</p>
+<div class="math notranslate nohighlight">
+\[
+\big\||A^{-1}||A||x|\big\|_\infty\le\big\||A^{-1}||A|\big\|_\infty\|x\|_\infty,
+\qquad
+\big\||A^{-1}||A|\big\|_\infty\le\big\||A^{-1}|\big\|_\infty\big\||A|\big\|_\infty
+= \|A^{-1}\|_\infty\|A\|_\infty,
+\]</div>
+<p>where the last step holds because the <span class="math notranslate nohighlight">\(\infty\)</span>-norm of a matrix depends only
+on the absolute values of its entries. (2) Since <span class="math notranslate nohighlight">\(D\)</span> is diagonal,
+<span class="math notranslate nohighlight">\(|(DA)^{-1}||DA| = |A^{-1}D^{-1}||D||A| = |A^{-1}||D^{-1}||D||A| = |A^{-1}||A|\)</span>.
+(3) <span class="math notranslate nohighlight">\(|A^{-1}||A|\ge|A^{-1}A| = I\)</span> entrywise.</p>
+</div>
+<p>Property 2 is the point: Skeel’s condition number ignores row scaling,
+whereas <span class="math notranslate nohighlight">\(\kappa_\infty(DA)\)</span> can be made arbitrarily large by choosing <span class="math notranslate nohighlight">\(D\)</span>.
+In fact <span class="math notranslate nohighlight">\(\mathrm{cond}(A) = \min_D\kappa_\infty(DA)\)</span> over nonsingular
+diagonal <span class="math notranslate nohighlight">\(D\)</span>: properties 1 and 2 give
+<span class="math notranslate nohighlight">\(\kappa_\infty(DA)\ge\mathrm{cond}(DA) = \mathrm{cond}(A)\)</span>, and the row
+equilibration <span class="math notranslate nohighlight">\(D = \diag\big(1/(|A|e)_i\big)\)</span> gives <span class="math notranslate nohighlight">\(\|DA\|_\infty = 1\)</span> and
+<span class="math notranslate nohighlight">\(\|(DA)^{-1}\|_\infty = \||A^{-1}|D^{-1}e\|_\infty =
+\||A^{-1}||A|e\|_\infty = \mathrm{cond}(A)\)</span>. So <span class="math notranslate nohighlight">\(\mathrm{cond}(A)\)</span> is the normwise condition number
+of the best row scaling of <span class="math notranslate nohighlight">\(A\)</span> <span class="bibtex-citation" id="id7">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Section 7.3).</p>
+<div class="proof example admonition" id="ch04-exa-row-scaling">
+<p class="admonition-title"><span class="caption-number">Example 4.4 </span> (A badly row-scaled matrix)</p>
+<section class="example-content" id="proof-content">
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}1&amp;1\\10^{-8}&amp;-10^{-8}\end{bmatrix}
+= \begin{bmatrix}1&amp;0\\0&amp;10^{-8}\end{bmatrix}\begin{bmatrix}1&amp;1\\1&amp;-1\end{bmatrix},
+\qquad
+A^{-1} = \frac12\begin{bmatrix}1&amp;10^8\\1&amp;-10^8\end{bmatrix}.
+\end{split}\]</div>
+<p>Then <span class="math notranslate nohighlight">\(\|A\|_\infty = 2\)</span> and <span class="math notranslate nohighlight">\(\|A^{-1}\|_\infty = (1+10^8)/2\)</span>, so
+<span class="math notranslate nohighlight">\(\kappa_\infty(A) = 1+10^8\)</span>. But
+<span class="math notranslate nohighlight">\(|A^{-1}||A| = \begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}\)</span> and
+<span class="math notranslate nohighlight">\(\mathrm{cond}(A) = 2\)</span>. Normwise perturbations of relative size <span class="math notranslate nohighlight">\(t\)</span> may change
+the second row by as much as <span class="math notranslate nohighlight">\(t\)</span>, which completely destroys an equation whose
+coefficients are <span class="math notranslate nohighlight">\(10^{-8}\)</span>; such perturbations can change <span class="math notranslate nohighlight">\(x\)</span> by a relative
+amount of order <span class="math notranslate nohighlight">\(10^8t\)</span>. Componentwise perturbations of the same size change
+<span class="math notranslate nohighlight">\(x\)</span> by at most about <span class="math notranslate nohighlight">\(4t\)</span>. Which bound is relevant depends on the errors the
+data actually have, and on the errors the algorithm actually commits. In the
+lab, <code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve</span></code> applied to a random <span class="math notranslate nohighlight">\(50\times50\)</span> matrix whose rows
+are scaled by factors from <span class="math notranslate nohighlight">\(1\)</span> to <span class="math notranslate nohighlight">\(10^{-12}\)</span> gives a forward error of the
+order of <span class="math notranslate nohighlight">\(\mathrm{cond}(A)u\)</span> or smaller, far below <span class="math notranslate nohighlight">\(\kappa_\infty(A)u\)</span>.</p>
+</section>
+</div><p>Gaussian elimination with partial pivoting is not guaranteed to produce
+componentwise small backward errors, but <span class="bibtex-citation" id="id8">Skeel [<a class="reference internal" href="../back/bibliography.html#id33" title="Robert D. Skeel. Iterative refinement implies numerical stability for Gaussian elimination. Mathematics of Computation, 35(151):817–832, 1980.">1980</a>]</span> proved that
+one step of iterative refinement in working precision makes the componentwise
+backward error small under mild conditions. We return to this in
+<a class="reference internal" href="../ch06-cholesky/notes.html#ch06"><span class="std std-numref">Chapter 6</span></a>.</p>
+</section>
+<section id="forward-error-backward-error-and-stability">
+<span id="ch04-sec-stability"></span><h2><span class="section-number">4.5. </span>Forward error, backward error and stability<a class="headerlink" href="#forward-error-backward-error-and-stability" title="Link to this heading">#</a></h2>
+<section id="definitions">
+<h3><span class="section-number">4.5.1. </span>Definitions<a class="headerlink" href="#definitions" title="Link to this heading">#</a></h3>
+<p>An <em>algorithm</em> for a problem <span class="math notranslate nohighlight">\(f: X\to Y\)</span> is a map <span class="math notranslate nohighlight">\(\hat f: X\to Y\)</span> defined by
+a sequence of floating-point operations; <span class="math notranslate nohighlight">\(\hat f(x)\)</span> is what the computer
+returns. It depends on the arithmetic, so it is a different map for each
+floating-point system.</p>
+<div class="proof definition admonition" id="ch04-def-errors">
+<p class="admonition-title"><span class="caption-number">Definition 4.4 </span> (Forward and backward error)</p>
+<section class="definition-content" id="proof-content">
+<p>The <em>forward error</em> of <span class="math notranslate nohighlight">\(\hat f\)</span> at <span class="math notranslate nohighlight">\(x\)</span> is <span class="math notranslate nohighlight">\(\|\hat f(x) - f(x)\|\)</span>, or
+<span class="math notranslate nohighlight">\(\|\hat f(x) - f(x)\|/\|f(x)\|\)</span> in relative terms. The (relative) <em>backward
+error</em> is</p>
+<div class="math notranslate nohighlight">
+\[
+\eta(x) = \inf\left\{\frac{\|\Delta x\|}{\|x\|} : \hat f(x) = f(x+\Delta x)\right\},
+\]</div>
+<p>the smallest relative perturbation of the data for which the computed answer
+is the exact answer (<span class="math notranslate nohighlight">\(\eta = \infty\)</span> if there is none).</p>
+</section>
+</div><p>The forward error is what we want to know, but we can rarely compute it,
+because <span class="math notranslate nohighlight">\(f(x)\)</span> is unknown. The backward error is often computable, and it
+compares the algorithm with the only standard that makes sense when the data
+themselves are uncertain: if <span class="math notranslate nohighlight">\(\eta(x)\)</span> is no larger than the uncertainty in
+the data, the computed answer is as good as the data deserve.</p>
+<div class="proof definition admonition" id="ch04-def-stability">
+<p class="admonition-title"><span class="caption-number">Definition 4.5 </span> (Stability)</p>
+<section class="definition-content" id="proof-content">
+<p>An algorithm <span class="math notranslate nohighlight">\(\hat f\)</span> for <span class="math notranslate nohighlight">\(f\)</span> is</p>
+<ol class="arabic simple">
+<li><p><em>backward stable</em> if for each <span class="math notranslate nohighlight">\(x\)</span> there is <span class="math notranslate nohighlight">\(\tilde x\)</span> with
+<span class="math notranslate nohighlight">\(\hat f(x) = f(\tilde x)\)</span> and <span class="math notranslate nohighlight">\(\|\tilde x - x\|/\|x\| = \bigO(u)\)</span>;</p></li>
+<li><p><em>stable</em> (or <em>mixed forward-backward stable</em>) if for each <span class="math notranslate nohighlight">\(x\)</span> there is
+<span class="math notranslate nohighlight">\(\tilde x\)</span> with <span class="math notranslate nohighlight">\(\|\tilde x - x\|/\|x\| = \bigO(u)\)</span> and
+<span class="math notranslate nohighlight">\(\|\hat f(x) - f(\tilde x)\|/\|f(\tilde x)\| = \bigO(u)\)</span>.</p></li>
+</ol>
+<p>Here <span class="math notranslate nohighlight">\(\bigO(u)\)</span> means: bounded by <span class="math notranslate nohighlight">\(Cu\)</span> for all <span class="math notranslate nohighlight">\(x\)</span> and all sufficiently small
+<span class="math notranslate nohighlight">\(u\)</span>, with a constant <span class="math notranslate nohighlight">\(C\)</span> that does not depend on <span class="math notranslate nohighlight">\(x\)</span> but may depend on the
+dimensions of the problem.</p>
+</section>
+</div><p>A stable algorithm gives “nearly the right answer to nearly the right
+question,” in the phrase of <span class="bibtex-citation" id="id9">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Lecture 14), and a
+backward stable algorithm gives “exactly the right answer to nearly the right
+question.” Backward stability implies stability. <span class="bibtex-citation" id="id10">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>
+(Chapter 1) also calls an algorithm <em>forward stable</em> if its forward error
+is of the size <span class="math notranslate nohighlight">\(\kappa u\)</span> that a backward stable algorithm would produce,
+whether or not it is backward stable.</p>
+<p>The basic floating-point operations are backward stable. For example,
+<span class="math notranslate nohighlight">\(\fl(x_1 - x_2) = (x_1-x_2)(1+\delta) = x_1(1+\delta) - x_2(1+\delta)\)</span> is the
+exact difference of data perturbed by relative amounts at most <span class="math notranslate nohighlight">\(u\)</span>. The same
+holds for <span class="math notranslate nohighlight">\(+\)</span>, <span class="math notranslate nohighlight">\(\times\)</span>, <span class="math notranslate nohighlight">\(/\)</span> and, with IEEE arithmetic, for <span class="math notranslate nohighlight">\(\sqrt{\ }\)</span>:
+<span class="math notranslate nohighlight">\(\fl(\sqrt x) = \sqrt x(1+\delta) = \sqrt{x(1+\delta)^2}\)</span>.</p>
+</section>
+<section id="forward-error-condition-number-and-backward-error">
+<h3><span class="section-number">4.5.2. </span>Forward error, condition number and backward error<a class="headerlink" href="#forward-error-condition-number-and-backward-error" title="Link to this heading">#</a></h3>
+<p>Suppose <span class="math notranslate nohighlight">\(\hat f(x) = f(x+\Delta x)\)</span> with <span class="math notranslate nohighlight">\(\|\Delta x\|/\|x\| = \eta\)</span>. By the
+definition <a class="reference internal" href="#equation-ch04-eq-rel-cond">(4.1)</a> of the relative condition number,</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\|\hat f(x) - f(x)\|}{\|f(x)\|} = \frac{\|f(x+\Delta x) - f(x)\|}{\|f(x)\|}
+\le\big(\kappa(x) + o(1)\big)\,\eta \qquad(\eta\to0).
+\]</div>
+<p>If <span class="math notranslate nohighlight">\(f\)</span> is twice continuously differentiable, a Taylor expansion
+<span class="math notranslate nohighlight">\(f(x+\Delta x) - f(x) = J(x)\Delta x + \bigO(\|\Delta x\|^2)\)</span> gives the more
+explicit form</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-rule">
+<span class="eqno">(4.9)<a class="headerlink" href="#equation-ch04-eq-rule" title="Link to this equation">#</a></span>\[
+\frac{\|\hat f(x) - f(x)\|}{\|f(x)\|}\le\kappa(x)\,\eta + \bigO(\eta^2).
+\]</div>
+<p>This is the precise content of the rule “forward error <span class="math notranslate nohighlight">\(\lesssim\)</span> condition
+number <span class="math notranslate nohighlight">\(\times\)</span> backward error.” It separates the two sources of error: the
+condition number belongs to the problem and the backward error to the
+algorithm.</p>
+<div class="proof theorem admonition" id="ch04-thm-accuracy">
+<p class="admonition-title"><span class="caption-number">Theorem 4.5 </span> (Accuracy of backward stable algorithms)</p>
+<section class="theorem-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(\hat f\)</span> is a backward stable algorithm for a problem <span class="math notranslate nohighlight">\(f\)</span> with relative
+condition number <span class="math notranslate nohighlight">\(\kappa(x)\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\|\hat f(x) - f(x)\|}{\|f(x)\|} = \bigO\big(\kappa(x)\,u\big).
+\]</div>
+<p>If <span class="math notranslate nohighlight">\(\hat f\)</span> is only stable, the relative forward error is
+<span class="math notranslate nohighlight">\(\bigO\big((1+\kappa(x))u\big)\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Backward stability gives <span class="math notranslate nohighlight">\(\tilde x\)</span> with <span class="math notranslate nohighlight">\(\hat f(x) = f(\tilde x)\)</span> and
+<span class="math notranslate nohighlight">\(\|\tilde x - x\|/\|x\|\le Cu\)</span>. By <a class="reference internal" href="#equation-ch04-eq-rel-cond">(4.1)</a>,
+<span class="math notranslate nohighlight">\(\|f(\tilde x) - f(x)\|/\|f(x)\|\le(\kappa(x)+o(1))Cu\)</span> as <span class="math notranslate nohighlight">\(u\to0\)</span>, which is
+<span class="math notranslate nohighlight">\(\bigO(\kappa(x)u)\)</span>. For a stable algorithm write
+<span class="math notranslate nohighlight">\(\hat f(x) - f(x) = \big(\hat f(x) - f(\tilde x)\big) + \big(f(\tilde x) - f(x)\big)\)</span>.
+The second term is bounded as before. The first is at most
+<span class="math notranslate nohighlight">\(C'u\,\|f(\tilde x)\|\le C'u\big(\|f(x)\| + \|f(\tilde x) - f(x)\|\big)\)</span>,
+which is <span class="math notranslate nohighlight">\(C'u\big(1 + \bigO(\kappa(x)u)\big)\|f(x)\|\)</span> and hence
+<span class="math notranslate nohighlight">\(\bigO\big((1+\kappa(x))u\big)\|f(x)\|\)</span>.</p>
+</div>
+<p>This is Theorem 15.1 of <span class="bibtex-citation" id="id11">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span>, translated to <span class="math notranslate nohighlight">\(u\)</span>. It
+explains why backward error analysis became the standard method for
+analyzing algorithms: the stability of the algorithm and the conditioning of
+the problem can be studied separately and then combined.</p>
+</section>
+</section>
+<section id="backward-errors-for-linear-systems">
+<span id="ch04-sec-backward-error-linear"></span><h2><span class="section-number">4.6. </span>Backward errors for linear systems<a class="headerlink" href="#backward-errors-for-linear-systems" title="Link to this heading">#</a></h2>
+<p>For <span class="math notranslate nohighlight">\(Ax = b\)</span> the backward error of an approximate solution <span class="math notranslate nohighlight">\(y\)</span> can be computed
+exactly from the residual <span class="math notranslate nohighlight">\(r = b - Ay\)</span>. Which formula is right depends on which
+data we allow to be perturbed and how we measure the perturbation.</p>
+<div class="proof theorem admonition" id="ch04-thm-rigal-gaches">
+<p class="admonition-title"><span class="caption-number">Theorem 4.6 </span> (Rigal–Gaches)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span>, <span class="math notranslate nohighlight">\(b\in\R^n\)</span>, <span class="math notranslate nohighlight">\(y\in\R^n\)</span> with <span class="math notranslate nohighlight">\(\|A\|\,\|y\|+\|b\|&gt;0\)</span>,
+and <span class="math notranslate nohighlight">\(r = b - Ay\)</span>. The normwise backward error</p>
+<div class="math notranslate nohighlight">
+\[
+\eta(y) = \min\big\{t : (A+\Delta A)y = b+\Delta b,\ \|\Delta A\|\le t\|A\|,\
+\|\Delta b\|\le t\|b\|\big\}
+\]</div>
+<p>is given by</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-rigal-gaches">
+<span class="eqno">(4.10)<a class="headerlink" href="#equation-ch04-eq-rigal-gaches" title="Link to this equation">#</a></span>\[
+\eta(y) = \frac{\|r\|}{\|A\|\,\|y\| + \|b\|}.
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. We give the proof for the 2-norm; <span class="bibtex-citation" id="id12">Rigal and Gaches [<a class="reference internal" href="../back/bibliography.html#id30" title="J. L. Rigal and J. Gaches. On the compatibility of a given solution with the data of a linear system. Journal of the ACM, 14(3):543–548, 1967.">1967</a>]</span> treat general norms
+(see also <span class="bibtex-citation" id="id13">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Section 7.1). If <span class="math notranslate nohighlight">\((A+\Delta A)y = b + \Delta b\)</span>
+with <span class="math notranslate nohighlight">\(\|\Delta A\|\le t\|A\|\)</span> and <span class="math notranslate nohighlight">\(\|\Delta b\|\le t\|b\|\)</span>, then
+<span class="math notranslate nohighlight">\(r = b - Ay = \Delta A\,y - \Delta b\)</span>, so
+<span class="math notranslate nohighlight">\(\|r\|\le t(\|A\|\,\|y\| + \|b\|)\)</span> and <span class="math notranslate nohighlight">\(t\ge\eta(y)\)</span>. Conversely, let
+<span class="math notranslate nohighlight">\(\eta = \eta(y)\)</span>, <span class="math notranslate nohighlight">\(\alpha = \|A\|_2\|y\|_2 + \|b\|_2\)</span>, and (if <span class="math notranslate nohighlight">\(y\ne0\)</span>)</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta A = \frac{\|A\|_2\|y\|_2}{\alpha}\,\frac{r\,y^T}{\|y\|_2^2},\qquad
+\Delta b = -\frac{\|b\|_2}{\alpha}\,r .
+\]</div>
+<p>Then <span class="math notranslate nohighlight">\(\Delta A\,y - \Delta b = r(\|A\|_2\|y\|_2 + \|b\|_2)/\alpha = r\)</span>, so
+<span class="math notranslate nohighlight">\((A+\Delta A)y = b+\Delta b\)</span>. Since <span class="math notranslate nohighlight">\(\|ry^T\|_2 = \|r\|_2\|y\|_2\)</span>, we get
+<span class="math notranslate nohighlight">\(\|\Delta A\|_2 = \|A\|_2\|r\|_2/\alpha = \eta\|A\|_2\)</span> and
+<span class="math notranslate nohighlight">\(\|\Delta b\|_2 = \eta\|b\|_2\)</span>. (If <span class="math notranslate nohighlight">\(y = 0\)</span> take <span class="math notranslate nohighlight">\(\Delta A = 0\)</span> and
+<span class="math notranslate nohighlight">\(\Delta b = -b\)</span>.) So the minimum is attained and equals <span class="math notranslate nohighlight">\(\eta\)</span>.</p>
+</div>
+<p>Combining this with <a class="reference internal" href="#ch04-thm-perturbation">Theorem 4.2</a> gives a computable error
+bound. If a solver returns <span class="math notranslate nohighlight">\(y\)</span> with <span class="math notranslate nohighlight">\(\kappa(A)\eta(y)&lt;1\)</span>, then</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-linear-accuracy">
+<span class="eqno">(4.11)<a class="headerlink" href="#equation-ch04-eq-linear-accuracy" title="Link to this equation">#</a></span>\[
+\frac{\|y - x\|}{\|x\|}\le\frac{2\kappa(A)\,\eta(y)}{1-\kappa(A)\,\eta(y)} .
+\]</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The relative residual <span class="math notranslate nohighlight">\(\|r\|/\|b\|\)</span> is <em>not</em> the backward error in general.
+It is the backward error when only <span class="math notranslate nohighlight">\(b\)</span> may be perturbed
+(<a class="reference internal" href="#ch04-ex-one-sided-backward"><span class="std std-numref">Exercise 4.5</span></a>), and by <a class="reference internal" href="#equation-ch04-eq-rigal-gaches">(4.10)</a> it
+exceeds <span class="math notranslate nohighlight">\(\eta(y)\)</span> by exactly the factor <span class="math notranslate nohighlight">\(1 + \|A\|\,\|y\|/\|b\|\)</span>, which for
+<span class="math notranslate nohighlight">\(y\approx x\)</span> can be as large as about <span class="math notranslate nohighlight">\(1+\kappa(A)\)</span>. A backward stable solver
+guarantees that <span class="math notranslate nohighlight">\(\eta(y)\)</span> is small; it does not guarantee a small relative
+residual. In the lab, for a random right-hand side and <span class="math notranslate nohighlight">\(\kappa_2(A) = 10^{12}\)</span>, <code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve</span></code> returns <span class="math notranslate nohighlight">\(y\)</span> with
+<span class="math notranslate nohighlight">\(\eta(y)\)</span> of order <span class="math notranslate nohighlight">\(u\)</span> while <span class="math notranslate nohighlight">\(\|r\|_2/\|b\|_2\)</span> is many orders of magnitude
+larger. The quantity
+<span class="math notranslate nohighlight">\(\|r\|/(\|A\|\,\|y\|)\)</span>, the backward error when only <span class="math notranslate nohighlight">\(A\)</span> may be perturbed,
+satisfies <span class="math notranslate nohighlight">\(\eta\le\|r\|/(\|A\|\,\|y\|)\le2\eta\)</span> whenever
+<span class="math notranslate nohighlight">\(\|A\|\,\|y\|\ge\|b\|\)</span>, so it is interchangeable with <span class="math notranslate nohighlight">\(\eta\)</span> in practice.</p>
+</div>
+<p>When each entry of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(b\)</span> carries its own relative uncertainty, the
+right measure is componentwise.</p>
+<div class="proof theorem admonition" id="ch04-thm-oettli-prager">
+<p class="admonition-title"><span class="caption-number">Theorem 4.7 </span> (Oettli–Prager)</p>
+<section class="theorem-content" id="proof-content">
+<p>With <span class="math notranslate nohighlight">\(r = b - Ay\)</span>, the componentwise backward error</p>
+<div class="math notranslate nohighlight">
+\[
+\omega(y) = \min\big\{t : (A+\Delta A)y = b+\Delta b,\ |\Delta A|\le t|A|,\
+|\Delta b|\le t|b|\big\}
+\]</div>
+<p>is given by</p>
+<div class="math notranslate nohighlight" id="equation-ch04-eq-oettli-prager">
+<span class="eqno">(4.12)<a class="headerlink" href="#equation-ch04-eq-oettli-prager" title="Link to this equation">#</a></span>\[
+\omega(y) = \max_{1\le i\le n}\frac{|r_i|}{(|A||y| + |b|)_i},
+\]</div>
+<p>with the conventions <span class="math notranslate nohighlight">\(0/0 = 0\)</span> and <span class="math notranslate nohighlight">\(\xi/0 = \infty\)</span> for <span class="math notranslate nohighlight">\(\xi\neq0\)</span>
+<span class="bibtex-citation" id="id14">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Section 7.2).</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. If <span class="math notranslate nohighlight">\((A+\Delta A)y = b+\Delta b\)</span> with <span class="math notranslate nohighlight">\(|\Delta A|\le t|A|\)</span> and
+<span class="math notranslate nohighlight">\(|\Delta b|\le t|b|\)</span>, then <span class="math notranslate nohighlight">\(|r| = |\Delta A\,y - \Delta b|\le t(|A||y| + |b|)\)</span>,
+so <span class="math notranslate nohighlight">\(t\ge\omega(y)\)</span>. Conversely, let <span class="math notranslate nohighlight">\(D = \diag(d_i)\)</span> with
+<span class="math notranslate nohighlight">\(d_i = r_i/(|A||y|+|b|)_i\)</span> (and <span class="math notranslate nohighlight">\(d_i = 0\)</span> if <span class="math notranslate nohighlight">\(r_i = 0\)</span>), let
+<span class="math notranslate nohighlight">\(S = \diag(\sign(y_j))\)</span>, and put <span class="math notranslate nohighlight">\(\Delta A = D|A|S\)</span> and <span class="math notranslate nohighlight">\(\Delta b = -D|b|\)</span>.
+Then <span class="math notranslate nohighlight">\(\Delta A\,y - \Delta b = D(|A||y| + |b|) = r\)</span>, and
+<span class="math notranslate nohighlight">\(|\Delta A|\le\omega|A|\)</span>, <span class="math notranslate nohighlight">\(|\Delta b|\le\omega|b|\)</span>.</p>
+</div>
+<p>These formulas lead to a practical procedure that is carried out, in some
+form, by careful linear-equation software such as LAPACK
+<span class="bibtex-citation" id="id15">[<a class="reference internal" href="../back/bibliography.html#id24" title="E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen. LAPACK Users' Guide. SIAM, Philadelphia, 3rd edition, 1999.">Anderson <em>et al.</em>, 1999</a>]</span>.</p>
+<div class="proof algorithm admonition" id="ch04-alg-assessment">
+<p class="admonition-title"><span class="caption-number">Algorithm 4.1 </span> (A posteriori assessment of a computed solution)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span>, <span class="math notranslate nohighlight">\(b\in\R^n\)</span>, a computed solution <span class="math notranslate nohighlight">\(y\)</span>, and an
+LU factorization of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<p><strong>Output:</strong> backward errors <span class="math notranslate nohighlight">\(\eta_\infty(y)\)</span> and <span class="math notranslate nohighlight">\(\omega(y)\)</span>, and an
+approximate forward error bound.</p>
+<ol class="arabic simple">
+<li><p>Compute the residual <span class="math notranslate nohighlight">\(r = b - Ay\)</span> (<span class="math notranslate nohighlight">\(2n^2\)</span> flops).</p></li>
+<li><p><span class="math notranslate nohighlight">\(\eta_\infty\leftarrow\|r\|_\infty/(\|A\|_\infty\|y\|_\infty + \|b\|_\infty)\)</span>
+(<span class="math notranslate nohighlight">\(n^2\)</span> flops for <span class="math notranslate nohighlight">\(\|A\|_\infty\)</span>).</p></li>
+<li><p><span class="math notranslate nohighlight">\(\omega\leftarrow\max_i|r_i|/(|A||y|+|b|)_i\)</span> (<span class="math notranslate nohighlight">\(2n^2\)</span> flops).</p></li>
+<li><p>Estimate <span class="math notranslate nohighlight">\(\kappa_\infty(A)\)</span> with a condition estimator that uses a few
+solves with the LU factors (<span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> flops) <span class="bibtex-citation" id="id16">[<a class="reference internal" href="../back/bibliography.html#id36" title="William W. Hager. Condition estimates. SIAM Journal on Scientific and Statistical Computing, 5(2):311–316, 1984.">Hager, 1984</a>]</span>.</p></li>
+<li><p>Report <span class="math notranslate nohighlight">\(2\kappa_\infty\eta_\infty/(1-\kappa_\infty\eta_\infty)\)</span> as an
+estimate of <span class="math notranslate nohighlight">\(\|y-x\|_\infty/\|x\|_\infty\)</span> if <span class="math notranslate nohighlight">\(\kappa_\infty\eta_\infty&lt;1\)</span>.</p></li>
+</ol>
+</section>
+</div><p>The cost is <span class="math notranslate nohighlight">\(\bigO(n^2)\)</span>, negligible next to the <span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> flops of the
+LU factorization (<a class="reference internal" href="../ch05-lu/notes.html#ch05"><span class="std std-numref">Chapter 5</span></a>). Two cautions apply. The
+residual is itself computed in floating point, with an error bounded by
+<span class="math notranslate nohighlight">\(\gamma_{n+1}(|b| + |A||y|)\)</span> entrywise, so computed backward errors below
+about <span class="math notranslate nohighlight">\(nu\)</span> are not meaningful; and the bound in step 5 is only as reliable as
+the condition estimate, which is reliable in practice but is a lower bound
+that carries no guarantee of accuracy <span class="bibtex-citation" id="id17">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Chapter 15).</p>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>A colleague solves a system with <span class="math notranslate nohighlight">\(\kappa_\infty(A)\approx10^{10}\)</span> and reports
+that the solution must be accurate because the residual satisfies
+<span class="math notranslate nohighlight">\(\|r\|_\infty/(\|A\|_\infty\|y\|_\infty)\approx10^{-16}\)</span>. What can you
+conclude?</p>
+<p><em>Answer.</em> The residual shows that <span class="math notranslate nohighlight">\(y\)</span> is the exact solution of a system whose
+matrix differs from <span class="math notranslate nohighlight">\(A\)</span> by a relative amount of about <span class="math notranslate nohighlight">\(10^{-16}\)</span>: the solver
+did its job. By <a class="reference internal" href="#equation-ch04-eq-linear-accuracy">(4.11)</a> the relative forward error is at
+most about <span class="math notranslate nohighlight">\(2\times10^{10}\times10^{-16} = 2\times10^{-6}\)</span>, so about five or
+six correct digits are guaranteed, not sixteen. More digits may be correct
+for this particular <span class="math notranslate nohighlight">\(b\)</span> and perturbation, but the residual cannot show it.</p>
+</div>
+</section>
+<section id="stable-and-unstable-algorithms">
+<span id="ch04-sec-examples"></span><h2><span class="section-number">4.7. </span>Stable and unstable algorithms<a class="headerlink" href="#stable-and-unstable-algorithms" title="Link to this heading">#</a></h2>
+<p>Rounding error analysis rests on the model
+<span class="math notranslate nohighlight">\(\fl(a\circ b) = (a\circ b)(1+\delta)\)</span>, <span class="math notranslate nohighlight">\(|\delta|\le u\)</span>, and on the following
+lemma for accumulating the factors <span class="math notranslate nohighlight">\(1+\delta\)</span>. It is proved in
+<span class="bibtex-citation" id="id18">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> (Lemma 3.1) and in <a class="reference internal" href="../ch03-floating-point/notes.html#ch03"><span class="std std-numref">Chapter 3</span></a>.</p>
+<div class="proof lemma admonition" id="ch04-lem-gamma">
+<p class="admonition-title"><span class="caption-number">Lemma 4.2 </span> (Products of rounding factors)</p>
+<section class="lemma-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(|\delta_i|\le u\)</span> and <span class="math notranslate nohighlight">\(\rho_i = \pm1\)</span> for <span class="math notranslate nohighlight">\(i = 1,\dots,k\)</span>, and <span class="math notranslate nohighlight">\(ku&lt;1\)</span>, then
+<span class="math notranslate nohighlight">\(\prod_{i=1}^k(1+\delta_i)^{\rho_i} = 1 + \theta_k\)</span> with
+<span class="math notranslate nohighlight">\(|\theta_k|\le\gamma_k = ku/(1-ku)\)</span>.</p>
+</section>
+</div><section id="inner-products-are-backward-stable">
+<h3><span class="section-number">4.7.1. </span>Inner products are backward stable<a class="headerlink" href="#inner-products-are-backward-stable" title="Link to this heading">#</a></h3>
+<div class="proof theorem admonition" id="ch04-thm-inner-product">
+<p class="admonition-title"><span class="caption-number">Theorem 4.8 </span> (Rounding errors in inner products)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(x,y\in\R^n\)</span> and let <span class="math notranslate nohighlight">\(\hat s\)</span> be the value of <span class="math notranslate nohighlight">\(x^Ty\)</span> computed by
+recursive summation, <span class="math notranslate nohighlight">\(s\leftarrow x_1y_1\)</span> and <span class="math notranslate nohighlight">\(s\leftarrow s + x_ky_k\)</span> for
+<span class="math notranslate nohighlight">\(k = 2,\dots,n\)</span>. If <span class="math notranslate nohighlight">\(nu&lt;1\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[
+\hat s = (x+\Delta x)^Ty,\qquad |\Delta x|\le\gamma_n|x|,
+\]</div>
+<p>and consequently <span class="math notranslate nohighlight">\(|\hat s - x^Ty|\le\gamma_n\,|x|^T|y|\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Each product is computed as <span class="math notranslate nohighlight">\(x_ky_k(1+\epsilon_k)\)</span> and each addition
+contributes a factor <span class="math notranslate nohighlight">\(1+\delta_k\)</span>, <span class="math notranslate nohighlight">\(k\ge2\)</span>. Unrolling the recursion,</p>
+<div class="math notranslate nohighlight">
+\[
+\hat s = x_1y_1(1+\epsilon_1)\prod_{j=2}^n(1+\delta_j)
++ \sum_{k=2}^n x_ky_k(1+\epsilon_k)\prod_{j=k}^n(1+\delta_j).
+\]</div>
+<p>The <span class="math notranslate nohighlight">\(k\)</span>th term carries at most <span class="math notranslate nohighlight">\(n\)</span> rounding factors, so by
+<a class="reference internal" href="#ch04-lem-gamma">Lemma 4.2</a> it equals <span class="math notranslate nohighlight">\(x_ky_k(1+\theta^{(k)})\)</span> with
+<span class="math notranslate nohighlight">\(|\theta^{(k)}|\le\gamma_n\)</span>. Put <span class="math notranslate nohighlight">\(\Delta x_k = \theta^{(k)}x_k\)</span>. The forward
+bound follows from <span class="math notranslate nohighlight">\(|\hat s - x^Ty| = |\Delta x^Ty|\le\gamma_n|x|^T|y|\)</span>.</p>
+</div>
+<p>The computed inner product is the exact inner product of slightly perturbed
+data, so the algorithm is backward stable, with a componentwise backward error
+of at most <span class="math notranslate nohighlight">\(\gamma_n\approx nu\)</span>. The forward error bound is this backward
+error times the componentwise condition number <span class="math notranslate nohighlight">\(|x|^T|y|/|x^Ty|\)</span> from
+<a class="reference internal" href="#equation-ch04-eq-comp-cond">(4.3)</a>. When <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> are nearly orthogonal, that
+condition number is large and a small relative error in <span class="math notranslate nohighlight">\(\hat s\)</span> cannot be
+expected. Other summation orders (pairwise, blocked, the orders used by BLAS
+libraries) satisfy the same bound or better.</p>
+</section>
+<section id="outer-products-are-not-backward-stable">
+<h3><span class="section-number">4.7.2. </span>Outer products are not backward stable<a class="headerlink" href="#outer-products-are-not-backward-stable" title="Link to this heading">#</a></h3>
+<p>The outer product <span class="math notranslate nohighlight">\(A = xy^T\)</span> with <span class="math notranslate nohighlight">\(x\in\R^m\)</span>, <span class="math notranslate nohighlight">\(y\in\R^n\)</span> is computed entry by
+entry as <span class="math notranslate nohighlight">\(\hat a_{ij} = x_iy_j(1+\delta_{ij})\)</span>. Each entry is accurate to
+relative error <span class="math notranslate nohighlight">\(u\)</span>, so <span class="math notranslate nohighlight">\(\hat A\)</span> is very accurate in the componentwise sense,
+and the algorithm is stable (take <span class="math notranslate nohighlight">\(\tilde x = x\)</span>, <span class="math notranslate nohighlight">\(\tilde y = y\)</span> in the
+definition). But it is not backward stable: the exact outer product of any
+perturbed data <span class="math notranslate nohighlight">\((x+\Delta x)(y+\Delta y)^T\)</span> has rank one, while <span class="math notranslate nohighlight">\(\hat A\)</span>
+generally has rank greater than one, because the independent factors
+<span class="math notranslate nohighlight">\(1+\delta_{ij}\)</span> destroy the proportionality of its rows. The lab verifies in
+exact rational arithmetic that a <span class="math notranslate nohighlight">\(2\times2\)</span> minor of a computed outer product
+is nonzero. Backward stability is a strong property that fails for many
+perfectly good computations whose output has more degrees of freedom than
+their input <span class="bibtex-citation" id="id19">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span> (Lecture 15).</p>
+</section>
+<section id="bilinear-forms">
+<h3><span class="section-number">4.7.3. </span>Bilinear forms<a class="headerlink" href="#bilinear-forms" title="Link to this heading">#</a></h3>
+<p>The same reasoning handles compound computations. Consider <span class="math notranslate nohighlight">\(x^TAy\)</span> for
+<span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span>, computed as <span class="math notranslate nohighlight">\(z = Ay\)</span> followed by <span class="math notranslate nohighlight">\(x^Tz\)</span>. Each entry of
+<span class="math notranslate nohighlight">\(z\)</span> is an inner product, so <span class="math notranslate nohighlight">\(\hat z = (A + \Delta A)y\)</span> with
+<span class="math notranslate nohighlight">\(|\Delta A|\le\gamma_n|A|\)</span>, and then <span class="math notranslate nohighlight">\(\fl(x^T\hat z) = (x+\Delta x)^T\hat z\)</span>
+with <span class="math notranslate nohighlight">\(|\Delta x|\le\gamma_n|x|\)</span>. Hence</p>
+<div class="math notranslate nohighlight">
+\[
+\fl(x^TAy) = (x+\Delta x)^T(A+\Delta A)\,y .
+\]</div>
+<p>Writing <span class="math notranslate nohighlight">\(x_i + \Delta x_i = x_i(1+\theta_i)\)</span> we can move this perturbation
+into <span class="math notranslate nohighlight">\(A\)</span>: the result equals <span class="math notranslate nohighlight">\(x^T(A + E)y\)</span> with
+<span class="math notranslate nohighlight">\(e_{ij} = a_{ij}\big((1+\theta_i)(1+\phi_{ij}) - 1\big)\)</span>, where
+<span class="math notranslate nohighlight">\(|\phi_{ij}|\le\gamma_n\)</span>. Since <span class="math notranslate nohighlight">\((1+\gamma_n)^2\le1+\gamma_{2n}\)</span>, we get
+<span class="math notranslate nohighlight">\(|E|\le\gamma_{2n}|A|\)</span>: the computation is backward stable with respect to
+<span class="math notranslate nohighlight">\(A\)</span> alone, and</p>
+<div class="math notranslate nohighlight">
+\[
+|\fl(x^TAy) - x^TAy|\le\gamma_{2n}\,|x|^T|A||y| .
+\]</div>
+</section>
+<section id="an-unstable-algorithm-for-a-well-conditioned-problem">
+<h3><span class="section-number">4.7.4. </span>An unstable algorithm for a well-conditioned problem<a class="headerlink" href="#an-unstable-algorithm-for-a-well-conditioned-problem" title="Link to this heading">#</a></h3>
+<div class="proof example admonition" id="ch04-exa-exp">
+<p class="admonition-title"><span class="caption-number">Example 4.5 </span> (Computing <span class="math notranslate nohighlight">\(e^{-x}\)</span> from its Taylor series)</p>
+<section class="example-content" id="proof-content">
+<p>The problem <span class="math notranslate nohighlight">\(f(x) = e^{-x}\)</span> has relative condition number
+<span class="math notranslate nohighlight">\(\kappa(x) = |xf'(x)/f(x)| = |x|\)</span>, so for <span class="math notranslate nohighlight">\(x = 20\)</span> a stable algorithm must
+deliver about <span class="math notranslate nohighlight">\(20u\approx2\times10^{-15}\)</span> relative accuracy. Consider summing
+the Taylor series <span class="math notranslate nohighlight">\(\sum_{k\ge0}(-x)^k/k!\)</span> term by term until the partial sums
+stop changing. For <span class="math notranslate nohighlight">\(x = 20\)</span> the terms alternate in sign and the largest,
+<span class="math notranslate nohighlight">\(20^{20}/20!\)</span>, is about <span class="math notranslate nohighlight">\(4.3\times10^7\)</span>, while the answer is
+<span class="math notranslate nohighlight">\(e^{-20}\approx2.06\times10^{-9}\)</span>. A single rounding error committed while
+the partial sums are of size <span class="math notranslate nohighlight">\(4\times10^7\)</span> has absolute size up to about
+<span class="math notranslate nohighlight">\(4.3\times10^7u\approx5\times10^{-9}\)</span>, more than the answer itself. In double precision the computed sum is
+about <span class="math notranslate nohighlight">\(5.6\times10^{-9}\)</span>, with relative error about <span class="math notranslate nohighlight">\(1.7\)</span>.</p>
+<p>The problem is not ill-conditioned; the algorithm is unstable. It passes
+through an intermediate problem, summing numbers of both signs, whose
+condition number <span class="math notranslate nohighlight">\(\sum_k|t_k|/|\sum_kt_k|\)</span> is <span class="math notranslate nohighlight">\(e^{x}/e^{-x} = e^{2x}\)</span>, about
+<span class="math notranslate nohighlight">\(2.4\times10^{17}\)</span> for <span class="math notranslate nohighlight">\(x = 20\)</span> (<a class="reference internal" href="#ch04-ex-summation"><span class="std std-numref">Exercise 4.11</span></a>). The cure is to
+avoid the cancellation: compute <span class="math notranslate nohighlight">\(e^{x}\)</span> from its series, all of whose terms
+are positive (a well-conditioned sum), and take the reciprocal, which is also
+well-conditioned. <a class="reference internal" href="#ch04-fig-exp"><span class="std std-numref">Figure 4.3</span></a> shows the relative errors of both
+algorithms.</p>
+</section>
+</div><figure class="align-default" id="ch04-fig-exp">
+<a class="reference internal image-reference" href="../_images/ch04-exp-series.png"><img alt="Relative error in e^{-x} against x on a log scale. The alternating Taylor series has error growing like u e^{2x}, reaching about 1e18 at x = 40; the reciprocal of the series for e^x stays below about 1e-15." src="../_images/ch04-exp-series.png" style="width: 75%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4.3 </span><span class="caption-text">Relative error in <span class="math notranslate nohighlight">\(e^{-x}\)</span> computed by summing its Taylor series (unstable)
+and as the reciprocal of the Taylor series for <span class="math notranslate nohighlight">\(e^{x}\)</span> (stable). The error of
+the unstable algorithm grows like <span class="math notranslate nohighlight">\(u\,e^{2x}\)</span>, <span class="math notranslate nohighlight">\(u\)</span> times the condition number of
+the intermediate summation; the error of the stable algorithm stays within a
+factor of <span class="math notranslate nohighlight">\(4\)</span> of <span class="math notranslate nohighlight">\(u\kappa(x) = ux\)</span>.</span><a class="headerlink" href="#ch04-fig-exp" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>A second example is short enough to do by hand. The function
+<span class="math notranslate nohighlight">\(f(x) = 1-\cos x\)</span> has <span class="math notranslate nohighlight">\(\kappa(x) = x\sin x/(1-\cos x)\)</span>, which tends to <span class="math notranslate nohighlight">\(2\)</span> as
+<span class="math notranslate nohighlight">\(x\to0\)</span>: the problem is well-conditioned. For <span class="math notranslate nohighlight">\(x = 10^{-8}\)</span>, however,
+<span class="math notranslate nohighlight">\(\cos x = 1 - 5\times10^{-17} + \dots\)</span> rounds to exactly <span class="math notranslate nohighlight">\(1\)</span>, and the formula
+<span class="math notranslate nohighlight">\(1 - \cos x\)</span> returns <span class="math notranslate nohighlight">\(0\)</span>, a relative error of <span class="math notranslate nohighlight">\(1\)</span>. The identity
+<span class="math notranslate nohighlight">\(1-\cos x = 2\sin^2(x/2)\)</span> involves no cancellation and gives full accuracy
+(<a class="reference internal" href="#ch04-ex-cos"><span class="std std-numref">Exercise 4.10</span></a>).</p>
+<div class="proof remark admonition" id="ch04-rem-charpoly">
+<p class="admonition-title"><span class="caption-number">Remark 4.2 </span> (Eigenvalues from the characteristic polynomial)</p>
+<section class="remark-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> be the diagonal matrix with entries <span class="math notranslate nohighlight">\(1,2,\dots,20\)</span>. Its eigenvalues
+are perfectly conditioned: a symmetric perturbation of <span class="math notranslate nohighlight">\(A\)</span> moves each eigenvalue by at most
+<span class="math notranslate nohighlight">\(\|\Delta A\|_2\)</span> (<a class="reference internal" href="../ch09-eigenvalues/notes.html#ch09"><span class="std std-numref">Chapter 9</span></a>). The characteristic polynomial
+of <span class="math notranslate nohighlight">\(A\)</span> is Wilkinson’s polynomial, whose roots are violently ill-conditioned
+functions of its coefficients (<a class="reference internal" href="#ch04-rem-wilkinson">Remark 4.1</a>). An algorithm
+that forms the characteristic polynomial and then finds its roots is
+therefore unstable, even if each step is carried out as accurately as
+possible, because it replaces a well-conditioned problem by an ill-conditioned
+intermediate one <span class="bibtex-citation" id="id20">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span> (Lecture 15). This is why
+eigenvalue algorithms never form the characteristic polynomial
+(<a class="reference internal" href="../ch10-qr-algorithm/notes.html#ch10"><span class="std std-numref">Chapter 10</span></a>). The same mechanism explains why solving
+least-squares problems through the normal equations can lose accuracy that
+QR-based methods retain (<a class="reference internal" href="../ch08-least-squares/notes.html#ch08"><span class="std std-numref">Chapter 8</span></a>).</p>
+</section>
+</div><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Cancellation is often blamed for instability, but a subtraction is backward
+stable and introduces almost no error of its own. What cancellation does is
+reveal errors already present in its operands, or created in intermediate
+quantities much larger than the final result. The remedy is therefore not to
+avoid subtraction but to avoid ill-conditioned intermediate problems.</p>
+</div>
+</section>
+</section>
+<section id="accuracy-of-computed-solutions-of-linear-systems">
+<span id="ch04-sec-accuracy"></span><h2><span class="section-number">4.8. </span>Accuracy of computed solutions of linear systems<a class="headerlink" href="#accuracy-of-computed-solutions-of-linear-systems" title="Link to this heading">#</a></h2>
+<p>Combining the pieces: if an algorithm for <span class="math notranslate nohighlight">\(Ax = b\)</span> returns <span class="math notranslate nohighlight">\(y\)</span> with
+<span class="math notranslate nohighlight">\((A+\Delta A)y = b+\Delta b\)</span>, <span class="math notranslate nohighlight">\(\|\Delta A\|\le\eta\|A\|\)</span> and
+<span class="math notranslate nohighlight">\(\|\Delta b\|\le\eta\|b\|\)</span>, then <a class="reference internal" href="#equation-ch04-eq-linear-accuracy">(4.11)</a> bounds the
+forward error by <span class="math notranslate nohighlight">\(2\kappa(A)\eta/(1-\kappa(A)\eta)\)</span>. Gaussian elimination with
+partial pivoting, analyzed in <a class="reference internal" href="../ch05-lu/notes.html#ch05"><span class="std std-numref">Chapter 5</span></a>, has a normwise
+backward error bounded by a low-degree polynomial in <span class="math notranslate nohighlight">\(n\)</span> times the growth
+factor times <span class="math notranslate nohighlight">\(u\)</span>, and in practice <span class="math notranslate nohighlight">\(\eta(y)\)</span> is almost always a small multiple
+of <span class="math notranslate nohighlight">\(u\)</span>. The lab confirms this for <code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve</span></code> (LAPACK’s <code class="docutils literal notranslate"><span class="pre">dgesv</span></code>)
+over condition numbers from <span class="math notranslate nohighlight">\(1\)</span> to <span class="math notranslate nohighlight">\(10^{15}\)</span>.</p>
+<figure class="align-default" id="ch04-fig-solve">
+<a class="reference internal image-reference" href="../_images/ch04-solve-errors.png"><img alt="Log-log plot against kappa of the forward error, which grows proportionally to kappa and, except for kappa at most 10, stays below the line kappa times u, and of the backward error, which stays within a few multiples of u." src="../_images/ch04-solve-errors.png" style="width: 75%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 4.4 </span><span class="caption-text">Forward error and normwise backward error <a class="reference internal" href="#equation-ch04-eq-rigal-gaches">(4.10)</a> of
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve</span></code> for <span class="math notranslate nohighlight">\(50\times50\)</span> matrices <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span> with random
+orthogonal <span class="math notranslate nohighlight">\(U\)</span>, <span class="math notranslate nohighlight">\(V\)</span> and singular values spaced logarithmically from <span class="math notranslate nohighlight">\(1\)</span> to
+<span class="math notranslate nohighlight">\(1/\kappa\)</span>, three matrices per value of <span class="math notranslate nohighlight">\(\kappa\)</span> (one run on one machine). The
+backward error stays within a few units of <span class="math notranslate nohighlight">\(u\)</span>. The forward error grows in
+proportion to <span class="math notranslate nohighlight">\(\kappa_2(A)\)</span>; it exceeds <span class="math notranslate nohighlight">\(\kappa_2(A)u\)</span> only for
+<span class="math notranslate nohighlight">\(\kappa_2(A)\le10\)</span>, and then by a factor of at most about <span class="math notranslate nohighlight">\(11\)</span>; it stays below
+<span class="math notranslate nohighlight">\(\kappa_2(A)u\)</span> for the larger condition numbers in this experiment.</span><a class="headerlink" href="#ch04-fig-solve" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p><a class="reference internal" href="#ch04-fig-solve"><span class="std std-numref">Figure 4.4</span></a> shows both halves of the rule. The backward error
+does not grow with <span class="math notranslate nohighlight">\(\kappa\)</span>: the algorithm is backward stable. The forward
+error grows linearly with <span class="math notranslate nohighlight">\(\kappa\)</span>: the problem is ill-conditioned. Except
+for the smallest condition numbers, the forward errors lie somewhat below
+<span class="math notranslate nohighlight">\(\kappa u\)</span>, as expected when the rounding errors are not aligned with the
+worst-case directions.</p>
+<section id="the-hilbert-matrix">
+<span id="ch04-sec-hilbert"></span><h3><span class="section-number">4.8.1. </span>The Hilbert matrix<a class="headerlink" href="#the-hilbert-matrix" title="Link to this heading">#</a></h3>
+<p>The Hilbert matrix <span class="math notranslate nohighlight">\(H_n\)</span> with entries <span class="math notranslate nohighlight">\(h_{ij} = 1/(i+j-1)\)</span> is symmetric
+positive definite and famously ill-conditioned. Its exact inverse has integer
+entries, which lets us compute <span class="math notranslate nohighlight">\(\kappa_2(H_n) = \lambda_{\max}(H_n)\,
+\lambda_{\max}(H_n^{-1})\)</span> accurately without inverting a rounded matrix.</p>
+<div class="proof example admonition" id="ch04-exa-hilbert">
+<p class="admonition-title"><span class="caption-number">Example 4.6 </span> (Solving with the Hilbert matrix)</p>
+<section class="example-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(x = e = (1,\dots,1)^T\)</span> and <span class="math notranslate nohighlight">\(b = H_ne\)</span>. The entries <span class="math notranslate nohighlight">\(1/(i+j-1)\)</span> and the
+row sums <span class="math notranslate nohighlight">\(b_i\)</span> are generally not floating-point numbers, so the computer
+stores <span class="math notranslate nohighlight">\(\hat H = \fl(H_n)\)</span> and <span class="math notranslate nohighlight">\(\hat b = \fl(b)\)</span>, with
+<span class="math notranslate nohighlight">\(|\hat H - H_n|\le u|H_n|\)</span> and <span class="math notranslate nohighlight">\(|\hat b - b|\le u|b|\)</span>. Before any algorithm
+runs, the problem has already been perturbed componentwise by <span class="math notranslate nohighlight">\(u\)</span>. We can
+compute the exact solution <span class="math notranslate nohighlight">\(\hat x\)</span> of the stored system
+<span class="math notranslate nohighlight">\(\hat H\hat x = \hat b\)</span> in rational arithmetic and compare it with <span class="math notranslate nohighlight">\(e\)</span>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(n\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\kappa_2(H_n)\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\kappa_2(H_n)\,u\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\lVert\hat x - e\rVert_\infty\)</span></p></th>
+<th class="head"><p>bound of <a class="reference internal" href="#ch04-thm-componentwise">Theorem 4.4</a></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4</p></td>
+<td><p><span class="math notranslate nohighlight">\(1.55\times10^{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.7\times10^{-12}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(3.2\times10^{-13}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(3.0\times10^{-12}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p><span class="math notranslate nohighlight">\(1.50\times10^{7}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.7\times10^{-9}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.7\times10^{-10}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2.5\times10^{-9}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p><span class="math notranslate nohighlight">\(1.53\times10^{10}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.7\times10^{-6}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(5.6\times10^{-7}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2.6\times10^{-6}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p><span class="math notranslate nohighlight">\(1.60\times10^{13}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.8\times10^{-3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(4.7\times10^{-4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2.5\times10^{-3}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p><span class="math notranslate nohighlight">\(1.71\times10^{16}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.9\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(3.1\times10^{-1}\)</span></p></td>
+<td><p>not applicable</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The last column is <span class="math notranslate nohighlight">\(2u\,\mathrm{cond}(H_n,e)/(1-u\,\mathrm{cond}(H_n))\)</span>,
+evaluated exactly; for <span class="math notranslate nohighlight">\(n = 12\)</span> the hypothesis
+<span class="math notranslate nohighlight">\(u\,\mathrm{cond}(H_{12})&lt;1\)</span> fails. Each increase of <span class="math notranslate nohighlight">\(n\)</span> by one multiplies
+<span class="math notranslate nohighlight">\(\kappa_2(H_n)\)</span> by a factor between 30 and 34 for <span class="math notranslate nohighlight">\(4\le n\le12\)</span>. For <span class="math notranslate nohighlight">\(n = 10\)</span>,
+even an exact solver applied to the stored data returns only about three
+correct digits, and for <span class="math notranslate nohighlight">\(n = 12\)</span> essentially none. The digits are lost when
+the data are rounded, not in the elimination.</p>
+</section>
+</div><p>The lab adds <code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve</span></code> to this experiment. Its error relative to
+the exact solution <span class="math notranslate nohighlight">\(\hat x\)</span> of the stored system is of the same order as the
+data error in the table, and its backward error <span class="math notranslate nohighlight">\(\eta\)</span> is of order <span class="math notranslate nohighlight">\(u\)</span> for
+every <span class="math notranslate nohighlight">\(n\)</span>. So the solver is backward stable; the loss of accuracy is due to
+the conditioning of the problem, and it would occur for any algorithm that
+works with the rounded data. The only remedies are to supply more accurate
+data (for example, a scaled Hilbert matrix with integer entries), to use
+higher precision, or to reformulate the underlying problem, which in the
+classical application, least-squares fitting with the monomial basis, means
+using orthogonal polynomials (<a class="reference internal" href="../ch08-least-squares/notes.html#ch08"><span class="std std-numref">Chapter 8</span></a>).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The condition number of an ill-conditioned matrix cannot be computed
+accurately from the rounded matrix. The value <code class="docutils literal notranslate"><span class="pre">numpy.linalg.cond(H)</span></code> for the
+stored <span class="math notranslate nohighlight">\(\hat H_{12}\)</span> is, at best, the condition number of a matrix that
+differs from <span class="math notranslate nohighlight">\(H_{12}\)</span> by relative perturbations of size <span class="math notranslate nohighlight">\(u\)</span>. A perturbation
+<span class="math notranslate nohighlight">\(\Delta H\)</span> can change each singular value by up to <span class="math notranslate nohighlight">\(\|\Delta H\|_2\)</span>
+(<a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a>), and relative to <span class="math notranslate nohighlight">\(\sigma_n\)</span> a change of size
+<span class="math notranslate nohighlight">\(u\|H_{12}\|_2\)</span> is <span class="math notranslate nohighlight">\(\kappa_2(H_{12})u\approx2\)</span>: the smallest singular value,
+and with it <span class="math notranslate nohighlight">\(\kappa_2\)</span>, is not determined by the stored data even to one
+digit. With the NumPy version used for this book,
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.cond(scipy.linalg.hilbert(12))</span></code> returns about
+<span class="math notranslate nohighlight">\(1.8\times10^{16}\)</span>, while the exact value is about <span class="math notranslate nohighlight">\(1.71\times10^{16}\)</span>; other
+software and other versions return other values.</p>
+</div>
+</section>
+</section>
+<section id="computational-laboratory">
+<h2><span class="section-number">4.9. </span>Computational laboratory<a class="headerlink" href="#computational-laboratory" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="lab.html"><span class="std std-doc">The lab notebook for this chapter</span></a> estimates condition numbers of
+scalar problems by finite differences and compares them with the formulas of
+<a class="reference internal" href="#ch04-sec-problems"><span class="std std-numref">Section 4.1</span></a>, including the evaluation of <span class="math notranslate nohighlight">\((x-2)^9\)</span> near its
+root. It builds matrices with prescribed singular values and verifies
+<a class="reference internal" href="#ch04-thm-perturbation">Theorem 4.2</a>, showing that aligned perturbations attain
+the bound while random ones fall well below it, and it constructs the nearest
+singular matrix of <a class="reference internal" href="#ch04-thm-distance">Theorem 4.3</a>. It compares forward error,
+Rigal–Gaches backward error, relative residual and <span class="math notranslate nohighlight">\(\kappa u\)</span> for
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve</span></code> over a range of condition numbers, computes Skeel’s
+condition number for a badly row-scaled matrix, verifies the inner-product
+error bound and the failure of backward stability for outer products in exact
+rational arithmetic, compares unstable and stable algorithms for <span class="math notranslate nohighlight">\(e^{-x}\)</span> and
+<span class="math notranslate nohighlight">\(1-\cos x\)</span>, and repeats the Hilbert experiment of
+<a class="reference internal" href="#ch04-exa-hilbert">Example 4.6</a> with the solver included.</p>
+</section>
+<section id="summary">
+<h2><span class="section-number">4.10. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>The condition number of a problem measures how much its exact solution can
+change under small relative changes of the data; for differentiable problems
+it is <span class="math notranslate nohighlight">\(\|J\|\,\|x\|/\|f(x)\|\)</span>, and componentwise variants measure sensitivity
+to independent relative errors in each datum. For linear systems the
+condition number <span class="math notranslate nohighlight">\(\kappa(A) = \|A\|\,\|A^{-1}\|\)</span> bounds the sensitivity to
+perturbations of both <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(b\)</span>, the bound is attained for aligned
+perturbations, and <span class="math notranslate nohighlight">\(1/\kappa_2(A)\)</span> is the relative distance to singularity.
+Skeel’s condition number can be much smaller than <span class="math notranslate nohighlight">\(\kappa(A)\)</span> and is the
+right measure for componentwise perturbations. An algorithm is backward
+stable if it computes the exact solution of a nearby problem; its forward
+error is then at most about the condition number times the backward error.
+For linear systems the backward error is computable from the residual by the
+Rigal–Gaches and Oettli–Prager formulas, which are not the same as the
+relative residual. Instability arises when an algorithm passes through an
+intermediate problem that is worse conditioned than the original one.</p>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">4.11. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id21">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> present conditioning and stability in Lectures 12,
+14 and 15, with <span class="math notranslate nohighlight">\(\epsilon_{\text{machine}}\)</span> in place of our <span class="math notranslate nohighlight">\(u\)</span>.
+<span class="bibtex-citation" id="id22">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> is the definitive reference: Chapter 1 introduces
+forward and backward error, conditioning and cancellation, Chapter 3 analyzes
+inner products and summation, and Chapter 7 develops normwise and
+componentwise perturbation theory for linear systems, including the
+Rigal–Gaches and Oettli–Prager theorems and Skeel’s condition number.
+<span class="bibtex-citation" id="id23">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span> discuss the sensitivity of square systems and finite
+precision computation in Sections 2.6 and 2.7 and condition estimation and
+scaling in Section 3.5. <span class="bibtex-citation" id="id24">Demmel [<a class="reference internal" href="../back/bibliography.html#id5" title="James W. Demmel. Applied Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> treats condition numbers and
+backward stability in Section 1.3, polynomial evaluation near a root in
+Section 1.4, and perturbation theory for <span class="math notranslate nohighlight">\(Ax = b\)</span> in Section 2.2.
+<span class="bibtex-citation" id="id25">Stewart and Sun [<a class="reference internal" href="../back/bibliography.html#id7" title="G. W. Stewart and Ji-guang Sun. Matrix Perturbation Theory. Academic Press, Boston, 1990.">1990</a>]</span> is a comprehensive treatment of matrix perturbation
+theory. The original papers of <span class="bibtex-citation" id="id26">Rigal and Gaches [<a class="reference internal" href="../back/bibliography.html#id30" title="J. L. Rigal and J. Gaches. On the compatibility of a given solution with the data of a linear system. Journal of the ACM, 14(3):543–548, 1967.">1967</a>]</span> and <span class="bibtex-citation" id="id27">Skeel [<a class="reference internal" href="../back/bibliography.html#id33" title="Robert D. Skeel. Iterative refinement implies numerical stability for Gaussian elimination. Mathematics of Computation, 35(151):817–832, 1980.">1980</a>]</span>
+remain readable.</p>
+</section>
+<section id="exercises">
+<span id="ch04-sec-exercises"></span><h2><span class="section-number">4.12. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<div class="exercise admonition" id="ch04-ex-scalar-condition">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.1 </span> (Concept: condition numbers of elementary functions)</p>
+<section id="exercise-content">
+<p>Compute the relative condition number <span class="math notranslate nohighlight">\(\kappa(x) = |xf'(x)/f(x)|\)</span> of
+<span class="math notranslate nohighlight">\(f(x) = e^x\)</span>, <span class="math notranslate nohighlight">\(f(x) = \log x\)</span> (<span class="math notranslate nohighlight">\(x&gt;0\)</span>), <span class="math notranslate nohighlight">\(f(x) = x^\alpha\)</span> and <span class="math notranslate nohighlight">\(f(x) = \sin x\)</span>.
+For which <span class="math notranslate nohighlight">\(x\)</span> is each problem ill-conditioned? Is computing <span class="math notranslate nohighlight">\(\log x\)</span> for
+<span class="math notranslate nohighlight">\(x = 1 + 10^{-10}\)</span> an ill-conditioned problem, and does that mean that
+<span class="math notranslate nohighlight">\(\log(1+z)\)</span> cannot be computed accurately for small <span class="math notranslate nohighlight">\(z\)</span>?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch04-conditioning-stability/notes-solution-27">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch04-ex-scalar-condition"> Exercise 4.1 (Concept: condition numbers of elementary functions)</a></p>
+<section id="solution-content">
+<p>For <span class="math notranslate nohighlight">\(e^x\)</span>, <span class="math notranslate nohighlight">\(\kappa = |x|\)</span>, large only for large <span class="math notranslate nohighlight">\(|x|\)</span>. For <span class="math notranslate nohighlight">\(\log x\)</span>,
+<span class="math notranslate nohighlight">\(\kappa = |x\cdot(1/x)/\log x| = 1/|\log x|\)</span>, which is large near <span class="math notranslate nohighlight">\(x = 1\)</span>. For
+<span class="math notranslate nohighlight">\(x^\alpha\)</span>, <span class="math notranslate nohighlight">\(\kappa = |\alpha|\)</span> everywhere. For <span class="math notranslate nohighlight">\(\sin x\)</span>,
+<span class="math notranslate nohighlight">\(\kappa = |x\cos x/\sin x| = |x\cot x|\)</span>, which is large near the zeros
+<span class="math notranslate nohighlight">\(x = k\pi\)</span>, <span class="math notranslate nohighlight">\(k\neq0\)</span> (at <span class="math notranslate nohighlight">\(x = 0\)</span> the limit is <span class="math notranslate nohighlight">\(1\)</span>).</p>
+<p>At <span class="math notranslate nohighlight">\(x = 1+10^{-10}\)</span>, <span class="math notranslate nohighlight">\(\kappa\approx10^{10}\)</span>: as a function of <span class="math notranslate nohighlight">\(x\)</span> the logarithm
+is ill-conditioned, because storing <span class="math notranslate nohighlight">\(x\)</span> already loses the information in the
+digits beyond <span class="math notranslate nohighlight">\(u\)</span> of <span class="math notranslate nohighlight">\(z = x - 1\)</span>. But the function <span class="math notranslate nohighlight">\(z\mapsto\log(1+z)\)</span> has
+<span class="math notranslate nohighlight">\(\kappa(z) = |z/((1+z)\log(1+z))|\to1\)</span> as <span class="math notranslate nohighlight">\(z\to0\)</span>, so it is well-conditioned
+as a function of <span class="math notranslate nohighlight">\(z\)</span>, and <code class="docutils literal notranslate"><span class="pre">numpy.log1p(z)</span></code> computes it accurately. Whether a
+computation is ill-conditioned depends on what the data are.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-kappa-properties">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.2 </span> (Theory: properties of the condition number)</p>
+<section id="exercise-content">
+<p>Prove that <span class="math notranslate nohighlight">\(\kappa(AB)\le\kappa(A)\kappa(B)\)</span> for nonsingular <span class="math notranslate nohighlight">\(A,B\)</span> and every
+induced norm, that <span class="math notranslate nohighlight">\(\kappa_2(A^TA) = \kappa_2(A)^2\)</span>, and that
+<span class="math notranslate nohighlight">\(\kappa_2(A)/n\le\kappa_1(A)\le n\,\kappa_2(A)\)</span>. Give a <span class="math notranslate nohighlight">\(2\times2\)</span> example
+where <span class="math notranslate nohighlight">\(\kappa(AB)\)</span> is much smaller than <span class="math notranslate nohighlight">\(\kappa(A)\kappa(B)\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-perturbed-denominator">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.3 </span> (Theory: a bound without a smallness assumption)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> be nonsingular, <span class="math notranslate nohighlight">\(Ax = b\)</span> and <span class="math notranslate nohighlight">\((A+\Delta A)(x+\Delta x) = b\)</span>. Show,
+without assuming that <span class="math notranslate nohighlight">\(\|A^{-1}\|\,\|\Delta A\|&lt;1\)</span>, that</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\|\Delta x\|}{\|x+\Delta x\|}\le\kappa(A)\,\frac{\|\Delta A\|}{\|A\|}.
+\]</div>
+<p>Why is this bound less convenient than <a class="reference internal" href="#equation-ch04-eq-perturbation">(4.7)</a>?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch04-conditioning-stability/notes-solution-30">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch04-ex-perturbed-denominator"> Exercise 4.3 (Theory: a bound without a smallness assumption)</a></p>
+<section id="solution-content">
+<p>Subtract <span class="math notranslate nohighlight">\(Ax = b\)</span> from <span class="math notranslate nohighlight">\((A+\Delta A)(x+\Delta x) = b\)</span> to get
+<span class="math notranslate nohighlight">\(A\Delta x = -\Delta A(x+\Delta x)\)</span>, so <span class="math notranslate nohighlight">\(\Delta x = -A^{-1}\Delta A(x+\Delta x)\)</span>
+and <span class="math notranslate nohighlight">\(\|\Delta x\|\le\|A^{-1}\|\,\|\Delta A\|\,\|x+\Delta x\|\)</span>. Divide by
+<span class="math notranslate nohighlight">\(\|x+\Delta x\|\)</span> (which is nonzero if <span class="math notranslate nohighlight">\(x\neq0\)</span> or <span class="math notranslate nohighlight">\(\Delta x\neq0\)</span>; if both
+vanish there is nothing to prove) and write
+<span class="math notranslate nohighlight">\(\|A^{-1}\|\,\|\Delta A\| = \kappa(A)\|\Delta A\|/\|A\|\)</span>. The bound measures
+the error relative to the perturbed solution <span class="math notranslate nohighlight">\(x+\Delta x\)</span>, which is the
+computed one in applications, not relative to the exact <span class="math notranslate nohighlight">\(x\)</span> that we want; it
+also presupposes that the perturbed system has a solution.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-sharpness">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.4 </span> (Theory: which right-hand sides are sensitive)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A = U\Sigma V^T\)</span> be nonsingular. Show that for <span class="math notranslate nohighlight">\(x = v_1\)</span> and
+<span class="math notranslate nohighlight">\(\Delta b = t\|b\|_2u_n\)</span> the bound <span class="math notranslate nohighlight">\(\|\Delta x\|_2/\|x\|_2\le\kappa_2(A)
+\|\Delta b\|_2/\|b\|_2\)</span> holds with equality, and that for <span class="math notranslate nohighlight">\(x = v_n\)</span> every
+perturbation <span class="math notranslate nohighlight">\(\Delta b\)</span> satisfies
+<span class="math notranslate nohighlight">\(\|\Delta x\|_2/\|x\|_2\le\|\Delta b\|_2/\|b\|_2\)</span>. Express the condition number
+<a class="reference internal" href="#equation-ch04-eq-cond-rhs">(4.6)</a> in terms of the coefficients of <span class="math notranslate nohighlight">\(b\)</span> in the basis
+<span class="math notranslate nohighlight">\(u_1,\dots,u_n\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-one-sided-backward">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.5 </span> (Theory: one-sided backward errors)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(y\neq0\)</span> be an approximate solution of <span class="math notranslate nohighlight">\(Ax = b\)</span> with residual <span class="math notranslate nohighlight">\(r = b - Ay\)</span>.
+Show that in the 2-norm</p>
+<div class="math notranslate nohighlight">
+\[
+\min\left\{\frac{\|\Delta b\|}{\|b\|} : Ay = b+\Delta b\right\} = \frac{\|r\|}{\|b\|},\qquad
+\min\left\{\frac{\|\Delta A\|}{\|A\|} : (A+\Delta A)y = b\right\} = \frac{\|r\|}{\|A\|\,\|y\|}.
+\]</div>
+<p>Call these <span class="math notranslate nohighlight">\(\eta_b\)</span> and <span class="math notranslate nohighlight">\(\eta_A\)</span> and show that the Rigal–Gaches backward error
+satisfies <span class="math notranslate nohighlight">\(1/\eta = 1/\eta_A + 1/\eta_b\)</span>. Deduce that
+<span class="math notranslate nohighlight">\(\tfrac12\min(\eta_A,\eta_b)\le\eta\le\min(\eta_A,\eta_b)\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch04-conditioning-stability/notes-solution-33">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch04-ex-one-sided-backward"> Exercise 4.5 (Theory: one-sided backward errors)</a></p>
+<section id="solution-content">
+<p>If only <span class="math notranslate nohighlight">\(b\)</span> is perturbed, <span class="math notranslate nohighlight">\(Ay = b + \Delta b\)</span> forces <span class="math notranslate nohighlight">\(\Delta b = Ay - b = -r\)</span>,
+so <span class="math notranslate nohighlight">\(\eta_b = \|r\|/\|b\|\)</span>. If only <span class="math notranslate nohighlight">\(A\)</span> is perturbed, <span class="math notranslate nohighlight">\((A+\Delta A)y = b\)</span> means
+<span class="math notranslate nohighlight">\(\Delta A\,y = r\)</span>, which implies <span class="math notranslate nohighlight">\(\|r\|\le\|\Delta A\|\,\|y\|\)</span>, and the
+rank-one matrix <span class="math notranslate nohighlight">\(\Delta A = ry^T/\|y\|_2^2\)</span> satisfies <span class="math notranslate nohighlight">\(\Delta A\,y = r\)</span> with
+<span class="math notranslate nohighlight">\(\|\Delta A\|_2 = \|r\|_2/\|y\|_2\)</span>. Hence <span class="math notranslate nohighlight">\(\eta_A = \|r\|/(\|A\|\,\|y\|)\)</span>.
+By <a class="reference internal" href="#equation-ch04-eq-rigal-gaches">(4.10)</a>,</p>
+<div class="math notranslate nohighlight">
+\[
+\frac1\eta = \frac{\|A\|\,\|y\|+\|b\|}{\|r\|} = \frac1{\eta_A} + \frac1{\eta_b}.
+\]</div>
+<p>If <span class="math notranslate nohighlight">\(m = \min(\eta_A,\eta_b)\)</span> then <span class="math notranslate nohighlight">\(1/m\le1/\eta\le2/m\)</span>. So <span class="math notranslate nohighlight">\(\eta\)</span> and the
+smaller of the two one-sided backward errors agree within a factor of <span class="math notranslate nohighlight">\(2\)</span>. For
+an accurate solution <span class="math notranslate nohighlight">\(\|A\|\,\|y\|\ge\|b\|\)</span> approximately, so <span class="math notranslate nohighlight">\(\eta_A\)</span> is the
+smaller one, while <span class="math notranslate nohighlight">\(\eta_b = \|r\|/\|b\|\)</span> can be larger than <span class="math notranslate nohighlight">\(\eta\)</span> by the
+factor <span class="math notranslate nohighlight">\(1+\|A\|\,\|y\|/\|b\|\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-skeel">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.6 </span> (Theory: Skeel’s condition number)</p>
+<section id="exercise-content">
+<p>Prove that <span class="math notranslate nohighlight">\(\mathrm{cond}(A)\le\kappa_\infty(A)\)</span> and that
+<span class="math notranslate nohighlight">\(\mathrm{cond}(DA) = \mathrm{cond}(A)\)</span> for nonsingular diagonal <span class="math notranslate nohighlight">\(D\)</span>. Show by a
+<span class="math notranslate nohighlight">\(2\times2\)</span> example that <span class="math notranslate nohighlight">\(\mathrm{cond}(AD)\neq\mathrm{cond}(A)\)</span> in general, so
+Skeel’s condition number is not invariant under column scaling. Compute
+<span class="math notranslate nohighlight">\(\mathrm{cond}(A)\)</span> and <span class="math notranslate nohighlight">\(\kappa_\infty(A)\)</span> for
+<span class="math notranslate nohighlight">\(A = \begin{bmatrix}1&amp;1\\1&amp;1+s\end{bmatrix}\)</span> with <span class="math notranslate nohighlight">\(0&lt;s&lt;1\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-which-stable">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.7 </span> (Concept: backward stable, stable, or neither?)</p>
+<section id="exercise-content">
+<p>Assume that <span class="math notranslate nohighlight">\(\fl\)</span> satisfies the standard model and that library functions
+return <span class="math notranslate nohighlight">\(f(x)(1+\delta)\)</span> with <span class="math notranslate nohighlight">\(|\delta|\le u\)</span>. Decide whether each algorithm is
+backward stable, stable but not backward stable, or unstable, with respect to
+the data indicated: (a) <span class="math notranslate nohighlight">\(x\mapsto\fl(x+1)\)</span>, data <span class="math notranslate nohighlight">\(x\)</span>; (b) <span class="math notranslate nohighlight">\(x\mapsto\fl(x\cdot
+x)\)</span>, data <span class="math notranslate nohighlight">\(x\)</span>; (c) <span class="math notranslate nohighlight">\((x,y)\mapsto\)</span> the computed outer product <span class="math notranslate nohighlight">\(xy^T\)</span>; (d)
+<span class="math notranslate nohighlight">\(x\mapsto\fl(\sin x)\)</span> for <span class="math notranslate nohighlight">\(x\)</span> near <span class="math notranslate nohighlight">\(\pi/2\)</span>, data <span class="math notranslate nohighlight">\(x\)</span>; (e) <span class="math notranslate nohighlight">\(x\mapsto1-\cos x\)</span>
+computed as <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">cos(x)</span></code>, for <span class="math notranslate nohighlight">\(x\)</span> near <span class="math notranslate nohighlight">\(0\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-polynomial">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.8 </span> (Computation: a polynomial near its root)</p>
+<section id="exercise-content">
+<p>Evaluate <span class="math notranslate nohighlight">\(p(x) = (x-2)^9\)</span> at 2001 equally spaced points of <span class="math notranslate nohighlight">\([1.95, 2.05]\)</span> by
+Horner’s rule on the expanded coefficients. Plot the computed values, the
+error bound <span class="math notranslate nohighlight">\(\gamma_{18}\sum_k|a_k||x|^k\)</span> and the observed error. Compute the
+condition number <a class="reference internal" href="#equation-ch04-eq-poly-cond">(4.4)</a> and explain why the computed sign of
+<span class="math notranslate nohighlight">\(p(x)\)</span> is unreliable in a neighborhood of <span class="math notranslate nohighlight">\(2\)</span>. Estimate the width of that
+neighborhood.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-wilkinson">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.9 </span> (Computation: the roots of Wilkinson’s polynomial)</p>
+<section id="exercise-content">
+<p>Using exact integer arithmetic in Python, compute the coefficients of
+<span class="math notranslate nohighlight">\(w(x) = \prod_{k=1}^{20}(x-k)\)</span> and the condition numbers
+<a class="reference internal" href="#equation-ch04-eq-root-cond">(4.5)</a> of every root <span class="math notranslate nohighlight">\(r\)</span> with respect to every coefficient
+<span class="math notranslate nohighlight">\(a_k\)</span>. Which root and coefficient give the largest condition number? Explain
+why the smallest roots are far better conditioned than the roots between
+<span class="math notranslate nohighlight">\(10\)</span> and <span class="math notranslate nohighlight">\(17\)</span>, in agreement with <a class="reference internal" href="#ch04-fig-wilkinson"><span class="std std-numref">Figure 4.2</span></a>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-cos">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.10 </span> (Computation: computing <span class="math notranslate nohighlight">\(1 - \cos x\)</span>)</p>
+<section id="exercise-content">
+<p>For <span class="math notranslate nohighlight">\(x = 10^{-k}\)</span>, <span class="math notranslate nohighlight">\(k = 1,2,\dots,10\)</span>, compute <span class="math notranslate nohighlight">\(1-\cos x\)</span> with the formula
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">np.cos(x)</span></code> and with <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">np.sin(x</span> <span class="pre">/</span> <span class="pre">2)**2</span></code>. Report the relative
+differences, compute the condition number of the problem, and explain the
+results. At which <span class="math notranslate nohighlight">\(x\)</span> does the first formula return exactly <span class="math notranslate nohighlight">\(0\)</span>?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch04-conditioning-stability/notes-solution-39">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch04-ex-cos"> Exercise 4.10 (Computation: computing <span class="math notranslate nohighlight">\(1 - \cos x\)</span>)</a></p>
+<section id="solution-content">
+<p>The condition number is <span class="math notranslate nohighlight">\(\kappa(x) = |x\sin x/(1-\cos x)|\)</span>, which tends to
+<span class="math notranslate nohighlight">\(2\)</span> as <span class="math notranslate nohighlight">\(x\to0\)</span>, so the problem is well-conditioned. The second formula is a
+product of backward stable operations on well-conditioned intermediate
+quantities and is accurate to a few units of <span class="math notranslate nohighlight">\(u\)</span>. The first computes
+<span class="math notranslate nohighlight">\(\fl(\cos x) = \cos x(1+\delta)\)</span>, an error of absolute size up to <span class="math notranslate nohighlight">\(u\)</span>, and then
+subtracts it from <span class="math notranslate nohighlight">\(1\approx\cos x\)</span>. The subtraction is exact, but the
+rounding error of <span class="math notranslate nohighlight">\(\cos x\)</span>, of absolute size up to <span class="math notranslate nohighlight">\(u/2\)</span> for values just below
+<span class="math notranslate nohighlight">\(1\)</span>, is now measured against <span class="math notranslate nohighlight">\(1-\cos x\approx x^2/2\)</span>, so the relative error
+can be as large as about <span class="math notranslate nohighlight">\(u/x^2\)</span>. This grows like <span class="math notranslate nohighlight">\(x^{-2}\)</span>: up to about
+<span class="math notranslate nohighlight">\(10^{-10}\)</span> at <span class="math notranslate nohighlight">\(x = 10^{-3}\)</span> and <span class="math notranslate nohighlight">\(10^{-6}\)</span> at <span class="math notranslate nohighlight">\(x = 10^{-5}\)</span>. Once <span class="math notranslate nohighlight">\(x^2/2\)</span> is
+less than half the spacing <span class="math notranslate nohighlight">\(u\)</span> of the floating-point numbers just below <span class="math notranslate nohighlight">\(1\)</span>,
+that is for <span class="math notranslate nohighlight">\(x\)</span> below <span class="math notranslate nohighlight">\(2^{-26.5}\approx1.05\times10^{-8}\)</span>, <span class="math notranslate nohighlight">\(\cos x\)</span> rounds to
+exactly <span class="math notranslate nohighlight">\(1\)</span> (if the cosine is correctly rounded) and the formula returns
+<span class="math notranslate nohighlight">\(0\)</span>; among the given points this happens first at <span class="math notranslate nohighlight">\(x = 10^{-8}\)</span>. The algorithm
+is unstable because it passes through the ill-conditioned intermediate problem
+of subtracting two nearly equal numbers.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-summation">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.11 </span> (Theory: summation and the Taylor series of <span class="math notranslate nohighlight">\(e^{-x}\)</span>)</p>
+<section id="exercise-content">
+<p>Show that recursive summation <span class="math notranslate nohighlight">\(s\leftarrow x_1\)</span>, <span class="math notranslate nohighlight">\(s\leftarrow s+x_k\)</span> computes
+<span class="math notranslate nohighlight">\(\hat s = \sum_{k}x_k(1+\theta^{(k)})\)</span> with <span class="math notranslate nohighlight">\(|\theta^{(k)}|\le\gamma_{n-1}\)</span>, so
+that <span class="math notranslate nohighlight">\(|\hat s - s|\le\gamma_{n-1}\sum_k|x_k|\)</span>. What is the componentwise
+condition number of the sum? Apply the result to the Taylor series of <span class="math notranslate nohighlight">\(e^{-x}\)</span>
+(treating the terms as exact) and explain the slope of the upper curve in
+<a class="reference internal" href="#ch04-fig-exp"><span class="std std-numref">Figure 4.3</span></a>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-residual-hilbert">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.12 </span> (Computation: residuals and backward errors for the Hilbert matrix)</p>
+<section id="exercise-content">
+<p>For <span class="math notranslate nohighlight">\(n = 6, 8, 10, 12\)</span> solve <span class="math notranslate nohighlight">\(H_ny = b\)</span> with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve</span></code> for two
+right-hand sides: <span class="math notranslate nohighlight">\(b = H_ne\)</span> and a random <span class="math notranslate nohighlight">\(b\)</span> with independent standard normal
+entries. For each, report <span class="math notranslate nohighlight">\(\kappa_2(H_n)\)</span>, the relative residual
+<span class="math notranslate nohighlight">\(\|r\|_2/\|b\|_2\)</span>, the Rigal–Gaches backward error <span class="math notranslate nohighlight">\(\eta(y)\)</span>, and the ratio
+<span class="math notranslate nohighlight">\(\|H_n\|_2\|y\|_2/\|b\|_2\)</span>. Explain why the relative residual is small for the
+first right-hand side and large for the second, while <span class="math notranslate nohighlight">\(\eta(y)\)</span> is small for
+both.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch04-ex-hager">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4.13 </span> (Project: estimating the condition number)</p>
+<section id="exercise-content">
+<p>Computing <span class="math notranslate nohighlight">\(\|A^{-1}\|_1\)</span> exactly costs <span class="math notranslate nohighlight">\(\bigO(n^3)\)</span> flops even when an LU
+factorization of <span class="math notranslate nohighlight">\(A\)</span> is available. Implement Hager’s estimator
+<span class="bibtex-citation" id="id28">[<a class="reference internal" href="../back/bibliography.html#id36" title="William W. Hager. Condition estimates. SIAM Journal on Scientific and Statistical Computing, 5(2):311–316, 1984.">Hager, 1984</a>]</span>, which maximizes the convex function
+<span class="math notranslate nohighlight">\(\|A^{-1}z\|_1\)</span> over the unit ball of the 1-norm by a gradient-like iteration
+that uses only solves with <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(A^T\)</span>. Test it on random matrices with
+prescribed singular values, on the Hilbert matrices and on the matrix of
+<a class="reference internal" href="#ch04-exa-row-scaling">Example 4.4</a>, and compare the estimates with
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.cond(A,</span> <span class="pre">1)</span></code>. Report how often the estimate is exact, the worst
+underestimate you observe, and the number of solves used.</p>
+</section>
+</div>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch04-conditioning-stability"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../ch03-floating-point/lab.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">3.14. </span>Lab 3: Floating-point arithmetic</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lab.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">4.13. </span>Lab 4: Conditioning and stability</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problems-and-condition-numbers">4.1. Problems and condition numbers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problems-as-maps">4.1.1. Problems as maps</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#polynomials-evaluation-near-a-root-and-roots">4.1.2. Polynomials: evaluation near a root and roots</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-condition-number-of-a-matrix">4.2. The condition number of a matrix</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-vector-multiplication-and-linear-systems">4.2.1. Matrix-vector multiplication and linear systems</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perturbation-theory-for-linear-systems">4.3. Perturbation theory for linear systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-perturbation-theorem">4.3.1. The perturbation theorem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-what-sense-the-bound-is-sharp">4.3.2. In what sense the bound is sharp</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-distance-to-singularity">4.3.3. The distance to singularity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#componentwise-perturbation-theory">4.4. Componentwise perturbation theory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#forward-error-backward-error-and-stability">4.5. Forward error, backward error and stability</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definitions">4.5.1. Definitions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#forward-error-condition-number-and-backward-error">4.5.2. Forward error, condition number and backward error</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-errors-for-linear-systems">4.6. Backward errors for linear systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stable-and-unstable-algorithms">4.7. Stable and unstable algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inner-products-are-backward-stable">4.7.1. Inner products are backward stable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outer-products-are-not-backward-stable">4.7.2. Outer products are not backward stable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bilinear-forms">4.7.3. Bilinear forms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#an-unstable-algorithm-for-a-well-conditioned-problem">4.7.4. An unstable algorithm for a well-conditioned problem</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accuracy-of-computed-solutions-of-linear-systems">4.8. Accuracy of computed solutions of linear systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hilbert-matrix">4.8.1. The Hilbert matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">4.9. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">4.10. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">4.11. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">4.12. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

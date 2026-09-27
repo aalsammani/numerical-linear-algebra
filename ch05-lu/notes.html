@@ -1,0 +1,1996 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5. Gaussian elimination and LU factorization &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch05-lu/notes';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.11. Lab 5: Gaussian elimination and LU factorization" href="lab.html" />
+    <link rel="prev" title="4.13. Lab 4: Conditioning and stability" href="../ch04-conditioning-stability/lab.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">5. Gaussian elimination and LU factorization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch05-lu/notes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch05-lu/notes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Gaussian elimination and LU factorization</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#triangular-systems">5.1. Triangular systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-elimination-as-a-matrix-factorization">5.2. Gaussian elimination as a matrix factorization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gauss-transformations">5.2.1. Gauss transformations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lu-factorization">5.2.2. The LU factorization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#existence-and-uniqueness">5.2.3. Existence and uniqueness</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-need-for-pivoting">5.3. The need for pivoting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-small-pivot">5.3.1. A small pivot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-pivoting">5.3.2. Partial pivoting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rounding-error-analysis">5.4. Rounding error analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-error-of-the-factorization-and-of-the-solve">5.4.1. Backward error of the factorization and of the solve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-growth-factor">5.4.2. The growth factor</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-growth-and-pivoting-strategies">5.5. Element growth and pivoting strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#worst-case-growth-under-partial-pivoting">5.5.1. Worst-case growth under partial pivoting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-and-rook-pivoting">5.5.2. Complete and rook pivoting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#growth-on-random-matrices">5.5.3. Growth on random matrices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lu-in-practice">5.6. LU in practice</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocked-lu-and-level-3-blas">5.6.1. Blocked LU and level-3 BLAS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lapack-and-scipy">5.6.2. LAPACK and SciPy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#never-form-the-inverse">5.6.3. Never form the inverse</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determinants">5.6.4. Determinants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#banded-matrices">5.6.5. Banded matrices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">5.7. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">5.8. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">5.9. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">5.10. Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="gaussian-elimination-and-lu-factorization">
+<span id="ch05"></span><h1><span class="section-number">5. </span>Gaussian elimination and LU factorization<a class="headerlink" href="#gaussian-elimination-and-lu-factorization" title="Link to this heading">#</a></h1>
+<p>Solving a square linear system <span class="math notranslate nohighlight">\(Ax = b\)</span> is the most frequently executed task
+in scientific computing, and Gaussian elimination is the method that almost
+every library uses for a dense, unstructured matrix. The algorithm is taught
+in every first course on linear algebra. What that course usually leaves out
+is the subject of this chapter: that elimination computes a factorization
+<span class="math notranslate nohighlight">\(A = LU\)</span> into triangular factors, that the factorization is the object one
+should compute and reuse, that it can fail or become useless in floating-point
+arithmetic even for a perfectly well-conditioned matrix, and that a simple
+reordering of the rows (partial pivoting) repairs this in practice, although
+not in the worst case.</p>
+<p>The chapter uses the vocabulary of the previous two chapters. From
+<a class="reference internal" href="../ch03-floating-point/notes.html#ch03"><span class="std std-numref">Chapter 3</span></a> we take the model
+<span class="math notranslate nohighlight">\(\fl(x\mathbin{\mathrm{op}}y) = (x\mathbin{\mathrm{op}}y)(1+\delta)\)</span> with
+<span class="math notranslate nohighlight">\(|\delta|\le u = 2^{-53}\)</span> and the constants <span class="math notranslate nohighlight">\(\gamma_n = nu/(1-nu)\)</span> (always
+assuming <span class="math notranslate nohighlight">\(nu&lt;1\)</span>); from <a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a> we take the notions of
+backward error, backward stability and the condition number
+<span class="math notranslate nohighlight">\(\kappa(A) = \|A\|\,\|A^{-1}\|\)</span>. Inequalities between matrices and absolute
+values of matrices are meant entrywise: <span class="math notranslate nohighlight">\(|A|\)</span> is the matrix with entries
+<span class="math notranslate nohighlight">\(|a_{ij}|\)</span>, and <span class="math notranslate nohighlight">\(|A|\le|B|\)</span> means <span class="math notranslate nohighlight">\(|a_{ij}|\le|b_{ij}|\)</span> for all <span class="math notranslate nohighlight">\(i,j\)</span>.</p>
+<div class="admonition-learning-objectives admonition">
+<p class="admonition-title">Learning objectives</p>
+<p>After working through this chapter you should be able to:</p>
+<ol class="arabic simple">
+<li><p>solve triangular systems by forward and back substitution, count their
+cost, and state their backward stability;</p></li>
+<li><p>describe Gaussian elimination as a product of Gauss transformations and
+derive the <span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> flop count of the LU factorization;</p></li>
+<li><p>prove when an LU factorization without pivoting exists and is unique, and
+prove that partial pivoting produces <span class="math notranslate nohighlight">\(PA = LU\)</span> for every nonsingular <span class="math notranslate nohighlight">\(A\)</span>;</p></li>
+<li><p>explain, with a correctly computed example, why small pivots destroy the
+accuracy of unpivoted elimination;</p></li>
+<li><p>state the backward error results for LU and for the solution of <span class="math notranslate nohighlight">\(Ax = b\)</span>,
+and explain the role of the growth factor;</p></li>
+<li><p>distinguish the worst-case growth of partial pivoting (<span class="math notranslate nohighlight">\(2^{n-1}\)</span>), the
+unbounded growth of unpivoted elimination, and the small growth observed
+on random matrices;</p></li>
+<li><p>use LAPACK and SciPy correctly: factor once and solve many times, never
+form <span class="math notranslate nohighlight">\(A^{-1}\)</span> to solve a system, and interpret the output of
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.lu</span></code>.</p></li>
+</ol>
+</div>
+<section id="triangular-systems">
+<span id="ch05-sec-triangular"></span><h2><span class="section-number">5.1. </span>Triangular systems<a class="headerlink" href="#triangular-systems" title="Link to this heading">#</a></h2>
+<p>Triangular systems are the building block of everything that follows: once
+<span class="math notranslate nohighlight">\(A\)</span> has been factored into triangular matrices, solving <span class="math notranslate nohighlight">\(Ax = b\)</span> reduces to
+two triangular solves.</p>
+<p>A matrix <span class="math notranslate nohighlight">\(T\in\R^{n\times n}\)</span> is <em>upper triangular</em> if <span class="math notranslate nohighlight">\(t_{ij} = 0\)</span> for
+<span class="math notranslate nohighlight">\(i&gt;j\)</span> and <em>lower triangular</em> if <span class="math notranslate nohighlight">\(t_{ij} = 0\)</span> for <span class="math notranslate nohighlight">\(i&lt;j\)</span>. It is <em>unit</em> lower
+(upper) triangular if in addition all diagonal entries equal <span class="math notranslate nohighlight">\(1\)</span>. Since
+<span class="math notranslate nohighlight">\(\det T = t_{11}t_{22}\cdots t_{nn}\)</span>, a triangular matrix is nonsingular if
+and only if all its diagonal entries are nonzero. Products and inverses of
+lower triangular matrices are lower triangular, and products and inverses of
+unit lower triangular matrices are unit lower triangular.</p>
+<p>For an upper triangular <span class="math notranslate nohighlight">\(U\)</span> with nonzero diagonal, the last equation of
+<span class="math notranslate nohighlight">\(Ux = y\)</span> involves only <span class="math notranslate nohighlight">\(x_n\)</span>, the one before it only <span class="math notranslate nohighlight">\(x_{n-1}\)</span> and <span class="math notranslate nohighlight">\(x_n\)</span>,
+and so on. Solving from the bottom up gives <em>back substitution</em>,</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-back-sub">
+<span class="eqno">(5.1)<a class="headerlink" href="#equation-ch05-eq-back-sub" title="Link to this equation">#</a></span>\[
+x_i = \frac{1}{u_{ii}}\Big(y_i - \sum_{j=i+1}^{n} u_{ij}x_j\Big),
+\qquad i = n, n-1, \dots, 1,
+\]</div>
+<p>and solving <span class="math notranslate nohighlight">\(Ly = b\)</span> from the top down gives <em>forward substitution</em>,
+<span class="math notranslate nohighlight">\(y_i = \big(b_i - \sum_{j&lt;i}\ell_{ij}y_j\big)/\ell_{ii}\)</span> for
+<span class="math notranslate nohighlight">\(i = 1,\dots,n\)</span>.</p>
+<div class="proof algorithm admonition" id="ch05-alg-back-sub">
+<p class="admonition-title"><span class="caption-number">Algorithm 5.1 </span> (Back substitution)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> upper triangular <span class="math notranslate nohighlight">\(U\in\R^{n\times n}\)</span> with <span class="math notranslate nohighlight">\(u_{ii}\ne0\)</span>, and
+<span class="math notranslate nohighlight">\(y\in\R^n\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(x\in\R^n\)</span> with <span class="math notranslate nohighlight">\(Ux = y\)</span>.</p>
+<ol class="arabic simple">
+<li><p>For <span class="math notranslate nohighlight">\(i = n, n-1, \dots, 1\)</span>:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(s \leftarrow y_i - \sum_{j=i+1}^{n} u_{ij}x_j\)</span> (an inner product of
+length <span class="math notranslate nohighlight">\(n-i\)</span>).</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_i \leftarrow s/u_{ii}\)</span>.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p><strong>Cost.</strong> Step <span class="math notranslate nohighlight">\(i\)</span> uses <span class="math notranslate nohighlight">\(n-i\)</span> multiplications, <span class="math notranslate nohighlight">\(n-i\)</span> subtractions and one
+division, so back substitution costs
+<span class="math notranslate nohighlight">\(\sum_{i=1}^{n}\big(2(n-i)+1\big) = n(n-1) + n = n^2\)</span> flops. Forward
+substitution also costs <span class="math notranslate nohighlight">\(n^2\)</span> flops, or <span class="math notranslate nohighlight">\(n^2 - n\)</span> when <span class="math notranslate nohighlight">\(L\)</span> is unit lower
+triangular and the divisions are omitted. A triangular solve therefore costs
+about as much as one matrix-vector product, which is small compared with the
+<span class="math notranslate nohighlight">\(\bigO(n^3)\)</span> cost of a factorization.</p>
+<p>The loop in <a class="reference internal" href="#ch05-alg-back-sub">Algorithm 5.1</a> accesses <span class="math notranslate nohighlight">\(U\)</span> by rows. Exchanging the
+order of the loops gives a <em>column-oriented</em> version: once <span class="math notranslate nohighlight">\(x_n\)</span> is known,
+subtract <span class="math notranslate nohighlight">\(x_n\)</span> times the last column of <span class="math notranslate nohighlight">\(U\)</span> from <span class="math notranslate nohighlight">\(y\)</span>, then compute <span class="math notranslate nohighlight">\(x_{n-1}\)</span>,
+and so on. Both versions perform the same flops; which is faster depends on
+how the matrix is stored, and optimized libraries (the level-2 BLAS routine
+<code class="docutils literal notranslate"><span class="pre">trsv</span></code> and the level-3 routine <code class="docutils literal notranslate"><span class="pre">trsm</span></code> for many right-hand sides) choose for
+you.</p>
+<p><strong>Stability.</strong> Triangular solves are backward stable in the strongest,
+componentwise, sense.</p>
+<div class="proof theorem admonition" id="ch05-thm-triangular">
+<p class="admonition-title"><span class="caption-number">Theorem 5.1 </span> (Backward stability of substitution)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(T\in\R^{n\times n}\)</span> be a nonsingular triangular matrix and let <span class="math notranslate nohighlight">\(\hat x\)</span>
+be the solution of <span class="math notranslate nohighlight">\(Tx = b\)</span> computed by forward or back substitution in
+floating-point arithmetic. Then</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-triangular">
+<span class="eqno">(5.2)<a class="headerlink" href="#equation-ch05-eq-triangular" title="Link to this equation">#</a></span>\[
+(T + \Delta T)\hat x = b,\qquad |\Delta T|\le\gamma_n|T| .
+\]</div>
+<p>This is <span class="bibtex-citation" id="id1">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Theorem 8.5; the result holds for any ordering
+of the inner products in <a class="reference internal" href="#equation-ch05-eq-back-sub">(5.1)</a>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <em>Sketch.</em> Consider back substitution. The computed <span class="math notranslate nohighlight">\(\hat x_i\)</span> is obtained by
+subtracting the products <span class="math notranslate nohighlight">\(u_{ij}\hat x_j\)</span> from <span class="math notranslate nohighlight">\(y_i\)</span> one at a time and then
+dividing by <span class="math notranslate nohighlight">\(u_{ii}\)</span>. Each product, each subtraction and the division commit
+one rounding error. Collecting the factors <span class="math notranslate nohighlight">\((1+\delta)\)</span> that multiply each
+term and moving them onto the matrix entries shows that</p>
+<div class="math notranslate nohighlight">
+\[
+u_{ii}(1+\theta_{ii})\hat x_i = y_i - \sum_{j&gt;i}u_{ij}(1+\theta_{ij})\hat x_j,
+\]</div>
+<p>where each <span class="math notranslate nohighlight">\(1+\theta_{ij}\)</span> is a product and quotient of at most <span class="math notranslate nohighlight">\(n\)</span> factors
+<span class="math notranslate nohighlight">\(1+\delta\)</span>, so that <span class="math notranslate nohighlight">\(|\theta_{ij}|\le\gamma_n\)</span> by the standard lemma on
+products of such factors (<a class="reference internal" href="../ch03-floating-point/notes.html#ch03"><span class="std std-numref">Chapter 3</span></a>). Setting
+<span class="math notranslate nohighlight">\(\Delta u_{ij} = \theta_{ij}u_{ij}\)</span> gives <a class="reference internal" href="#equation-ch05-eq-triangular">(5.2)</a>. The full
+bookkeeping is in <span class="bibtex-citation" id="id2">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Section 8.1.</p>
+</div>
+<p>The theorem says that each computed <span class="math notranslate nohighlight">\(\hat x\)</span> solves a nearby triangular
+system in which every entry of <span class="math notranslate nohighlight">\(T\)</span> has been changed by a relative amount of
+at most <span class="math notranslate nohighlight">\(\gamma_n\approx nu\)</span>. Zeros of <span class="math notranslate nohighlight">\(T\)</span> are not perturbed. The forward
+error then depends on the conditioning of <span class="math notranslate nohighlight">\(T\)</span>, which can be very large;
+triangular matrices are not in general well conditioned.</p>
+<div class="proof example admonition" id="ch05-exa-triangular">
+<p class="admonition-title"><span class="caption-number">Example 5.1 </span> (A triangular solve by hand)</p>
+<section class="example-content" id="proof-content">
+<p>For</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+U = \begin{bmatrix}2&amp;1&amp;1\\0&amp;1&amp;1\\0&amp;0&amp;2\end{bmatrix},\qquad
+y = \begin{bmatrix}4\\2\\2\end{bmatrix},
+\end{split}\]</div>
+<p>back substitution gives <span class="math notranslate nohighlight">\(x_3 = 2/2 = 1\)</span>, then <span class="math notranslate nohighlight">\(x_2 = (2 - 1\cdot1)/1 = 1\)</span>,
+then <span class="math notranslate nohighlight">\(x_1 = (4 - 1\cdot1 - 1\cdot1)/2 = 1\)</span>. This <span class="math notranslate nohighlight">\(U\)</span> reappears below as the
+upper triangular factor of a <span class="math notranslate nohighlight">\(3\times3\)</span> matrix.</p>
+</section>
+</div></section>
+<section id="gaussian-elimination-as-a-matrix-factorization">
+<span id="ch05-sec-ge"></span><h2><span class="section-number">5.2. </span>Gaussian elimination as a matrix factorization<a class="headerlink" href="#gaussian-elimination-as-a-matrix-factorization" title="Link to this heading">#</a></h2>
+<section id="gauss-transformations">
+<h3><span class="section-number">5.2.1. </span>Gauss transformations<a class="headerlink" href="#gauss-transformations" title="Link to this heading">#</a></h3>
+<p>Gaussian elimination subtracts multiples of one row from the rows below it
+until the matrix is upper triangular. To analyze it we write each step as a
+multiplication by a matrix.</p>
+<div class="proof definition admonition" id="ch05-def-gauss">
+<p class="admonition-title"><span class="caption-number">Definition 5.1 </span> (Gauss transformation)</p>
+<section class="definition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(1\le k\le n-1\)</span> and let <span class="math notranslate nohighlight">\(\ell_k = (0,\dots,0,\ell_{k+1,k},\dots,\ell_{nk})^T
+\in\R^n\)</span> have zeros in its first <span class="math notranslate nohighlight">\(k\)</span> positions. The matrix</p>
+<div class="math notranslate nohighlight">
+\[
+M_k = I - \ell_k e_k^T
+\]</div>
+<p>is called a <em>Gauss transformation</em>, and the <span class="math notranslate nohighlight">\(\ell_{ik}\)</span> are called
+<em>multipliers</em>.</p>
+</section>
+</div><p>For any matrix <span class="math notranslate nohighlight">\(B\)</span>, <span class="math notranslate nohighlight">\(M_kB = B - \ell_k(e_k^TB)\)</span> subtracts <span class="math notranslate nohighlight">\(\ell_{ik}\)</span> times
+row <span class="math notranslate nohighlight">\(k\)</span> of <span class="math notranslate nohighlight">\(B\)</span> from row <span class="math notranslate nohighlight">\(i\)</span>, for each <span class="math notranslate nohighlight">\(i&gt;k\)</span>, and leaves rows <span class="math notranslate nohighlight">\(1,\dots,k\)</span>
+unchanged. If <span class="math notranslate nohighlight">\(b_{kk}\ne0\)</span> and we choose <span class="math notranslate nohighlight">\(\ell_{ik} = b_{ik}/b_{kk}\)</span>, then
+<span class="math notranslate nohighlight">\(M_kB\)</span> has zeros in positions <span class="math notranslate nohighlight">\(k+1,\dots,n\)</span> of column <span class="math notranslate nohighlight">\(k\)</span>. Two properties
+make Gauss transformations convenient.</p>
+<div class="proof lemma admonition" id="ch05-lem-gauss">
+<p class="admonition-title"><span class="caption-number">Lemma 5.1 </span> (Inverses and products of Gauss transformations)</p>
+<section class="lemma-content" id="proof-content">
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(M_k^{-1} = I + \ell_ke_k^T\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(M_1^{-1}M_2^{-1}\cdots M_{n-1}^{-1} = I + \sum_{k=1}^{n-1}\ell_ke_k^T\)</span>,
+the unit lower triangular matrix whose <span class="math notranslate nohighlight">\(k\)</span>th column below the diagonal
+is the vector of multipliers of step <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1) <span class="math notranslate nohighlight">\((I - \ell_ke_k^T)(I + \ell_ke_k^T) = I - \ell_k(e_k^T\ell_k)e_k^T = I\)</span>,
+because the <span class="math notranslate nohighlight">\(k\)</span>th entry of <span class="math notranslate nohighlight">\(\ell_k\)</span> is zero. (2) By induction on the number of
+factors: assume <span class="math notranslate nohighlight">\(M_1^{-1}\cdots M_{k-1}^{-1} = I + \sum_{j&lt;k}\ell_je_j^T\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\Big(I + \sum_{j&lt;k}\ell_je_j^T\Big)(I + \ell_ke_k^T)
+= I + \sum_{j&lt;k}\ell_je_j^T + \ell_ke_k^T + \sum_{j&lt;k}\ell_j(e_j^T\ell_k)e_k^T,
+\]</div>
+<p>and <span class="math notranslate nohighlight">\(e_j^T\ell_k = 0\)</span> for <span class="math notranslate nohighlight">\(j&lt;k\)</span> because the first <span class="math notranslate nohighlight">\(k\)</span> entries of <span class="math notranslate nohighlight">\(\ell_k\)</span>
+vanish.</p>
+</div>
+<p>The product in the other order, <span class="math notranslate nohighlight">\(M_{n-1}\cdots M_1\)</span>, is not so simple: its
+entries contain products of multipliers (<a class="reference internal" href="#ch05-ex-gauss-product"><span class="std std-numref">Exercise 5.2</span></a>). This
+is why an implementation stores the multipliers themselves, which are the
+entries of <span class="math notranslate nohighlight">\(L\)</span>, rather than the elimination matrix.</p>
+</section>
+<section id="the-lu-factorization">
+<h3><span class="section-number">5.2.2. </span>The LU factorization<a class="headerlink" href="#the-lu-factorization" title="Link to this heading">#</a></h3>
+<p>Put <span class="math notranslate nohighlight">\(A^{(1)} = A\)</span>. If <span class="math notranslate nohighlight">\(a^{(k)}_{kk}\ne0\)</span> for <span class="math notranslate nohighlight">\(k = 1,\dots,n-1\)</span>, the choice
+<span class="math notranslate nohighlight">\(\ell_{ik} = a^{(k)}_{ik}/a^{(k)}_{kk}\)</span> and <span class="math notranslate nohighlight">\(A^{(k+1)} = M_kA^{(k)}\)</span> produces
+<span class="math notranslate nohighlight">\(U = A^{(n)} = M_{n-1}\cdots M_1A\)</span>, which is upper triangular. By
+<a class="reference internal" href="#ch05-lem-gauss">Lemma 5.1</a>,</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-lu">
+<span class="eqno">(5.3)<a class="headerlink" href="#equation-ch05-eq-lu" title="Link to this equation">#</a></span>\[
+A = LU,\qquad L = M_1^{-1}\cdots M_{n-1}^{-1} = I + \sum_{k=1}^{n-1}\ell_ke_k^T .
+\]</div>
+<p>The numbers <span class="math notranslate nohighlight">\(a^{(k)}_{kk} = u_{kk}\)</span> are the <em>pivots</em>. The update of one step,
+written in block form, is</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-schur">
+<span class="eqno">(5.4)<a class="headerlink" href="#equation-ch05-eq-schur" title="Link to this equation">#</a></span>\[\begin{split}
+\begin{bmatrix}\alpha &amp; w^T\\ v &amp; B\end{bmatrix}
+= \begin{bmatrix}1 &amp; 0\\ v/\alpha &amp; I\end{bmatrix}
+  \begin{bmatrix}\alpha &amp; w^T\\ 0 &amp; B - vw^T/\alpha\end{bmatrix},
+\end{split}\]</div>
+<p>and the matrix <span class="math notranslate nohighlight">\(S = B - vw^T/\alpha\)</span> is the <em>Schur complement</em> of <span class="math notranslate nohighlight">\(\alpha\)</span>.
+Elimination is this identity applied recursively to <span class="math notranslate nohighlight">\(S\)</span>. The update of <span class="math notranslate nohighlight">\(S\)</span>
+is a rank-one modification of <span class="math notranslate nohighlight">\(B\)</span>, a level-2 BLAS operation in the language
+of <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01"><span class="std std-numref">Chapter 1</span></a>.</p>
+<div class="proof algorithm admonition" id="ch05-alg-lu">
+<p class="admonition-title"><span class="caption-number">Algorithm 5.2 </span> (LU factorization without pivoting)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(A\)</span> overwritten by <span class="math notranslate nohighlight">\(U\)</span> in its upper triangle and by the
+multipliers <span class="math notranslate nohighlight">\(\ell_{ik}\)</span> (<span class="math notranslate nohighlight">\(i&gt;k\)</span>) in its strict lower triangle, so that
+<span class="math notranslate nohighlight">\(A = LU\)</span>; or failure if a zero pivot occurs.</p>
+<ol class="arabic simple">
+<li><p>For <span class="math notranslate nohighlight">\(k = 1, \dots, n-1\)</span>:</p>
+<ol class="arabic simple">
+<li><p>If <span class="math notranslate nohighlight">\(a_{kk} = 0\)</span>, stop: the factorization does not exist or is not
+unique (<a class="reference internal" href="#ch05-thm-lu-exists">Theorem 5.2</a>).</p></li>
+<li><p><span class="math notranslate nohighlight">\(a_{k+1:n,\,k} \leftarrow a_{k+1:n,\,k}/a_{kk}\)</span> (multipliers).</p></li>
+<li><p><span class="math notranslate nohighlight">\(a_{k+1:n,\,k+1:n} \leftarrow a_{k+1:n,\,k+1:n} - a_{k+1:n,\,k}\,a_{k,\,k+1:n}\)</span>
+(rank-one update of the Schur complement).</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><div class="proof proposition admonition" id="ch05-prop-lu-cost">
+<p class="admonition-title"><span class="caption-number">Proposition 5.1 </span> (Cost of the LU factorization)</p>
+<section class="proposition-content" id="proof-content">
+<p><a class="reference internal" href="#ch05-alg-lu">Algorithm 5.2</a> performs <span class="math notranslate nohighlight">\(\tfrac23n^3 - \tfrac12n^2 - \tfrac16n\)</span> flops.
+Solving <span class="math notranslate nohighlight">\(Ax = b\)</span> with the factors costs <span class="math notranslate nohighlight">\(2n^2 - n\)</span> further flops, so the
+total cost of a linear solve is <span class="math notranslate nohighlight">\(\tfrac23n^3 + \bigO(n^2)\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. At step <span class="math notranslate nohighlight">\(k\)</span> the active submatrix has order <span class="math notranslate nohighlight">\(m = n-k+1\)</span>. Computing the
+multipliers takes <span class="math notranslate nohighlight">\(m-1\)</span> divisions, and the rank-one update changes <span class="math notranslate nohighlight">\((m-1)^2\)</span> entries with one multiplication
+and one subtraction each. Summing over <span class="math notranslate nohighlight">\(m-1 = j = 1,\dots,n-1\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{j=1}^{n-1}\big(j + 2j^2\big) = \frac{n(n-1)}{2} + \frac{(n-1)n(2n-1)}{3}
+= \frac{n(n-1)(4n+1)}{6} = \frac23n^3 - \frac12n^2 - \frac16n .
+\]</div>
+<p>The forward substitution with the unit lower triangular <span class="math notranslate nohighlight">\(L\)</span> costs <span class="math notranslate nohighlight">\(n^2-n\)</span>
+flops and the back substitution <span class="math notranslate nohighlight">\(n^2\)</span>.</p>
+</div>
+<p>The count can be remembered geometrically: the dominant work is
+<span class="math notranslate nohighlight">\(2\sum_j j^2\approx 2\int_0^n x^2\,dx = \tfrac23n^3\)</span>, one multiply-add for
+each point of a pyramid. For comparison, a matrix-matrix product costs
+<span class="math notranslate nohighlight">\(2n^3\)</span> flops (<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01"><span class="std std-numref">Chapter 1</span></a>), so factoring a matrix costs a
+third of multiplying two matrices of the same order.</p>
+<div class="proof example admonition" id="ch05-exa-lu3">
+<p class="admonition-title"><span class="caption-number">Example 5.2 </span> (LU factorization of a <span class="math notranslate nohighlight">\(3\times3\)</span> matrix)</p>
+<section class="example-content" id="proof-content">
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}2&amp;1&amp;1\\4&amp;3&amp;3\\8&amp;7&amp;9\end{bmatrix}.
+\end{split}\]</div>
+<p>Step 1 uses the pivot <span class="math notranslate nohighlight">\(2\)</span> and the multipliers <span class="math notranslate nohighlight">\(\ell_{21} = 2\)</span>,
+<span class="math notranslate nohighlight">\(\ell_{31} = 4\)</span>: subtracting <span class="math notranslate nohighlight">\(2\times\)</span> row 1 from row 2 and <span class="math notranslate nohighlight">\(4\times\)</span> row 1
+from row 3 gives the rows <span class="math notranslate nohighlight">\((0,1,1)\)</span> and <span class="math notranslate nohighlight">\((0,3,5)\)</span>. Step 2 uses the pivot <span class="math notranslate nohighlight">\(1\)</span>
+and <span class="math notranslate nohighlight">\(\ell_{32} = 3\)</span>, and turns <span class="math notranslate nohighlight">\((0,3,5)\)</span> into <span class="math notranslate nohighlight">\((0,0,2)\)</span>. Hence</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+L = \begin{bmatrix}1&amp;0&amp;0\\2&amp;1&amp;0\\4&amp;3&amp;1\end{bmatrix},\qquad
+U = \begin{bmatrix}2&amp;1&amp;1\\0&amp;1&amp;1\\0&amp;0&amp;2\end{bmatrix},
+\end{split}\]</div>
+<p>and one checks <span class="math notranslate nohighlight">\(LU = A\)</span> by multiplication. The count of
+<a class="reference internal" href="#ch05-prop-lu-cost">Proposition 5.1</a> gives <span class="math notranslate nohighlight">\(18 - 4.5 - 0.5 = 13\)</span> flops: <span class="math notranslate nohighlight">\(2+8\)</span> in the
+first step and <span class="math notranslate nohighlight">\(1+2\)</span> in the second. To solve <span class="math notranslate nohighlight">\(Ax = b\)</span> with
+<span class="math notranslate nohighlight">\(b = (4,10,24)^T\)</span>, forward substitution gives <span class="math notranslate nohighlight">\(y = (4, 10 - 8, 24 - 16 - 6)^T =
+(4,2,2)^T\)</span>, and back substitution with <span class="math notranslate nohighlight">\(U\)</span>
+(<a class="reference internal" href="#ch05-exa-triangular">Example 5.1</a>) gives <span class="math notranslate nohighlight">\(x = (1,1,1)^T\)</span>.</p>
+</section>
+</div></section>
+<section id="existence-and-uniqueness">
+<h3><span class="section-number">5.2.3. </span>Existence and uniqueness<a class="headerlink" href="#existence-and-uniqueness" title="Link to this heading">#</a></h3>
+<p>Elimination without row interchanges breaks down exactly when a pivot is
+zero. The following theorem characterizes when this happens in terms of the
+<em>leading principal submatrices</em> <span class="math notranslate nohighlight">\(A_k = A(1{:}k, 1{:}k)\)</span>.</p>
+<div class="proof theorem admonition" id="ch05-thm-lu-exists">
+<p class="admonition-title"><span class="caption-number">Theorem 5.2 </span> (Existence and uniqueness of LU)</p>
+<section class="theorem-content" id="proof-content">
+<p>A matrix <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> has a unique factorization <span class="math notranslate nohighlight">\(A = LU\)</span> with <span class="math notranslate nohighlight">\(L\)</span>
+unit lower triangular and <span class="math notranslate nohighlight">\(U\)</span> upper triangular if and only if the leading
+principal submatrices <span class="math notranslate nohighlight">\(A_1,\dots,A_{n-1}\)</span> are nonsingular. In that case
+<span class="math notranslate nohighlight">\(\det A_k = u_{11}u_{22}\cdots u_{kk}\)</span> for every <span class="math notranslate nohighlight">\(k\)</span>, so the pivots are
+<span class="math notranslate nohighlight">\(u_{11} = a_{11}\)</span> and <span class="math notranslate nohighlight">\(u_{kk} = \det A_k/\det A_{k-1}\)</span> for <span class="math notranslate nohighlight">\(k\ge2\)</span>, and <span class="math notranslate nohighlight">\(U\)</span> is
+nonsingular if and only if <span class="math notranslate nohighlight">\(A\)</span> is.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <em>The factorization restricts to leading blocks.</em> If <span class="math notranslate nohighlight">\(A = LU\)</span>, partitioning
+after row and column <span class="math notranslate nohighlight">\(k\)</span> gives <span class="math notranslate nohighlight">\(A_k = L_kU_k\)</span>, where <span class="math notranslate nohighlight">\(L_k\)</span> and <span class="math notranslate nohighlight">\(U_k\)</span> are the
+leading <span class="math notranslate nohighlight">\(k\times k\)</span> blocks, because the blocks <span class="math notranslate nohighlight">\(L_{12}\)</span> and <span class="math notranslate nohighlight">\(U_{21}\)</span> are
+zero. Hence <span class="math notranslate nohighlight">\(\det A_k = \det U_k = u_{11}\cdots u_{kk}\)</span>.</p>
+<p><em>Sufficiency, by induction on <span class="math notranslate nohighlight">\(n\)</span>.</em> For <span class="math notranslate nohighlight">\(n=1\)</span>, <span class="math notranslate nohighlight">\(A = [1][a_{11}]\)</span> is the only
+factorization. Let <span class="math notranslate nohighlight">\(n\ge2\)</span> and assume the statement for order <span class="math notranslate nohighlight">\(n-1\)</span>. The
+matrix <span class="math notranslate nohighlight">\(A_{n-1}\)</span> satisfies the hypothesis for order <span class="math notranslate nohighlight">\(n-1\)</span> (its own leading
+submatrices are <span class="math notranslate nohighlight">\(A_1,\dots,A_{n-2}\)</span>), so it has a unique factorization
+<span class="math notranslate nohighlight">\(A_{n-1} = L_{n-1}U_{n-1}\)</span>, and <span class="math notranslate nohighlight">\(U_{n-1}\)</span> is nonsingular because
+<span class="math notranslate nohighlight">\(\det U_{n-1} = \det A_{n-1}\ne0\)</span>. Write</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}A_{n-1}&amp;b\\c^T&amp;d\end{bmatrix}
+= \begin{bmatrix}L_{n-1}&amp;0\\ l^T&amp;1\end{bmatrix}
+  \begin{bmatrix}U_{n-1}&amp;y\\0&amp;z\end{bmatrix} .
+\end{split}\]</div>
+<p>Multiplying out, this holds if and only if <span class="math notranslate nohighlight">\(L_{n-1}y = b\)</span>,
+<span class="math notranslate nohighlight">\(l^TU_{n-1} = c^T\)</span> and <span class="math notranslate nohighlight">\(l^Ty + z = d\)</span>. Since <span class="math notranslate nohighlight">\(L_{n-1}\)</span> and <span class="math notranslate nohighlight">\(U_{n-1}\)</span> are
+nonsingular, these equations have exactly one solution <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(l\)</span>, <span class="math notranslate nohighlight">\(z\)</span>.
+Every factorization of <span class="math notranslate nohighlight">\(A\)</span> restricts to a factorization of <span class="math notranslate nohighlight">\(A_{n-1}\)</span>,
+which is unique, so the factorization of <span class="math notranslate nohighlight">\(A\)</span> is unique.</p>
+<p><em>Necessity.</em> Suppose <span class="math notranslate nohighlight">\(A = LU\)</span> and <span class="math notranslate nohighlight">\(A_k\)</span> is singular for some <span class="math notranslate nohighlight">\(k\le n-1\)</span>. We
+construct a second factorization. Since <span class="math notranslate nohighlight">\(\det U_k = \det A_k = 0\)</span>, there is
+<span class="math notranslate nohighlight">\(w\in\R^k\)</span>, <span class="math notranslate nohighlight">\(w\ne0\)</span>, with <span class="math notranslate nohighlight">\(w^TU_k = 0\)</span>. Let <span class="math notranslate nohighlight">\(\hat w = (w^T, 0,\dots,0)^T\in\R^n\)</span>
+and define</p>
+<div class="math notranslate nohighlight">
+\[
+L' = L\,(I + e_{k+1}\hat w^T),\qquad U' = (I - e_{k+1}\hat w^T)\,U .
+\]</div>
+<p>Because <span class="math notranslate nohighlight">\(\hat w^Te_{k+1} = 0\)</span>, the two middle factors are inverse to each
+other and <span class="math notranslate nohighlight">\(L'U' = LU = A\)</span>. The matrix <span class="math notranslate nohighlight">\(e_{k+1}\hat w^T\)</span> has its nonzero
+entries in row <span class="math notranslate nohighlight">\(k+1\)</span>, columns <span class="math notranslate nohighlight">\(1,\dots,k\)</span>, so it is strictly lower
+triangular and <span class="math notranslate nohighlight">\(L'\)</span> is unit lower triangular. Next,
+<span class="math notranslate nohighlight">\(e_{k+1}\hat w^TU\)</span> is zero outside row <span class="math notranslate nohighlight">\(k+1\)</span>, and its row <span class="math notranslate nohighlight">\(k+1\)</span> is
+<span class="math notranslate nohighlight">\(w^TU(1{:}k,:)\)</span>, whose first <span class="math notranslate nohighlight">\(k\)</span> entries are <span class="math notranslate nohighlight">\(w^TU_k = 0\)</span>; so <span class="math notranslate nohighlight">\(U'\)</span> is upper
+triangular. Finally <span class="math notranslate nohighlight">\(L' - L = (Le_{k+1})\hat w^T\ne0\)</span> because
+<span class="math notranslate nohighlight">\(Le_{k+1}\neq 0\)</span> and <span class="math notranslate nohighlight">\(\hat w\ne0\)</span>. Thus the factorization is not unique. If
+no factorization exists there is nothing more to prove. The formula for the
+pivots follows from <span class="math notranslate nohighlight">\(\det A_k = u_{11}\cdots u_{kk}\)</span>.</p>
+</div>
+<p>Two remarks. First, the theorem is about exact arithmetic. A leading
+submatrix that is singular causes a zero pivot, but a leading submatrix that
+is merely <em>nearly</em> singular causes a small pivot, which is just as harmful in
+floating point, as we see next. Second, some important classes of matrices
+satisfy the hypothesis automatically and, in addition, have small
+multipliers: symmetric positive definite matrices, for which the
+factorization becomes the Cholesky factorization of
+<a class="reference internal" href="../ch06-cholesky/notes.html#ch06"><span class="std std-numref">Chapter 6</span></a>, and matrices that are diagonally dominant by
+columns (<a class="reference internal" href="#ch05-ex-diag-dominant"><span class="std std-numref">Exercise 5.6</span></a>).</p>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>Does <span class="math notranslate nohighlight">\(A = \begin{bmatrix}0&amp;1\\1&amp;0\end{bmatrix}\)</span> have an LU factorization?
+Does it have one after its rows are interchanged? What does
+<a class="reference internal" href="#ch05-thm-lu-exists">Theorem 5.2</a> say about <span class="math notranslate nohighlight">\(B = \begin{bmatrix}1&amp;1\\1&amp;1\end{bmatrix}\)</span>?</p>
+<p><em>Answer.</em> If <span class="math notranslate nohighlight">\(A = LU\)</span> then <span class="math notranslate nohighlight">\(a_{11} = u_{11} = 0\)</span> and
+<span class="math notranslate nohighlight">\(a_{21} = \ell_{21}u_{11} = 0\)</span>, contradicting <span class="math notranslate nohighlight">\(a_{21} = 1\)</span>; so there is no LU
+factorization, although <span class="math notranslate nohighlight">\(A\)</span> is orthogonal and perfectly conditioned. After the
+interchange the matrix is <span class="math notranslate nohighlight">\(I = I\cdot I\)</span>. For <span class="math notranslate nohighlight">\(B\)</span>, <span class="math notranslate nohighlight">\(A_1 = [1]\)</span> is
+nonsingular, so the factorization exists and is unique:
+<span class="math notranslate nohighlight">\(\ell_{21} = 1\)</span>, <span class="math notranslate nohighlight">\(U = \begin{bmatrix}1&amp;1\\0&amp;0\end{bmatrix}\)</span>. The matrix <span class="math notranslate nohighlight">\(B\)</span> is
+singular, and this shows up as <span class="math notranslate nohighlight">\(u_{22} = 0\)</span>; singularity of <span class="math notranslate nohighlight">\(A = A_n\)</span> itself
+does not prevent the factorization.</p>
+</div>
+</section>
+</section>
+<section id="the-need-for-pivoting">
+<span id="ch05-sec-pivoting"></span><h2><span class="section-number">5.3. </span>The need for pivoting<a class="headerlink" href="#the-need-for-pivoting" title="Link to this heading">#</a></h2>
+<section id="a-small-pivot">
+<h3><span class="section-number">5.3.1. </span>A small pivot<a class="headerlink" href="#a-small-pivot" title="Link to this heading">#</a></h3>
+<p>A zero pivot stops elimination. A small pivot does not stop it, but it
+produces huge multipliers and huge entries in <span class="math notranslate nohighlight">\(U\)</span>, and rounding errors
+committed on the scale of those entries are large compared with the data.</p>
+<div class="proof example admonition" id="ch05-exa-small-pivot">
+<p class="admonition-title"><span class="caption-number">Example 5.3 </span> (A small pivot in double precision)</p>
+<section class="example-content" id="proof-content">
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}\delta&amp;1\\1&amp;1\end{bmatrix},\qquad
+b = \begin{bmatrix}1\\2\end{bmatrix},\qquad
+x = \frac{1}{1-\delta}\begin{bmatrix}1\\1-2\delta\end{bmatrix}.
+\end{split}\]</div>
+<p>For small <span class="math notranslate nohighlight">\(\delta\)</span> the exact solution is close to <span class="math notranslate nohighlight">\((1,1)^T\)</span>. The matrix is
+well conditioned: as <span class="math notranslate nohighlight">\(\delta\to0\)</span> it tends to the symmetric matrix
+<span class="math notranslate nohighlight">\(\begin{bmatrix}0&amp;1\\1&amp;1\end{bmatrix}\)</span>, whose eigenvalues are
+<span class="math notranslate nohighlight">\((1\pm\sqrt5)/2\approx1.618\)</span> and <span class="math notranslate nohighlight">\(-0.618\)</span>, so that
+<span class="math notranslate nohighlight">\(\kappa_2(A)\to(3+\sqrt5)/2\approx2.62\)</span>.</p>
+<p>Take <span class="math notranslate nohighlight">\(\delta = 10^{-20}\)</span> and eliminate without pivoting in IEEE double
+precision. The multiplier is <span class="math notranslate nohighlight">\(\hat\ell_{21} = \fl(1/\delta)\approx10^{20}\)</span>.
+The exact pivot <span class="math notranslate nohighlight">\(u_{22} = 1 - 10^{20}\)</span> is not representable; the spacing of
+the floating-point numbers near <span class="math notranslate nohighlight">\(10^{20}\)</span> is <span class="math notranslate nohighlight">\(2^{14} = 16384\)</span>, so
+<span class="math notranslate nohighlight">\(\hat u_{22} = \fl(1 - \hat\ell_{21}) = -\hat\ell_{21}\)</span> and the <span class="math notranslate nohighlight">\(1\)</span> is lost.
+Forward substitution gives <span class="math notranslate nohighlight">\(\hat y_2 = \fl(2 - \hat\ell_{21}\cdot1) =
+-\hat\ell_{21}\)</span>, and back substitution gives</p>
+<div class="math notranslate nohighlight">
+\[
+\hat x_2 = \fl(\hat y_2/\hat u_{22}) = 1,\qquad
+\hat x_1 = \fl\big((1 - \hat x_2)/\delta\big) = 0 .
+\]</div>
+<p>The computed solution <span class="math notranslate nohighlight">\((0,1)^T\)</span> has a relative error of about <span class="math notranslate nohighlight">\(70\%\)</span> in the
+2-norm and <span class="math notranslate nohighlight">\(100\%\)</span> in its first component. With partial pivoting (defined
+below) the rows are interchanged first, the multiplier is <span class="math notranslate nohighlight">\(\delta\)</span>, and
+the computation <span class="math notranslate nohighlight">\(\hat u_{22} = \fl(1-\delta) = 1\)</span>,
+<span class="math notranslate nohighlight">\(\hat y_2 = \fl(1 - 2\delta) = 1\)</span>, <span class="math notranslate nohighlight">\(\hat x_2 = 1\)</span>,
+<span class="math notranslate nohighlight">\(\hat x_1 = \fl(2 - 1) = 1\)</span> gives the exact solution rounded to working
+precision.</p>
+</section>
+</div><p>The damage is easy to locate. In the unpivoted computation, every operation
+was performed with a relative error below <span class="math notranslate nohighlight">\(u\)</span>, and the computed factors satisfy</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\hat L\hat U = \begin{bmatrix}1&amp;0\\\hat\ell_{21}&amp;1\end{bmatrix}
+\begin{bmatrix}\delta&amp;1\\0&amp;-\hat\ell_{21}\end{bmatrix}
+= \begin{bmatrix}\delta&amp;1\\\hat\ell_{21}\delta&amp;0\end{bmatrix},
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\hat\ell_{21}\delta = 1\)</span> to within a relative error of order <span class="math notranslate nohighlight">\(u\)</span>: they
+are the exact factors of a matrix whose <span class="math notranslate nohighlight">\((2,2)\)</span> entry is <span class="math notranslate nohighlight">\(0\)</span> instead of <span class="math notranslate nohighlight">\(1\)</span>.
+This perturbation is small compared with the entries of <span class="math notranslate nohighlight">\(|\hat L||\hat U|\)</span>
+(the <span class="math notranslate nohighlight">\((2,2)\)</span> entry of <span class="math notranslate nohighlight">\(|\hat L||\hat U|\)</span> is <span class="math notranslate nohighlight">\(2\times10^{20}\)</span>), which is all
+that the backward error analysis of <a class="reference internal" href="#ch05-sec-error-analysis"><span class="std std-numref">Section 5.4</span></a>
+guarantees, but it is not small compared with <span class="math notranslate nohighlight">\(A\)</span>. The factorization of a
+matrix whose entries are at most <span class="math notranslate nohighlight">\(1\)</span> in modulus has produced entries of size
+<span class="math notranslate nohighlight">\(10^{20}\)</span>: the elements of
+<span class="math notranslate nohighlight">\(U\)</span> have <em>grown</em>.</p>
+<p>The failure is not limited to extremely small <span class="math notranslate nohighlight">\(\delta\)</span>. The error in
+<span class="math notranslate nohighlight">\(\hat x_1 = (1-\hat x_2)/\delta\)</span> is essentially the rounding error in
+<span class="math notranslate nohighlight">\(\hat x_2\)</span>, which is of order <span class="math notranslate nohighlight">\(u\)</span>, divided by <span class="math notranslate nohighlight">\(\delta\)</span>: the relative error
+in <span class="math notranslate nohighlight">\(\hat x_1\)</span> is typically of order <span class="math notranslate nohighlight">\(u/\delta\)</span>. The table lists the
+computed <span class="math notranslate nohighlight">\(\hat x_1\)</span> for several values of <span class="math notranslate nohighlight">\(\delta\)</span> (computed in double
+precision; see the lab).</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(\delta\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\hat x_1\)</span> without pivoting</p></th>
+<th class="head"><p>relative error of <span class="math notranslate nohighlight">\(\hat x_1\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(10^{-8}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.0000000050247593\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(5.0\times10^{-9}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(10^{-15}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(0.9992007221626408\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(8.0\times10^{-4}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(10^{-16}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2.220446049250313\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.2\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(10^{-17}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(10^{-20}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For <span class="math notranslate nohighlight">\(\delta = 10^{-15}\)</span> only about three significant digits of <span class="math notranslate nohighlight">\(\hat x_1\)</span> are
+correct, and for <span class="math notranslate nohighlight">\(\delta = 10^{-16}\)</span> none are. With partial pivoting the
+relative error is at most of order <span class="math notranslate nohighlight">\(u\)</span> for every <span class="math notranslate nohighlight">\(\delta\)</span>.
+<a class="reference internal" href="#ch05-fig-small-pivot"><span class="std std-numref">Figure 5.1</span></a> shows the whole range.</p>
+<figure class="align-default" id="ch05-fig-small-pivot">
+<a class="reference internal image-reference" href="../_images/ch05-small-pivot.png"><img alt="Relative error of the first solution component versus delta on log-log axes. Without pivoting the error follows the line u over delta up to one; with partial pivoting it stays at the level of the unit roundoff." src="../_images/ch05-small-pivot.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5.1 </span><span class="caption-text">Relative error of <span class="math notranslate nohighlight">\(\hat x_1\)</span> for the system of
+<a class="reference internal" href="#ch05-exa-small-pivot">Example 5.3</a>, as a function of the pivot <span class="math notranslate nohighlight">\(\delta\)</span>. Without
+pivoting the error follows <span class="math notranslate nohighlight">\(u/\delta\)</span> until it saturates at <span class="math notranslate nohighlight">\(100\%\)</span>; with
+partial pivoting it stays at the level of <span class="math notranslate nohighlight">\(u\)</span> (errors below <span class="math notranslate nohighlight">\(u/10\)</span>,
+including exact results, are plotted at <span class="math notranslate nohighlight">\(u/10\)</span>). The matrix is well
+conditioned for every <span class="math notranslate nohighlight">\(\delta\)</span>.</span><a class="headerlink" href="#ch05-fig-small-pivot" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The lesson is that unpivoted elimination is <em>unstable</em>: the problem is well
+conditioned, yet the answer is wrong. The growth of <span class="math notranslate nohighlight">\(|\hat u_{22}|\)</span> from <span class="math notranslate nohighlight">\(1\)</span>
+to <span class="math notranslate nohighlight">\(\approx1/\delta\)</span> shows that growth without pivoting is not bounded by
+any function of <span class="math notranslate nohighlight">\(n\)</span>: already for <span class="math notranslate nohighlight">\(n = 2\)</span> it can be as large as we like.</p>
+</section>
+<section id="partial-pivoting">
+<h3><span class="section-number">5.3.2. </span>Partial pivoting<a class="headerlink" href="#partial-pivoting" title="Link to this heading">#</a></h3>
+<p>The remedy is to avoid small pivots by reordering the rows. At step <span class="math notranslate nohighlight">\(k\)</span>,
+<em>partial pivoting</em> chooses as pivot the entry of largest absolute value in
+the active part of column <span class="math notranslate nohighlight">\(k\)</span>, that is, among <span class="math notranslate nohighlight">\(a^{(k)}_{kk},\dots,a^{(k)}_{nk}\)</span>,
+and interchanges its row with row <span class="math notranslate nohighlight">\(k\)</span> before eliminating. Then every
+multiplier satisfies <span class="math notranslate nohighlight">\(|\ell_{ik}|\le1\)</span>.</p>
+<p>A <em>permutation matrix</em> <span class="math notranslate nohighlight">\(P\)</span> is the identity with its rows reordered; <span class="math notranslate nohighlight">\(PA\)</span> has
+the same rows as <span class="math notranslate nohighlight">\(A\)</span> in the new order, and <span class="math notranslate nohighlight">\(P^{-1} = P^T\)</span>. Let <span class="math notranslate nohighlight">\(P_k\)</span> denote
+the permutation matrix that interchanges rows <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(p_k\ge k\)</span> (with
+<span class="math notranslate nohighlight">\(P_k = I\)</span> if <span class="math notranslate nohighlight">\(p_k = k\)</span>).</p>
+<div class="proof algorithm admonition" id="ch05-alg-gepp">
+<p class="admonition-title"><span class="caption-number">Algorithm 5.3 </span> (LU factorization with partial pivoting)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span>.</p>
+<p><strong>Output:</strong> pivot indices <span class="math notranslate nohighlight">\(p_1,\dots,p_{n-1}\)</span> and <span class="math notranslate nohighlight">\(A\)</span> overwritten by <span class="math notranslate nohighlight">\(U\)</span> and
+the multipliers, such that <span class="math notranslate nohighlight">\(PA = LU\)</span> with
+<span class="math notranslate nohighlight">\(P = P_{n-1}\cdots P_1\)</span> and <span class="math notranslate nohighlight">\(|\ell_{ij}|\le1\)</span>.</p>
+<ol class="arabic simple">
+<li><p>For <span class="math notranslate nohighlight">\(k = 1, \dots, n-1\)</span>:</p>
+<ol class="arabic simple">
+<li><p>Choose <span class="math notranslate nohighlight">\(p_k\ge k\)</span> with <span class="math notranslate nohighlight">\(|a_{p_k,k}| = \max_{i\ge k}|a_{ik}|\)</span> (the first
+such index if there are ties).</p></li>
+<li><p>Interchange rows <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(p_k\)</span> of the whole array <span class="math notranslate nohighlight">\(A\)</span> (this also
+interchanges multipliers stored in columns <span class="math notranslate nohighlight">\(1,\dots,k-1\)</span>).</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(a_{kk} = 0\)</span>, the active part of column <span class="math notranslate nohighlight">\(k\)</span> is zero: record that
+<span class="math notranslate nohighlight">\(U\)</span> is singular and continue with the next <span class="math notranslate nohighlight">\(k\)</span> (nothing needs to be
+eliminated).</p></li>
+<li><p><span class="math notranslate nohighlight">\(a_{k+1:n,\,k} \leftarrow a_{k+1:n,\,k}/a_{kk}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(a_{k+1:n,\,k+1:n} \leftarrow a_{k+1:n,\,k+1:n} - a_{k+1:n,\,k}\,a_{k,\,k+1:n}\)</span>.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p>The pivot search costs <span class="math notranslate nohighlight">\(\sum_k(n-k)\approx n^2/2\)</span> comparisons and the
+interchanges move <span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> numbers, both negligible against the
+<span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> flops, which are unchanged. The zero-pivot branch of the
+algorithm is the correct treatment of
+an exactly zero pivot column: the factorization <span class="math notranslate nohighlight">\(PA = LU\)</span> remains exact, with
+<span class="math notranslate nohighlight">\(u_{kk} = 0\)</span>, and a solver must then report that <span class="math notranslate nohighlight">\(U\)</span> is singular. LAPACK’s
+<code class="docutils literal notranslate"><span class="pre">getrf</span></code> behaves in this way and returns the index of the first zero pivot.
+No threshold such as “<span class="math notranslate nohighlight">\(|a_{kk}|&lt;10^{-14}\)</span>” should be used to skip a step: it
+depends on the scaling of <span class="math notranslate nohighlight">\(A\)</span>, it cannot decide singularity (a matrix with
+all pivots of size <span class="math notranslate nohighlight">\(10^{-15}\)</span> can be perfectly conditioned), and skipping the
+elimination of a nonzero column leaves nonzero entries below the diagonal
+that a subsequent <code class="docutils literal notranslate"><span class="pre">triu</span></code> would silently discard. Whether a nonsingular
+matrix is too close to singular for the purpose at hand is a question about
+<span class="math notranslate nohighlight">\(\kappa(A)\)</span>, answered by a condition estimate
+(<a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>), not by the size of a pivot.</p>
+<div class="proof theorem admonition" id="ch05-thm-gepp">
+<p class="admonition-title"><span class="caption-number">Theorem 5.3 </span> (Partial pivoting always succeeds)</p>
+<section class="theorem-content" id="proof-content">
+<p>For every <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span>, <a class="reference internal" href="#ch05-alg-gepp">Algorithm 5.3</a> in exact arithmetic
+produces a permutation matrix <span class="math notranslate nohighlight">\(P\)</span>, a unit lower triangular <span class="math notranslate nohighlight">\(L\)</span> with
+<span class="math notranslate nohighlight">\(|\ell_{ij}|\le1\)</span> and an upper triangular <span class="math notranslate nohighlight">\(U\)</span> such that <span class="math notranslate nohighlight">\(PA = LU\)</span>. If <span class="math notranslate nohighlight">\(A\)</span> is
+nonsingular, all pivots <span class="math notranslate nohighlight">\(u_{kk}\)</span> are nonzero.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. After <span class="math notranslate nohighlight">\(k-1\)</span> steps the algorithm has formed</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A^{(k)} = M_{k-1}P_{k-1}\cdots M_1P_1A
+= \begin{bmatrix}U_{11}&amp;U_{12}\\0&amp;S\end{bmatrix},
+\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(U_{11}\)</span> upper triangular of order <span class="math notranslate nohighlight">\(k-1\)</span>. At step <span class="math notranslate nohighlight">\(k\)</span> the pivot is the
+entry of largest modulus in the first column of <span class="math notranslate nohighlight">\(S\)</span>. If it is nonzero, all
+multipliers have modulus at most <span class="math notranslate nohighlight">\(1\)</span>. If it is zero, the column is already
+eliminated and <span class="math notranslate nohighlight">\(M_k = I\)</span>. If <span class="math notranslate nohighlight">\(A\)</span> is nonsingular, so is <span class="math notranslate nohighlight">\(A^{(k)}\)</span>, and
+<span class="math notranslate nohighlight">\(\det A^{(k)} = \det U_{11}\det S\)</span> shows that <span class="math notranslate nohighlight">\(S\)</span> is nonsingular; its first
+column is then nonzero and so is the pivot.</p>
+<p>After <span class="math notranslate nohighlight">\(n-1\)</span> steps, <span class="math notranslate nohighlight">\(M_{n-1}P_{n-1}\cdots M_1P_1A = U\)</span> is upper triangular. To
+move the permutations to the right, define for <span class="math notranslate nohighlight">\(k = 1,\dots,n-1\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+\tilde M_k = P_{n-1}\cdots P_{k+1}\,M_k\,P_{k+1}\cdots P_{n-1}.
+\]</div>
+<p>Since each <span class="math notranslate nohighlight">\(P_j\)</span> is a transposition, <span class="math notranslate nohighlight">\(P_j^2 = I\)</span>, and the product telescopes:
+<span class="math notranslate nohighlight">\(\tilde M_{n-1}\cdots\tilde M_1\,P_{n-1}\cdots P_1 = M_{n-1}P_{n-1}\cdots M_1P_1\)</span>.
+Moreover, <span class="math notranslate nohighlight">\(P_j\)</span> with <span class="math notranslate nohighlight">\(j&gt;k\)</span> interchanges two rows with indices <span class="math notranslate nohighlight">\(\ge j&gt;k\)</span>, so
+<span class="math notranslate nohighlight">\(e_k^TP_j = e_k^T\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[
+\tilde M_k = I - (P_{n-1}\cdots P_{k+1}\ell_k)e_k^T .
+\]</div>
+<p>This is a Gauss transformation whose multiplier vector is a permutation of
+the entries of <span class="math notranslate nohighlight">\(\ell_k\)</span> in positions <span class="math notranslate nohighlight">\(k+1,\dots,n\)</span>; its entries still have
+modulus at most <span class="math notranslate nohighlight">\(1\)</span>. With <span class="math notranslate nohighlight">\(P = P_{n-1}\cdots P_1\)</span> we get
+<span class="math notranslate nohighlight">\(\tilde M_{n-1}\cdots\tilde M_1PA = U\)</span>, hence <span class="math notranslate nohighlight">\(PA = LU\)</span> with
+<span class="math notranslate nohighlight">\(L = \tilde M_1^{-1}\cdots\tilde M_{n-1}^{-1}\)</span>, which is unit lower triangular
+with <span class="math notranslate nohighlight">\(|\ell_{ij}|\le1\)</span> by <a class="reference internal" href="#ch05-lem-gauss">Lemma 5.1</a>. The permuted multiplier
+vectors are exactly what the algorithm produces by interchanging
+entire rows of the array, including the multipliers stored in earlier
+columns.</p>
+</div>
+<div class="proof example admonition" id="ch05-exa-gepp3">
+<p class="admonition-title"><span class="caption-number">Example 5.4 </span> (Partial pivoting on the <span class="math notranslate nohighlight">\(3\times3\)</span> example)</p>
+<section class="example-content" id="proof-content">
+<p>For the matrix <span class="math notranslate nohighlight">\(A\)</span> of <a class="reference internal" href="#ch05-exa-lu3">Example 5.2</a>, the first pivot is <span class="math notranslate nohighlight">\(8\)</span> (row 3).
+After interchanging rows 1 and 3 the multipliers are <span class="math notranslate nohighlight">\(\tfrac12\)</span> and
+<span class="math notranslate nohighlight">\(\tfrac14\)</span>, and the active rows become <span class="math notranslate nohighlight">\((0,-\tfrac12,-\tfrac32)\)</span> (from the old
+row 2) and <span class="math notranslate nohighlight">\((0,-\tfrac34,-\tfrac54)\)</span> (from the old row 1). The second pivot is
+<span class="math notranslate nohighlight">\(-\tfrac34\)</span>, so these two rows are interchanged, the multiplier is
+<span class="math notranslate nohighlight">\((-\tfrac12)/(-\tfrac34) = \tfrac23\)</span>, and the last pivot is
+<span class="math notranslate nohighlight">\(-\tfrac32 - \tfrac23(-\tfrac54) = -\tfrac23\)</span>. The result is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+P = \begin{bmatrix}0&amp;0&amp;1\\1&amp;0&amp;0\\0&amp;1&amp;0\end{bmatrix},\quad
+L = \begin{bmatrix}1&amp;0&amp;0\\\tfrac14&amp;1&amp;0\\\tfrac12&amp;\tfrac23&amp;1\end{bmatrix},\quad
+U = \begin{bmatrix}8&amp;7&amp;9\\0&amp;-\tfrac34&amp;-\tfrac54\\0&amp;0&amp;-\tfrac23\end{bmatrix},
+\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(PA = LU\)</span>: the rows of <span class="math notranslate nohighlight">\(PA\)</span> are rows <span class="math notranslate nohighlight">\(3, 1, 2\)</span> of <span class="math notranslate nohighlight">\(A\)</span>. The product of the
+pivots is <span class="math notranslate nohighlight">\(8\cdot(-\tfrac34)\cdot(-\tfrac23) = 4 = \det A\)</span>, and <span class="math notranslate nohighlight">\(\det P = 1\)</span> because
+the permutation is a cyclic shift of three elements.</p>
+</section>
+</div><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">scipy.linalg.lu(A)</span></code> returns three matrices <code class="docutils literal notranslate"><span class="pre">P,</span> <span class="pre">L,</span> <span class="pre">U</span></code> with
+<span class="math notranslate nohighlight">\(A = PLU\)</span>, <strong>not</strong> <span class="math notranslate nohighlight">\(PA = LU\)</span>. Its <code class="docutils literal notranslate"><span class="pre">P</span></code> is therefore the transpose of the <span class="math notranslate nohighlight">\(P\)</span>
+in <a class="reference internal" href="#ch05-thm-gepp">Theorem 5.3</a>. For the matrix of
+<a class="reference internal" href="#ch05-exa-gepp3">Example 5.4</a>, SciPy returns the transpose of the matrix <span class="math notranslate nohighlight">\(P\)</span>
+shown there. The residual to check is <span class="math notranslate nohighlight">\(\|A - PLU\|\)</span> (equivalently
+<span class="math notranslate nohighlight">\(\|P^TA - LU\|\)</span>); computing <span class="math notranslate nohighlight">\(\|PA - LU\|\)</span> with SciPy’s <code class="docutils literal notranslate"><span class="pre">P</span></code> gives a number of
+the size of <span class="math notranslate nohighlight">\(\|A\|\)</span> whenever the permutation is not symmetric, which says
+nothing about the accuracy of the factorization.</p>
+</div>
+</section>
+</section>
+<section id="rounding-error-analysis">
+<span id="ch05-sec-error-analysis"></span><h2><span class="section-number">5.4. </span>Rounding error analysis<a class="headerlink" href="#rounding-error-analysis" title="Link to this heading">#</a></h2>
+<section id="backward-error-of-the-factorization-and-of-the-solve">
+<h3><span class="section-number">5.4.1. </span>Backward error of the factorization and of the solve<a class="headerlink" href="#backward-error-of-the-factorization-and-of-the-solve" title="Link to this heading">#</a></h3>
+<p>We now quantify what went wrong in <a class="reference internal" href="#ch05-exa-small-pivot">Example 5.3</a> and why
+pivoting helps. Pivoting only reorders rows, so the analysis of elimination
+without pivoting applies to <span class="math notranslate nohighlight">\(PA\)</span> once the permutation is fixed; we therefore
+state the results for elimination without interchanges.</p>
+<div class="proof theorem admonition" id="ch05-thm-lu-backward">
+<p class="admonition-title"><span class="caption-number">Theorem 5.4 </span> (Backward error of LU)</p>
+<section class="theorem-content" id="proof-content">
+<p>If Gaussian elimination applied to <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> runs to completion
+in floating-point arithmetic, the computed factors <span class="math notranslate nohighlight">\(\hat L\)</span> and <span class="math notranslate nohighlight">\(\hat U\)</span>
+satisfy</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-lu-backward">
+<span class="eqno">(5.5)<a class="headerlink" href="#equation-ch05-eq-lu-backward" title="Link to this equation">#</a></span>\[
+\hat L\hat U = A + \Delta A,\qquad |\Delta A|\le\gamma_n|\hat L||\hat U| .
+\]</div>
+<p>This is <span class="bibtex-citation" id="id3">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Theorem 9.3. With partial pivoting it holds with
+<span class="math notranslate nohighlight">\(A\)</span> replaced by <span class="math notranslate nohighlight">\(PA\)</span>, where <span class="math notranslate nohighlight">\(P\)</span> is the permutation that the algorithm
+actually chose.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <em>Sketch.</em> Entry <span class="math notranslate nohighlight">\((i,j)\)</span> of <span class="math notranslate nohighlight">\(A\)</span> is modified at steps <span class="math notranslate nohighlight">\(1,2,\dots\)</span> by
+subtracting the products <span class="math notranslate nohighlight">\(\hat\ell_{ik}\hat u_{kj}\)</span> one at a time; at the end
+it has become <span class="math notranslate nohighlight">\(\hat u_{ij}\)</span> (if <span class="math notranslate nohighlight">\(i\le j\)</span>) or, after division by
+<span class="math notranslate nohighlight">\(\hat u_{jj}\)</span>, the multiplier <span class="math notranslate nohighlight">\(\hat\ell_{ij}\)</span> (if <span class="math notranslate nohighlight">\(i&gt;j\)</span>). This is the same
+sequence of operations as in <a class="reference internal" href="#equation-ch05-eq-back-sub">(5.1)</a>, and the argument of
+<a class="reference internal" href="#ch05-thm-triangular">Theorem 5.1</a> gives
+<span class="math notranslate nohighlight">\(|a_{ij} - \sum_k\hat\ell_{ik}\hat u_{kj}|\le\gamma_n\sum_k|\hat\ell_{ik}||\hat u_{kj}|\)</span>,
+where the sums run over <span class="math notranslate nohighlight">\(k\le\min(i,j)\)</span> and <span class="math notranslate nohighlight">\(\hat\ell_{ii} = 1\)</span>.</p>
+</div>
+<div class="proof theorem admonition" id="ch05-thm-solve-backward">
+<p class="admonition-title"><span class="caption-number">Theorem 5.5 </span> (Backward error of the solution of <span class="math notranslate nohighlight">\(Ax = b\)</span>)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(\hat x\)</span> be computed by Gaussian elimination followed by forward and back
+substitution with the computed factors. Then</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-solve-backward">
+<span class="eqno">(5.6)<a class="headerlink" href="#equation-ch05-eq-solve-backward" title="Link to this equation">#</a></span>\[
+(A+\Delta A)\hat x = b,\qquad |\Delta A|\le\gamma_{3n}|\hat L||\hat U| .
+\]</div>
+<p>This is <span class="bibtex-citation" id="id4">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Theorem 9.4.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. By <a class="reference internal" href="#ch05-thm-triangular">Theorem 5.1</a>, the computed <span class="math notranslate nohighlight">\(\hat y\)</span> and <span class="math notranslate nohighlight">\(\hat x\)</span> satisfy
+<span class="math notranslate nohighlight">\((\hat L + \Delta L)\hat y = b\)</span> and <span class="math notranslate nohighlight">\((\hat U + \Delta U)\hat x = \hat y\)</span> with
+<span class="math notranslate nohighlight">\(|\Delta L|\le\gamma_n|\hat L|\)</span> and <span class="math notranslate nohighlight">\(|\Delta U|\le\gamma_n|\hat U|\)</span>. Hence</p>
+<div class="math notranslate nohighlight">
+\[
+b = (\hat L+\Delta L)(\hat U+\Delta U)\hat x
+= \big(A + \Delta A_1 + \hat L\Delta U + \Delta L\hat U + \Delta L\Delta U\big)\hat x ,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta A_1\)</span> is the perturbation of <a class="reference internal" href="#ch05-thm-lu-backward">Theorem 5.4</a>. The
+sum <span class="math notranslate nohighlight">\(\Delta A\)</span> of the four perturbations satisfies
+<span class="math notranslate nohighlight">\(|\Delta A|\le(3\gamma_n + \gamma_n^2)|\hat L||\hat U|\)</span>, and
+<span class="math notranslate nohighlight">\(3\gamma_n + \gamma_n^2\le\gamma_{3n}\)</span> because
+<span class="math notranslate nohighlight">\((1+\gamma_n)^3 - 1\le\gamma_{3n}\)</span> (<span class="bibtex-citation" id="id5">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Lemma 3.3).</p>
+</div>
+<p>These theorems contain the whole story of this chapter. Elimination is
+backward stable in the usual normwise sense if <span class="math notranslate nohighlight">\(|\hat L||\hat U|\)</span> is not
+much larger than <span class="math notranslate nohighlight">\(|A|\)</span>, and nothing else can go wrong. Without pivoting,
+<a class="reference internal" href="#ch05-exa-small-pivot">Example 5.3</a> has <span class="math notranslate nohighlight">\(\||\hat L||\hat U|\|\approx2/\delta\)</span>
+while <span class="math notranslate nohighlight">\(\|A\|\approx2\)</span>, and the bound permits exactly the error observed. With
+partial pivoting <span class="math notranslate nohighlight">\(|\hat\ell_{ij}|\le1\)</span> (the computed quotient of two numbers
+with <span class="math notranslate nohighlight">\(|a|\le|b|\)</span> also has modulus at most <span class="math notranslate nohighlight">\(1\)</span>, because rounding is monotone),
+so the only remaining source of trouble is the size of <span class="math notranslate nohighlight">\(\hat U\)</span>.</p>
+</section>
+<section id="the-growth-factor">
+<h3><span class="section-number">5.4.2. </span>The growth factor<a class="headerlink" href="#the-growth-factor" title="Link to this heading">#</a></h3>
+<div class="proof definition admonition" id="ch05-def-growth">
+<p class="admonition-title"><span class="caption-number">Definition 5.2 </span> (Growth factor)</p>
+<section class="definition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(a^{(k)}_{ij}\)</span> denote the entries of the matrices <span class="math notranslate nohighlight">\(A^{(k)}\)</span> computed
+during elimination (with or without pivoting). The <em>growth factor</em> is</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-growth">
+<span class="eqno">(5.7)<a class="headerlink" href="#equation-ch05-eq-growth" title="Link to this equation">#</a></span>\[
+\rho_n = \frac{\max_{i,j,k}|a^{(k)}_{ij}|}{\max_{i,j}|a_{ij}|} .
+\]</div>
+</section>
+</div><p>Since <span class="math notranslate nohighlight">\(u_{ij} = a^{(i)}_{ij}\)</span>, we have <span class="math notranslate nohighlight">\(\max_{i,j}|u_{ij}|\le\rho_n\max_{i,j}|a_{ij}|\)</span>.
+Some books, including <span class="bibtex-citation" id="id6">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span>, define the growth factor as
+the computable ratio <span class="math notranslate nohighlight">\(\max|u_{ij}|/\max|a_{ij}|\)</span>, which is never larger than
+<a class="reference internal" href="#equation-ch05-eq-growth">(5.7)</a>; all statements below about upper bounds hold for both.
+In a rounding error analysis the <span class="math notranslate nohighlight">\(a^{(k)}_{ij}\)</span> are the computed quantities.</p>
+<div class="proof corollary admonition" id="ch05-cor-normwise">
+<p class="admonition-title"><span class="caption-number">Corollary 5.1 </span> (Normwise backward error of partial pivoting)</p>
+<section class="corollary-content" id="proof-content">
+<p>For Gaussian elimination with partial pivoting, the computed solution
+satisfies <span class="math notranslate nohighlight">\((A+\Delta A)\hat x = b\)</span> with</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-normwise">
+<span class="eqno">(5.8)<a class="headerlink" href="#equation-ch05-eq-normwise" title="Link to this equation">#</a></span>\[
+\|\Delta A\|_\infty\le n^2\gamma_{3n}\,\rho_n\,\|A\|_\infty .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Apply <a class="reference internal" href="#ch05-thm-solve-backward">Theorem 5.5</a> to <span class="math notranslate nohighlight">\(PA\)</span> and <span class="math notranslate nohighlight">\(Pb\)</span> and multiply by
+<span class="math notranslate nohighlight">\(P^T\)</span>; this permutes the rows of the perturbation, which does not change its
+<span class="math notranslate nohighlight">\(\infty\)</span>-norm. Every row of <span class="math notranslate nohighlight">\(|\hat L|\)</span> has at most <span class="math notranslate nohighlight">\(n\)</span> entries of modulus at
+most <span class="math notranslate nohighlight">\(1\)</span>, so <span class="math notranslate nohighlight">\(\||\hat L|\|_\infty\le n\)</span>. Every row of <span class="math notranslate nohighlight">\(|\hat U|\)</span> has at most
+<span class="math notranslate nohighlight">\(n\)</span> entries of modulus at most <span class="math notranslate nohighlight">\(\rho_n\max_{i,j}|a_{ij}|\le\rho_n\|A\|_\infty\)</span>.
+Hence <span class="math notranslate nohighlight">\(\||\hat L||\hat U|\|_\infty\le\||\hat L|\|_\infty\||\hat U|\|_\infty
+\le n^2\rho_n\|A\|_\infty\)</span>, and <a class="reference internal" href="#equation-ch05-eq-solve-backward">(5.6)</a> gives the claim.</p>
+</div>
+<p>The constant <span class="math notranslate nohighlight">\(n^2\gamma_{3n}\approx3n^3u\)</span> is a worst-case artifact of the
+analysis; the observed backward error of LU with partial pivoting is almost
+always a modest multiple of <span class="math notranslate nohighlight">\(u\)</span> (see the lab). The factor that matters is
+<span class="math notranslate nohighlight">\(\rho_n\)</span>: elimination with partial pivoting is backward stable exactly to the
+extent that the growth factor is small. Combined with the perturbation
+theory of <a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>, a relative backward error <span class="math notranslate nohighlight">\(\eta\)</span>
+gives a relative forward error of at most about <span class="math notranslate nohighlight">\(\kappa(A)\eta\)</span>.</p>
+<p>The backward error of a computed solution can also be measured directly,
+after the fact. The normwise backward error of Rigal and Gaches
+<span class="bibtex-citation" id="id7">[<a class="reference internal" href="../back/bibliography.html#id30" title="J. L. Rigal and J. Gaches. On the compatibility of a given solution with the data of a linear system. Journal of the ACM, 14(3):543–548, 1967.">Rigal and Gaches, 1967</a>]</span>,</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-rigal">
+<span class="eqno">(5.9)<a class="headerlink" href="#equation-ch05-eq-rigal" title="Link to this equation">#</a></span>\[
+\eta(\hat x) = \min\{\epsilon : (A+\Delta A)\hat x = b + \Delta b,\
+\|\Delta A\|\le\epsilon\|A\|,\ \|\Delta b\|\le\epsilon\|b\|\}
+= \frac{\|b - A\hat x\|}{\|A\|\,\|\hat x\| + \|b\|},
+\]</div>
+<p>costs only a residual and a few norms (<span class="bibtex-citation" id="id8">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Chapter 7). A
+value of <span class="math notranslate nohighlight">\(\eta(\hat x)\)</span> of order <span class="math notranslate nohighlight">\(u\)</span> certifies that <span class="math notranslate nohighlight">\(\hat x\)</span> is as good as the
+data deserve; the lab computes it for every solve.</p>
+</section>
+</section>
+<section id="element-growth-and-pivoting-strategies">
+<span id="ch05-sec-growth"></span><h2><span class="section-number">5.5. </span>Element growth and pivoting strategies<a class="headerlink" href="#element-growth-and-pivoting-strategies" title="Link to this heading">#</a></h2>
+<section id="worst-case-growth-under-partial-pivoting">
+<h3><span class="section-number">5.5.1. </span>Worst-case growth under partial pivoting<a class="headerlink" href="#worst-case-growth-under-partial-pivoting" title="Link to this heading">#</a></h3>
+<div class="proof theorem admonition" id="ch05-thm-growth-bound">
+<p class="admonition-title"><span class="caption-number">Theorem 5.6 </span> (Growth bound for partial pivoting)</p>
+<section class="theorem-content" id="proof-content">
+<p>For Gaussian elimination with partial pivoting, <span class="math notranslate nohighlight">\(\rho_n\le2^{n-1}\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The update is <span class="math notranslate nohighlight">\(a^{(k+1)}_{ij} = a^{(k)}_{ij} - \ell_{ik}a^{(k)}_{kj}\)</span> with
+<span class="math notranslate nohighlight">\(|\ell_{ik}|\le1\)</span>, so
+<span class="math notranslate nohighlight">\(\max_{i,j}|a^{(k+1)}_{ij}|\le2\max_{i,j}|a^{(k)}_{ij}|\)</span>. There are <span class="math notranslate nohighlight">\(n-1\)</span>
+steps.</p>
+</div>
+<p>The bound is attained. Let <span class="math notranslate nohighlight">\(W_n\)</span> be the matrix with ones on the diagonal and
+in the last column, <span class="math notranslate nohighlight">\(-1\)</span> everywhere below the diagonal, and zeros elsewhere:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+W_5 = \begin{bmatrix}
+1&amp;0&amp;0&amp;0&amp;1\\-1&amp;1&amp;0&amp;0&amp;1\\-1&amp;-1&amp;1&amp;0&amp;1\\-1&amp;-1&amp;-1&amp;1&amp;1\\-1&amp;-1&amp;-1&amp;-1&amp;1
+\end{bmatrix}.
+\end{split}\]</div>
+<p>We call it the Wilkinson matrix, after <span class="bibtex-citation" id="id9">Wilkinson [<a class="reference internal" href="../back/bibliography.html#id31" title="J. H. Wilkinson. Error analysis of direct methods of matrix inversion. Journal of the ACM, 8(3):281–330, 1961.">1961</a>]</span>, who used it to
+show that the bound of <a class="reference internal" href="#ch05-thm-growth-bound">Theorem 5.6</a> is sharp.</p>
+<div class="proof example admonition" id="ch05-exa-wilkinson">
+<p class="admonition-title"><span class="caption-number">Example 5.5 </span> (Growth <span class="math notranslate nohighlight">\(2^{n-1}\)</span> for the Wilkinson matrix)</p>
+<section class="example-content" id="proof-content">
+<p>At step 1 of partial pivoting on <span class="math notranslate nohighlight">\(W_n\)</span>, the candidates in column 1 are <span class="math notranslate nohighlight">\(1\)</span>
+and <span class="math notranslate nohighlight">\(-1,\dots,-1\)</span>, all of modulus <span class="math notranslate nohighlight">\(1\)</span>. The first one wins the tie, so no rows
+are interchanged, all multipliers equal <span class="math notranslate nohighlight">\(-1\)</span>, and row 1 is added to every
+other row. This zeros column 1 below the diagonal, leaves the entries <span class="math notranslate nohighlight">\(\pm1\)</span>
+and <span class="math notranslate nohighlight">\(0\)</span> in columns <span class="math notranslate nohighlight">\(2,\dots,n-1\)</span> unchanged, and doubles the last column below
+row 1 from <span class="math notranslate nohighlight">\(1\)</span> to <span class="math notranslate nohighlight">\(2\)</span>. The active submatrix has the same structure as
+<span class="math notranslate nohighlight">\(W_{n-1}\)</span> except that its last column is multiplied by <span class="math notranslate nohighlight">\(2\)</span>. By induction no
+interchange ever occurs, <span class="math notranslate nohighlight">\(L\)</span> has all its subdiagonal entries equal to <span class="math notranslate nohighlight">\(-1\)</span>,
+<span class="math notranslate nohighlight">\(U\)</span> agrees with the identity except in its last column
+<span class="math notranslate nohighlight">\((1, 2, 4, \dots, 2^{n-1})^T\)</span>, and <span class="math notranslate nohighlight">\(\rho_n = 2^{n-1}\)</span>. For <span class="math notranslate nohighlight">\(n = 20\)</span> this is
+<span class="math notranslate nohighlight">\(2^{19} = 524288\)</span>, and for <span class="math notranslate nohighlight">\(n = 60\)</span> it is <span class="math notranslate nohighlight">\(2^{59}\approx5.8\times10^{17}\)</span>.</p>
+</section>
+</div><p>The Wilkinson matrix is well conditioned: <span class="math notranslate nohighlight">\(\kappa_2(W_{20})\approx8.83\)</span> and
+<span class="math notranslate nohighlight">\(\kappa_2(W_{60})\approx26.8\)</span>. Nonetheless, for <span class="math notranslate nohighlight">\(n = 60\)</span> the growth factor
+exceeds <span class="math notranslate nohighlight">\(1/u\approx9\times10^{15}\)</span>, the bound <a class="reference internal" href="#equation-ch05-eq-normwise">(5.8)</a> says
+nothing, and the solution computed by LAPACK’s partial pivoting solver loses
+essentially all accuracy: for random right-hand sides its relative error is
+typically of order <span class="math notranslate nohighlight">\(10^{-1}\)</span> and sometimes exceeds <span class="math notranslate nohighlight">\(1\)</span> (see the lab), while
+<span class="math notranslate nohighlight">\(\kappa_2(W_{60})u\approx3\times10^{-15}\)</span>. This is a genuine instability of
+partial pivoting, in exact agreement with the theory.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The Wilkinson matrix is often misused to “show” that elimination without
+pivoting fails. It shows nothing of the kind. Partial pivoting makes <strong>no
+interchanges</strong> on <span class="math notranslate nohighlight">\(W_n\)</span>, because every candidate pivot ties with the
+diagonal entry, so the pivoted and unpivoted factorizations are identical:
+same <span class="math notranslate nohighlight">\(L\)</span>, same <span class="math notranslate nohighlight">\(U\)</span>, same growth <span class="math notranslate nohighlight">\(2^{n-1}\)</span>, same errors. The Wilkinson matrix
+illustrates the worst case <em>of partial pivoting</em>. To see unpivoted
+elimination fail, use a genuinely small pivot as in
+<a class="reference internal" href="#ch05-exa-small-pivot">Example 5.3</a>, where interchanging rows repairs the
+computation.</p>
+</div>
+<p>Nor is <span class="math notranslate nohighlight">\(2^{n-1}\)</span> a bound for elimination without pivoting. Without pivoting
+the multipliers are unbounded, and so is the growth: the <span class="math notranslate nohighlight">\(2\times2\)</span> matrix of
+<a class="reference internal" href="#ch05-exa-small-pivot">Example 5.3</a> has <span class="math notranslate nohighlight">\(\rho_2 = |1 - 1/\delta|\)</span>, which exceeds
+any prescribed number for <span class="math notranslate nohighlight">\(\delta\)</span> small enough.</p>
+</section>
+<section id="complete-and-rook-pivoting">
+<h3><span class="section-number">5.5.2. </span>Complete and rook pivoting<a class="headerlink" href="#complete-and-rook-pivoting" title="Link to this heading">#</a></h3>
+<p><em>Complete pivoting</em> chooses as pivot at step <span class="math notranslate nohighlight">\(k\)</span> the entry of largest modulus
+in the whole active submatrix and brings it to position <span class="math notranslate nohighlight">\((k,k)\)</span> by
+interchanging rows and columns. It computes <span class="math notranslate nohighlight">\(PAQ = LU\)</span> with permutation
+matrices <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(Q\)</span>, and <span class="math notranslate nohighlight">\(Ax = b\)</span> is solved as <span class="math notranslate nohighlight">\(L(U(Q^Tx)) = Pb\)</span>.
+Wilkinson proved a much smaller bound for its growth.</p>
+<div class="proof theorem admonition" id="ch05-thm-complete">
+<p class="admonition-title"><span class="caption-number">Theorem 5.7 </span> (Wilkinson’s bound for complete pivoting)</p>
+<section class="theorem-content" id="proof-content">
+<p>For Gaussian elimination with complete pivoting in exact arithmetic,</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-wilkinson-bound">
+<span class="eqno">(5.10)<a class="headerlink" href="#equation-ch05-eq-wilkinson-bound" title="Link to this equation">#</a></span>\[
+\rho_n\le f(n) = n^{1/2}\big(2\cdot3^{1/2}\cdot4^{1/3}\cdots n^{1/(n-1)}\big)^{1/2} .
+\]</div>
+<p>This is due to <span class="bibtex-citation" id="id10">Wilkinson [<a class="reference internal" href="../back/bibliography.html#id31" title="J. H. Wilkinson. Error analysis of direct methods of matrix inversion. Journal of the ACM, 8(3):281–330, 1961.">1961</a>]</span>; see also <span class="bibtex-citation" id="id11">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>,
+Chapter 9.</p>
+</section>
+</div><p>Taking logarithms, <span class="math notranslate nohighlight">\(\ln f(n) = \tfrac12\ln n + \tfrac12\sum_{k=2}^{n}\ln k/(k-1)\)</span>,
+and the sum equals <span class="math notranslate nohighlight">\(\tfrac12(\ln n)^2\)</span> plus a quantity that converges as
+<span class="math notranslate nohighlight">\(n\to\infty\)</span>. Hence <span class="math notranslate nohighlight">\(f(n)\sim c\,n^{1/2+(\ln n)/4}\)</span> for a constant <span class="math notranslate nohighlight">\(c\)</span>: the
+bound grows faster than any polynomial but much more slowly than any
+exponential <span class="math notranslate nohighlight">\(a^n\)</span> with <span class="math notranslate nohighlight">\(a&gt;1\)</span>. Concretely, <span class="math notranslate nohighlight">\(f(10)\approx19.3\)</span>,
+<span class="math notranslate nohighlight">\(f(100)\approx3.57\times10^3\)</span> and <span class="math notranslate nohighlight">\(f(1000)\approx8.65\times10^6\)</span>, whereas
+<span class="math notranslate nohighlight">\(2^{99}\approx6.3\times10^{29}\)</span>. How close the bound is to the true worst
+case is not known. It was long conjectured that <span class="math notranslate nohighlight">\(\rho_n\le n\)</span> for complete
+pivoting on real matrices; the conjecture is false, but the counterexamples
+reported by <span class="bibtex-citation" id="id12">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> (Chapter 9) exceed <span class="math notranslate nohighlight">\(n\)</span> only slightly. On the
+Wilkinson matrix, complete pivoting (with the tie-breaking rule used in the
+lab) gives <span class="math notranslate nohighlight">\(\rho_n = 2\)</span>.</p>
+<p>Complete pivoting is rarely used in practice for solving linear systems. Its
+pivot searches cost about <span class="math notranslate nohighlight">\(n^3/3\)</span> comparisons in total, a significant fraction
+of the <span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> flops, and they require access to the whole active
+submatrix at every step, which prevents the blocked organization discussed
+below. Its main uses are in rank-revealing factorizations.</p>
+<div class="proof remark admonition" id="ch05-rem-rook">
+<p class="admonition-title"><span class="caption-number">Remark 5.1 </span> (Rook pivoting)</p>
+<section class="remark-content" id="proof-content">
+<p><em>Rook pivoting</em> is an intermediate strategy: it searches for an entry of the
+active submatrix that is largest in modulus in both its row and its column,
+by alternately searching a column and a row, as a rook moves on a chess
+board. Its worst-case growth bound, like that of complete pivoting, grows
+far more slowly than <span class="math notranslate nohighlight">\(2^{n-1}\)</span>, and in practice it typically inspects only a
+few rows and columns per step (<span class="bibtex-citation" id="id13">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Chapter 9).</p>
+</section>
+</div></section>
+<section id="growth-on-random-matrices">
+<h3><span class="section-number">5.5.3. </span>Growth on random matrices<a class="headerlink" href="#growth-on-random-matrices" title="Link to this heading">#</a></h3>
+<p>If partial pivoting can be exponentially unstable, why is it the default in
+every library? Because large growth essentially never occurs in practice.
+The evidence is empirical and average-case, not a theorem about all matrices.
+<span class="bibtex-citation" id="id14">Trefethen and Schreiber [<a class="reference internal" href="../back/bibliography.html#id32" title="Lloyd N. Trefethen and Robert S. Schreiber. Average-case stability of Gaussian elimination. SIAM Journal on Matrix Analysis and Applications, 11(3):335–360, 1990.">1990</a>]</span> studied Gaussian elimination on random matrices from
+several distributions with <span class="math notranslate nohighlight">\(n\le1024\)</span> and found that the average growth,
+measured as the largest entry encountered during elimination divided by the
+standard deviation of the entries of <span class="math notranslate nohighlight">\(A\)</span>, is close to <span class="math notranslate nohighlight">\(n^{2/3}\)</span> for partial
+pivoting and about <span class="math notranslate nohighlight">\(n^{1/2}\)</span> for complete pivoting. They also gave a heuristic explanation of why the
+elimination steps, which are rank-one updates, tend to retard growth.
+<span class="bibtex-citation" id="id15">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Lecture 22) discuss the same phenomenon. Matrices
+with large growth under partial pivoting do arise, but rarely; a few
+applications that produce them are documented in <span class="bibtex-citation" id="id16">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>
+(Chapter 9).</p>
+<p><a class="reference internal" href="#ch05-fig-growth"><span class="std std-numref">Figure 5.2</span></a> compares the three regimes: the exponential growth
+of the Wilkinson matrix, Wilkinson’s bound for complete pivoting, and the
+observed growth of partial pivoting on Gaussian random matrices, which stays
+small and increases slowly with <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<figure class="align-default" id="ch05-fig-growth">
+<a class="reference internal image-reference" href="../_images/ch05-growth.png"><img alt="Growth factor versus matrix order on log-log axes. The Wilkinson matrix curve rises exponentially; Wilkinson's complete-pivoting bound rises more slowly; random matrices stay between 1 and about 20." src="../_images/ch05-growth.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5.2 </span><span class="caption-text">Growth factors <span class="math notranslate nohighlight">\(\rho_n\)</span> of <a class="reference internal" href="#equation-ch05-eq-growth">(5.7)</a>. The Wilkinson matrix reaches
+<span class="math notranslate nohighlight">\(2^{n-1}\)</span> under partial pivoting; the dashed curve is Wilkinson’s bound
+<a class="reference internal" href="#equation-ch05-eq-wilkinson-bound">(5.10)</a> for complete pivoting; the markers show the
+mean and maximum of <span class="math notranslate nohighlight">\(\rho_n\)</span> for partial pivoting over 10 to 30 Gaussian
+random matrices of each order (generated by <code class="docutils literal notranslate"><span class="pre">scripts/figures/ch05.py</span></code>).</span><a class="headerlink" href="#ch05-fig-growth" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>A practical consequence is that one does not need to trust luck: the growth
+factor, or the backward error <a class="reference internal" href="#equation-ch05-eq-rigal">(5.9)</a>, can be computed cheaply
+after the factorization, and a large value can trigger a remedy such as
+iterative refinement (<a class="reference internal" href="../ch06-cholesky/notes.html#ch06"><span class="std std-numref">Chapter 6</span></a>) or a QR-based solve
+(<a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a>).</p>
+</section>
+</section>
+<section id="lu-in-practice">
+<span id="ch05-sec-practice"></span><h2><span class="section-number">5.6. </span>LU in practice<a class="headerlink" href="#lu-in-practice" title="Link to this heading">#</a></h2>
+<section id="blocked-lu-and-level-3-blas">
+<h3><span class="section-number">5.6.1. </span>Blocked LU and level-3 BLAS<a class="headerlink" href="#blocked-lu-and-level-3-blas" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="#ch05-alg-gepp">Algorithm 5.3</a> performs its flops in rank-one updates, level-2 BLAS
+operations that move <span class="math notranslate nohighlight">\(\bigO(1)\)</span> data per flop and run at the speed of memory
+rather than the speed of the processor (<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01"><span class="std std-numref">Chapter 1</span></a>). High
+performance libraries reorganize the same arithmetic so that most flops occur
+in matrix-matrix products. Choose a block size <span class="math notranslate nohighlight">\(r\ll n\)</span> and partition</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}A_{11}&amp;A_{12}\\A_{21}&amp;A_{22}\end{bmatrix},\qquad
+A_{11}\in\R^{r\times r} .
+\end{split}\]</div>
+<p>The first <span class="math notranslate nohighlight">\(r\)</span> steps of elimination only need the <em>panel</em>
+<span class="math notranslate nohighlight">\(\begin{bmatrix}A_{11}\\A_{21}\end{bmatrix}\)</span>, and they produce the identity</p>
+<div class="math notranslate nohighlight" id="equation-ch05-eq-blocked">
+<span class="eqno">(5.11)<a class="headerlink" href="#equation-ch05-eq-blocked" title="Link to this equation">#</a></span>\[\begin{split}
+\begin{bmatrix}A_{11}&amp;A_{12}\\A_{21}&amp;A_{22}\end{bmatrix}
+= \begin{bmatrix}L_{11}&amp;0\\L_{21}&amp;I\end{bmatrix}
+  \begin{bmatrix}U_{11}&amp;U_{12}\\0&amp;A_{22} - L_{21}U_{12}\end{bmatrix},
+\qquad U_{12} = L_{11}^{-1}A_{12} .
+\end{split}\]</div>
+<div class="proof algorithm admonition" id="ch05-alg-blocked">
+<p class="admonition-title"><span class="caption-number">Algorithm 5.4 </span> (Right-looking blocked LU with partial pivoting)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span>, block size <span class="math notranslate nohighlight">\(r\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(PA = LU\)</span>, stored as in <a class="reference internal" href="#ch05-alg-gepp">Algorithm 5.3</a>.</p>
+<ol class="arabic simple">
+<li><p>For <span class="math notranslate nohighlight">\(k = 1, r+1, 2r+1, \dots\)</span> (let <span class="math notranslate nohighlight">\(A_{11}\)</span>, <span class="math notranslate nohighlight">\(A_{12}\)</span>, <span class="math notranslate nohighlight">\(A_{21}\)</span>, <span class="math notranslate nohighlight">\(A_{22}\)</span>
+be the blocks of the active submatrix starting at row and column <span class="math notranslate nohighlight">\(k\)</span>):</p>
+<ol class="arabic simple">
+<li><p>Factor the panel <span class="math notranslate nohighlight">\(\begin{bmatrix}A_{11}\\A_{21}\end{bmatrix} =
+P_1\begin{bmatrix}L_{11}\\L_{21}\end{bmatrix}U_{11}\)</span> by
+<a class="reference internal" href="#ch05-alg-gepp">Algorithm 5.3</a> (unblocked, or recursively).</p></li>
+<li><p>Apply the row interchanges of the panel to the rest of the rows,
+including <span class="math notranslate nohighlight">\(A_{12}\)</span>, <span class="math notranslate nohighlight">\(A_{22}\)</span> and the columns of <span class="math notranslate nohighlight">\(L\)</span> computed so far.</p></li>
+<li><p><span class="math notranslate nohighlight">\(U_{12}\leftarrow L_{11}^{-1}A_{12}\)</span> (triangular solve with <span class="math notranslate nohighlight">\(r\)</span> rows,
+level-3 BLAS <code class="docutils literal notranslate"><span class="pre">trsm</span></code>).</p></li>
+<li><p><span class="math notranslate nohighlight">\(A_{22}\leftarrow A_{22} - L_{21}U_{12}\)</span> (matrix-matrix product,
+level-3 BLAS <code class="docutils literal notranslate"><span class="pre">gemm</span></code>).</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p><a class="reference internal" href="#ch05-fig-blocked"><span class="std std-numref">Figure 5.3</span></a> shows one step. The algorithm performs the same
+flops as <a class="reference internal" href="#ch05-alg-gepp">Algorithm 5.3</a>, and with the same pivot choices it
+produces the same factors in exact arithmetic. The difference is
+where the flops happen: the panel factorizations and the triangular solves
+for <span class="math notranslate nohighlight">\(U_{12}\)</span> cost <span class="math notranslate nohighlight">\(\bigO(n^2r)\)</span> flops in total, and the remaining
+<span class="math notranslate nohighlight">\(\tfrac23n^3 - \bigO(n^2r)\)</span> flops are in the <code class="docutils literal notranslate"><span class="pre">gemm</span></code> updates of <span class="math notranslate nohighlight">\(A_{22}\)</span>,
+which run close to the peak speed of the machine.
+LAPACK’s <code class="docutils literal notranslate"><span class="pre">getrf</span></code> is organized in this way <span class="bibtex-citation" id="id17">[<a class="reference internal" href="../back/bibliography.html#id24" title="E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen. LAPACK Users' Guide. SIAM, Philadelphia, 3rd edition, 1999.">Anderson <em>et al.</em>, 1999</a>]</span>, with a block
+size chosen for the machine. The rounding error analysis is essentially
+unchanged (<span class="bibtex-citation" id="id18">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Chapter 13). Partial pivoting fits into this
+scheme because the pivot search at step <span class="math notranslate nohighlight">\(k\)</span> needs only the current column of
+the panel; complete pivoting does not, because it needs the whole trailing
+matrix to be updated before each pivot choice.</p>
+<figure class="align-default" id="ch05-fig-blocked">
+<a class="reference internal image-reference" href="../_images/ch05-blocked.png"><img alt="A square matrix divided into regions: finished rows of U at the top, finished columns of L on the left, and the active part split into A11, A12, A21 and A22." src="../_images/ch05-blocked.png" style="width: 50%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 5.3 </span><span class="caption-text">One step of right-looking blocked LU. The rows of <span class="math notranslate nohighlight">\(U\)</span> and columns of <span class="math notranslate nohighlight">\(L\)</span>
+above and to the left of the active part are final. The panel
+<span class="math notranslate nohighlight">\([A_{11};A_{21}]\)</span> is factored with pivoting, <span class="math notranslate nohighlight">\(A_{12}\)</span> is overwritten by
+<span class="math notranslate nohighlight">\(U_{12} = L_{11}^{-1}A_{12}\)</span>, and the trailing matrix <span class="math notranslate nohighlight">\(A_{22}\)</span> receives the
+level-3 update <span class="math notranslate nohighlight">\(A_{22} - L_{21}U_{12}\)</span>.</span><a class="headerlink" href="#ch05-fig-blocked" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="lapack-and-scipy">
+<h3><span class="section-number">5.6.2. </span>LAPACK and SciPy<a class="headerlink" href="#lapack-and-scipy" title="Link to this heading">#</a></h3>
+<p>The LAPACK routines for general dense matrices are <code class="docutils literal notranslate"><span class="pre">getrf</span></code> (LU with partial
+pivoting, blocked), <code class="docutils literal notranslate"><span class="pre">getrs</span></code> (solve using the factors), the driver <code class="docutils literal notranslate"><span class="pre">gesv</span></code>
+(both), and <code class="docutils literal notranslate"><span class="pre">gecon</span></code> (estimate the condition number from the factors)
+<span class="bibtex-citation" id="id19">[<a class="reference internal" href="../back/bibliography.html#id24" title="E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen. LAPACK Users' Guide. SIAM, Philadelphia, 3rd edition, 1999.">Anderson <em>et al.</em>, 1999</a>]</span>. In Python:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve(A,</span> <span class="pre">b)</span></code> and <code class="docutils literal notranslate"><span class="pre">scipy.linalg.solve(A,</span> <span class="pre">b)</span></code> call LAPACK’s LU
+routines (<code class="docutils literal notranslate"><span class="pre">gesv</span></code>, or <code class="docutils literal notranslate"><span class="pre">getrf</span></code> followed by <code class="docutils literal notranslate"><span class="pre">getrs</span></code>): a new factorization for
+every call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lu,</span> <span class="pre">piv</span> <span class="pre">=</span> <span class="pre">scipy.linalg.lu_factor(A)</span></code> calls <code class="docutils literal notranslate"><span class="pre">getrf</span></code> and returns the compact
+form of <a class="reference internal" href="#ch05-alg-gepp">Algorithm 5.3</a>: <span class="math notranslate nohighlight">\(U\)</span> and the multipliers in one array, and
+LAPACK-style pivot indices (row <code class="docutils literal notranslate"><span class="pre">i</span></code> was interchanged with row <code class="docutils literal notranslate"><span class="pre">piv[i]</span></code>, with
+0-based indices). <code class="docutils literal notranslate"><span class="pre">scipy.linalg.lu_solve((lu,</span> <span class="pre">piv),</span> <span class="pre">B)</span></code> then solves for one
+or many right-hand sides at <span class="math notranslate nohighlight">\(2n^2\)</span> flops each.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">P,</span> <span class="pre">L,</span> <span class="pre">U</span> <span class="pre">=</span> <span class="pre">scipy.linalg.lu(A)</span></code> returns explicit factors with <span class="math notranslate nohighlight">\(A = PLU\)</span> (see
+the warning in <a class="reference internal" href="#ch05-sec-pivoting"><span class="std std-numref">Section 5.3</span></a>). It is useful for teaching and
+inspection, not for solving.</p></li>
+</ul>
+<p>Factor once, solve many times: with <span class="math notranslate nohighlight">\(k\)</span> right-hand sides, the cost is
+<span class="math notranslate nohighlight">\(\tfrac23n^3 + 2kn^2\)</span> flops if the factorization is reused, against
+<span class="math notranslate nohighlight">\(k(\tfrac23n^3 + 2n^2)\)</span> if every system is solved from scratch. This matters
+in time stepping, in Newton’s method with a frozen Jacobian, and in inverse
+iteration (<a class="reference internal" href="../ch09-eigenvalues/notes.html#ch09"><span class="std std-numref">Chapter 9</span></a>).</p>
+</section>
+<section id="never-form-the-inverse">
+<h3><span class="section-number">5.6.3. </span>Never form the inverse<a class="headerlink" href="#never-form-the-inverse" title="Link to this heading">#</a></h3>
+<p>Computing <span class="math notranslate nohighlight">\(A^{-1}\)</span> by LU costs <span class="math notranslate nohighlight">\(2n^3\)</span> flops (<span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> for the
+factorization and <span class="math notranslate nohighlight">\(\tfrac43n^3\)</span> for the <span class="math notranslate nohighlight">\(n\)</span> triangular solves that exploit
+the unit triangular right-hand sides), three times the cost of the factorization;
+multiplying <span class="math notranslate nohighlight">\(A^{-1}b\)</span> then costs <span class="math notranslate nohighlight">\(2n^2\)</span> flops, the same as two triangular
+solves. So the inverse is never cheaper, even for many right-hand sides. It
+is also less accurate: <span class="math notranslate nohighlight">\(\hat x = \fl(\widehat{A^{-1}}\,b)\)</span> is not backward
+stable in general, and its residual <span class="math notranslate nohighlight">\(\|b - A\hat x\|\)</span> can exceed that of the
+LU solution by a factor of up to about <span class="math notranslate nohighlight">\(\kappa(A)\)</span> (<span class="bibtex-citation" id="id20">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>,
+Chapter 14). The lab shows this effect for matrices with prescribed
+condition numbers. When a formula contains <span class="math notranslate nohighlight">\(A^{-1}B\)</span>, read it as “solve
+<span class="math notranslate nohighlight">\(AX = B\)</span>”.</p>
+</section>
+<section id="determinants">
+<h3><span class="section-number">5.6.4. </span>Determinants<a class="headerlink" href="#determinants" title="Link to this heading">#</a></h3>
+<p>From <span class="math notranslate nohighlight">\(PA = LU\)</span> we get <span class="math notranslate nohighlight">\(\det A = \det(P)\,u_{11}u_{22}\cdots u_{nn}\)</span> with
+<span class="math notranslate nohighlight">\(\det P = (-1)^s\)</span>, where <span class="math notranslate nohighlight">\(s\)</span> is the number of actual interchanges. This costs
+<span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> flops, compared with <span class="math notranslate nohighlight">\(n!\)</span> terms in the Leibniz formula, and it
+is how <code class="docutils literal notranslate"><span class="pre">numpy.linalg.det</span></code> and <code class="docutils literal notranslate"><span class="pre">scipy.linalg.det</span></code> work. The product of the
+pivots easily overflows or underflows, so libraries also provide
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.slogdet</span></code>, which returns the sign and <span class="math notranslate nohighlight">\(\sum_k\ln|u_{kk}|\)</span>.
+The determinant is a poor indicator of near-singularity: <span class="math notranslate nohighlight">\(\det(10^{-1}I_n) =
+10^{-n}\)</span> although <span class="math notranslate nohighlight">\(\kappa(10^{-1}I_n) = 1\)</span> (<a class="reference internal" href="#ch05-ex-determinant"><span class="std std-numref">Exercise 5.11</span></a>).</p>
+</section>
+<section id="banded-matrices">
+<h3><span class="section-number">5.6.5. </span>Banded matrices<a class="headerlink" href="#banded-matrices" title="Link to this heading">#</a></h3>
+<p>If <span class="math notranslate nohighlight">\(a_{ij} = 0\)</span> whenever <span class="math notranslate nohighlight">\(i - j &gt; p\)</span> or <span class="math notranslate nohighlight">\(j - i &gt; q\)</span> (<span class="math notranslate nohighlight">\(A\)</span> has lower bandwidth
+<span class="math notranslate nohighlight">\(p\)</span> and upper bandwidth <span class="math notranslate nohighlight">\(q\)</span>), then elimination without pivoting preserves
+the band: <span class="math notranslate nohighlight">\(L\)</span> has lower bandwidth <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(U\)</span> upper bandwidth <span class="math notranslate nohighlight">\(q\)</span>. Each step
+computes at most <span class="math notranslate nohighlight">\(p\)</span> multipliers and updates a <span class="math notranslate nohighlight">\(p\times q\)</span> block, so the cost
+is about <span class="math notranslate nohighlight">\(2npq\)</span> flops, linear in <span class="math notranslate nohighlight">\(n\)</span> (<a class="reference internal" href="#ch05-ex-banded"><span class="std std-numref">Exercise 5.12</span></a>). With partial
+pivoting the upper bandwidth of <span class="math notranslate nohighlight">\(U\)</span> can grow to <span class="math notranslate nohighlight">\(p+q\)</span>, and the cost remains
+<span class="math notranslate nohighlight">\(\bigO(np(p+q))\)</span> (<span class="bibtex-citation" id="id21">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span>, Section 4.3). For a tridiagonal
+matrix these counts are <span class="math notranslate nohighlight">\(\bigO(n)\)</span>, compared with <span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> for a dense
+factorization. LAPACK provides the band routines <code class="docutils literal notranslate"><span class="pre">gbtrf</span></code> and <code class="docutils literal notranslate"><span class="pre">gbtrs</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.solve_banded</span></code> solves banded systems with LAPACK’s band
+solvers.</p>
+</section>
+</section>
+<section id="computational-laboratory">
+<h2><span class="section-number">5.7. </span>Computational laboratory<a class="headerlink" href="#computational-laboratory" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="lab.html"><span class="std std-doc">The lab notebook for this chapter</span></a> implements forward and back
+substitution and checks the componentwise backward error bound of
+<a class="reference internal" href="#ch05-thm-triangular">Theorem 5.1</a>; implements LU without pivoting and with
+partial pivoting (with vectorized rank-one updates and a correct treatment of
+exactly zero pivots) and verifies them against <code class="docutils literal notranslate"><span class="pre">scipy.linalg.lu</span></code> using the
+residual <span class="math notranslate nohighlight">\(\|A - PLU\|\)</span> and the entrywise bound <a class="reference internal" href="#equation-ch05-eq-lu-backward">(5.5)</a>;
+reproduces the small-pivot failure of <a class="reference internal" href="#ch05-exa-small-pivot">Example 5.3</a>;
+measures growth factors on random matrices and on the Wilkinson matrix,
+including the solve with LAPACK that fails for <span class="math notranslate nohighlight">\(n = 60\)</span> and the rescue by
+complete pivoting; compares the backward error <a class="reference internal" href="#equation-ch05-eq-rigal">(5.9)</a>, the
+forward error and <span class="math notranslate nohighlight">\(\kappa(A)u\)</span> for matrices with prescribed condition numbers;
+and times <code class="docutils literal notranslate"><span class="pre">lu_factor</span></code> against the <span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> prediction, the reuse of a
+factorization for many right-hand sides, and the solve with an explicit
+inverse.</p>
+</section>
+<section id="summary">
+<h2><span class="section-number">5.8. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Gaussian elimination factors <span class="math notranslate nohighlight">\(A = LU\)</span> with <span class="math notranslate nohighlight">\(L\)</span> unit lower triangular and <span class="math notranslate nohighlight">\(U\)</span>
+upper triangular in <span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> flops, after which each linear system costs
+two triangular solves of <span class="math notranslate nohighlight">\(n^2\)</span> flops each. The factorization without
+interchanges exists and is unique exactly when the leading principal
+submatrices <span class="math notranslate nohighlight">\(A_1,\dots,A_{n-1}\)</span> are nonsingular, but it is unstable: small
+pivots produce large multipliers and unbounded growth, and the computed
+solution can be wrong for a well-conditioned matrix. Partial pivoting yields
+<span class="math notranslate nohighlight">\(PA = LU\)</span> for every nonsingular <span class="math notranslate nohighlight">\(A\)</span> with multipliers bounded by one. The
+computed solution then solves <span class="math notranslate nohighlight">\((A+\Delta A)\hat x = b\)</span> with
+<span class="math notranslate nohighlight">\(|\Delta A|\le\gamma_{3n}|\hat L||\hat U|\)</span>, so stability is governed by the
+growth factor <span class="math notranslate nohighlight">\(\rho_n\)</span>, which can reach <span class="math notranslate nohighlight">\(2^{n-1}\)</span> (the Wilkinson matrix) but
+is small on random matrices and in almost all applications. Complete
+pivoting has a much smaller worst case but costs more and cannot be blocked
+well. Libraries implement partial pivoting with blocked level-3 updates; the
+user’s job is to factor once, reuse the factors, and never form <span class="math notranslate nohighlight">\(A^{-1}\)</span>.</p>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">5.9. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id22">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> present Gaussian elimination, pivoting, stability and
+Cholesky in Lectures 20–23; they write <span class="math notranslate nohighlight">\(\epsilon_{\text{machine}}\)</span> for the
+unit roundoff that we call <span class="math notranslate nohighlight">\(u\)</span>. <span class="bibtex-citation" id="id23">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span> treat triangular systems,
+the LU factorization, its rounding error analysis and pivoting in Chapter 3,
+and banded systems in Section 4.3. <span class="bibtex-citation" id="id24">Demmel [<a class="reference internal" href="../back/bibliography.html#id5" title="James W. Demmel. Applied Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Chapter 2) covers the
+same ground with an emphasis on error bounds and blocked algorithms. The
+definitive treatment of the rounding error analysis is <span class="bibtex-citation" id="id25">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>:
+Chapter 8 for triangular systems, Chapter 9 for LU factorization, growth
+factors and pivoting strategies, Chapter 13 for blocked algorithms and
+Chapter 14 for matrix inversion. The classical sources are
+<span class="bibtex-citation" id="id26">Wilkinson [<a class="reference internal" href="../back/bibliography.html#id31" title="J. H. Wilkinson. Error analysis of direct methods of matrix inversion. Journal of the ACM, 8(3):281–330, 1961.">1961</a>]</span> for the growth bounds and <span class="bibtex-citation" id="id27">Trefethen and Schreiber [<a class="reference internal" href="../back/bibliography.html#id32" title="Lloyd N. Trefethen and Robert S. Schreiber. Average-case stability of Gaussian elimination. SIAM Journal on Matrix Analysis and Applications, 11(3):335–360, 1990.">1990</a>]</span> for
+the average-case behavior; the LAPACK Users’ Guide <span class="bibtex-citation" id="id28">[<a class="reference internal" href="../back/bibliography.html#id24" title="E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen. LAPACK Users' Guide. SIAM, Philadelphia, 3rd edition, 1999.">Anderson <em>et al.</em>, 1999</a>]</span>
+documents the routines.</p>
+</section>
+<section id="exercises">
+<span id="ch05-sec-exercises"></span><h2><span class="section-number">5.10. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<div class="exercise admonition" id="ch05-ex-flops">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.1 </span> (Theory: exact flop counts)</p>
+<section id="exercise-content">
+<p>(a) Show that forward substitution with a unit lower triangular <span class="math notranslate nohighlight">\(L\)</span> costs
+<span class="math notranslate nohighlight">\(n^2 - n\)</span> flops. (b) Show that computing <span class="math notranslate nohighlight">\(A^{-1}\)</span> from <span class="math notranslate nohighlight">\(PA = LU\)</span> by solving
+<span class="math notranslate nohighlight">\(LUx_j = Pe_j\)</span> for <span class="math notranslate nohighlight">\(j = 1,\dots,n\)</span> costs <span class="math notranslate nohighlight">\(\tfrac83n^3\)</span> flops to leading order
+if the zeros of <span class="math notranslate nohighlight">\(Pe_j\)</span> are ignored, and <span class="math notranslate nohighlight">\(2n^3\)</span> in total (with the
+factorization) if forward substitution starts at the first nonzero of
+<span class="math notranslate nohighlight">\(Pe_j\)</span>. (c) How large must <span class="math notranslate nohighlight">\(k\)</span> be before solving <span class="math notranslate nohighlight">\(k\)</span> systems with one
+factorization costs as much as the factorization itself?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch05-lu/notes-solution-23">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch05-ex-flops"> Exercise 5.1 (Theory: exact flop counts)</a></p>
+<section id="solution-content">
+<p>(a) Row <span class="math notranslate nohighlight">\(i\)</span> needs <span class="math notranslate nohighlight">\(i-1\)</span> multiplications and <span class="math notranslate nohighlight">\(i-1\)</span> subtractions and no
+division, so the total is <span class="math notranslate nohighlight">\(\sum_{i=1}^n2(i-1) = n(n-1)\)</span>.</p>
+<p>(b) Each column needs a forward and a back substitution, <span class="math notranslate nohighlight">\(2n^2\)</span> flops to
+leading order, so <span class="math notranslate nohighlight">\(n\)</span> columns cost <span class="math notranslate nohighlight">\(2n^3\)</span>, plus <span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> for the
+factorization: <span class="math notranslate nohighlight">\(\tfrac83n^3\)</span>. If <span class="math notranslate nohighlight">\(Pe_j\)</span> has its only <span class="math notranslate nohighlight">\(1\)</span> in position <span class="math notranslate nohighlight">\(i\)</span>,
+forward substitution produces zeros in positions <span class="math notranslate nohighlight">\(1,\dots,i-1\)</span> and costs
+only <span class="math notranslate nohighlight">\((n-i)^2\)</span> flops to leading order. Order the columns so that the
+positions are <span class="math notranslate nohighlight">\(1,\dots,n\)</span>; then the forward substitutions cost
+<span class="math notranslate nohighlight">\(\sum_i(n-i)^2\approx n^3/3\)</span>, the back substitutions <span class="math notranslate nohighlight">\(n\cdot n^2 = n^3\)</span>, and
+the total with the factorization is <span class="math notranslate nohighlight">\(\tfrac23n^3 + \tfrac13n^3 + n^3 = 2n^3\)</span>.</p>
+<p>(c) Each solve costs about <span class="math notranslate nohighlight">\(2n^2\)</span> flops, so <span class="math notranslate nohighlight">\(k\cdot2n^2 = \tfrac23n^3\)</span> gives
+<span class="math notranslate nohighlight">\(k = n/3\)</span>. For <span class="math notranslate nohighlight">\(n = 3000\)</span> one can solve a thousand systems for the price of
+one factorization.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-gauss-product">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.2 </span> (Theory: products of Gauss transformations)</p>
+<section id="exercise-content">
+<p>For <span class="math notranslate nohighlight">\(n = 3\)</span> compute <span class="math notranslate nohighlight">\(M_2M_1\)</span> and <span class="math notranslate nohighlight">\(M_1^{-1}M_2^{-1}\)</span> in terms of the
+multipliers <span class="math notranslate nohighlight">\(\ell_{21},\ell_{31},\ell_{32}\)</span>. Explain why an implementation of
+elimination stores the multipliers, that is <span class="math notranslate nohighlight">\(L\)</span>, rather than
+<span class="math notranslate nohighlight">\(M = M_{n-1}\cdots M_1 = L^{-1}\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-pivots-minors">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.3 </span> (Theory: pivots and leading minors)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A_1,\dots,A_{n-1}\)</span> be nonsingular. (a) Show that the pivot <span class="math notranslate nohighlight">\(u_{kk}\)</span> is
+the Schur complement of <span class="math notranslate nohighlight">\(A_{k-1}\)</span> in <span class="math notranslate nohighlight">\(A_k\)</span>, that is
+<span class="math notranslate nohighlight">\(u_{kk} = a_{kk} - A(k,1{:}k-1)A_{k-1}^{-1}A(1{:}k-1,k)\)</span>. (b) Show that if <span class="math notranslate nohighlight">\(A\)</span>
+is symmetric positive definite, all pivots are positive. (c) Compute the
+pivots of the matrix of <a class="reference internal" href="#ch05-exa-lu3">Example 5.2</a> from its leading principal
+minors.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-nonunique">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.4 </span> (Concept: when LU fails or is not unique)</p>
+<section id="exercise-content">
+<p>(a) Show that <span class="math notranslate nohighlight">\(\begin{bmatrix}0&amp;1\\0&amp;1\end{bmatrix}\)</span> has infinitely many
+LU factorizations and describe them all. (b) Show that
+<span class="math notranslate nohighlight">\(\begin{bmatrix}0&amp;1\\1&amp;1\end{bmatrix}\)</span> has none. (c) Which of the two cases
+of the necessity part of <a class="reference internal" href="#ch05-thm-lu-exists">Theorem 5.2</a> does each matrix
+illustrate?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch05-lu/notes-solution-27">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch05-ex-nonunique"> Exercise 5.4 (Concept: when LU fails or is not unique)</a></p>
+<section id="solution-content">
+<p>(a) <span class="math notranslate nohighlight">\(\begin{bmatrix}1&amp;0\\\ell&amp;1\end{bmatrix}\begin{bmatrix}u_{11}&amp;u_{12}\\0&amp;u_{22}\end{bmatrix}
+= \begin{bmatrix}u_{11}&amp;u_{12}\\\ell u_{11}&amp;\ell u_{12}+u_{22}\end{bmatrix}\)</span>.
+Matching entries gives <span class="math notranslate nohighlight">\(u_{11} = 0\)</span>, <span class="math notranslate nohighlight">\(u_{12} = 1\)</span>, and <span class="math notranslate nohighlight">\(\ell + u_{22} = 1\)</span>,
+so for every <span class="math notranslate nohighlight">\(\ell\in\R\)</span> the choice <span class="math notranslate nohighlight">\(u_{22} = 1-\ell\)</span> gives a factorization.
+(b) Here <span class="math notranslate nohighlight">\(u_{11} = 0\)</span> would force <span class="math notranslate nohighlight">\(a_{21} = \ell u_{11} = 0\ne1\)</span>, so no
+factorization exists. (c) Both matrices have the singular leading submatrix
+<span class="math notranslate nohighlight">\(A_1 = [0]\)</span>. The first shows that a factorization can exist but then is not
+unique; the construction in the proof, with <span class="math notranslate nohighlight">\(w = 1\)</span>, changes <span class="math notranslate nohighlight">\(\ell\)</span> by <span class="math notranslate nohighlight">\(1\)</span>
+and <span class="math notranslate nohighlight">\(u_{22}\)</span> by <span class="math notranslate nohighlight">\(-1\)</span>. The second shows that a factorization need not exist.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-single">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.5 </span> (Computation: a small pivot in single precision)</p>
+<section id="exercise-content">
+<p>Repeat <a class="reference internal" href="#ch05-exa-small-pivot">Example 5.3</a> in IEEE single precision
+(<code class="docutils literal notranslate"><span class="pre">numpy.float32</span></code>, unit roundoff <span class="math notranslate nohighlight">\(2^{-24}\approx6.0\times10^{-8}\)</span>) for
+<span class="math notranslate nohighlight">\(\delta = 10^{-2}, 10^{-4}, 10^{-6}, 10^{-8}\)</span>, with and without pivoting.
+Report <span class="math notranslate nohighlight">\(\hat x_1\)</span> and its relative error, and compare the errors with
+<span class="math notranslate nohighlight">\(u/\delta\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-diag-dominant">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.6 </span> (Theory: diagonally dominant matrices need no pivoting)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> be strictly diagonally dominant by columns:
+<span class="math notranslate nohighlight">\(|a_{jj}|&gt;\sum_{i\ne j}|a_{ij}|\)</span> for every <span class="math notranslate nohighlight">\(j\)</span>. (a) Show that the Schur
+complement <span class="math notranslate nohighlight">\(S = B - vw^T/\alpha\)</span> in <a class="reference internal" href="#equation-ch05-eq-schur">(5.4)</a> is again strictly
+diagonally dominant by columns. (b) Deduce that elimination without pivoting
+succeeds, that all multipliers satisfy <span class="math notranslate nohighlight">\(|\ell_{ik}|&lt;1\)</span>, and hence that
+partial pivoting makes no interchanges. (c) Show that
+<span class="math notranslate nohighlight">\(\sum_i|a^{(k+1)}_{ij}|\le\sum_i|a^{(k)}_{ij}|\)</span> for each column <span class="math notranslate nohighlight">\(j\)</span> of the
+active submatrix, and deduce <span class="math notranslate nohighlight">\(\rho_n\le2\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-wilkinson">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.7 </span> (Theory: the factors of the Wilkinson matrix)</p>
+<section id="exercise-content">
+<p>(a) Prove by induction the description of <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(U\)</span> for <span class="math notranslate nohighlight">\(W_n\)</span> in
+<a class="reference internal" href="#ch05-exa-wilkinson">Example 5.5</a>. (b) Verify that <span class="math notranslate nohighlight">\(W_n\)</span> is nonsingular and find
+<span class="math notranslate nohighlight">\(\det W_n\)</span>. (c) Suppose a pivoting rule broke ties by choosing the <em>last</em>
+row of maximal modulus. What happens at the first step for <span class="math notranslate nohighlight">\(W_3\)</span>?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-wilkinson-claim">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.8 </span> (Concept: what the Wilkinson matrix shows)</p>
+<section id="exercise-content">
+<p>A notebook factors <span class="math notranslate nohighlight">\(W_{12}\)</span> with and without partial pivoting, observes the
+same growth <span class="math notranslate nohighlight">\(2^{11} = 2048\)</span> and the same error in both cases, and concludes
+that “the Wilkinson matrix shows that LU without pivoting fails and that
+<span class="math notranslate nohighlight">\(2^{n-1}\)</span> is the worst-case growth without pivoting.” Identify the two errors
+in this conclusion and state the correct facts.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch05-lu/notes-solution-32">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch05-ex-wilkinson-claim"> Exercise 5.8 (Concept: what the Wilkinson matrix shows)</a></p>
+<section id="solution-content">
+<p>First, on <span class="math notranslate nohighlight">\(W_n\)</span> partial pivoting makes no interchanges (all candidates in the
+pivot column have modulus <span class="math notranslate nohighlight">\(1\)</span>, and the tie is broken in favor of the diagonal
+entry), so the two computations are identical; an experiment in which the
+two methods coincide cannot show that one of them fails where the other
+succeeds. <span class="math notranslate nohighlight">\(W_n\)</span> illustrates the worst case of <em>partial pivoting</em>. The failure
+of unpivoted elimination must be demonstrated with a small pivot, as in
+<a class="reference internal" href="#ch05-exa-small-pivot">Example 5.3</a>. Second, <span class="math notranslate nohighlight">\(2^{n-1}\)</span> is the bound for partial
+pivoting (<a class="reference internal" href="#ch05-thm-growth-bound">Theorem 5.6</a>). Without pivoting the growth is
+unbounded even for <span class="math notranslate nohighlight">\(n = 2\)</span>: <span class="math notranslate nohighlight">\(\rho_2 = |1-1/\delta|\)</span> for
+<span class="math notranslate nohighlight">\(\begin{bmatrix}\delta&amp;1\\1&amp;1\end{bmatrix}\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-complete">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.9 </span> (Computation: complete pivoting)</p>
+<section id="exercise-content">
+<p>Implement Gaussian elimination with complete pivoting, returning <span class="math notranslate nohighlight">\(P\)</span>, <span class="math notranslate nohighlight">\(Q\)</span>,
+<span class="math notranslate nohighlight">\(L\)</span>, <span class="math notranslate nohighlight">\(U\)</span> with <span class="math notranslate nohighlight">\(PAQ = LU\)</span>, and a solver based on it. (a) Verify the
+factorization on random matrices. (b) Compute the growth factor for <span class="math notranslate nohighlight">\(W_n\)</span>,
+<span class="math notranslate nohighlight">\(n = 10, 20, 60\)</span>, and the error of the solution of <span class="math notranslate nohighlight">\(W_{60}x = b\)</span> for a random
+<span class="math notranslate nohighlight">\(x\)</span>. (c) Tabulate Wilkinson’s bound <a class="reference internal" href="#equation-ch05-eq-wilkinson-bound">(5.10)</a> for
+<span class="math notranslate nohighlight">\(n = 10, 100, 1000\)</span> and compare with <span class="math notranslate nohighlight">\(2^{n-1}\)</span>. (d) Count the comparisons made
+by the pivot searches.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-inverse">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.10 </span> (Computation: solving with the inverse)</p>
+<section id="exercise-content">
+<p>Generate <span class="math notranslate nohighlight">\(A = U\Sigma V^T\in\R^{200\times200}\)</span> with random orthogonal <span class="math notranslate nohighlight">\(U,V\)</span>
+and singular values logarithmically spaced from <span class="math notranslate nohighlight">\(1\)</span> to <span class="math notranslate nohighlight">\(1/\kappa\)</span>, for
+<span class="math notranslate nohighlight">\(\kappa = 10^2, 10^6, 10^{10}, 10^{14}\)</span>. For <span class="math notranslate nohighlight">\(b = Ax\)</span> with random <span class="math notranslate nohighlight">\(x\)</span>,
+compare the backward error <a class="reference internal" href="#equation-ch05-eq-rigal">(5.9)</a> and the forward error of
+<code class="docutils literal notranslate"><span class="pre">lu_solve</span></code> with those of <code class="docutils literal notranslate"><span class="pre">inv(A)</span> <span class="pre">&#64;</span> <span class="pre">b</span></code>. Explain the results.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-determinant">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.11 </span> (Concept: determinants from LU)</p>
+<section id="exercise-content">
+<p>(a) Explain how to compute <span class="math notranslate nohighlight">\(\det A\)</span> and <span class="math notranslate nohighlight">\(\ln|\det A|\)</span> from the output of
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.lu_factor</span></code>. (b) Why does <code class="docutils literal notranslate"><span class="pre">numpy.linalg.det</span></code> return <code class="docutils literal notranslate"><span class="pre">inf</span></code> or
+<code class="docutils literal notranslate"><span class="pre">0.0</span></code> for many matrices of order a few hundred, and what should be used
+instead? (c) Show by an example that a small determinant does not mean that a
+matrix is nearly singular in the sense of <a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch05-lu/notes-solution-36">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch05-ex-determinant"> Exercise 5.11 (Concept: determinants from LU)</a></p>
+<section id="solution-content">
+<p>(a) <code class="docutils literal notranslate"><span class="pre">lu_factor</span></code> returns the array <code class="docutils literal notranslate"><span class="pre">lu</span></code> holding <span class="math notranslate nohighlight">\(U\)</span> in its upper triangle and
+the pivot vector <code class="docutils literal notranslate"><span class="pre">piv</span></code>. The number of interchanges is
+<span class="math notranslate nohighlight">\(s = \#\{i : \mathtt{piv}[i]\ne i\}\)</span>, and
+<span class="math notranslate nohighlight">\(\det A = (-1)^s\prod_i u_{ii}\)</span>, <span class="math notranslate nohighlight">\(\ln|\det A| = \sum_i\ln|u_{ii}|\)</span>.
+(b) The product of <span class="math notranslate nohighlight">\(n\)</span> pivots overflows (<span class="math notranslate nohighlight">\(&gt;1.8\times10^{308}\)</span>) or underflows
+when the pivots are consistently larger or smaller than <span class="math notranslate nohighlight">\(1\)</span>, which is
+typical for matrices of order a few hundred with entries of order one or
+of very different scales. The sum of logarithms does not overflow; use
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.slogdet</span></code>. (c) <span class="math notranslate nohighlight">\(A = 10^{-1}I_{n}\)</span> has <span class="math notranslate nohighlight">\(\det A = 10^{-n}\)</span>, which
+underflows to zero for <span class="math notranslate nohighlight">\(n &gt; 323\)</span>, yet <span class="math notranslate nohighlight">\(\kappa(A) = 1\)</span>: <span class="math notranslate nohighlight">\(A\)</span> is as far from
+singular, relative to its norm, as any matrix can be. Conversely
+<span class="math notranslate nohighlight">\(\begin{bmatrix}1&amp;10^{10}\\0&amp;1\end{bmatrix}\)</span> has determinant <span class="math notranslate nohighlight">\(1\)</span> and
+<span class="math notranslate nohighlight">\(\kappa_\infty = (1+10^{10})^2\approx10^{20}\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-banded">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.12 </span> (Theory: banded LU)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> have lower bandwidth <span class="math notranslate nohighlight">\(p\)</span> and upper bandwidth <span class="math notranslate nohighlight">\(q\)</span>, and suppose
+elimination without pivoting succeeds. (a) Show that <span class="math notranslate nohighlight">\(L\)</span> has lower bandwidth
+<span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(U\)</span> has upper bandwidth <span class="math notranslate nohighlight">\(q\)</span>. (b) Show that the factorization costs
+at most <span class="math notranslate nohighlight">\(n(2pq+p)\)</span> flops, and specialize to a tridiagonal matrix. (c) Show by
+a <span class="math notranslate nohighlight">\(3\times3\)</span> example that partial pivoting can increase the upper bandwidth
+of <span class="math notranslate nohighlight">\(U\)</span> from <span class="math notranslate nohighlight">\(q\)</span> to <span class="math notranslate nohighlight">\(p+q\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch05-ex-blocked">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5.13 </span> (Project: blocked LU)</p>
+<section id="exercise-content">
+<p>Implement <a class="reference internal" href="#ch05-alg-blocked">Algorithm 5.4</a> in NumPy, using your unblocked partial
+pivoting code for the panels, <code class="docutils literal notranslate"><span class="pre">scipy.linalg.solve_triangular</span></code> for <span class="math notranslate nohighlight">\(U_{12}\)</span>
+and <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> for the update of <span class="math notranslate nohighlight">\(A_{22}\)</span>. Verify <span class="math notranslate nohighlight">\(PA = LU\)</span> with the bound
+<a class="reference internal" href="#equation-ch05-eq-lu-backward">(5.5)</a> and check that you obtain the same pivot sequence as
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.lu_factor</span></code> on random matrices. For <span class="math notranslate nohighlight">\(n = 2000\)</span>, time your code
+for block sizes <span class="math notranslate nohighlight">\(r = 1, 8, 32, 128, 512\)</span> (median of several runs), compare with
+<code class="docutils literal notranslate"><span class="pre">lu_factor</span></code>, and report the fraction of flops performed in the <code class="docutils literal notranslate"><span class="pre">gemm</span></code>
+updates. State which conclusions depend on your machine.</p>
+</section>
+</div>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch05-lu"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../ch04-conditioning-stability/lab.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">4.13. </span>Lab 4: Conditioning and stability</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lab.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">5.11. </span>Lab 5: Gaussian elimination and LU factorization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#triangular-systems">5.1. Triangular systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-elimination-as-a-matrix-factorization">5.2. Gaussian elimination as a matrix factorization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gauss-transformations">5.2.1. Gauss transformations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-lu-factorization">5.2.2. The LU factorization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#existence-and-uniqueness">5.2.3. Existence and uniqueness</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-need-for-pivoting">5.3. The need for pivoting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-small-pivot">5.3.1. A small pivot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-pivoting">5.3.2. Partial pivoting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rounding-error-analysis">5.4. Rounding error analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-error-of-the-factorization-and-of-the-solve">5.4.1. Backward error of the factorization and of the solve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-growth-factor">5.4.2. The growth factor</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#element-growth-and-pivoting-strategies">5.5. Element growth and pivoting strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#worst-case-growth-under-partial-pivoting">5.5.1. Worst-case growth under partial pivoting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-and-rook-pivoting">5.5.2. Complete and rook pivoting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#growth-on-random-matrices">5.5.3. Growth on random matrices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lu-in-practice">5.6. LU in practice</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#blocked-lu-and-level-3-blas">5.6.1. Blocked LU and level-3 BLAS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lapack-and-scipy">5.6.2. LAPACK and SciPy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#never-form-the-inverse">5.6.3. Never form the inverse</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determinants">5.6.4. Determinants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#banded-matrices">5.6.5. Banded matrices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">5.7. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">5.8. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">5.9. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">5.10. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

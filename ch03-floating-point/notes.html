@@ -1,0 +1,2245 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. Floating-point arithmetic &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch03-floating-point/notes';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.14. Lab 3: Floating-point arithmetic" href="lab.html" />
+    <link rel="prev" title="2.12. Case study: image compression with the SVD" href="../ch02-svd/case-study-image-compression.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">3. Floating-point arithmetic</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch03-floating-point/notes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch03-floating-point/notes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Floating-point arithmetic</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#floating-point-number-systems">3.1. Floating-point number systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">3.1.1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spacing-of-floating-point-numbers">3.1.2. Spacing of floating-point numbers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-ieee-754-formats">3.1.3. The IEEE 754 formats</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subnormal-numbers-infinities-and-nan">3.2. Subnormal numbers, infinities and NaN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradual-underflow">3.2.1. Gradual underflow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overflow-infinities-signed-zeros-and-nan">3.2.2. Overflow, infinities, signed zeros and NaN</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rounding-and-the-unit-roundoff">3.3. Rounding and the unit roundoff</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#round-to-nearest">3.3.1. Round to nearest</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unit-roundoff-and-machine-epsilon">3.3.2. Unit roundoff and machine epsilon</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-standard-model-of-arithmetic">3.4. The standard model of arithmetic</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#correctly-rounded-operations">3.4.1. Correctly rounded operations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operations-that-are-exact">3.4.2. Operations that are exact</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accumulating-rounding-errors-the-gamma-n-lemma">3.4.3. Accumulating rounding errors: the <span class="math notranslate nohighlight">\(\gamma_n\)</span> lemma</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summation">3.5. Summation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recursive-summation">3.5.1. Recursive summation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pairwise-summation">3.5.2. Pairwise summation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compensated-summation">3.5.3. Compensated summation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inner-products-and-matrix-products">3.6. Inner products and matrix products</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cancellation">3.7. Cancellation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-cancellation-is-and-is-not">3.7.1. What cancellation is and is not</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stable-reformulations">3.7.2. Stable reformulations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overflow-underflow-and-scaling">3.8. Overflow, underflow and scaling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#beyond-the-worst-case">3.9. Beyond the worst case</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">3.10. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">3.11. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">3.12. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">3.13. Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="floating-point-arithmetic">
+<span id="ch03"></span><h1><span class="section-number">3. </span>Floating-point arithmetic<a class="headerlink" href="#floating-point-arithmetic" title="Link to this heading">#</a></h1>
+<p>Every algorithm in this course is executed on numbers that carry a fixed,
+finite number of binary digits. The real number <span class="math notranslate nohighlight">\(0.1\)</span> cannot be stored
+exactly, <span class="math notranslate nohighlight">\((a+b)+c\)</span> need not equal <span class="math notranslate nohighlight">\(a+(b+c)\)</span>, and an innocent-looking formula
+such as <span class="math notranslate nohighlight">\(\sqrt{x+1}-\sqrt{x}\)</span> can return a result with no correct digits.
+None of this makes computing unreliable. The arithmetic of modern computers
+is specified precisely by the IEEE 754 standard <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../back/bibliography.html#id25" title="IEEE. IEEE standard for floating-point arithmetic (IEEE std 754-2019). Institute of Electrical and Electronics Engineers, 2019.">IEEE, 2019</a>]</span>, and from
+that specification one can prove rigorous bounds on the errors of
+computations, as we shall do for sums, inner products and matrix products.</p>
+<p>This chapter builds the model of floating-point arithmetic used for every
+error analysis in the rest of the course. We first describe the set of
+floating-point numbers and the rules for rounding a real number into it,
+then state and prove the basic error bound <span class="math notranslate nohighlight">\(\fl(x) = x(1+\delta)\)</span>,
+<span class="math notranslate nohighlight">\(|\delta|\le u\)</span>, and derive from it the standard model of arithmetic. The
+remaining sections apply the model: we analyze summation algorithms, prove
+the bound <span class="math notranslate nohighlight">\(|\widehat C - AB|\le\gamma_n|A||B|\)</span> that the lab of
+<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01"><span class="std std-numref">Chapter 1</span></a> used, and study cancellation, overflow and
+underflow, the three ways in which floating-point computations most often go
+wrong in practice. <a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a> then combines these tools with
+the notions of conditioning and backward stability.</p>
+<p>Throughout the chapter we keep a strict distinction between exact and
+computed quantities. A letter such as <span class="math notranslate nohighlight">\(s\)</span> denotes an exact real number, a
+hat as in <span class="math notranslate nohighlight">\(\widehat s\)</span> denotes the number actually produced by a computation
+in floating-point arithmetic, and <span class="math notranslate nohighlight">\(\fl(\cdot)\)</span> denotes the result of
+evaluating an expression in floating-point arithmetic in a specified order.</p>
+<div class="admonition-learning-objectives admonition">
+<p class="admonition-title">Learning objectives</p>
+<p>After working through this chapter you should be able to:</p>
+<ol class="arabic simple">
+<li><p>describe a floating-point number system by its base, precision and
+exponent range, and give the parameters of the IEEE binary64, binary32,
+binary16 and bfloat16 formats;</p></li>
+<li><p>explain normalized and subnormal numbers, the hidden bit, the spacing of
+floating-point numbers, and the special values <span class="math notranslate nohighlight">\(\pm0\)</span>, <span class="math notranslate nohighlight">\(\pm\infty\)</span> and NaN;</p></li>
+<li><p>state and prove the bound <span class="math notranslate nohighlight">\(\fl(x) = x(1+\delta)\)</span>, <span class="math notranslate nohighlight">\(|\delta|\le u\)</span>, explain
+why it fails in the subnormal range, and distinguish the unit roundoff
+<span class="math notranslate nohighlight">\(u = 2^{-53}\)</span> from machine epsilon <span class="math notranslate nohighlight">\(\epsmach = 2^{-52}\)</span>;</p></li>
+<li><p>use the standard model and the <span class="math notranslate nohighlight">\(\gamma_n\)</span> lemma to derive error bounds for
+summation, inner products and matrix products;</p></li>
+<li><p>compare recursive, pairwise and compensated summation and explain why the
+relative error of every method depends on the condition number of the sum;</p></li>
+<li><p>recognize cancellation, explain why it exposes rather than creates errors,
+and rewrite formulas to avoid it; avoid overflow and underflow by scaling;</p></li>
+<li><p>verify all of these statements numerically with exact rational arithmetic.</p></li>
+</ol>
+</div>
+<section id="floating-point-number-systems">
+<span id="ch03-sec-number-systems"></span><h2><span class="section-number">3.1. </span>Floating-point number systems<a class="headerlink" href="#floating-point-number-systems" title="Link to this heading">#</a></h2>
+<section id="definition">
+<h3><span class="section-number">3.1.1. </span>Definition<a class="headerlink" href="#definition" title="Link to this heading">#</a></h3>
+<p>A floating-point number is a number written in scientific notation with a
+fixed number of digits. The following definition makes this precise.</p>
+<div class="proof definition admonition" id="ch03-def-fp-system">
+<p class="admonition-title"><span class="caption-number">Definition 3.1 </span> (Floating-point number system)</p>
+<section class="definition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(\beta\ge2\)</span> (the <em>base</em>), <span class="math notranslate nohighlight">\(p\ge1\)</span> (the <em>precision</em>) and integers
+<span class="math notranslate nohighlight">\(e_{\min}&lt;e_{\max}\)</span> (the <em>exponent range</em>) be given. The floating-point
+number system <span class="math notranslate nohighlight">\(F\subset\R\)</span>, also written <span class="math notranslate nohighlight">\(F(\beta,p,e_{\min},e_{\max})\)</span>,
+consists of <span class="math notranslate nohighlight">\(0\)</span> and all numbers</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-fp-number">
+<span class="eqno">(3.1)<a class="headerlink" href="#equation-ch03-eq-fp-number" title="Link to this equation">#</a></span>\[
+x = \pm\,(d_0.d_1d_2\cdots d_{p-1})_\beta\times\beta^{e}
+  = \pm\Big(d_0 + \frac{d_1}{\beta} + \dots + \frac{d_{p-1}}{\beta^{p-1}}\Big)\beta^{e},
+\]</div>
+<p>with digits <span class="math notranslate nohighlight">\(d_i\in\{0,1,\dots,\beta-1\}\)</span> and exponent
+<span class="math notranslate nohighlight">\(e_{\min}\le e\le e_{\max}\)</span>. The number is <em>normalized</em> if <span class="math notranslate nohighlight">\(d_0\ne0\)</span>. It is
+<em>subnormal</em> if <span class="math notranslate nohighlight">\(d_0 = 0\)</span>, <span class="math notranslate nohighlight">\(e = e_{\min}\)</span> and not all digits are zero. The
+string <span class="math notranslate nohighlight">\(d_0.d_1\cdots d_{p-1}\)</span> is the <em>significand</em>.</p>
+</section>
+</div><p>Every nonzero element of <span class="math notranslate nohighlight">\(F\)</span> is either normalized or subnormal: a number
+with <span class="math notranslate nohighlight">\(d_0 = 0\)</span> and <span class="math notranslate nohighlight">\(e&gt;e_{\min}\)</span> can be renormalized by shifting its digits
+left and decreasing <span class="math notranslate nohighlight">\(e\)</span>. Multiplying <a class="reference internal" href="#equation-ch03-eq-fp-number">(3.1)</a> by
+<span class="math notranslate nohighlight">\(\beta^{p-1}/\beta^{p-1}\)</span> gives the equivalent <em>integer form</em></p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-integer-form">
+<span class="eqno">(3.2)<a class="headerlink" href="#equation-ch03-eq-integer-form" title="Link to this equation">#</a></span>\[
+F\setminus\{0\} = \big\{\, m\,\beta^{\,e-p+1} :\ m\in\mathbb{Z},\ 0&lt;|m|&lt;\beta^{p},\
+e_{\min}\le e\le e_{\max}\,\big\},
+\]</div>
+<p>in which a number is normalized exactly when it can be written with
+<span class="math notranslate nohighlight">\(|m|\ge\beta^{p-1}\)</span>. The integer form is convenient in proofs: it shows
+at once that every element of <span class="math notranslate nohighlight">\(F\)</span> is an integer multiple of
+<span class="math notranslate nohighlight">\(\beta^{e_{\min}-p+1}\)</span>, the smallest positive subnormal number.</p>
+<p>The positive normalized numbers range from the <em>smallest normalized number</em>
+<span class="math notranslate nohighlight">\(x_{\min} = \beta^{e_{\min}}\)</span> to the <em>largest number</em>
+<span class="math notranslate nohighlight">\(x_{\max} = (\beta-\beta^{1-p})\beta^{e_{\max}}\)</span>. The interval
+<span class="math notranslate nohighlight">\([x_{\min},x_{\max}]\)</span> (and its negative) is the <em>normal range</em>.</p>
+<p>In base 2 the leading digit of a normalized number is always <span class="math notranslate nohighlight">\(d_0 = 1\)</span>, so it
+need not be stored. This <em>hidden bit</em> (or implicit bit) is the reason why a
+format that stores <span class="math notranslate nohighlight">\(p-1\)</span> fraction bits has precision <span class="math notranslate nohighlight">\(p\)</span>.</p>
+</section>
+<section id="spacing-of-floating-point-numbers">
+<h3><span class="section-number">3.1.2. </span>Spacing of floating-point numbers<a class="headerlink" href="#spacing-of-floating-point-numbers" title="Link to this heading">#</a></h3>
+<p>Consider the normalized numbers with a fixed exponent <span class="math notranslate nohighlight">\(e\)</span>, which lie in the
+<em>binade</em> <span class="math notranslate nohighlight">\([\beta^e,\beta^{e+1})\)</span> (for <span class="math notranslate nohighlight">\(\beta = 2\)</span>). By
+<a class="reference internal" href="#equation-ch03-eq-integer-form">(3.2)</a> they are <span class="math notranslate nohighlight">\(m\beta^{e-p+1}\)</span> with
+<span class="math notranslate nohighlight">\(\beta^{p-1}\le m&lt;\beta^p\)</span>: they are equally spaced, with spacing
+<span class="math notranslate nohighlight">\(\beta^{e-p+1}\)</span>. The spacing is constant within a binade and is multiplied by
+<span class="math notranslate nohighlight">\(\beta\)</span> from one binade to the next. The floating-point numbers are
+therefore <em>not</em> uniformly spaced on the real line; they are approximately
+uniformly spaced on a logarithmic scale.</p>
+<div class="proof definition admonition" id="ch03-def-ulp">
+<p class="admonition-title"><span class="caption-number">Definition 3.2 </span> (Unit in the last place)</p>
+<section class="definition-content" id="proof-content">
+<p>For a binary system and a real number <span class="math notranslate nohighlight">\(x\)</span> with <span class="math notranslate nohighlight">\(2^e\le|x|&lt;2^{e+1}\)</span> and
+<span class="math notranslate nohighlight">\(e\ge e_{\min}\)</span>, the <em>unit in the last place</em> of <span class="math notranslate nohighlight">\(x\)</span> is
+<span class="math notranslate nohighlight">\(\operatorname{ulp}(x) = 2^{e-p+1}\)</span>, the spacing of the floating-point
+numbers in the binade containing <span class="math notranslate nohighlight">\(x\)</span>. For <span class="math notranslate nohighlight">\(|x|&lt;2^{e_{\min}}\)</span> we set
+<span class="math notranslate nohighlight">\(\operatorname{ulp}(x) = 2^{e_{\min}-p+1}\)</span>.</p>
+</section>
+</div><p>In the normal range the <em>relative</em> spacing satisfies</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-relative-spacing">
+<span class="eqno">(3.3)<a class="headerlink" href="#equation-ch03-eq-relative-spacing" title="Link to this equation">#</a></span>\[
+2^{-p} &lt; \frac{\operatorname{ulp}(x)}{|x|} \le 2^{1-p},
+\]</div>
+<p>because <span class="math notranslate nohighlight">\(2^e\le|x|&lt;2^{e+1}\)</span>. The relative spacing thus “wobbles” by a factor
+of two within each binade, as shown in the lower panel of
+<a class="reference internal" href="#ch03-fig-number-system"><span class="std std-numref">Figure 3.1</span></a>. At a power of two the gap below is half the
+gap above: the neighbors of <span class="math notranslate nohighlight">\(1\)</span> in binary64 are <span class="math notranslate nohighlight">\(1-2^{-53}\)</span> and <span class="math notranslate nohighlight">\(1+2^{-52}\)</span>.
+NumPy’s <code class="docutils literal notranslate"><span class="pre">np.spacing(x)</span></code> returns the gap from <span class="math notranslate nohighlight">\(x\)</span> to the next float away from
+zero, and <code class="docutils literal notranslate"><span class="pre">np.nextafter(x,</span> <span class="pre">y)</span></code> the neighbor of <span class="math notranslate nohighlight">\(x\)</span> in the direction of <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<div class="proof example admonition" id="ch03-exa-toy">
+<p class="admonition-title"><span class="caption-number">Example 3.1 </span> (A toy floating-point system)</p>
+<section class="example-content" id="proof-content">
+<p>Take <span class="math notranslate nohighlight">\(\beta = 2\)</span>, <span class="math notranslate nohighlight">\(p = 3\)</span>, <span class="math notranslate nohighlight">\(e_{\min} = -1\)</span>, <span class="math notranslate nohighlight">\(e_{\max} = 2\)</span>. The positive
+normalized numbers are <span class="math notranslate nohighlight">\((1.d_1d_2)_2\times2^e\)</span>, that is,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+e=-1&amp;:\quad 0.5,\ 0.625,\ 0.75,\ 0.875, &amp; e=0&amp;:\quad 1,\ 1.25,\ 1.5,\ 1.75,\\
+e=1&amp;:\quad 2,\ 2.5,\ 3,\ 3.5, &amp; e=2&amp;:\quad 4,\ 5,\ 6,\ 7 ,
+\end{aligned}
+\end{split}\]</div>
+<p>sixteen numbers in all, with <span class="math notranslate nohighlight">\(x_{\min} = 0.5\)</span> and <span class="math notranslate nohighlight">\(x_{\max} = 7\)</span>. The spacing
+is <span class="math notranslate nohighlight">\(1/8\)</span> in <span class="math notranslate nohighlight">\([0.5,1)\)</span> and doubles in each binade up to <span class="math notranslate nohighlight">\(1\)</span> in <span class="math notranslate nohighlight">\([4,7]\)</span>. The
+subnormal numbers <span class="math notranslate nohighlight">\((0.d_1d_2)_2\times2^{-1}\)</span> are <span class="math notranslate nohighlight">\(0.125\)</span>, <span class="math notranslate nohighlight">\(0.25\)</span> and <span class="math notranslate nohighlight">\(0.375\)</span>,
+and they fill the gap between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(x_{\min}\)</span> with the same spacing
+<span class="math notranslate nohighlight">\(1/8\)</span> as the lowest binade. Without them the gap <span class="math notranslate nohighlight">\((0, 0.5)\)</span> would be four
+times wider than the spacing just above it.</p>
+</section>
+</div><figure class="align-default" id="ch03-fig-number-system">
+<a class="reference internal image-reference" href="../_images/ch03-number-system.png"><img alt="Top, a number line with the 16 positive normalized numbers and 3 subnormal numbers of the toy system; the spacing doubles at each power of two. Bottom, a sawtooth curve of the relative spacing of binary64 numbers between u and 2u." src="../_images/ch03-number-system.png" style="width: 85%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3.1 </span><span class="caption-text">Top: the positive numbers of the toy system of
+<a class="reference internal" href="#ch03-exa-toy">Example 3.1</a>; subnormal numbers fill the gap next to zero.
+Bottom: the relative spacing <span class="math notranslate nohighlight">\(\operatorname{ulp}(x)/x\)</span> of binary64 numbers,
+in units of <span class="math notranslate nohighlight">\(u = 2^{-53}\)</span>, drops from <span class="math notranslate nohighlight">\(2u\)</span> to <span class="math notranslate nohighlight">\(u\)</span> across each binade
+<a class="reference internal" href="#equation-ch03-eq-relative-spacing">(3.3)</a>.</span><a class="headerlink" href="#ch03-fig-number-system" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="the-ieee-754-formats">
+<h3><span class="section-number">3.1.3. </span>The IEEE 754 formats<a class="headerlink" href="#the-ieee-754-formats" title="Link to this heading">#</a></h3>
+<p>The IEEE 754 standard <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../back/bibliography.html#id25" title="IEEE. IEEE standard for floating-point arithmetic (IEEE std 754-2019). Institute of Electrical and Electronics Engineers, 2019.">IEEE, 2019</a>]</span>, first published in 1985 and revised
+in 2008 and 2019, defines binary formats, the results of the basic
+operations, rounding, and the handling of exceptions. Almost all current
+hardware implements it. <a class="reference internal" href="#ch03-sec-rounding"><span class="std std-numref">Section 3.3</span></a> defines the unit
+roundoff <span class="math notranslate nohighlight">\(u\)</span> listed in the first table.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Format</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(p\)</span></p></th>
+<th class="head"><p>Fraction bits</p></th>
+<th class="head"><p>Exponent bits</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(e_{\min}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(e_{\max}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(u = 2^{-p}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>binary64</p></td>
+<td><p>53</p></td>
+<td><p>52</p></td>
+<td><p>11</p></td>
+<td><p><span class="math notranslate nohighlight">\(-1022\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1023\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.11\times10^{-16}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>binary32</p></td>
+<td><p>24</p></td>
+<td><p>23</p></td>
+<td><p>8</p></td>
+<td><p><span class="math notranslate nohighlight">\(-126\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(127\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(5.96\times10^{-8}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>binary16</p></td>
+<td><p>11</p></td>
+<td><p>10</p></td>
+<td><p>5</p></td>
+<td><p><span class="math notranslate nohighlight">\(-14\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(15\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(4.88\times10^{-4}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>bfloat16</p></td>
+<td><p>8</p></td>
+<td><p>7</p></td>
+<td><p>8</p></td>
+<td><p><span class="math notranslate nohighlight">\(-126\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(127\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(3.91\times10^{-3}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The range of each format is given by its smallest positive subnormal number
+<span class="math notranslate nohighlight">\(2^{e_{\min}-p+1}\)</span>, its smallest normalized number <span class="math notranslate nohighlight">\(x_{\min} = 2^{e_{\min}}\)</span>
+and its largest number <span class="math notranslate nohighlight">\(x_{\max} = (2-2^{1-p})2^{e_{\max}}\)</span>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Format</p></th>
+<th class="head"><p>smallest subnormal</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(x_{\min}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(x_{\max}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>binary64</p></td>
+<td><p><span class="math notranslate nohighlight">\(4.94\times10^{-324}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2.23\times10^{-308}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.80\times10^{308}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>binary32</p></td>
+<td><p><span class="math notranslate nohighlight">\(1.40\times10^{-45}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.18\times10^{-38}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(3.40\times10^{38}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>binary16</p></td>
+<td><p><span class="math notranslate nohighlight">\(5.96\times10^{-8}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(6.10\times10^{-5}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(65504\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>bfloat16</p></td>
+<td><p><span class="math notranslate nohighlight">\(9.18\times10^{-41}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(1.18\times10^{-38}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(3.39\times10^{38}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The column “Fraction bits” gives the number of stored fraction bits, one
+less than the precision because of the hidden bit. Binary64 (double
+precision) is the default in NumPy, MATLAB and most scientific software, and
+it is the format assumed in this book unless we say otherwise. Binary32
+(single precision) halves storage and memory traffic. Binary16 (half
+precision) and bfloat16 are used on
+hardware for machine learning; bfloat16 is not one of the IEEE 754 formats,
+but it follows the same design with the exponent range of binary32 and only
+8 bits of precision (hardware support for bfloat16 subnormal numbers
+varies).</p>
+<p>A binary64 number occupies 64 bits: a sign bit <span class="math notranslate nohighlight">\(s\)</span>, an 11-bit biased
+exponent <span class="math notranslate nohighlight">\(E\in\{0,\dots,2047\}\)</span> and a 52-bit fraction <span class="math notranslate nohighlight">\(f\)</span>. For
+<span class="math notranslate nohighlight">\(1\le E\le2046\)</span> the number is <span class="math notranslate nohighlight">\((-1)^s(1.f)_2\times2^{E-1023}\)</span>, with the
+hidden bit supplying the leading <span class="math notranslate nohighlight">\(1\)</span>; this covers <span class="math notranslate nohighlight">\(e = E - 1023\)</span> from
+<span class="math notranslate nohighlight">\(-1022\)</span> to <span class="math notranslate nohighlight">\(1023\)</span>. The exponent field <span class="math notranslate nohighlight">\(E = 0\)</span> encodes <span class="math notranslate nohighlight">\(\pm0\)</span> (if <span class="math notranslate nohighlight">\(f = 0\)</span>)
+and the subnormal numbers <span class="math notranslate nohighlight">\((-1)^s(0.f)_2\times2^{-1022}\)</span>, and <span class="math notranslate nohighlight">\(E = 2047\)</span>
+encodes <span class="math notranslate nohighlight">\(\pm\infty\)</span> (if <span class="math notranslate nohighlight">\(f = 0\)</span>) and NaN (otherwise).</p>
+<div class="proof example admonition" id="ch03-exa-one-tenth">
+<p class="admonition-title"><span class="caption-number">Example 3.2 </span> (How <span class="math notranslate nohighlight">\(0.1\)</span> is stored)</p>
+<section class="example-content" id="proof-content">
+<p>In binary, <span class="math notranslate nohighlight">\(0.1 = (1.100110011001\ldots)_2\times2^{-4}\)</span> with the block
+<span class="math notranslate nohighlight">\(1001\)</span> repeating forever. Rounding the significand to 53 bits rounds the
+repeating pattern up in its last place, and the 64 stored bits are, in
+hexadecimal, <code class="docutils literal notranslate"><span class="pre">3FB999999999999A</span></code>: sign <span class="math notranslate nohighlight">\(0\)</span>, exponent field
+<span class="math notranslate nohighlight">\(E = 1019 = -4+1023\)</span>, and fraction <code class="docutils literal notranslate"><span class="pre">999999999999A</span></code>. The stored number is</p>
+<div class="math notranslate nohighlight">
+\[
+\fl(0.1) = 0.1000000000000000055511151231257827\ldots
+= 0.1\,(1+2^{-54}),
+\]</div>
+<p>so its relative error is <span class="math notranslate nohighlight">\(2^{-54} = u/2\)</span>. The familiar surprise
+<code class="docutils literal notranslate"><span class="pre">0.1</span> <span class="pre">+</span> <span class="pre">0.2</span> <span class="pre">==</span> <span class="pre">0.3</span></code> evaluating to <code class="docutils literal notranslate"><span class="pre">False</span></code> in Python happens because three
+different rounding errors (in <span class="math notranslate nohighlight">\(0.1\)</span>, <span class="math notranslate nohighlight">\(0.2\)</span>, and the sum) do not match the
+one rounding error in <span class="math notranslate nohighlight">\(0.3\)</span>; the computed sum is
+<span class="math notranslate nohighlight">\(0.30000000000000004\)</span> to 17 significant digits.</p>
+</section>
+</div><div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>How many binary64 numbers lie in <span class="math notranslate nohighlight">\([1,2)\)</span>? What is the spacing of binary64
+numbers in <span class="math notranslate nohighlight">\([2^{52},2^{53})\)</span>, and what is the smallest positive integer that
+is not a binary64 number?</p>
+<p><em>Answer.</em> The numbers in <span class="math notranslate nohighlight">\([1,2)\)</span> are <span class="math notranslate nohighlight">\(1 + k2^{-52}\)</span> for
+<span class="math notranslate nohighlight">\(k = 0,\dots,2^{52}-1\)</span>, so there are <span class="math notranslate nohighlight">\(2^{52}\approx4.5\times10^{15}\)</span> of
+them. In <span class="math notranslate nohighlight">\([2^{52},2^{53})\)</span> the spacing is <span class="math notranslate nohighlight">\(2^{52-52} = 1\)</span>, so every integer
+up to <span class="math notranslate nohighlight">\(2^{53}\)</span> is representable. In <span class="math notranslate nohighlight">\([2^{53},2^{54})\)</span> the spacing is <span class="math notranslate nohighlight">\(2\)</span>, so
+<span class="math notranslate nohighlight">\(2^{53}+1\)</span> is the smallest positive integer that is not a binary64 number;
+in Python <code class="docutils literal notranslate"><span class="pre">float(2**53</span> <span class="pre">+</span> <span class="pre">1)</span> <span class="pre">==</span> <span class="pre">2**53</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</div>
+</section>
+</section>
+<section id="subnormal-numbers-infinities-and-nan">
+<span id="ch03-sec-special"></span><h2><span class="section-number">3.2. </span>Subnormal numbers, infinities and NaN<a class="headerlink" href="#subnormal-numbers-infinities-and-nan" title="Link to this heading">#</a></h2>
+<section id="gradual-underflow">
+<h3><span class="section-number">3.2.1. </span>Gradual underflow<a class="headerlink" href="#gradual-underflow" title="Link to this heading">#</a></h3>
+<p>A computed result that is nonzero but smaller in magnitude than <span class="math notranslate nohighlight">\(x_{\min}\)</span>
+is said to <em>underflow</em>. IEEE arithmetic handles underflow <em>gradually</em>: such
+results are rounded to the subnormal numbers, which are equally spaced with
+spacing <span class="math notranslate nohighlight">\(2^{e_{\min}-p+1}\)</span> between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(x_{\min}\)</span>. The price is a loss of
+relative precision: a subnormal number <span class="math notranslate nohighlight">\((0.0\cdots01d_k\cdots d_{p-1})_2
+\times2^{e_{\min}}\)</span> has fewer than <span class="math notranslate nohighlight">\(p\)</span> significant bits. The benefit is that
+addition and subtraction never underflow harmfully.</p>
+<div class="proof lemma admonition" id="ch03-lem-subnormal-exact">
+<p class="admonition-title"><span class="caption-number">Lemma 3.1 </span> (Exact sums near the underflow threshold)</p>
+<section class="lemma-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(F\)</span> be a binary IEEE-style system with subnormal numbers. If
+<span class="math notranslate nohighlight">\(x,y\in F\)</span> and <span class="math notranslate nohighlight">\(|x\pm y|&lt;2x_{\min} = 2^{e_{\min}+1}\)</span>, then <span class="math notranslate nohighlight">\(x\pm y\in F\)</span>;
+that is, the sum or difference is computed exactly.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. By <a class="reference internal" href="#equation-ch03-eq-integer-form">(3.2)</a> both <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> are integer multiples of
+<span class="math notranslate nohighlight">\(2^{e_{\min}-p+1}\)</span>, hence so is <span class="math notranslate nohighlight">\(z = x\pm y\)</span>: <span class="math notranslate nohighlight">\(z = k\,2^{e_{\min}-p+1}\)</span> with
+<span class="math notranslate nohighlight">\(k\in\mathbb Z\)</span>. From <span class="math notranslate nohighlight">\(|z|&lt;2^{e_{\min}+1}\)</span> we get <span class="math notranslate nohighlight">\(|k|&lt;2^{p}\)</span>, and by
+<a class="reference internal" href="#equation-ch03-eq-integer-form">(3.2)</a> with <span class="math notranslate nohighlight">\(e = e_{\min}\)</span> the number <span class="math notranslate nohighlight">\(z\)</span> belongs to <span class="math notranslate nohighlight">\(F\)</span>.</p>
+</div>
+<p>In particular, whenever the exact result of an addition or subtraction is
+subnormal, it is computed exactly, and for floating-point numbers
+<span class="math notranslate nohighlight">\(x\ne y\)</span> the computed difference <span class="math notranslate nohighlight">\(x - y\)</span> is never zero
+(<a class="reference internal" href="#ch03-ex-gradual-underflow"><span class="std std-numref">Exercise 3.4</span></a>). Some hardware offers a faster
+“flush-to-zero” mode that replaces subnormal results by <span class="math notranslate nohighlight">\(0\)</span>; it gives up
+these guarantees.</p>
+</section>
+<section id="overflow-infinities-signed-zeros-and-nan">
+<h3><span class="section-number">3.2.2. </span>Overflow, infinities, signed zeros and NaN<a class="headerlink" href="#overflow-infinities-signed-zeros-and-nan" title="Link to this heading">#</a></h3>
+<p>A result whose magnitude is too large for the format <em>overflows</em>. In the
+default rounding mode, IEEE 754 specifies that an exact result of magnitude
+at least <span class="math notranslate nohighlight">\(2^{e_{\max}}(2-2^{-p})\)</span>, which is <span class="math notranslate nohighlight">\(x_{\max}\)</span> plus half a unit in
+its last place, rounds to <span class="math notranslate nohighlight">\(\pm\infty\)</span>; smaller results round to finite
+numbers. In binary64, <span class="math notranslate nohighlight">\(x_{\max}+2^{970}\)</span> is exactly halfway between
+<span class="math notranslate nohighlight">\(x_{\max}\)</span> and <span class="math notranslate nohighlight">\(2^{1024}\)</span> and gives <code class="docutils literal notranslate"><span class="pre">inf</span></code>, while <span class="math notranslate nohighlight">\(x_{\max}+2^{969}\)</span> rounds
+back to <span class="math notranslate nohighlight">\(x_{\max}\)</span>.</p>
+<p>The special values follow the rules of limits wherever these are
+unambiguous: <span class="math notranslate nohighlight">\(1/(+0) = +\infty\)</span>, <span class="math notranslate nohighlight">\(1/(-0) = -\infty\)</span>,
+<span class="math notranslate nohighlight">\(x/\infty = 0\)</span> for finite <span class="math notranslate nohighlight">\(x\)</span>, and <span class="math notranslate nohighlight">\(\infty+\infty = \infty\)</span>. Operations
+without a meaningful limit, such as <span class="math notranslate nohighlight">\(0/0\)</span>, <span class="math notranslate nohighlight">\(\infty-\infty\)</span>, <span class="math notranslate nohighlight">\(0\cdot\infty\)</span>
+and <span class="math notranslate nohighlight">\(\sqrt{-1}\)</span>, return NaN (“not a number”), which propagates through all
+subsequent arithmetic. Every comparison involving a NaN is false, so
+<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">!=</span> <span class="pre">x</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> exactly when <code class="docutils literal notranslate"><span class="pre">x</span></code> is a NaN. The two zeros compare equal,
+<span class="math notranslate nohighlight">\(+0 = -0\)</span>, but they carry the sign of a result that underflowed and make
+identities such as <span class="math notranslate nohighlight">\(1/(1/x) = x\)</span> hold for <span class="math notranslate nohighlight">\(x = \pm\infty\)</span>.</p>
+<p>The standard also defines five exceptions, <em>invalid operation</em>, <em>division by
+zero</em>, <em>overflow</em>, <em>underflow</em> and <em>inexact</em>, which raise status flags and
+by default deliver the results just described instead of stopping the
+program. NumPy reports them as warnings, configurable with <code class="docutils literal notranslate"><span class="pre">np.errstate</span></code>;
+plain Python floats instead raise <code class="docutils literal notranslate"><span class="pre">ZeroDivisionError</span></code> for division by zero.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The relative error bound <span class="math notranslate nohighlight">\(\fl(x) = x(1+\delta)\)</span>, <span class="math notranslate nohighlight">\(|\delta|\le u\)</span> of the next
+section holds only in the normal range. In the subnormal range the absolute
+error is at most half the subnormal spacing, but the relative error can be
+as large as <span class="math notranslate nohighlight">\(1\)</span>: in binary64, <span class="math notranslate nohighlight">\(3\cdot2^{-1076}\)</span> rounds to <span class="math notranslate nohighlight">\(2^{-1074}\)</span> with
+relative error <span class="math notranslate nohighlight">\(1/3\)</span>, and <span class="math notranslate nohighlight">\(2^{-1075}\)</span> rounds to <span class="math notranslate nohighlight">\(0\)</span>. Error bounds of the form
+“relative error at most a modest multiple of <span class="math notranslate nohighlight">\(u\)</span>” always carry the implicit
+hypothesis that no underflow (and no overflow) occurs.</p>
+</div>
+</section>
+</section>
+<section id="rounding-and-the-unit-roundoff">
+<span id="ch03-sec-rounding"></span><h2><span class="section-number">3.3. </span>Rounding and the unit roundoff<a class="headerlink" href="#rounding-and-the-unit-roundoff" title="Link to this heading">#</a></h2>
+<section id="round-to-nearest">
+<h3><span class="section-number">3.3.1. </span>Round to nearest<a class="headerlink" href="#round-to-nearest" title="Link to this heading">#</a></h3>
+<p>The result of a computation is in general not in <span class="math notranslate nohighlight">\(F\)</span> and must be rounded.
+IEEE 754 provides several rounding functions; the default, used everywhere
+in this book, is <em>round to nearest, ties to even</em>.</p>
+<div class="proof definition admonition" id="ch03-def-rounding">
+<p class="admonition-title"><span class="caption-number">Definition 3.3 </span> (Rounding to nearest)</p>
+<section class="definition-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(x\in\R\)</span> with <span class="math notranslate nohighlight">\(|x|\le x_{\max}\)</span>, <span class="math notranslate nohighlight">\(\fl(x)\)</span> is the element of <span class="math notranslate nohighlight">\(F\)</span> nearest
+to <span class="math notranslate nohighlight">\(x\)</span>. If <span class="math notranslate nohighlight">\(x\)</span> lies exactly halfway between two consecutive elements of <span class="math notranslate nohighlight">\(F\)</span>
+(a <em>tie</em>), <span class="math notranslate nohighlight">\(\fl(x)\)</span> is the one whose last significand digit <span class="math notranslate nohighlight">\(d_{p-1}\)</span> is
+even (zero, in base 2).</p>
+</section>
+</div><p>The tie rule removes the statistical bias of always rounding ties upward.
+The other IEEE rounding modes, toward <span class="math notranslate nohighlight">\(0\)</span>, toward <span class="math notranslate nohighlight">\(+\infty\)</span> and toward
+<span class="math notranslate nohighlight">\(-\infty\)</span>, are used mainly in interval arithmetic. Rounding is monotone:
+<span class="math notranslate nohighlight">\(x\le y\)</span> implies <span class="math notranslate nohighlight">\(\fl(x)\le\fl(y)\)</span>.</p>
+<div class="proof theorem admonition" id="ch03-thm-rounding">
+<p class="admonition-title"><span class="caption-number">Theorem 3.1 </span> (Relative error of rounding)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(u = \tfrac12\beta^{1-p}\)</span>, which is <span class="math notranslate nohighlight">\(u = 2^{-p}\)</span> in base 2 and
+<span class="math notranslate nohighlight">\(u = 2^{-53}\approx1.11\times10^{-16}\)</span> in binary64. If <span class="math notranslate nohighlight">\(x\in\R\)</span> lies in the
+normal range, <span class="math notranslate nohighlight">\(x_{\min}\le|x|\le x_{\max}\)</span>, then</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-rounding">
+<span class="eqno">(3.4)<a class="headerlink" href="#equation-ch03-eq-rounding" title="Link to this equation">#</a></span>\[
+\fl(x) = x(1+\delta) = \frac{x}{1+\delta'},\qquad |\delta|\le u,\quad |\delta'|\le u .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. By symmetry we may assume <span class="math notranslate nohighlight">\(x&gt;0\)</span>. Let <span class="math notranslate nohighlight">\(e\)</span> be the integer with
+<span class="math notranslate nohighlight">\(\beta^e\le x&lt;\beta^{e+1}\)</span>; then <span class="math notranslate nohighlight">\(e_{\min}\le e\le e_{\max}\)</span>. The elements of
+<span class="math notranslate nohighlight">\(F\)</span> in <span class="math notranslate nohighlight">\([\beta^e,\beta^{e+1})\)</span> are <span class="math notranslate nohighlight">\(m\beta^{e-p+1}\)</span> with
+<span class="math notranslate nohighlight">\(\beta^{p-1}\le m&lt;\beta^p\)</span>, so consecutive elements are <span class="math notranslate nohighlight">\(\beta^{e-p+1}\)</span>
+apart. If <span class="math notranslate nohighlight">\(e&lt;e_{\max}\)</span> then <span class="math notranslate nohighlight">\(\beta^{e+1}\in F\)</span> as well, and <span class="math notranslate nohighlight">\(x\)</span> lies between
+two consecutive elements of <span class="math notranslate nohighlight">\(F\)</span> at distance <span class="math notranslate nohighlight">\(\beta^{e-p+1}\)</span>; if <span class="math notranslate nohighlight">\(e = e_{\max}\)</span>,
+the hypothesis <span class="math notranslate nohighlight">\(x\le x_{\max}\)</span> gives the same conclusion. The nearest of
+the two is at most half the gap away:</p>
+<div class="math notranslate nohighlight">
+\[
+|\fl(x) - x|\le\tfrac12\beta^{e-p+1}.
+\]</div>
+<p>Dividing by <span class="math notranslate nohighlight">\(x\ge\beta^e\)</span> gives <span class="math notranslate nohighlight">\(|\delta| = |\fl(x)-x|/x\le\tfrac12\beta^{1-p} = u\)</span>.
+For the second form, <span class="math notranslate nohighlight">\(\beta^e\in F\)</span> and <span class="math notranslate nohighlight">\(\beta^e\le x\)</span>, so by monotonicity
+<span class="math notranslate nohighlight">\(\fl(x)\ge\beta^e\)</span>, and <span class="math notranslate nohighlight">\(\delta' = (x - \fl(x))/\fl(x)\)</span> satisfies
+<span class="math notranslate nohighlight">\(|\delta'|\le\tfrac12\beta^{e-p+1}/\beta^e = u\)</span>.</p>
+</div>
+<p>The bound is essentially attained: in binary64, <span class="math notranslate nohighlight">\(x = 1+2^{-53}\)</span> is a tie
+between <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(1+2^{-52}\)</span> and rounds to <span class="math notranslate nohighlight">\(1\)</span>, with relative error
+<span class="math notranslate nohighlight">\(2^{-53}/(1+2^{-53}) = u/(1+u)\)</span>. In fact <span class="math notranslate nohighlight">\(u/(1+u)\)</span> is the exact maximum
+(<a class="reference internal" href="#ch03-ex-sharper-bound"><span class="std std-numref">Exercise 3.2</span></a>). The theorem says that rounding in the normal
+range commits a relative error of at most <span class="math notranslate nohighlight">\(u\)</span>, whatever the magnitude of
+<span class="math notranslate nohighlight">\(x\)</span>: floating-point numbers provide a fixed <em>relative</em> accuracy of about 16
+significant decimal digits in binary64, and about 7 in binary32.</p>
+<p>In the subnormal range the relative bound fails, as the warning above
+showed, but an absolute bound remains.</p>
+<div class="proof theorem admonition" id="ch03-thm-underflow">
+<p class="admonition-title"><span class="caption-number">Theorem 3.2 </span> (Rounding with underflow)</p>
+<section class="theorem-content" id="proof-content">
+<p>In a binary system with subnormal numbers, every <span class="math notranslate nohighlight">\(x\in\R\)</span> with
+<span class="math notranslate nohighlight">\(|x|\le x_{\max}\)</span> satisfies</p>
+<div class="math notranslate nohighlight">
+\[
+\fl(x) = x(1+\delta) + \eta,\qquad |\delta|\le u,\quad |\eta|\le2^{e_{\min}-p},\quad \delta\eta = 0 .
+\]</div>
+<p>In binary64, <span class="math notranslate nohighlight">\(2^{e_{\min}-p} = 2^{-1075}\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. If <span class="math notranslate nohighlight">\(|x|\ge x_{\min}\)</span>, take <span class="math notranslate nohighlight">\(\eta = 0\)</span> and apply <a class="reference internal" href="#ch03-thm-rounding">Theorem 3.1</a>.
+If <span class="math notranslate nohighlight">\(|x|&lt;x_{\min}\)</span>, then <span class="math notranslate nohighlight">\(x\)</span> lies between two consecutive multiples of
+<span class="math notranslate nohighlight">\(2^{e_{\min}-p+1}\)</span> in <span class="math notranslate nohighlight">\([-x_{\min}, x_{\min}]\)</span>, all of which are in <span class="math notranslate nohighlight">\(F\)</span> by
+<a class="reference internal" href="#equation-ch03-eq-integer-form">(3.2)</a>, so <span class="math notranslate nohighlight">\(|\fl(x) - x|\le2^{e_{\min}-p}\)</span>; take
+<span class="math notranslate nohighlight">\(\delta = 0\)</span> and <span class="math notranslate nohighlight">\(\eta = \fl(x) - x\)</span>.</p>
+</div>
+</section>
+<section id="unit-roundoff-and-machine-epsilon">
+<h3><span class="section-number">3.3.2. </span>Unit roundoff and machine epsilon<a class="headerlink" href="#unit-roundoff-and-machine-epsilon" title="Link to this heading">#</a></h3>
+<p>Two closely related constants describe the precision of a format, and the
+literature uses both under confusingly similar names. This book fixes the
+following convention.</p>
+<div class="proof definition admonition" id="ch03-def-epsilon">
+<p class="admonition-title"><span class="caption-number">Definition 3.4 </span> (Unit roundoff and machine epsilon)</p>
+<section class="definition-content" id="proof-content">
+<p>The <em>unit roundoff</em> is <span class="math notranslate nohighlight">\(u = \tfrac12\beta^{1-p}\)</span>, the bound in
+<a class="reference internal" href="#ch03-thm-rounding">Theorem 3.1</a>. <em>Machine epsilon</em> is
+<span class="math notranslate nohighlight">\(\epsmach = \beta^{1-p} = 2u\)</span>, the distance from <span class="math notranslate nohighlight">\(1\)</span> to the next larger
+floating-point number. In binary64, <span class="math notranslate nohighlight">\(u = 2^{-53}\approx1.11\times10^{-16}\)</span>
+and <span class="math notranslate nohighlight">\(\epsmach = 2^{-52}\approx2.22\times10^{-16}\)</span>, which is the value of
+<code class="docutils literal notranslate"><span class="pre">np.finfo(float).eps</span></code>, of MATLAB’s <code class="docutils literal notranslate"><span class="pre">eps</span></code> and of <code class="docutils literal notranslate"><span class="pre">DBL_EPSILON</span></code> in C.</p>
+</section>
+</div><p>A third characterization is sometimes used as a definition: “the smallest
+<span class="math notranslate nohighlight">\(\varepsilon&gt;0\)</span> such that <span class="math notranslate nohighlight">\(\fl(1+\varepsilon)&gt;1\)</span>.” It does not give either
+constant exactly.</p>
+<div class="proof proposition admonition" id="ch03-prop-smallest-eps">
+<p class="admonition-title"><span class="caption-number">Proposition 3.1 </span> (The smallest float that changes <span class="math notranslate nohighlight">\(1\)</span>)</p>
+<section class="proposition-content" id="proof-content">
+<p>In binary64 with round to nearest, ties to even, <span class="math notranslate nohighlight">\(\fl(1+\varepsilon) = 1\)</span> for
+every floating-point number <span class="math notranslate nohighlight">\(0&lt;\varepsilon\le2^{-53}\)</span>. The smallest
+floating-point number <span class="math notranslate nohighlight">\(\varepsilon\)</span> with <span class="math notranslate nohighlight">\(\fl(1+\varepsilon)&gt;1\)</span> is
+<span class="math notranslate nohighlight">\(2^{-53}+2^{-105} = u(1+\epsmach)\)</span>, and for it <span class="math notranslate nohighlight">\(\fl(1+\varepsilon) = 1+2^{-52}\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The floating-point neighbors of <span class="math notranslate nohighlight">\(1\)</span> from above are <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(1+2^{-52}\)</span>, with
+midpoint <span class="math notranslate nohighlight">\(1+2^{-53}\)</span>. If <span class="math notranslate nohighlight">\(0&lt;\varepsilon&lt;2^{-53}\)</span>, then <span class="math notranslate nohighlight">\(1+\varepsilon\)</span> is
+nearer to <span class="math notranslate nohighlight">\(1\)</span>. If <span class="math notranslate nohighlight">\(\varepsilon = 2^{-53}\)</span>, then <span class="math notranslate nohighlight">\(1+\varepsilon\)</span> is a tie,
+and it rounds to <span class="math notranslate nohighlight">\(1\)</span> because the last significand bit of <span class="math notranslate nohighlight">\(1\)</span> is <span class="math notranslate nohighlight">\(0\)</span> and that
+of <span class="math notranslate nohighlight">\(1+2^{-52}\)</span> is <span class="math notranslate nohighlight">\(1\)</span>. The next floating-point number after <span class="math notranslate nohighlight">\(2^{-53}\)</span> is
+<span class="math notranslate nohighlight">\(2^{-53}(1+2^{-52}) = 2^{-53}+2^{-105}\)</span>, and <span class="math notranslate nohighlight">\(1+2^{-53}+2^{-105}\)</span> lies
+strictly between the midpoint and <span class="math notranslate nohighlight">\(1+2^{-52}\)</span>, so it rounds up to
+<span class="math notranslate nohighlight">\(1+2^{-52}\)</span>.</p>
+</div>
+<p>Among real numbers there is no smallest <span class="math notranslate nohighlight">\(\varepsilon\)</span> with
+<span class="math notranslate nohighlight">\(\fl(1+\varepsilon)&gt;1\)</span>: the set of such <span class="math notranslate nohighlight">\(\varepsilon\)</span> is the open interval
+<span class="math notranslate nohighlight">\((2^{-53},\infty)\)</span> intersected with the range. In Python, <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2**-53</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>
+is <code class="docutils literal notranslate"><span class="pre">False</span></code>, while <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2**-52</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>. A loop that halves a trial
+value while <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">eps/2</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> tests only powers of two and stops at <span class="math notranslate nohighlight">\(2^{-52}\)</span>;
+it computes <span class="math notranslate nohighlight">\(\epsmach\)</span>, but for a reason that has nothing to do with the
+“smallest <span class="math notranslate nohighlight">\(\varepsilon\)</span>” definition.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Different books use the words “machine epsilon” for different constants.
+<span class="bibtex-citation" id="id3">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Lecture 13) define
+<span class="math notranslate nohighlight">\(\epsilon_{\text{machine}} = \tfrac12\beta^{1-t}\)</span>, which is our <span class="math notranslate nohighlight">\(u\)</span>, and write
+their axioms with <span class="math notranslate nohighlight">\(|\epsilon|\le\epsilon_{\text{machine}}\)</span>. NumPy, MATLAB and
+C use <span class="math notranslate nohighlight">\(\epsmach = 2u\)</span>. <span class="bibtex-citation" id="id4">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> uses <span class="math notranslate nohighlight">\(u\)</span>, as we do. Whenever we
+quote a result from Trefethen and Bau we translate their
+<span class="math notranslate nohighlight">\(\epsilon_{\text{machine}}\)</span> into <span class="math notranslate nohighlight">\(u\)</span>. Mixing the conventions loses a factor
+of two, and writing the rounding bound as <span class="math notranslate nohighlight">\(|\delta|\le\epsmach\)</span> is valid but
+not sharp.</p>
+</div>
+</section>
+</section>
+<section id="the-standard-model-of-arithmetic">
+<span id="ch03-sec-model"></span><h2><span class="section-number">3.4. </span>The standard model of arithmetic<a class="headerlink" href="#the-standard-model-of-arithmetic" title="Link to this heading">#</a></h2>
+<section id="correctly-rounded-operations">
+<h3><span class="section-number">3.4.1. </span>Correctly rounded operations<a class="headerlink" href="#correctly-rounded-operations" title="Link to this heading">#</a></h3>
+<p>IEEE 754 requires that the basic operations <span class="math notranslate nohighlight">\(+,-,\times,\div\)</span>, the square
+root and the fused multiply-add be <em>correctly rounded</em>: for floating-point
+operands <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, the computed result is the exact result rounded
+according to <a class="reference internal" href="#ch03-def-rounding">Definition 3.3</a>,</p>
+<div class="math notranslate nohighlight">
+\[
+\fl(x\mathbin{\mathrm{op}}y) = \fl\big(\text{exact } x\mathbin{\mathrm{op}}y\big).
+\]</div>
+<p>Combining this with <a class="reference internal" href="#ch03-thm-rounding">Theorem 3.1</a> and
+<a class="reference internal" href="#ch03-lem-subnormal-exact">Lemma 3.1</a> gives the model on which all our error
+analyses rest.</p>
+<div class="proof theorem admonition" id="ch03-thm-standard-model">
+<p class="admonition-title"><span class="caption-number">Theorem 3.3 </span> (Standard model of floating-point arithmetic)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(x,y\in F\)</span> and <span class="math notranslate nohighlight">\(\mathrm{op}\in\{+,-,\times,\div\}\)</span> (with <span class="math notranslate nohighlight">\(y\ne0\)</span> for
+division). If <span class="math notranslate nohighlight">\(x\mathbin{\mathrm{op}}y\)</span> lies in the normal range, then</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-standard-model">
+<span class="eqno">(3.5)<a class="headerlink" href="#equation-ch03-eq-standard-model" title="Link to this equation">#</a></span>\[
+\fl(x\mathbin{\mathrm{op}}y) = (x\mathbin{\mathrm{op}}y)(1+\delta)
+= \frac{x\mathbin{\mathrm{op}}y}{1+\delta'},\qquad |\delta|\le u,\quad |\delta'|\le u .
+\]</div>
+<p>For addition and subtraction the relation also holds, with <span class="math notranslate nohighlight">\(\delta = \delta' = 0\)</span>,
+when <span class="math notranslate nohighlight">\(|x\pm y|&lt;x_{\min}\)</span>. The same statement holds for
+<span class="math notranslate nohighlight">\(\fl(\sqrt x) = \sqrt x\,(1+\delta)\)</span>, <span class="math notranslate nohighlight">\(x\ge0\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Correct rounding means that the computed result is <span class="math notranslate nohighlight">\(\fl(z)\)</span> with <span class="math notranslate nohighlight">\(z\)</span> the
+exact result, and <a class="reference internal" href="#ch03-thm-rounding">Theorem 3.1</a> applies to <span class="math notranslate nohighlight">\(z\)</span>. For addition
+and subtraction with <span class="math notranslate nohighlight">\(|z|&lt;x_{\min}\)</span>, <a class="reference internal" href="#ch03-lem-subnormal-exact">Lemma 3.1</a>
+shows that <span class="math notranslate nohighlight">\(z\in F\)</span>, so <span class="math notranslate nohighlight">\(\fl(z) = z\)</span>. The square root is covered in the same
+way, and <span class="math notranslate nohighlight">\(\sqrt x\)</span> lies in the normal range whenever <span class="math notranslate nohighlight">\(x\)</span> does.</p>
+</div>
+<p>Several points deserve emphasis. First, the model applies to operands that
+are already floating-point numbers. The expression <code class="docutils literal notranslate"><span class="pre">0.1</span> <span class="pre">*</span> <span class="pre">3</span></code> in a program
+involves two roundings: the conversion of the decimal constant <span class="math notranslate nohighlight">\(0.1\)</span> to
+<span class="math notranslate nohighlight">\(\fl(0.1)\)</span> and the multiplication. Second, the model is a bound, not a
+description: it does not say that <span class="math notranslate nohighlight">\(\delta\)</span> is random or small on average,
+and the analyses built on it are worst-case. Third, elementary functions
+such as <span class="math notranslate nohighlight">\(\exp\)</span> and <span class="math notranslate nohighlight">\(\sin\)</span> are not required to be correctly rounded; good
+libraries are accurate to about one unit in the last place, but the model
+<a class="reference internal" href="#equation-ch03-eq-standard-model">(3.5)</a> is then an assumption about the library rather
+than a theorem. Fourth, a <em>fused multiply-add</em> (FMA) computes
+<span class="math notranslate nohighlight">\(\fl(xy+z) = (xy+z)(1+\delta)\)</span> with a single rounding, which is more
+accurate than a multiplication followed by an addition.</p>
+<p>Algebraic laws that hold for real numbers may fail for floating-point
+operations. Addition and multiplication are commutative, but they are not
+associative, and multiplication does not distribute over addition. For
+example, in binary64</p>
+<div class="math notranslate nohighlight">
+\[
+(1 + 2^{-53}) + 2^{-53} = 1 \qquad\text{but}\qquad 1 + (2^{-53}+2^{-53}) = 1+2^{-52},
+\]</div>
+<p>because both additions on the left are ties that round to <span class="math notranslate nohighlight">\(1\)</span>, while
+<span class="math notranslate nohighlight">\(2^{-53}+2^{-53} = 2^{-52}\)</span> is exact. The ties-to-even rule can also round
+up: <span class="math notranslate nohighlight">\((1+2^{-52}) + 2^{-53}\)</span> is a tie between <span class="math notranslate nohighlight">\(1+2^{-52}\)</span> (odd last bit) and
+<span class="math notranslate nohighlight">\(1+2^{-51}\)</span> (even last bit), and gives <span class="math notranslate nohighlight">\(1+2^{-51}\)</span>.</p>
+</section>
+<section id="operations-that-are-exact">
+<h3><span class="section-number">3.4.2. </span>Operations that are exact<a class="headerlink" href="#operations-that-are-exact" title="Link to this heading">#</a></h3>
+<p>Some floating-point operations commit no rounding error at all. Multiplying
+by a power of <span class="math notranslate nohighlight">\(\beta\)</span> is exact as long as the result stays in the normal
+range, since only the exponent changes. Subtraction of nearby numbers is
+also exact, a fact with important consequences for cancellation
+(<a class="reference internal" href="#ch03-sec-cancellation"><span class="std std-numref">Section 3.7</span></a>).</p>
+<div class="proof lemma admonition" id="ch03-lem-sterbenz">
+<p class="admonition-title"><span class="caption-number">Lemma 3.2 </span> (Sterbenz)</p>
+<section class="lemma-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(F\)</span> be a binary system with subnormal numbers. If <span class="math notranslate nohighlight">\(x,y\in F\)</span> satisfy
+<span class="math notranslate nohighlight">\(y/2\le x\le2y\)</span>, then <span class="math notranslate nohighlight">\(x - y\in F\)</span>, so <span class="math notranslate nohighlight">\(\fl(x-y) = x-y\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The hypothesis forces <span class="math notranslate nohighlight">\(x,y\ge0\)</span> and is symmetric in <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, so we may
+assume <span class="math notranslate nohighlight">\(0&lt;y\le x\le2y\)</span> (the case <span class="math notranslate nohighlight">\(y = 0\)</span> forces <span class="math notranslate nohighlight">\(x = 0\)</span>). Let
+<span class="math notranslate nohighlight">\(e = \max(e_{\min},\lfloor\log_2 y\rfloor)\)</span>. Then <span class="math notranslate nohighlight">\(y&lt;2^{e+1}\)</span>, and by
+<a class="reference internal" href="#equation-ch03-eq-integer-form">(3.2)</a> <span class="math notranslate nohighlight">\(y\)</span> is an integer multiple of <span class="math notranslate nohighlight">\(2^{e-p+1}\)</span>. Likewise <span class="math notranslate nohighlight">\(x\)</span> is an integer multiple of <span class="math notranslate nohighlight">\(2^{e'-p+1}\)</span> with
+<span class="math notranslate nohighlight">\(e' = \max(e_{\min},\lfloor\log_2x\rfloor)\)</span>, and <span class="math notranslate nohighlight">\(e'\ge e\)</span> because <span class="math notranslate nohighlight">\(x\ge y\)</span>;
+so <span class="math notranslate nohighlight">\(x\)</span> is also an integer multiple of <span class="math notranslate nohighlight">\(2^{e-p+1}\)</span>. Therefore <span class="math notranslate nohighlight">\(x - y = k\,2^{e-p+1}\)</span> with <span class="math notranslate nohighlight">\(k\)</span> an integer
+and <span class="math notranslate nohighlight">\(0\le x-y\le2y-y = y&lt;2^{e+1}\)</span>, which gives <span class="math notranslate nohighlight">\(0\le k&lt;2^p\)</span>. By
+<a class="reference internal" href="#equation-ch03-eq-integer-form">(3.2)</a>, <span class="math notranslate nohighlight">\(x - y\in F\)</span>.</p>
+</div>
+</section>
+<section id="accumulating-rounding-errors-the-gamma-n-lemma">
+<h3><span class="section-number">3.4.3. </span>Accumulating rounding errors: the <span class="math notranslate nohighlight">\(\gamma_n\)</span> lemma<a class="headerlink" href="#accumulating-rounding-errors-the-gamma-n-lemma" title="Link to this heading">#</a></h3>
+<p>An algorithm with <span class="math notranslate nohighlight">\(n\)</span> operations produces products of up to <span class="math notranslate nohighlight">\(n\)</span> factors
+<span class="math notranslate nohighlight">\(1+\delta_i\)</span>, some of them inverted when the variant form of the model is
+used. The following lemma, due in this form to <span class="bibtex-citation" id="id5">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>
+(Lemma 3.1), bounds such products cleanly.</p>
+<div class="proof definition admonition" id="ch03-def-gamma">
+<p class="admonition-title"><span class="caption-number">Definition 3.5 </span> (The constant <span class="math notranslate nohighlight">\(\gamma_n\)</span>)</p>
+<section class="definition-content" id="proof-content">
+<p>For a positive integer <span class="math notranslate nohighlight">\(n\)</span> with <span class="math notranslate nohighlight">\(nu&lt;1\)</span>, let</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-gamma">
+<span class="eqno">(3.6)<a class="headerlink" href="#equation-ch03-eq-gamma" title="Link to this equation">#</a></span>\[
+\gamma_n = \frac{nu}{1-nu}.
+\]</div>
+</section>
+</div><p>For all practical dimensions <span class="math notranslate nohighlight">\(\gamma_n\)</span> is barely larger than <span class="math notranslate nohighlight">\(nu\)</span>: if
+<span class="math notranslate nohighlight">\(nu\le\tfrac12\)</span> then <span class="math notranslate nohighlight">\(\gamma_n\le2nu\)</span>, and if <span class="math notranslate nohighlight">\(nu\le0.01\)</span> then
+<span class="math notranslate nohighlight">\(\gamma_n\le1.0102\,nu\)</span>. In binary64 the hypothesis <span class="math notranslate nohighlight">\(nu&lt;1\)</span> allows
+<span class="math notranslate nohighlight">\(n&lt;2^{53}\)</span>, but in binary16 it requires <span class="math notranslate nohighlight">\(n&lt;2^{11} = 2048\)</span> and in bfloat16
+<span class="math notranslate nohighlight">\(n&lt;2^{8} = 256\)</span>.</p>
+<div class="proof lemma admonition" id="ch03-lem-gamma">
+<p class="admonition-title"><span class="caption-number">Lemma 3.3 </span> (Products of rounding errors)</p>
+<section class="lemma-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(|\delta_i|\le u\)</span> and <span class="math notranslate nohighlight">\(\rho_i\in\{+1,-1\}\)</span> for <span class="math notranslate nohighlight">\(i = 1,\dots,n\)</span>, and
+<span class="math notranslate nohighlight">\(nu&lt;1\)</span>, then</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-theta">
+<span class="eqno">(3.7)<a class="headerlink" href="#equation-ch03-eq-theta" title="Link to this equation">#</a></span>\[
+\prod_{i=1}^n(1+\delta_i)^{\rho_i} = 1+\theta_n,\qquad |\theta_n|\le\gamma_n .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Induction on <span class="math notranslate nohighlight">\(n\)</span>. For <span class="math notranslate nohighlight">\(n = 1\)</span>: if <span class="math notranslate nohighlight">\(\rho_1 = 1\)</span> then <span class="math notranslate nohighlight">\(|\theta_1| = |\delta_1|\le
+u\le\gamma_1\)</span>; if <span class="math notranslate nohighlight">\(\rho_1 = -1\)</span> then <span class="math notranslate nohighlight">\(\theta_1 = -\delta_1/(1+\delta_1)\)</span> and
+<span class="math notranslate nohighlight">\(|\theta_1|\le u/(1-u) = \gamma_1\)</span>. Suppose the claim holds for <span class="math notranslate nohighlight">\(n-1\)</span>, so that
+the product of the first <span class="math notranslate nohighlight">\(n-1\)</span> factors is <span class="math notranslate nohighlight">\(1+\theta_{n-1}\)</span> with
+<span class="math notranslate nohighlight">\(|\theta_{n-1}|\le\gamma_{n-1}\)</span>. Note that</p>
+<div class="math notranslate nohighlight">
+\[
+\gamma_{n-1} + u = \frac{nu - (n-1)u^2}{1-(n-1)u}.
+\]</div>
+<p>If <span class="math notranslate nohighlight">\(\rho_n = +1\)</span>, then <span class="math notranslate nohighlight">\(\theta_n = \theta_{n-1} + \delta_n + \theta_{n-1}\delta_n\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[
+|\theta_n|\le\gamma_{n-1}+u+\gamma_{n-1}u
+= \frac{nu - (n-1)u^2 + (n-1)u^2}{1-(n-1)u}
+= \frac{nu}{1-(n-1)u}\le\gamma_n .
+\]</div>
+<p>If <span class="math notranslate nohighlight">\(\rho_n = -1\)</span>, then <span class="math notranslate nohighlight">\(\theta_n = (\theta_{n-1}-\delta_n)/(1+\delta_n)\)</span> and
+<span class="math notranslate nohighlight">\(|\theta_n|\le(\gamma_{n-1}+u)/(1-u)\)</span>. Cross-multiplying, the inequality
+<span class="math notranslate nohighlight">\((\gamma_{n-1}+u)/(1-u)\le nu/(1-nu)\)</span> is equivalent to</p>
+<div class="math notranslate nohighlight">
+\[
+\big(nu-(n-1)u^2\big)(1-nu)\le nu\,(1-(n-1)u)(1-u),
+\]</div>
+<p>and expanding both sides shows that the right side exceeds the left by
+exactly <span class="math notranslate nohighlight">\((n-1)u^2\ge0\)</span>.</p>
+</div>
+<p>Following Higham, we write <span class="math notranslate nohighlight">\(\theta_k\)</span> for <em>any</em> quantity bounded by
+<span class="math notranslate nohighlight">\(|\theta_k|\le\gamma_k\)</span>; different occurrences of <span class="math notranslate nohighlight">\(\theta_k\)</span> may denote
+different quantities. The following rules make the notation easy to use.</p>
+<div class="proof lemma admonition" id="ch03-lem-gamma-rules">
+<p class="admonition-title"><span class="caption-number">Lemma 3.4 </span> (Rules for <span class="math notranslate nohighlight">\(\gamma_n\)</span>)</p>
+<section class="lemma-content" id="proof-content">
+<p>For positive integers <span class="math notranslate nohighlight">\(j,k\)</span> with <span class="math notranslate nohighlight">\((j+k)u&lt;1\)</span>:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\gamma_j+\gamma_k+\gamma_j\gamma_k\le\gamma_{j+k}\)</span>, and hence
+<span class="math notranslate nohighlight">\((1+\theta_j)(1+\theta_k) = 1+\theta_{j+k}\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma_j\le\gamma_k\)</span> if <span class="math notranslate nohighlight">\(j\le k\)</span>, and <span class="math notranslate nohighlight">\(ku\le\gamma_k\)</span>.</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1) <span class="math notranslate nohighlight">\(1+\gamma_j+\gamma_k+\gamma_j\gamma_k = (1+\gamma_j)(1+\gamma_k) =
+1/\big((1-ju)(1-ku)\big)\)</span>, and <span class="math notranslate nohighlight">\((1-ju)(1-ku) = 1-(j+k)u+jku^2\ge1-(j+k)u\)</span>,
+so the product is at most <span class="math notranslate nohighlight">\(1/(1-(j+k)u) = 1+\gamma_{j+k}\)</span>. Then
+<span class="math notranslate nohighlight">\(|(1+\theta_j)(1+\theta_k)-1|\le\gamma_j+\gamma_k+\gamma_j\gamma_k\)</span>.
+(2) <span class="math notranslate nohighlight">\(\gamma_k\)</span> is increasing in <span class="math notranslate nohighlight">\(k\)</span>, and <span class="math notranslate nohighlight">\(1-ku\le1\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="summation">
+<span id="ch03-sec-summation"></span><h2><span class="section-number">3.5. </span>Summation<a class="headerlink" href="#summation" title="Link to this heading">#</a></h2>
+<p>The sum <span class="math notranslate nohighlight">\(s_n = \sum_{i=1}^n x_i\)</span> of floating-point numbers is the simplest
+computation in which rounding errors accumulate, and it sits inside inner
+products, matrix products and every algorithm built from them. It is also
+where the order of operations matters most visibly.</p>
+<section id="recursive-summation">
+<h3><span class="section-number">3.5.1. </span>Recursive summation<a class="headerlink" href="#recursive-summation" title="Link to this heading">#</a></h3>
+<div class="proof algorithm admonition" id="ch03-alg-recursive-sum">
+<p class="admonition-title"><span class="caption-number">Algorithm 3.1 </span> (Recursive summation)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(x_1,\dots,x_n\in F\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(\widehat s_n\approx\sum_{i=1}^n x_i\)</span>.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\widehat s_1\leftarrow x_1\)</span>.</p></li>
+<li><p>For <span class="math notranslate nohighlight">\(i = 2,\dots,n\)</span>:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\widehat s_i\leftarrow\fl(\widehat s_{i-1}+x_i)\)</span>.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p>The algorithm performs <span class="math notranslate nohighlight">\(n-1\)</span> additions. Any other order of the additions,
+and any bracketing of the sum, is also a valid summation algorithm and has
+the same cost; we analyze this order first.</p>
+<div class="proof theorem admonition" id="ch03-thm-recursive-sum">
+<p class="admonition-title"><span class="caption-number">Theorem 3.4 </span> (Error of recursive summation)</p>
+<section class="theorem-content" id="proof-content">
+<p>Assume that no overflow occurs and that <span class="math notranslate nohighlight">\((n-1)u&lt;1\)</span>. The result of
+<a class="reference internal" href="#ch03-alg-recursive-sum">Algorithm 3.1</a> satisfies</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-sum-backward">
+<span class="eqno">(3.8)<a class="headerlink" href="#equation-ch03-eq-sum-backward" title="Link to this equation">#</a></span>\[
+\widehat s_n = \sum_{i=1}^n x_i(1+\theta^{(i)}),\qquad
+|\theta^{(1)}|\le\gamma_{n-1},\quad |\theta^{(i)}|\le\gamma_{n-i+1}\ (i\ge2),
+\]</div>
+<p>and consequently</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-sum-forward">
+<span class="eqno">(3.9)<a class="headerlink" href="#equation-ch03-eq-sum-forward" title="Link to this equation">#</a></span>\[
+|\widehat s_n - s_n|\le\gamma_{n-1}\sum_{i=1}^n|x_i|,\qquad
+\frac{|\widehat s_n - s_n|}{|s_n|}\le\gamma_{n-1}\,\kappa_\Sigma(x),\quad
+\kappa_\Sigma(x) = \frac{\sum_i|x_i|}{|\sum_ix_i|}\ \ (s_n\ne0).
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. By <a class="reference internal" href="#ch03-thm-standard-model">Theorem 3.3</a>, <span class="math notranslate nohighlight">\(\widehat s_i = (\widehat s_{i-1}+x_i)(1+\delta_i)\)</span>
+with <span class="math notranslate nohighlight">\(|\delta_i|\le u\)</span> for <span class="math notranslate nohighlight">\(i = 2,\dots,n\)</span>; underflow does no harm because
+additions whose result is below <span class="math notranslate nohighlight">\(x_{\min}\)</span> are exact. Unrolling the
+recurrence,</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat s_n = x_1\prod_{k=2}^n(1+\delta_k) + \sum_{i=2}^n x_i\prod_{k=i}^n(1+\delta_k).
+\]</div>
+<p>The term <span class="math notranslate nohighlight">\(x_1\)</span> carries <span class="math notranslate nohighlight">\(n-1\)</span> factors and <span class="math notranslate nohighlight">\(x_i\)</span> (<span class="math notranslate nohighlight">\(i\ge2\)</span>) carries <span class="math notranslate nohighlight">\(n-i+1\)</span>
+factors, so <a class="reference internal" href="#ch03-lem-gamma">Lemma 3.3</a> gives <a class="reference internal" href="#equation-ch03-eq-sum-backward">(3.8)</a>. Then
+<span class="math notranslate nohighlight">\(|\widehat s_n - s_n| = |\sum_ix_i\theta^{(i)}|\le\gamma_{n-1}\sum_i|x_i|\)</span>,
+because every <span class="math notranslate nohighlight">\(\gamma_{n-i+1}\le\gamma_{n-1}\)</span>.</p>
+</div>
+<p>The two halves of the theorem say different things. Equation
+<a class="reference internal" href="#equation-ch03-eq-sum-backward">(3.8)</a> is a <em>backward error</em> result: the computed sum is
+the exact sum of the perturbed data <span class="math notranslate nohighlight">\(x_i(1+\theta^{(i)})\)</span>, each perturbed by
+a relative amount at most <span class="math notranslate nohighlight">\(\gamma_{n-1}\approx(n-1)u\)</span>. Equation
+<a class="reference internal" href="#equation-ch03-eq-sum-forward">(3.9)</a> is a <em>forward error</em> bound, and it involves the
+factor <span class="math notranslate nohighlight">\(\kappa_\Sigma(x)\ge1\)</span>, the <em>condition number</em> of the sum. When all
+<span class="math notranslate nohighlight">\(x_i\)</span> have the same sign, <span class="math notranslate nohighlight">\(\kappa_\Sigma = 1\)</span> and the relative error is at
+most <span class="math notranslate nohighlight">\(\gamma_{n-1}\)</span>. When the terms cancel, <span class="math notranslate nohighlight">\(\kappa_\Sigma\)</span> can be arbitrarily
+large, and so can the relative error. This separation between the backward
+error, a property of the algorithm, and the condition number, a property of
+the problem, is the subject of <a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>.</p>
+<p>A sharper bound, computable after the fact, follows from the variant form of
+the model.</p>
+<div class="proof proposition admonition" id="ch03-prop-running-bound">
+<p class="admonition-title"><span class="caption-number">Proposition 3.2 </span> (A running error bound for summation)</p>
+<section class="proposition-content" id="proof-content">
+<p>Under the assumptions of <a class="reference internal" href="#ch03-thm-recursive-sum">Theorem 3.4</a>,</p>
+<div class="math notranslate nohighlight">
+\[
+|\widehat s_n - s_n|\le u\sum_{i=2}^n|\widehat s_i| .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. With the variant form, <span class="math notranslate nohighlight">\(\widehat s_i = (\widehat s_{i-1}+x_i)/(1+\delta_i')\)</span>,
+so <span class="math notranslate nohighlight">\(\widehat s_i = \widehat s_{i-1}+x_i-\delta_i'\widehat s_i\)</span>. Summing over
+<span class="math notranslate nohighlight">\(i = 2,\dots,n\)</span> and cancelling the telescoping terms gives
+<span class="math notranslate nohighlight">\(\widehat s_n = s_n - \sum_{i=2}^n\delta_i'\widehat s_i\)</span>.</p>
+</div>
+<p>The bound depends on the sizes of the partial sums, which depend on the
+order of the terms. For nonnegative data, adding the terms in increasing
+order keeps the partial sums as small as possible for as long as possible;
+for data of mixed sign no ordering is best in general
+(<a class="reference internal" href="#ch03-ex-ordering"><span class="std std-numref">Exercise 3.7</span></a>).</p>
+<div class="proof example admonition" id="ch03-exa-ordering">
+<p class="admonition-title"><span class="caption-number">Example 3.3 </span> (The order of summation matters)</p>
+<section class="example-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(x = (1, u, u, u, u)\)</span> with <span class="math notranslate nohighlight">\(u = 2^{-53}\)</span>, so that <span class="math notranslate nohighlight">\(s_5 = 1+4u\)</span> is a
+binary64 number. Recursive summation in the given order computes
+<span class="math notranslate nohighlight">\(\fl(1+u) = 1\)</span> (a tie, rounded to even) four times and returns
+<span class="math notranslate nohighlight">\(\widehat s_5 = 1\)</span>, an error of <span class="math notranslate nohighlight">\(4u\)</span>. Summing in the reverse order gives
+<span class="math notranslate nohighlight">\(u+u = 2u\)</span>, <span class="math notranslate nohighlight">\(3u\)</span>, <span class="math notranslate nohighlight">\(4u\)</span> and finally <span class="math notranslate nohighlight">\(4u + 1 = 1+2^{-51}\)</span>, all exactly, so the
+result is exact. The bound of <a class="reference internal" href="#ch03-thm-recursive-sum">Theorem 3.4</a> is
+<span class="math notranslate nohighlight">\(\gamma_4(1+4u) = 4u(1+4u)/(1-4u)\)</span>, which exceeds the actual error <span class="math notranslate nohighlight">\(4u\)</span> by a
+relative amount of about <span class="math notranslate nohighlight">\(8u\)</span>: for this example the worst-case bound is
+essentially attained.</p>
+</section>
+</div></section>
+<section id="pairwise-summation">
+<h3><span class="section-number">3.5.2. </span>Pairwise summation<a class="headerlink" href="#pairwise-summation" title="Link to this heading">#</a></h3>
+<p>Recursive summation passes the first terms through all <span class="math notranslate nohighlight">\(n-1\)</span> additions. A
+balanced binary tree of additions lets every term pass through only about
+<span class="math notranslate nohighlight">\(\log_2 n\)</span> of them.</p>
+<div class="proof algorithm admonition" id="ch03-alg-pairwise">
+<p class="admonition-title"><span class="caption-number">Algorithm 3.2 </span> (Pairwise summation)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(x_1,\dots,x_n\in F\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(\widehat s\approx\sum_{i=1}^n x_i\)</span>.</p>
+<ol class="arabic simple">
+<li><p>If <span class="math notranslate nohighlight">\(n = 1\)</span>, return <span class="math notranslate nohighlight">\(x_1\)</span>.</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(m = \lfloor n/2\rfloor\)</span>.</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(\widehat s' \)</span> as the pairwise sum of <span class="math notranslate nohighlight">\(x_1,\dots,x_m\)</span> and
+<span class="math notranslate nohighlight">\(\widehat s''\)</span> as the pairwise sum of <span class="math notranslate nohighlight">\(x_{m+1},\dots,x_n\)</span>.</p></li>
+<li><p>Return <span class="math notranslate nohighlight">\(\fl(\widehat s'+\widehat s'')\)</span>.</p></li>
+</ol>
+</section>
+</div><div class="proof theorem admonition" id="ch03-thm-pairwise">
+<p class="admonition-title"><span class="caption-number">Theorem 3.5 </span> (Error of pairwise summation)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(\ell = \lceil\log_2n\rceil\)</span> and assume <span class="math notranslate nohighlight">\(\ell u&lt;1\)</span> and no overflow. The
+result of <a class="reference internal" href="#ch03-alg-pairwise">Algorithm 3.2</a> satisfies
+<span class="math notranslate nohighlight">\(\widehat s = \sum_ix_i(1+\theta^{(i)})\)</span> with <span class="math notranslate nohighlight">\(|\theta^{(i)}|\le\gamma_\ell\)</span>,
+and therefore <span class="math notranslate nohighlight">\(|\widehat s - s|\le\gamma_\ell\sum_i|x_i|\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The additions form a binary tree whose leaves are the <span class="math notranslate nohighlight">\(x_i\)</span>, and <span class="math notranslate nohighlight">\(x_i\)</span> is
+multiplied by one factor <span class="math notranslate nohighlight">\(1+\delta\)</span> for each addition on the path from its
+leaf to the root. The two halves have at most <span class="math notranslate nohighlight">\(\lceil n/2\rceil\)</span> terms, so
+by induction the depth of the tree is at most <span class="math notranslate nohighlight">\(\lceil\log_2n\rceil\)</span> (for
+<span class="math notranslate nohighlight">\(n\ge2\)</span>, <span class="math notranslate nohighlight">\(\lceil\log_2\lceil n/2\rceil\rceil = \lceil\log_2n\rceil - 1\)</span>).
+Apply <a class="reference internal" href="#ch03-lem-gamma">Lemma 3.3</a> to each path.</p>
+</div>
+<p>Pairwise summation has the same cost, <span class="math notranslate nohighlight">\(n-1\)</span> additions, and a much better
+bound. NumPy’s <code class="docutils literal notranslate"><span class="pre">np.sum</span></code> uses a blocked variant (“partial pairwise
+summation”) when summing a contiguous array, and its errors grow very
+slowly with <span class="math notranslate nohighlight">\(n\)</span>; a plain Python loop, <code class="docutils literal notranslate"><span class="pre">np.cumsum</span></code>, and <code class="docutils literal notranslate"><span class="pre">functools.reduce</span></code>
+perform recursive summation.</p>
+</section>
+<section id="compensated-summation">
+<h3><span class="section-number">3.5.3. </span>Compensated summation<a class="headerlink" href="#compensated-summation" title="Link to this heading">#</a></h3>
+<p>W. Kahan observed that the rounding error of a floating-point addition can
+itself be computed in floating-point arithmetic and fed back into the next
+step <span class="bibtex-citation" id="id6">[<a class="reference internal" href="../back/bibliography.html#id27" title="W. Kahan. Further remarks on reducing truncation errors. Communications of the ACM, 8(1):40, 1965.">Kahan, 1965</a>]</span>. If <span class="math notranslate nohighlight">\(|a|\ge|b|\)</span> and <span class="math notranslate nohighlight">\(t = \fl(a+b)\)</span>, then
+<span class="math notranslate nohighlight">\(e = \fl(\fl(t - a) - b)\)</span> satisfies <span class="math notranslate nohighlight">\(a + b = t - e\)</span> <em>exactly</em>, in the absence
+of overflow (this is Dekker’s “Fast2Sum” algorithm; see
+<span class="bibtex-citation" id="id7">Muller <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id21" title="Jean-Michel Muller, Nicolas Brunie, Florent de Dinechin, Claude-Pierre Jeannerod, Mioara Joldes, Vincent Lefèvre, Guillaume Melquiond, Nathalie Revol, and Serge Torres. Handbook of Floating-Point Arithmetic. Birkhäuser, Cham, 2nd edition, 2018.">2018</a>]</span>). Compensated summation applies this correction at
+every step.</p>
+<div class="proof algorithm admonition" id="ch03-alg-kahan">
+<p class="admonition-title"><span class="caption-number">Algorithm 3.3 </span> (Kahan’s compensated summation)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(x_1,\dots,x_n\in F\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(\widehat s\approx\sum_{i=1}^n x_i\)</span>.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(s\leftarrow0\)</span>; <span class="math notranslate nohighlight">\(c\leftarrow0\)</span> (the running compensation).</p></li>
+<li><p>For <span class="math notranslate nohighlight">\(i = 1,\dots,n\)</span>:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(y\leftarrow x_i - c\)</span> (correct the new term by the previous error);</p></li>
+<li><p><span class="math notranslate nohighlight">\(t\leftarrow s + y\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(c\leftarrow(t - s) - y\)</span> (this equals the rounding error <span class="math notranslate nohighlight">\(t-(s+y)\)</span>
+when <span class="math notranslate nohighlight">\(|s|\ge|y|\)</span>);</p></li>
+<li><p><span class="math notranslate nohighlight">\(s\leftarrow t\)</span>.</p></li>
+</ol>
+</li>
+<li><p>Return <span class="math notranslate nohighlight">\(\widehat s = s\)</span>.</p></li>
+</ol>
+</section>
+</div><p>The algorithm costs <span class="math notranslate nohighlight">\(4n\)</span> flops instead of <span class="math notranslate nohighlight">\(n-1\)</span>. In exact arithmetic
+<span class="math notranslate nohighlight">\(c = 0\)</span> throughout, so a compiler that “simplifies” <span class="math notranslate nohighlight">\((t-s)-y\)</span> to <span class="math notranslate nohighlight">\(0\)</span>
+destroys the method; this is one reason to be careful with aggressive
+floating-point optimization flags.</p>
+<div class="proof theorem admonition" id="ch03-thm-kahan">
+<p class="admonition-title"><span class="caption-number">Theorem 3.6 </span> (Error of compensated summation)</p>
+<section class="theorem-content" id="proof-content">
+<p>In the absence of overflow, the result of <a class="reference internal" href="#ch03-alg-kahan">Algorithm 3.3</a> satisfies</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat s = \sum_{i=1}^n x_i(1+\mu_i),\qquad |\mu_i|\le2u+\bigO(nu^2),
+\]</div>
+<p>so that</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-kahan">
+<span class="eqno">(3.10)<a class="headerlink" href="#equation-ch03-eq-kahan" title="Link to this equation">#</a></span>\[
+|\widehat s - s|\le\big(2u+\bigO(nu^2)\big)\sum_{i=1}^n|x_i|,\qquad
+\frac{|\widehat s - s|}{|s|}\le\big(2u+\bigO(nu^2)\big)\,\kappa_\Sigma(x).
+\]</div>
+</section>
+</div><p>The proof is a careful but lengthy analysis; see <span class="bibtex-citation" id="id8">Goldberg [<a class="reference internal" href="../back/bibliography.html#id26" title="David Goldberg. What every computer scientist should know about floating-point arithmetic. ACM Computing Surveys, 23(1):5–48, 1991.">1991</a>]</span>
+(Theorem 8) and <span class="bibtex-citation" id="id9">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> (Section 4.3). The theorem says that
+for <span class="math notranslate nohighlight">\(nu\ll1\)</span> the backward error of compensated summation is independent of
+<span class="math notranslate nohighlight">\(n\)</span> to first order: each term is perturbed by at most about <span class="math notranslate nohighlight">\(2u\)</span>, instead of
+<span class="math notranslate nohighlight">\((n-1)u\)</span> for recursive summation. It does <em>not</em> say that the relative error
+of the computed sum is <span class="math notranslate nohighlight">\(\bigO(u)\)</span>. The forward bound still contains the
+condition number <span class="math notranslate nohighlight">\(\kappa_\Sigma(x)\)</span>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A common claim is that compensated summation “gives an error of order <span class="math notranslate nohighlight">\(u\)</span>
+regardless of <span class="math notranslate nohighlight">\(n\)</span>.” That is true of the backward error and of the forward
+error relative to <span class="math notranslate nohighlight">\(\sum_i|x_i|\)</span>, as <a class="reference internal" href="#equation-ch03-eq-kahan">(3.10)</a> shows. The relative
+error of the result can still be large when the sum is ill conditioned. For
+<span class="math notranslate nohighlight">\(x = (10^{16}, 1, -10^{16})\)</span> in binary64, where <span class="math notranslate nohighlight">\(\kappa_\Sigma = 2\times10^{16}+1\)</span>,
+Kahan’s algorithm returns <span class="math notranslate nohighlight">\(0\)</span> instead of <span class="math notranslate nohighlight">\(1\)</span>; so does recursive summation.
+To compute an ill-conditioned sum accurately one needs extra precision, for
+instance <code class="docutils literal notranslate"><span class="pre">math.fsum</span></code>, which keeps exact partial sums and, in IEEE arithmetic
+with the default rounding, returns the correctly rounded exact sum.</p>
+</div>
+<p><a class="reference internal" href="#ch03-fig-summation"><span class="std std-numref">Figure 3.2</span></a> shows the methods in single precision
+(<span class="math notranslate nohighlight">\(u = 2^{-24}\)</span>), where the effects are visible at moderate <span class="math notranslate nohighlight">\(n\)</span>. For positive
+terms (<span class="math notranslate nohighlight">\(\kappa_\Sigma = 1\)</span>) the error of recursive summation grows with <span class="math notranslate nohighlight">\(n\)</span>
+but stays far below the bound <span class="math notranslate nohighlight">\(\gamma_{n-1}\)</span>, while pairwise and compensated
+summation stay near <span class="math notranslate nohighlight">\(u\)</span>. For sums with cancellation the errors of recursive
+and compensated summation both grow in proportion to <span class="math notranslate nohighlight">\(\kappa_\Sigma\)</span>, and the bounds
+<a class="reference internal" href="#equation-ch03-eq-sum-forward">(3.9)</a> and <a class="reference internal" href="#equation-ch03-eq-kahan">(3.10)</a> hold with room to spare.</p>
+<figure class="align-default" id="ch03-fig-summation">
+<a class="reference internal image-reference" href="../_images/ch03-summation.png"><img alt="Left, relative error against the number of terms for recursive, pairwise and Kahan summation of positive single-precision numbers, with their bounds. Right, relative error against the condition number of the sum for recursive and Kahan summation." src="../_images/ch03-summation.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3.2 </span><span class="caption-text">Relative errors of summation in binary32, measured against exact sums.
+(a) Positive terms uniformly distributed in <span class="math notranslate nohighlight">\([0,1)\)</span>: medians over 16
+random sequences, with the bounds <span class="math notranslate nohighlight">\(\gamma_{n-1}\)</span>, <span class="math notranslate nohighlight">\(\gamma_{\lceil\log_2n\rceil}\)</span>
+and the leading term <span class="math notranslate nohighlight">\(2u\)</span> of <a class="reference internal" href="#equation-ch03-eq-kahan">(3.10)</a>. (b) 400 sums of
+<span class="math notranslate nohighlight">\(n = 1000\)</span> terms with prescribed cancellation: the error grows linearly
+with <span class="math notranslate nohighlight">\(\kappa_\Sigma\)</span> for both methods. Generated by
+<code class="docutils literal notranslate"><span class="pre">scripts/figures/ch03.py</span></code>.</span><a class="headerlink" href="#ch03-fig-summation" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>The data <span class="math notranslate nohighlight">\(x_1,\dots,x_n\)</span> are all positive and you want their sum to full
+binary64 accuracy. Which of recursive, pairwise and compensated summation
+guarantees a relative error of at most about <span class="math notranslate nohighlight">\(2u\)</span> for all <span class="math notranslate nohighlight">\(n\)</span> with
+<span class="math notranslate nohighlight">\(nu\ll1\)</span>? Would your answer change if the data had mixed signs?</p>
+<p><em>Answer.</em> For positive data <span class="math notranslate nohighlight">\(\kappa_\Sigma = 1\)</span>, and only compensated
+summation has a relative error bound <span class="math notranslate nohighlight">\(2u+\bigO(nu^2)\)</span> independent of <span class="math notranslate nohighlight">\(n\)</span>;
+the bounds for recursive and pairwise summation grow like <span class="math notranslate nohighlight">\((n-1)u\)</span> and
+<span class="math notranslate nohighlight">\(u\log_2n\)</span>. With mixed signs no method guarantees a small relative error,
+because every bound contains the factor <span class="math notranslate nohighlight">\(\kappa_\Sigma\)</span>; compensated
+summation still has the smallest bound, <span class="math notranslate nohighlight">\((2u+\bigO(nu^2))\kappa_\Sigma\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="inner-products-and-matrix-products">
+<span id="ch03-sec-inner-products"></span><h2><span class="section-number">3.6. </span>Inner products and matrix products<a class="headerlink" href="#inner-products-and-matrix-products" title="Link to this heading">#</a></h2>
+<p>An inner product <span class="math notranslate nohighlight">\(x^Ty = \sum_ix_iy_i\)</span> is a sum of <span class="math notranslate nohighlight">\(n\)</span> rounded products, so
+the analysis of summation extends to it with one extra rounding per term.</p>
+<div class="proof theorem admonition" id="ch03-thm-dot">
+<p class="admonition-title"><span class="caption-number">Theorem 3.7 </span> (Error of an inner product)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(x,y\in F^n\)</span> and assume <span class="math notranslate nohighlight">\(nu&lt;1\)</span> and that no underflow or overflow occurs.
+If <span class="math notranslate nohighlight">\(x^Ty\)</span> is evaluated in floating-point arithmetic, with the products
+<span class="math notranslate nohighlight">\(x_iy_i\)</span> added in any order, the computed result satisfies</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-dot-backward">
+<span class="eqno">(3.11)<a class="headerlink" href="#equation-ch03-eq-dot-backward" title="Link to this equation">#</a></span>\[
+\fl(x^Ty) = \sum_{i=1}^n x_iy_i(1+\theta^{(i)}),\qquad |\theta^{(i)}|\le\gamma_n,
+\]</div>
+<p>and therefore</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-dot-forward">
+<span class="eqno">(3.12)<a class="headerlink" href="#equation-ch03-eq-dot-forward" title="Link to this equation">#</a></span>\[
+|\fl(x^Ty) - x^Ty|\le\gamma_n\sum_{i=1}^n|x_iy_i| = \gamma_n\,|x|^T|y| .
+\]</div>
+<p>Here <span class="math notranslate nohighlight">\(|x|\)</span> denotes the vector with entries <span class="math notranslate nohighlight">\(|x_i|\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Each product is computed as <span class="math notranslate nohighlight">\(\fl(x_iy_i) = x_iy_i(1+\epsilon_i)\)</span> with
+<span class="math notranslate nohighlight">\(|\epsilon_i|\le u\)</span>. The <span class="math notranslate nohighlight">\(n\)</span> computed products are then summed by <span class="math notranslate nohighlight">\(n-1\)</span>
+additions arranged in some binary tree, and, as in the proofs of
+<a class="reference internal" href="#ch03-thm-recursive-sum">Theorem 3.4</a> and <a class="reference internal" href="#ch03-thm-pairwise">Theorem 3.5</a>, the term
+<span class="math notranslate nohighlight">\(\fl(x_iy_i)\)</span> acquires one factor <span class="math notranslate nohighlight">\(1+\delta\)</span> for each addition on its path to
+the root, of which there are at most <span class="math notranslate nohighlight">\(n-1\)</span>. The term <span class="math notranslate nohighlight">\(x_iy_i\)</span> therefore
+carries at most <span class="math notranslate nohighlight">\(n\)</span> factors, and <a class="reference internal" href="#ch03-lem-gamma">Lemma 3.3</a> together with
+<span class="math notranslate nohighlight">\(\gamma_k\le\gamma_n\)</span> for <span class="math notranslate nohighlight">\(k\le n\)</span> gives <a class="reference internal" href="#equation-ch03-eq-dot-backward">(3.11)</a>. The
+forward bound follows by the triangle inequality.</p>
+</div>
+<p>The same bound holds if the products and sums are fused into multiply-adds,
+since an FMA commits fewer roundings, and for recursive summation of the
+products the proof gives the slightly sharper constants
+<span class="math notranslate nohighlight">\(\gamma_n,\gamma_n,\gamma_{n-1},\dots,\gamma_2\)</span>. The underflow hypothesis
+matters only for the products; if underflow is possible, an additional
+absolute error of order <span class="math notranslate nohighlight">\(n\,2^{e_{\min}-p}\)</span> appears.</p>
+<p>Two consequences are worth stating. If <span class="math notranslate nohighlight">\(y = x\)</span>, then <span class="math notranslate nohighlight">\(|x|^T|x| = x^Tx\)</span> and
+the relative error of <span class="math notranslate nohighlight">\(\fl(x^Tx) = \fl(\|x\|_2^2)\)</span> is at most <span class="math notranslate nohighlight">\(\gamma_n\)</span>: sums
+of squares are always computed to high relative accuracy (barring overflow
+and underflow). If <span class="math notranslate nohighlight">\(x\perp y\)</span> or nearly so, the ratio <span class="math notranslate nohighlight">\(|x|^T|y|/|x^Ty|\)</span> is
+large and the relative error of the computed inner product may be large;
+once more the condition number of the problem appears.</p>
+<p>Matrix products consist of inner products, so the theorem applies entry by
+entry.</p>
+<div class="proof corollary admonition" id="ch03-cor-matmul">
+<p class="admonition-title"><span class="caption-number">Corollary 3.1 </span> (Matrix-vector and matrix-matrix products)</p>
+<section class="corollary-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in F^{m\times n}\)</span>, <span class="math notranslate nohighlight">\(B\in F^{n\times p}\)</span>, <span class="math notranslate nohighlight">\(x\in F^n\)</span>, and <span class="math notranslate nohighlight">\(nu&lt;1\)</span>, with
+no underflow or overflow. If each entry of <span class="math notranslate nohighlight">\(Ax\)</span> and of <span class="math notranslate nohighlight">\(AB\)</span> is computed as an
+inner product of length <span class="math notranslate nohighlight">\(n\)</span>, summed in any order, then</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-matmul-bound">
+<span class="eqno">(3.13)<a class="headerlink" href="#equation-ch03-eq-matmul-bound" title="Link to this equation">#</a></span>\[
+|\fl(Ax) - Ax|\le\gamma_n|A||x|,\qquad |\widehat C - AB|\le\gamma_n|A||B| ,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\widehat C = \fl(AB)\)</span>, <span class="math notranslate nohighlight">\(|A|\)</span> is the matrix with entries <span class="math notranslate nohighlight">\(|a_{ij}|\)</span>,
+and the inequalities hold entrywise. In particular
+<span class="math notranslate nohighlight">\(\|\widehat C - AB\|_F\le\gamma_n\|A\|_F\|B\|_F\)</span>. Moreover
+<span class="math notranslate nohighlight">\(\fl(Ax) = (A+\Delta A)x\)</span> with <span class="math notranslate nohighlight">\(|\Delta A|\le\gamma_n|A|\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Entry <span class="math notranslate nohighlight">\((i,j)\)</span> of <span class="math notranslate nohighlight">\(\widehat C\)</span> is the computed inner product of row <span class="math notranslate nohighlight">\(i\)</span> of <span class="math notranslate nohighlight">\(A\)</span>
+with column <span class="math notranslate nohighlight">\(j\)</span> of <span class="math notranslate nohighlight">\(B\)</span>, so <a class="reference internal" href="#equation-ch03-eq-dot-forward">(3.12)</a> gives
+<span class="math notranslate nohighlight">\(|\widehat c_{ij} - c_{ij}|\le\gamma_n\sum_k|a_{ik}||b_{kj}| = \gamma_n(|A||B|)_{ij}\)</span>.
+For the Frobenius norm, <span class="math notranslate nohighlight">\(\|\,|A||B|\,\|_F\le\|\,|A|\,\|_F\|\,|B|\,\|_F
+= \|A\|_F\|B\|_F\)</span>. For the matrix-vector product, apply
+<a class="reference internal" href="#equation-ch03-eq-dot-backward">(3.11)</a> to row <span class="math notranslate nohighlight">\(i\)</span> and put
+<span class="math notranslate nohighlight">\((\Delta A)_{ik} = a_{ik}\theta^{(k)}_i\)</span>.</p>
+</div>
+<p>The inner-product, column (saxpy) and outer-product forms of the matrix
+product of <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01"><span class="std std-numref">Chapter 1</span></a> all compute every entry
+<span class="math notranslate nohighlight">\(c_{ij}\)</span> as a sum of the same <span class="math notranslate nohighlight">\(n\)</span> products, only in different orders, and
+blocked BLAS implementations do the same. All of them satisfy
+<a class="reference internal" href="#equation-ch03-eq-matmul-bound">(3.13)</a>. Hence two computed products differ by at most
+<span class="math notranslate nohighlight">\(2\gamma_n|A||B|\)</span> entrywise, which is the tolerance used in the lab of
+<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01"><span class="std std-numref">Chapter 1</span></a> (where the inner dimension is called <span class="math notranslate nohighlight">\(k\)</span>).
+Fast methods such as Strassen’s algorithm reorganize the arithmetic and
+satisfy only a weaker, normwise bound <span class="bibtex-citation" id="id10">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Chapter 23).</p>
+<p>The matrix-vector product is backward stable in the strongest sense: the
+computed result is the exact product of a slightly perturbed matrix. The
+matrix-matrix product is not, in general: column <span class="math notranslate nohighlight">\(j\)</span> of <span class="math notranslate nohighlight">\(\widehat C\)</span> equals
+<span class="math notranslate nohighlight">\((A+\Delta A_j)b_j\)</span> with <span class="math notranslate nohighlight">\(|\Delta A_j|\le\gamma_n|A|\)</span>, but the perturbation
+<span class="math notranslate nohighlight">\(\Delta A_j\)</span> depends on <span class="math notranslate nohighlight">\(j\)</span>, and there need not be a single <span class="math notranslate nohighlight">\(\Delta A\)</span> with
+<span class="math notranslate nohighlight">\(\widehat C = (A+\Delta A)B\)</span>. The forward bound <a class="reference internal" href="#equation-ch03-eq-matmul-bound">(3.13)</a> is
+the natural statement. When <span class="math notranslate nohighlight">\(|A||B|\)</span> is much larger than <span class="math notranslate nohighlight">\(|AB|\)</span>, which
+happens when the products cancel, the relative error of <span class="math notranslate nohighlight">\(\widehat C\)</span> can be
+large even though every computed entry has a tiny backward error.</p>
+</section>
+<section id="cancellation">
+<span id="ch03-sec-cancellation"></span><h2><span class="section-number">3.7. </span>Cancellation<a class="headerlink" href="#cancellation" title="Link to this heading">#</a></h2>
+<section id="what-cancellation-is-and-is-not">
+<h3><span class="section-number">3.7.1. </span>What cancellation is and is not<a class="headerlink" href="#what-cancellation-is-and-is-not" title="Link to this heading">#</a></h3>
+<p>When two nearly equal numbers are subtracted, their leading digits cancel.
+It is often said that this “causes a large error.” That is misleading: by
+<a class="reference internal" href="#ch03-lem-sterbenz">Lemma 3.2</a>, if <span class="math notranslate nohighlight">\(\widehat a\)</span> and <span class="math notranslate nohighlight">\(\widehat b\)</span> are
+floating-point numbers within a factor of two of each other, then
+<span class="math notranslate nohighlight">\(\widehat a - \widehat b\)</span> is computed <em>exactly</em>. What cancellation does is
+reveal the errors already present in <span class="math notranslate nohighlight">\(\widehat a\)</span> and <span class="math notranslate nohighlight">\(\widehat b\)</span>.</p>
+<div class="proof proposition admonition" id="ch03-prop-cancellation">
+<p class="admonition-title"><span class="caption-number">Proposition 3.3 </span> (Error of a difference of inexact quantities)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(a\ne b\)</span> be real numbers and let <span class="math notranslate nohighlight">\(\widehat a = a(1+\Delta_a)\)</span>,
+<span class="math notranslate nohighlight">\(\widehat b = b(1+\Delta_b)\)</span>. Then</p>
+<div class="math notranslate nohighlight" id="equation-ch03-eq-cancellation">
+<span class="eqno">(3.14)<a class="headerlink" href="#equation-ch03-eq-cancellation" title="Link to this equation">#</a></span>\[
+\frac{|(\widehat a - \widehat b) - (a-b)|}{|a-b|}
+\le\max(|\Delta_a|,|\Delta_b|)\,\frac{|a|+|b|}{|a-b|} .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <span class="math notranslate nohighlight">\((\widehat a - \widehat b) - (a-b) = a\Delta_a - b\Delta_b\)</span>, whose absolute
+value is at most <span class="math notranslate nohighlight">\(\max(|\Delta_a|,|\Delta_b|)(|a|+|b|)\)</span>.</p>
+</div>
+<p>The factor <span class="math notranslate nohighlight">\((|a|+|b|)/|a-b|\)</span> is the condition number of subtraction, the
+special case <span class="math notranslate nohighlight">\(n = 2\)</span> of <span class="math notranslate nohighlight">\(\kappa_\Sigma\)</span>. It is large exactly when <span class="math notranslate nohighlight">\(a\approx b\)</span>.
+If <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are exact data, <span class="math notranslate nohighlight">\(\Delta_a = \Delta_b = 0\)</span> and the only error is
+the final rounding: the cancellation is <em>benign</em>. If <span class="math notranslate nohighlight">\(\widehat a\)</span> and
+<span class="math notranslate nohighlight">\(\widehat b\)</span> carry rounding errors from earlier computations, those errors
+are magnified by <span class="math notranslate nohighlight">\((|a|+|b|)/|a-b|\)</span>: the cancellation is <em>catastrophic</em>. The
+cure is never to perform the subtraction more carefully; it is to rewrite
+the computation so that the nearly equal quantities are not formed in the
+first place, or are formed exactly.</p>
+<div class="proof example admonition" id="ch03-exa-cancel-decimal">
+<p class="admonition-title"><span class="caption-number">Example 3.4 </span> (Cancellation in four-digit decimal arithmetic)</p>
+<section class="example-content" id="proof-content">
+<p>Compute <span class="math notranslate nohighlight">\(f(x) = \sqrt{x+1}-\sqrt{x}\)</span> at <span class="math notranslate nohighlight">\(x = 1000\)</span> in decimal arithmetic
+with <span class="math notranslate nohighlight">\(p = 4\)</span> significant digits, so <span class="math notranslate nohighlight">\(u = \tfrac12 10^{-3}\)</span>. The correctly
+rounded square roots are <span class="math notranslate nohighlight">\(\fl(\sqrt{1001}) = 31.64\)</span> and
+<span class="math notranslate nohighlight">\(\fl(\sqrt{1000}) = 31.62\)</span>, each with relative error below <span class="math notranslate nohighlight">\(u\)</span>. Their
+difference <span class="math notranslate nohighlight">\(0.02\)</span> is computed exactly, yet the true value is
+<span class="math notranslate nohighlight">\(f(1000) = 0.0158074\ldots\)</span>, so the relative error is about <span class="math notranslate nohighlight">\(0.27\)</span>. The
+rewritten formula</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = \sqrt{x+1}-\sqrt{x} = \frac{1}{\sqrt{x+1}+\sqrt{x}}
+\]</div>
+<p>gives <span class="math notranslate nohighlight">\(1/(31.64+31.62) = 1/63.26\)</span>, which rounds to <span class="math notranslate nohighlight">\(0.01581\)</span>, with relative
+error <span class="math notranslate nohighlight">\(1.6\times10^{-4}&lt;u\)</span>. The sum of two positive numbers has condition
+number <span class="math notranslate nohighlight">\(1\)</span>, and the division is well conditioned.</p>
+</section>
+</div><p>The same analysis applies in binary64. The computed square roots carry
+relative errors of at most about <span class="math notranslate nohighlight">\(\tfrac32u\)</span> (from <span class="math notranslate nohighlight">\(\fl(x+1)\)</span> and the root)
+and <span class="math notranslate nohighlight">\(u\)</span>, and their difference is exact for <span class="math notranslate nohighlight">\(x\ge1\)</span> by
+<a class="reference internal" href="#ch03-lem-sterbenz">Lemma 3.2</a>. By <a class="reference internal" href="#equation-ch03-eq-cancellation">(3.14)</a>, to first order
+in <span class="math notranslate nohighlight">\(u\)</span>, the relative error of the naive formula is at most</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\tfrac32u\sqrt{x+1}+u\sqrt x}{1/(\sqrt{x+1}+\sqrt x)}
+\le\tfrac52u\sqrt{x+1}\,\big(\sqrt{x+1}+\sqrt x\big)\le5(x+1)u ,
+\]</div>
+<p>because the exact difference is <span class="math notranslate nohighlight">\(1/(\sqrt{x+1}+\sqrt x)\)</span>. The rewritten
+formula has relative error at most about <span class="math notranslate nohighlight">\(\tfrac72u\)</span> for all <span class="math notranslate nohighlight">\(x\ge0\)</span>. In
+binary64 at <span class="math notranslate nohighlight">\(x = 10^{14}\)</span> the naive formula returns
+<span class="math notranslate nohighlight">\(5.029\times10^{-8}\)</span> instead of <span class="math notranslate nohighlight">\(5.000\times10^{-8}\)</span>, a relative error of
+<span class="math notranslate nohighlight">\(5.8\times10^{-3}\)</span>, and for <span class="math notranslate nohighlight">\(x\ge2^{53}\)</span> it returns <span class="math notranslate nohighlight">\(0\)</span> because
+<span class="math notranslate nohighlight">\(\fl(x+1) = x\)</span>. <a class="reference internal" href="#ch03-fig-cancellation"><span class="std std-numref">Figure 3.3</span></a> (a) shows the relative
+error for <span class="math notranslate nohighlight">\(1\le x\le10^{17}\)</span>.</p>
+<figure class="align-default" id="ch03-fig-cancellation">
+<a class="reference internal image-reference" href="../_images/ch03-cancellation.png"><img alt="Left, relative errors of the naive and rewritten formulas for sqrt(x+1) minus sqrt(x) against x, with the first-order bound. Right, relative errors of the one-pass and two-pass sample variance against the ratio of mean to standard deviation." src="../_images/ch03-cancellation.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3.3 </span><span class="caption-text">(a) Relative error of <span class="math notranslate nohighlight">\(\sqrt{x+1}-\sqrt x\)</span> in binary64 computed naively and
+as <span class="math notranslate nohighlight">\(1/(\sqrt{x+1}+\sqrt x)\)</span>, measured against a 50-digit reference, with the
+first-order bound <span class="math notranslate nohighlight">\(5(x+1)u\)</span> (capped at <span class="math notranslate nohighlight">\(1\)</span>). (b) Relative error of the
+sample variance of <span class="math notranslate nohighlight">\(n = 1000\)</span> numbers <span class="math notranslate nohighlight">\(\mu + z_i\)</span>, <span class="math notranslate nohighlight">\(z_i\)</span> standard normal,
+computed by the one-pass and two-pass formulas, measured against exact
+rational arithmetic.</span><a class="headerlink" href="#ch03-fig-cancellation" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="stable-reformulations">
+<h3><span class="section-number">3.7.2. </span>Stable reformulations<a class="headerlink" href="#stable-reformulations" title="Link to this heading">#</a></h3>
+<p>The following rewritings are standard; the lab checks each against an
+exact or high-precision reference.</p>
+<p><strong>The quadratic formula.</strong> The roots of <span class="math notranslate nohighlight">\(ax^2+bx+c = 0\)</span> (<span class="math notranslate nohighlight">\(a\ne0\)</span>,
+<span class="math notranslate nohighlight">\(b^2\ge4ac\)</span>) are <span class="math notranslate nohighlight">\((-b\pm\sqrt{b^2-4ac})/(2a)\)</span>. When <span class="math notranslate nohighlight">\(b^2\gg|4ac|\)</span>, one of the
+two signs subtracts nearly equal numbers, because
+<span class="math notranslate nohighlight">\(\sqrt{b^2-4ac}\approx|b|\)</span>. The other sign adds numbers of the same sign and
+is accurate. Vieta’s formula <span class="math notranslate nohighlight">\(x_1x_2 = c/a\)</span> then gives the second root
+without cancellation.</p>
+<div class="proof algorithm admonition" id="ch03-alg-quadratic">
+<p class="admonition-title"><span class="caption-number">Algorithm 3.4 </span> (Roots of a quadratic without cancellation)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(a,b,c\in F\)</span> with <span class="math notranslate nohighlight">\(a\ne0\)</span>, <span class="math notranslate nohighlight">\(b^2\ge4ac\)</span>, and <span class="math notranslate nohighlight">\((b,c)\ne(0,0)\)</span>.</p>
+<p><strong>Output:</strong> the two real roots <span class="math notranslate nohighlight">\(x_1, x_2\)</span>.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(d\leftarrow\sqrt{b^2-4ac}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(q\leftarrow-\tfrac12\big(b+\sign(b)\,d\big)\)</span>, with <span class="math notranslate nohighlight">\(\sign(0) = 1\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_1\leftarrow q/a\)</span> and <span class="math notranslate nohighlight">\(x_2\leftarrow c/q\)</span>.</p></li>
+</ol>
+</section>
+</div><p>For <span class="math notranslate nohighlight">\(x^2 - 10^8x + 1 = 0\)</span>, whose roots are about <span class="math notranslate nohighlight">\(10^8\)</span> and <span class="math notranslate nohighlight">\(10^{-8}\)</span>, the
+textbook formula for the small root in binary64 gives
+<span class="math notranslate nohighlight">\((10^8-\sqrt{10^{16}-4})/2 = 7.450580596923828\times10^{-9}\)</span>, a relative
+error of <span class="math notranslate nohighlight">\(0.25\)</span>, while <a class="reference internal" href="#ch03-alg-quadratic">Algorithm 3.4</a> gives
+<span class="math notranslate nohighlight">\(1.0000000000000000\times10^{-8}\)</span>, correct to within <span class="math notranslate nohighlight">\(u\)</span>. The algorithm does
+not remove a different difficulty: when <span class="math notranslate nohighlight">\(b^2\approx4ac\)</span> the discriminant
+itself cancels and magnifies the rounding errors in <span class="math notranslate nohighlight">\(\fl(b^2)\)</span> and
+<span class="math notranslate nohighlight">\(\fl(4ac)\)</span>. Computing <span class="math notranslate nohighlight">\(b^2-4ac\)</span> in higher precision (for example with an
+FMA) removes this algorithmic error, but no reformulation removes the
+sensitivity of two nearly coincident roots to perturbations of the
+coefficients themselves, including the perturbations made when the
+coefficients are rounded to floating-point numbers: that is genuine ill
+conditioning (<a class="reference internal" href="#ch03-ex-quadratic"><span class="std std-numref">Exercise 3.8</span></a>). For very large or very small
+coefficients, <span class="math notranslate nohighlight">\(b^2\)</span> can overflow or underflow, and the coefficients should
+be scaled first (<a class="reference internal" href="#ch03-ex-quadratic"><span class="std std-numref">Exercise 3.8</span></a>).</p>
+<p><strong>Logarithms and exponentials near zero.</strong> For <span class="math notranslate nohighlight">\(|x|\ll1\)</span>, forming <span class="math notranslate nohighlight">\(1+x\)</span>
+rounds away the low-order digits of <span class="math notranslate nohighlight">\(x\)</span>, and the subsequent logarithm
+faithfully computes the logarithm of the wrong number. At <span class="math notranslate nohighlight">\(x = 10^{-15}\)</span> in
+binary64, <span class="math notranslate nohighlight">\(\fl(1+x) = 1+5\cdot2^{-52}\)</span> and <code class="docutils literal notranslate"><span class="pre">np.log(1</span> <span class="pre">+</span> <span class="pre">x)</span></code> returns
+<span class="math notranslate nohighlight">\(1.110223\times10^{-15}\)</span>, a relative error of <span class="math notranslate nohighlight">\(0.11\)</span>. The subtraction in
+<span class="math notranslate nohighlight">\(e^x - 1\)</span> exposes the rounding error of <span class="math notranslate nohighlight">\(\fl(e^x)\)</span> in the same way. The
+library functions <code class="docutils literal notranslate"><span class="pre">np.log1p(x)</span></code> <span class="math notranslate nohighlight">\(= \log(1+x)\)</span> and <code class="docutils literal notranslate"><span class="pre">np.expm1(x)</span></code> <span class="math notranslate nohighlight">\(= e^x-1\)</span>
+avoid forming <span class="math notranslate nohighlight">\(1+x\)</span> and are designed to be accurate to within a few units
+of <span class="math notranslate nohighlight">\(u\)</span> for all <span class="math notranslate nohighlight">\(x\)</span>.
+Similarly, <span class="math notranslate nohighlight">\(1-\cos x = 2\sin^2(x/2)\)</span> avoids cancellation for small <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p><strong>The sample variance.</strong> The sample variance of <span class="math notranslate nohighlight">\(x_1,\dots,x_n\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[
+s^2 = \frac{1}{n-1}\sum_{i=1}^n(x_i-\bar x)^2
+    = \frac{1}{n-1}\Big(\sum_{i=1}^nx_i^2 - n\bar x^2\Big),\qquad
+\bar x = \frac1n\sum_{i=1}^nx_i .
+\]</div>
+<p>The first (<em>two-pass</em>) formula computes <span class="math notranslate nohighlight">\(\bar x\)</span> and then sums nonnegative
+terms. The second (<em>one-pass</em>, “textbook”) formula needs only one sweep
+through the data, but when the mean <span class="math notranslate nohighlight">\(\mu\)</span> is large compared with the
+standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span> it subtracts two nearly equal numbers of size
+about <span class="math notranslate nohighlight">\(n\mu^2\)</span>, each computed with a relative error of order <span class="math notranslate nohighlight">\(u\)</span> or
+larger. The result can lose all its digits and can even be negative. For the
+four numbers <span class="math notranslate nohighlight">\(10^8+4\)</span>, <span class="math notranslate nohighlight">\(10^8+7\)</span>, <span class="math notranslate nohighlight">\(10^8+13\)</span>, <span class="math notranslate nohighlight">\(10^8+16\)</span> (exactly representable,
+with <span class="math notranslate nohighlight">\(s^2 = 30\)</span>) the one-pass formula, with the sums computed by <code class="docutils literal notranslate"><span class="pre">np.sum</span></code> as
+in the lab, gives <span class="math notranslate nohighlight">\(29.33\)</span> in binary64, and after shifting the data to <span class="math notranslate nohighlight">\(10^9\)</span>
+it gives <span class="math notranslate nohighlight">\(-170.67\)</span>, a negative variance, while the two-pass formula gives
+<span class="math notranslate nohighlight">\(30\)</span> in both cases. <a class="reference internal" href="#ch03-fig-cancellation"><span class="std std-numref">Figure 3.3</span></a> (b) shows that the
+relative error of the one-pass formula grows in proportion to
+<span class="math notranslate nohighlight">\(u\mu^2/\sigma^2\)</span>, while that of the two-pass formula stays at the level of
+<span class="math notranslate nohighlight">\(u\)</span> in this experiment. If the data must be processed in one pass, updating
+formulas that accumulate the mean and the sum of squared deviations
+simultaneously are far more accurate than the textbook formula
+(<a class="reference internal" href="#ch03-ex-variance"><span class="std std-numref">Exercise 3.9</span></a>; <span class="bibtex-citation" id="id11">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>, Chapter 1).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>“Subtraction is the dangerous operation, so avoid subtracting.” Every
+floating-point operation commits a relative error of at most <span class="math notranslate nohighlight">\(u\)</span>, and
+subtracting nearby floating-point numbers commits none. The danger lies in
+subtracting quantities that are already <em>inaccurate</em>. A sum with
+cancellation of exact data, such as <span class="math notranslate nohighlight">\(\sum_i x_i\)</span> for data values, is
+computed with an error bounded by <a class="reference internal" href="#equation-ch03-eq-sum-forward">(3.9)</a>, and there is
+no reformulation that avoids its condition number.</p>
+</div>
+</section>
+</section>
+<section id="overflow-underflow-and-scaling">
+<span id="ch03-sec-scaling"></span><h2><span class="section-number">3.8. </span>Overflow, underflow and scaling<a class="headerlink" href="#overflow-underflow-and-scaling" title="Link to this heading">#</a></h2>
+<p>Overflow and underflow usually occur in intermediate quantities, not in the
+answer. The Euclidean length of <span class="math notranslate nohighlight">\(x = (10^{200},10^{200})\)</span> is
+<span class="math notranslate nohighlight">\(\sqrt2\times10^{200}\)</span>, far inside the binary64 range, yet the naive formula
+<span class="math notranslate nohighlight">\(\sqrt{x_1^2+x_2^2}\)</span> overflows because <span class="math notranslate nohighlight">\(10^{400}&gt;x_{\max}\)</span>. Symmetrically,
+for <span class="math notranslate nohighlight">\(x = (3\times10^{-200},4\times10^{-200})\)</span> the squares underflow to <span class="math notranslate nohighlight">\(0\)</span>
+and the naive formula returns <span class="math notranslate nohighlight">\(0\)</span> instead of <span class="math notranslate nohighlight">\(5\times10^{-200}\)</span>. In binary64
+the naive formula for <span class="math notranslate nohighlight">\(\|x\|_2\)</span> is guaranteed to be safe only when all
+entries lie roughly between <span class="math notranslate nohighlight">\(\sqrt{x_{\min}}\approx1.49\times10^{-154}\)</span> and
+<span class="math notranslate nohighlight">\(\sqrt{x_{\max}}\approx1.34\times10^{154}\)</span>; outside that range it may
+overflow, or underflow harmfully when all entries are tiny.</p>
+<p>The remedy is to <em>scale</em>. Since <span class="math notranslate nohighlight">\(\|x\|_2 = M\,\|x/M\|_2\)</span> for any <span class="math notranslate nohighlight">\(M&gt;0\)</span>,
+choosing <span class="math notranslate nohighlight">\(M = \max_i|x_i|\)</span> makes every entry of <span class="math notranslate nohighlight">\(x/M\)</span> at most <span class="math notranslate nohighlight">\(1\)</span> in
+magnitude, so no square overflows, and the largest square equals <span class="math notranslate nohighlight">\(1\)</span>, so
+the squares that underflow are negligible compared with the sum.</p>
+<div class="proof algorithm admonition" id="ch03-alg-scaled-norm">
+<p class="admonition-title"><span class="caption-number">Algorithm 3.5 </span> (Scaled 2-norm)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(x\in F^n\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(\widehat\nu\approx\|x\|_2\)</span>.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(M\leftarrow\max_i|x_i|\)</span>. If <span class="math notranslate nohighlight">\(M = 0\)</span>, return <span class="math notranslate nohighlight">\(0\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(t\leftarrow\sum_{i=1}^n(x_i/M)^2\)</span>.</p></li>
+<li><p>Return <span class="math notranslate nohighlight">\(\widehat\nu = M\sqrt t\)</span>.</p></li>
+</ol>
+</section>
+</div><p>The scaling costs <span class="math notranslate nohighlight">\(n\)</span> extra divisions (or multiplications by <span class="math notranslate nohighlight">\(1/M\)</span>); if <span class="math notranslate nohighlight">\(M\)</span>
+is replaced by a nearby power of two, the scaling is exact and the error
+analysis of the unscaled algorithm carries over unchanged. By
+<a class="reference internal" href="#ch03-thm-dot">Theorem 3.7</a> applied to <span class="math notranslate nohighlight">\(x/M\)</span>, the computed result has relative
+error of order <span class="math notranslate nohighlight">\(nu\)</span> (a few <span class="math notranslate nohighlight">\(u\)</span> more for the scaling and the square root).
+The function <code class="docutils literal notranslate"><span class="pre">hypot(a,</span> <span class="pre">b)</span></code> <span class="math notranslate nohighlight">\(= \sqrt{a^2+b^2}\)</span> in Python’s <code class="docutils literal notranslate"><span class="pre">math</span></code> module and
+NumPy is implemented with this kind of care, and the BLAS routine <code class="docutils literal notranslate"><span class="pre">nrm2</span></code>
+also scales. Not every library routine does: the lab shows that, in the
+NumPy version used for this book, <code class="docutils literal notranslate"><span class="pre">numpy.linalg.norm</span></code> overflows on the
+vector <span class="math notranslate nohighlight">\((10^{200},10^{200})\)</span>, whereas <code class="docutils literal notranslate"><span class="pre">scipy.linalg.norm</span></code>, <code class="docutils literal notranslate"><span class="pre">np.hypot</span></code> and
+<a class="reference internal" href="#ch03-alg-scaled-norm">Algorithm 3.5</a> do not.</p>
+<p>The same idea appears throughout numerical computing: Givens rotations use
+<code class="docutils literal notranslate"><span class="pre">hypot</span></code> (<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01"><span class="std std-numref">Chapter 1</span></a>), probabilities are multiplied in the
+logarithmic domain, the function <span class="math notranslate nohighlight">\(\log\sum_ie^{x_i}\)</span> is evaluated after
+subtracting <span class="math notranslate nohighlight">\(\max_ix_i\)</span> (<a class="reference internal" href="#ch03-ex-logsumexp"><span class="std std-numref">Exercise 3.10</span></a>), and the power method
+(<a class="reference internal" href="../ch09-eigenvalues/notes.html#ch09"><span class="std std-numref">Chapter 9</span></a>) normalizes its iterates at every step.</p>
+</section>
+<section id="beyond-the-worst-case">
+<span id="ch03-sec-beyond"></span><h2><span class="section-number">3.9. </span>Beyond the worst case<a class="headerlink" href="#beyond-the-worst-case" title="Link to this heading">#</a></h2>
+<p>The bounds of this chapter are worst-case bounds, and
+<a class="reference internal" href="#ch03-fig-summation"><span class="std std-numref">Figure 3.2</span></a> shows that typical errors are much smaller.
+Two developments address this gap and the demands of modern hardware.</p>
+<div class="proof remark admonition" id="ch03-rem-probabilistic">
+<p class="admonition-title"><span class="caption-number">Remark 3.1 </span> (Probabilistic rounding error analysis)</p>
+<section class="remark-content" id="proof-content">
+<p>If the rounding errors <span class="math notranslate nohighlight">\(\delta_i\)</span> in <a class="reference internal" href="#ch03-lem-gamma">Lemma 3.3</a> are modeled as
+independent random variables of mean zero, then the product
+<span class="math notranslate nohighlight">\(\prod(1+\delta_i)^{\pm1} - 1\)</span> behaves like a sum of <span class="math notranslate nohighlight">\(n\)</span> independent
+terms of size at most <span class="math notranslate nohighlight">\(u\)</span>, and concentration inequalities show that
+<span class="math notranslate nohighlight">\(|\theta_n|\le\lambda\sqrt n\,u + \bigO(u^2)\)</span> with a probability that tends
+to <span class="math notranslate nohighlight">\(1\)</span> very rapidly as the constant <span class="math notranslate nohighlight">\(\lambda\)</span> grows
+<span class="bibtex-citation" id="id12">[<a class="reference internal" href="../back/bibliography.html#id29" title="Nicholas J. Higham and Theo Mary. A new approach to probabilistic rounding error analysis. SIAM Journal on Scientific Computing, 41(5):A2815–A2835, 2019.">Higham and Mary, 2019</a>]</span>. Every bound of this chapter that contains <span class="math notranslate nohighlight">\(\gamma_n\)</span>
+then has a probabilistic analogue with <span class="math notranslate nohighlight">\(nu\)</span> replaced by a modest multiple of
+<span class="math notranslate nohighlight">\(\sqrt n\,u\)</span>; for an inner product,
+<span class="math notranslate nohighlight">\(|\fl(x^Ty) - x^Ty|\lesssim\lambda\sqrt n\,u\,|x|^T|y|\)</span> with high probability.
+This explains the long-standing rule of thumb that errors grow like
+<span class="math notranslate nohighlight">\(\sqrt n\,u\)</span> rather than <span class="math notranslate nohighlight">\(nu\)</span>. The model is an assumption, not a theorem
+about arithmetic, and it can fail. <a class="reference internal" href="#ch03-fig-inner-products"><span class="std std-numref">Figure 3.4</span></a> shows
+inner products of vectors with entries in <span class="math notranslate nohighlight">\([0,1)\)</span> in binary32: the errors
+follow <span class="math notranslate nohighlight">\(\sqrt n\,u\)</span> until <span class="math notranslate nohighlight">\(n\)</span> is so large that many terms are smaller than
+the spacing of the partial sums; those terms are then rounded in a
+systematic direction, the errors lose their zero mean, and they grow faster.
+The worst-case bound <span class="math notranslate nohighlight">\(\gamma_n\)</span> is never violated.</p>
+</section>
+</div><figure class="align-default" id="ch03-fig-inner-products">
+<a class="reference internal image-reference" href="../_images/ch03-inner-products.png"><img alt="Log-log plot of the normalized error of single-precision inner products against the vector length, with the worst-case bound gamma n and the curve square root of n times u." src="../_images/ch03-inner-products.png" style="width: 60%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 3.4 </span><span class="caption-text">Normalized error <span class="math notranslate nohighlight">\(|\widehat s - x^Ty|/(|x|^T|y|)\)</span> of recursive inner
+products in binary32 for vectors with independent entries uniformly
+distributed in <span class="math notranslate nohighlight">\([0,1)\)</span> (20 trials per length), compared with the worst-case
+bound <span class="math notranslate nohighlight">\(\gamma_n\)</span> of <a class="reference internal" href="#ch03-thm-dot">Theorem 3.7</a> and with <span class="math notranslate nohighlight">\(\sqrt n\,u\)</span>.</span><a class="headerlink" href="#ch03-fig-inner-products" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="proof remark admonition" id="ch03-rem-mixed-precision">
+<p class="admonition-title"><span class="caption-number">Remark 3.2 </span> (Mixed precision)</p>
+<section class="remark-content" id="proof-content">
+<p>Hardware for machine learning performs matrix products in binary16 or
+bfloat16 at a much higher speed than in binary64, often accumulating the
+products in binary32. The unit roundoffs <span class="math notranslate nohighlight">\(u = 2^{-11}\)</span> and <span class="math notranslate nohighlight">\(u = 2^{-8}\)</span> make
+the worst-case constants <span class="math notranslate nohighlight">\(\gamma_n\)</span> meaningless already for <span class="math notranslate nohighlight">\(n\ge2048\)</span> and
+<span class="math notranslate nohighlight">\(n\ge256\)</span>, which is one reason for the interest in probabilistic bounds and
+in blocked summation, whose error constants grow more slowly. Mixed
+precision algorithms combine a fast low-precision computation with a few
+steps in higher precision that restore full accuracy; iterative refinement
+in <a class="reference internal" href="../ch06-cholesky/notes.html#ch06"><span class="std std-numref">Chapter 6</span></a> is the prime example in this course.</p>
+</section>
+</div></section>
+<section id="computational-laboratory">
+<h2><span class="section-number">3.10. </span>Computational laboratory<a class="headerlink" href="#computational-laboratory" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="lab.html"><span class="std std-doc">The lab notebook for this chapter</span></a> makes every statement of the
+chapter concrete. It decodes the bits of binary64 numbers with <code class="docutils literal notranslate"><span class="pre">struct</span></code> and
+<code class="docutils literal notranslate"><span class="pre">np.frexp</span></code> to show the sign, the biased exponent, the 52 stored fraction bits
+and the hidden bit, and it explores the spacing of floating-point numbers
+with <code class="docutils literal notranslate"><span class="pre">np.spacing</span></code> and <code class="docutils literal notranslate"><span class="pre">np.nextafter</span></code>. It verifies
+<a class="reference internal" href="#ch03-thm-rounding">Theorem 3.1</a> by rounding random rational numbers and
+measuring the relative error exactly with <code class="docutils literal notranslate"><span class="pre">fractions.Fraction</span></code>, checks the
+standard model for the four basic operations and the square root, and shows
+its failure in the subnormal range. It demonstrates the facts about machine
+epsilon in <a class="reference internal" href="#ch03-prop-smallest-eps">Proposition 3.1</a>, including why
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2**-53</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>. It implements recursive, pairwise and Kahan
+summation, compares them with <code class="docutils literal notranslate"><span class="pre">np.sum</span></code> and <code class="docutils literal notranslate"><span class="pre">math.fsum</span></code> on well- and
+ill-conditioned sums, and checks the bounds of
+<a class="reference internal" href="#ch03-sec-summation"><span class="std std-numref">Section 3.5</span></a> and <a class="reference internal" href="#ch03-sec-inner-products"><span class="std std-numref">Section 3.6</span></a>. Finally, it
+reproduces the cancellation examples with exact references, compares one-
+and two-pass variance, demonstrates overflow and underflow in norm
+computations, and repeats several experiments in binary32.</p>
+</section>
+<section id="summary">
+<h2><span class="section-number">3.11. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Floating-point numbers form a finite set with a fixed relative spacing: in
+the normal range, rounding to nearest commits a relative error of at most
+<span class="math notranslate nohighlight">\(u = 2^{-53}\)</span> in binary64, half of machine epsilon <span class="math notranslate nohighlight">\(\epsmach = 2^{-52}\)</span>.
+Subnormal numbers extend the range gradually at the cost of relative
+accuracy, and <span class="math notranslate nohighlight">\(\pm\infty\)</span>, signed zeros and NaN make arithmetic closed.
+Because IEEE 754 operations are correctly rounded, every operation satisfies
+the standard model <span class="math notranslate nohighlight">\(\fl(x\mathbin{\mathrm{op}}y) = (x\mathbin{\mathrm{op}}y)(1+\delta)\)</span>
+in the absence of underflow and overflow, and products of such factors are controlled by <span class="math notranslate nohighlight">\(\gamma_n = nu/(1-nu)\)</span>. From
+this, recursive summation has backward error <span class="math notranslate nohighlight">\(\gamma_{n-1}\)</span>, pairwise
+summation <span class="math notranslate nohighlight">\(\gamma_{\lceil\log_2n\rceil}\)</span> and compensated summation
+<span class="math notranslate nohighlight">\(2u+\bigO(nu^2)\)</span>, while inner and matrix products satisfy
+<span class="math notranslate nohighlight">\(|\widehat C - AB|\le\gamma_n|A||B|\)</span>. Forward errors always involve a
+condition number, here <span class="math notranslate nohighlight">\(\kappa_\Sigma\)</span> or <span class="math notranslate nohighlight">\(|x|^T|y|/|x^Ty|\)</span>, which no
+algorithm can remove. Cancellation exposes earlier errors rather than
+creating new ones, and is avoided by algebraic reformulation; overflow and
+underflow in intermediate quantities are avoided by scaling.</p>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">3.12. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id13">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> is the standard reference for everything in this
+chapter: Chapter 1 discusses cancellation, the quadratic formula and the
+sample variance, Chapter 2 covers floating-point arithmetic and the IEEE
+standard, Chapter 3 the <span class="math notranslate nohighlight">\(\gamma_n\)</span> notation and the error analysis of inner
+and matrix products, and Chapter 4 recursive, pairwise and compensated
+summation (see also <span class="bibtex-citation" id="id14">Higham [<a class="reference internal" href="../back/bibliography.html#id28" title="Nicholas J. Higham. The accuracy of floating point summation. SIAM Journal on Scientific Computing, 14(4):783–799, 1993.">1993</a>]</span>). <span class="bibtex-citation" id="id15">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span>,
+Lecture 13, give a concise account using <span class="math notranslate nohighlight">\(\epsilon_{\text{machine}} = u\)</span>,
+and <span class="bibtex-citation" id="id16">Demmel [<a class="reference internal" href="../back/bibliography.html#id5" title="James W. Demmel. Applied Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span>, Section 1.5, treats floating-point arithmetic in
+the context of numerical linear algebra. <span class="bibtex-citation" id="id17">Goldberg [<a class="reference internal" href="../back/bibliography.html#id26" title="David Goldberg. What every computer scientist should know about floating-point arithmetic. ACM Computing Surveys, 23(1):5–48, 1991.">1991</a>]</span> is a classic
+tutorial that includes a proof of the error bound for Kahan’s compensated
+summation <span class="bibtex-citation" id="id18">[<a class="reference internal" href="../back/bibliography.html#id27" title="W. Kahan. Further remarks on reducing truncation errors. Communications of the ACM, 8(1):40, 1965.">Kahan, 1965</a>]</span>. <span class="bibtex-citation" id="id19">Overton [<a class="reference internal" href="../back/bibliography.html#id20" title="Michael L. Overton. Numerical Computing with IEEE Floating Point Arithmetic. SIAM, Philadelphia, 2001.">2001</a>]</span> is a short, readable
+book on IEEE arithmetic, and <span class="bibtex-citation" id="id20">Muller <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id21" title="Jean-Michel Muller, Nicolas Brunie, Florent de Dinechin, Claude-Pierre Jeannerod, Mioara Joldes, Vincent Lefèvre, Guillaume Melquiond, Nathalie Revol, and Serge Torres. Handbook of Floating-Point Arithmetic. Birkhäuser, Cham, 2nd edition, 2018.">2018</a>]</span> is the comprehensive
+handbook, including error-free transformations such as Fast2Sum. The
+standard itself is <span class="bibtex-citation" id="id21">IEEE [<a class="reference internal" href="../back/bibliography.html#id25" title="IEEE. IEEE standard for floating-point arithmetic (IEEE std 754-2019). Institute of Electrical and Electronics Engineers, 2019.">2019</a>]</span>. Probabilistic rounding error analysis
+is developed by <span class="bibtex-citation" id="id22">Higham and Mary [<a class="reference internal" href="../back/bibliography.html#id29" title="Nicholas J. Higham and Theo Mary. A new approach to probabilistic rounding error analysis. SIAM Journal on Scientific Computing, 41(5):A2815–A2835, 2019.">2019</a>]</span>.</p>
+</section>
+<section id="exercises">
+<span id="ch03-sec-exercises"></span><h2><span class="section-number">3.13. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<div class="exercise admonition" id="ch03-ex-counting">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.1 </span> (Concept: counting floating-point numbers)</p>
+<section id="exercise-content">
+<p>(a) How many positive normalized numbers does the toy system of
+<a class="reference internal" href="#ch03-exa-toy">Example 3.1</a> contain, and how many does a general binary system
+<span class="math notranslate nohighlight">\(F(2,p,e_{\min},e_{\max})\)</span> contain? (b) How many positive normalized binary64
+numbers are there? (c) What fraction of the positive normalized binary64
+numbers lie in <span class="math notranslate nohighlight">\([1,2)\)</span>?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch03-floating-point/notes-solution-32">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch03-ex-counting"> Exercise 3.1 (Concept: counting floating-point numbers)</a></p>
+<section id="solution-content">
+<p>(a) Each exponent contributes the <span class="math notranslate nohighlight">\(2^{p-1}\)</span> significands <span class="math notranslate nohighlight">\(1.d_1\cdots d_{p-1}\)</span>,
+so there are <span class="math notranslate nohighlight">\(2^{p-1}(e_{\max}-e_{\min}+1)\)</span> positive normalized numbers; the
+toy system has <span class="math notranslate nohighlight">\(4\cdot4 = 16\)</span>. (b) For binary64, <span class="math notranslate nohighlight">\(p = 53\)</span> and there are
+<span class="math notranslate nohighlight">\(1023-(-1022)+1 = 2046\)</span> exponents, giving <span class="math notranslate nohighlight">\(2046\cdot2^{52}\)</span> numbers. (c) The
+binade <span class="math notranslate nohighlight">\([1,2)\)</span> contains <span class="math notranslate nohighlight">\(2^{52}\)</span> of them, a fraction <span class="math notranslate nohighlight">\(1/2046\)</span>: the same as
+every other binade.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-sharper-bound">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.2 </span> (Theory: a sharper rounding bound)</p>
+<section id="exercise-content">
+<p>Show that in a binary system, for <span class="math notranslate nohighlight">\(x\)</span> in the normal range, the relative
+error of rounding to nearest satisfies <span class="math notranslate nohighlight">\(|\fl(x)-x|/|x|\le u/(1+u)\)</span>, and that
+this bound is attained. <em>Hint:</em> in the binade <span class="math notranslate nohighlight">\([2^e,2^{e+1})\)</span> the error is
+at most <span class="math notranslate nohighlight">\(2^{e-p}\)</span> and <span class="math notranslate nohighlight">\(|x|\ge2^e+2^{e-p}\)</span> whenever the error equals <span class="math notranslate nohighlight">\(2^{e-p}\)</span>;
+consider separately the <span class="math notranslate nohighlight">\(x\)</span> with <span class="math notranslate nohighlight">\(|\fl(x)-x|&lt;2^{e-p}\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-epsilon">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.3 </span> (Concept: machine epsilon three ways)</p>
+<section id="exercise-content">
+<p>(a) Which of the binary64 numbers <span class="math notranslate nohighlight">\(2^{-53}\)</span>, <span class="math notranslate nohighlight">\(2^{-53}+2^{-105}\)</span> and <span class="math notranslate nohighlight">\(2^{-52}\)</span>
+satisfy <span class="math notranslate nohighlight">\(\fl(1+\varepsilon)&gt;1\)</span>? (b) The loop
+<code class="docutils literal notranslate"><span class="pre">eps</span> <span class="pre">=</span> <span class="pre">1.0;</span> <span class="pre">while</span> <span class="pre">1.0</span> <span class="pre">+</span> <span class="pre">eps</span> <span class="pre">/</span> <span class="pre">2</span> <span class="pre">&gt;</span> <span class="pre">1.0:</span> <span class="pre">eps</span> <span class="pre">/=</span> <span class="pre">2</span></code> terminates with which
+value, and why is that not “the smallest <span class="math notranslate nohighlight">\(\varepsilon\)</span> with
+<span class="math notranslate nohighlight">\(\fl(1+\varepsilon)&gt;1\)</span>”? (c) What are <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(\epsmach\)</span> in binary32, and
+what number do Trefethen and Bau call <span class="math notranslate nohighlight">\(\epsilon_{\text{machine}}\)</span> for
+binary32?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch03-floating-point/notes-solution-35">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch03-ex-epsilon"> Exercise 3.3 (Concept: machine epsilon three ways)</a></p>
+<section id="solution-content">
+<p>(a) By <a class="reference internal" href="#ch03-prop-smallest-eps">Proposition 3.1</a>, <span class="math notranslate nohighlight">\(2^{-53}\)</span> does not (the tie rounds
+to <span class="math notranslate nohighlight">\(1\)</span>), while <span class="math notranslate nohighlight">\(2^{-53}+2^{-105}\)</span> and <span class="math notranslate nohighlight">\(2^{-52}\)</span> do; both give
+<span class="math notranslate nohighlight">\(\fl(1+\varepsilon) = 1+2^{-52}\)</span>. (b) The loop only visits powers of two.
+It halves <code class="docutils literal notranslate"><span class="pre">eps</span></code> from <span class="math notranslate nohighlight">\(2^{-51}\)</span> to <span class="math notranslate nohighlight">\(2^{-52}\)</span> because <span class="math notranslate nohighlight">\(1+2^{-52}&gt;1\)</span>, and stops
+there because <span class="math notranslate nohighlight">\(1+2^{-53}\)</span> rounds to <span class="math notranslate nohighlight">\(1\)</span>; the result is <span class="math notranslate nohighlight">\(2^{-52} = \epsmach\)</span>.
+The smallest float with the property, <span class="math notranslate nohighlight">\(2^{-53}+2^{-105}\)</span>, is not a power of
+two, so the loop never tests it. (c) In binary32 <span class="math notranslate nohighlight">\(p = 24\)</span>, so
+<span class="math notranslate nohighlight">\(u = 2^{-24}\approx5.96\times10^{-8}\)</span> and <span class="math notranslate nohighlight">\(\epsmach = 2^{-23}\approx1.19\times10^{-7}\)</span>
+(<code class="docutils literal notranslate"><span class="pre">np.finfo(np.float32).eps</span></code>); Trefethen and Bau’s
+<span class="math notranslate nohighlight">\(\epsilon_{\text{machine}}\)</span> is <span class="math notranslate nohighlight">\(u = 2^{-24}\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-gradual-underflow">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.4 </span> (Theory: gradual underflow)</p>
+<section id="exercise-content">
+<p>(a) Using <a class="reference internal" href="#ch03-lem-subnormal-exact">Lemma 3.1</a>, prove that for
+floating-point numbers <span class="math notranslate nohighlight">\(x\ne y\)</span> the computed difference <span class="math notranslate nohighlight">\(\fl(x-y)\)</span> is
+nonzero. (b) Suppose instead that the arithmetic flushes subnormal results
+to zero. Give binary64 numbers <span class="math notranslate nohighlight">\(x\ne y\)</span> with <span class="math notranslate nohighlight">\(\fl(x-y) = 0\)</span>, and explain
+why the test <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">x</span> <span class="pre">!=</span> <span class="pre">y:</span> <span class="pre">z</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">/</span> <span class="pre">(x</span> <span class="pre">-</span> <span class="pre">y)</span></code> is then unsafe.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-product">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.5 </span> (Theory: products are always accurate)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(x_1,\dots,x_n\in F\)</span> and let <span class="math notranslate nohighlight">\(\widehat p\)</span> be the product
+<span class="math notranslate nohighlight">\(x_1x_2\cdots x_n\)</span> computed from left to right. Assuming no underflow or
+overflow, show that <span class="math notranslate nohighlight">\(\widehat p = x_1\cdots x_n(1+\theta_{n-1})\)</span>. Contrast
+this with the error of summation: why is there no condition number in the
+relative error bound for products?</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch03-floating-point/notes-solution-38">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch03-ex-product"> Exercise 3.5 (Theory: products are always accurate)</a></p>
+<section id="solution-content">
+<p>Each of the <span class="math notranslate nohighlight">\(n-1\)</span> multiplications satisfies
+<span class="math notranslate nohighlight">\(\fl(\widehat p_{k-1}x_k) = \widehat p_{k-1}x_k(1+\delta_k)\)</span>, so
+<span class="math notranslate nohighlight">\(\widehat p = x_1\cdots x_n\prod_{k=2}^n(1+\delta_k)\)</span>, and
+<a class="reference internal" href="#ch03-lem-gamma">Lemma 3.3</a> gives <span class="math notranslate nohighlight">\(|\theta_{n-1}|\le\gamma_{n-1}\)</span>. Hence the
+relative error is at most <span class="math notranslate nohighlight">\(\gamma_{n-1}\)</span> for all data. The difference from
+summation is that relative perturbations of the factors of a product
+produce the same relative perturbation of the product: the condition number
+of <span class="math notranslate nohighlight">\(x_1\cdots x_n\)</span> with respect to relative perturbations of each <span class="math notranslate nohighlight">\(x_i\)</span> is
+<span class="math notranslate nohighlight">\(n\)</span>, independent of the data, whereas perturbations of the terms of a sum
+are magnified by <span class="math notranslate nohighlight">\(\kappa_\Sigma\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-horner">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.6 </span> (Theory: Horner’s rule)</p>
+<section id="exercise-content">
+<p>The polynomial <span class="math notranslate nohighlight">\(p(x) = \sum_{i=0}^na_ix^i\)</span> is evaluated by Horner’s rule,
+<span class="math notranslate nohighlight">\(q_n = a_n\)</span> and <span class="math notranslate nohighlight">\(q_i = xq_{i+1}+a_i\)</span> for <span class="math notranslate nohighlight">\(i = n-1,\dots,0\)</span>, with
+<span class="math notranslate nohighlight">\(p(x) = q_0\)</span>. Show that in floating-point arithmetic (no FMA, no underflow
+or overflow) the computed value satisfies
+<span class="math notranslate nohighlight">\(\widehat q_0 = \sum_{i=0}^na_i(1+\theta^{(i)})x^i\)</span> with
+<span class="math notranslate nohighlight">\(|\theta^{(i)}|\le\gamma_{2n}\)</span>, and deduce
+<span class="math notranslate nohighlight">\(|\widehat q_0 - p(x)|\le\gamma_{2n}\sum_i|a_i||x|^i\)</span>. What is the condition
+number that appears in the relative error?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-ordering">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.7 </span> (Theory: ordering in recursive summation)</p>
+<section id="exercise-content">
+<p>(a) For nonnegative <span class="math notranslate nohighlight">\(x_i\)</span>, show that the bound <span class="math notranslate nohighlight">\(u\sum_{i=2}^n|\widehat s_i|\)</span>
+of <a class="reference internal" href="#ch03-prop-running-bound">Proposition 3.2</a>, with the exact partial sums in place
+of the computed ones, is smallest when the terms are added in increasing
+order. (b) Let <span class="math notranslate nohighlight">\(M = 2^{53}\)</span>. Compute by hand the binary64 recursive sums of
+<span class="math notranslate nohighlight">\((1, M, 2M, -3M)\)</span> in the given order (increasing magnitude) and in the
+reverse order (decreasing magnitude), and compare with the exact sum.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-quadratic">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.8 </span> (Computation: a robust quadratic solver)</p>
+<section id="exercise-content">
+<p>Implement <a class="reference internal" href="#ch03-alg-quadratic">Algorithm 3.4</a> as a function that returns both real
+roots or reports complex roots. (a) Test it against the textbook formula on
+<span class="math notranslate nohighlight">\(x^2-10^8x+1\)</span> and <span class="math notranslate nohighlight">\(x^2+10^8x+1\)</span>, using <code class="docutils literal notranslate"><span class="pre">fractions.Fraction</span></code> and <code class="docutils literal notranslate"><span class="pre">decimal</span></code> to
+compute reference values. (b) Extend it so that it does not overflow for
+<span class="math notranslate nohighlight">\(a = c = 1\)</span>, <span class="math notranslate nohighlight">\(b = 10^{200}\)</span>, by scaling the coefficients. (c) The exact
+roots of <span class="math notranslate nohighlight">\(x^2 - 2x + (1-10^{-12})\)</span> are <span class="math notranslate nohighlight">\(1\pm10^{-6}\)</span>. How large are the errors
+of the roots computed in binary64? Show that they are caused by rounding the
+coefficient <span class="math notranslate nohighlight">\(1-10^{-12}\)</span> to a floating-point number, not by the algorithm,
+and explain why no rewriting of the formula can remove them.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-variance">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.9 </span> (Computation: one pass or two)</p>
+<section id="exercise-content">
+<p>Implement the two-pass and one-pass formulas for the sample variance and
+Welford’s updating formulas: <span class="math notranslate nohighlight">\(M_1 = x_1\)</span>, <span class="math notranslate nohighlight">\(S_1 = 0\)</span>, and for <span class="math notranslate nohighlight">\(k\ge2\)</span>,
+<span class="math notranslate nohighlight">\(M_k = M_{k-1}+(x_k-M_{k-1})/k\)</span> and <span class="math notranslate nohighlight">\(S_k = S_{k-1}+(x_k-M_{k-1})(x_k-M_k)\)</span>,
+with <span class="math notranslate nohighlight">\(s^2 = S_n/(n-1)\)</span>. Compare their relative errors, measured with exact
+rational arithmetic, on data <span class="math notranslate nohighlight">\(\mu+z_i\)</span> for <span class="math notranslate nohighlight">\(\mu = 10^k\)</span>, <span class="math notranslate nohighlight">\(k = 0,\dots,9\)</span>.
+Explain the results using <a class="reference internal" href="#equation-ch03-eq-cancellation">(3.14)</a>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-logsumexp">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.10 </span> (Computation: log-sum-exp)</p>
+<section id="exercise-content">
+<p>The function <span class="math notranslate nohighlight">\(\mathrm{lse}(x) = \log\sum_{i=1}^ne^{x_i}\)</span> appears in
+statistics and machine learning. (a) Show that for <span class="math notranslate nohighlight">\(x = (1000, 1000)\)</span> the
+naive evaluation in binary64 overflows, and for <span class="math notranslate nohighlight">\(x = (-1000,-1000)\)</span> it
+returns <span class="math notranslate nohighlight">\(-\infty\)</span>. (b) Prove that <span class="math notranslate nohighlight">\(\mathrm{lse}(x) = m+\log\sum_ie^{x_i-m}\)</span>
+for any <span class="math notranslate nohighlight">\(m\)</span>, and show that the choice <span class="math notranslate nohighlight">\(m = \max_ix_i\)</span> avoids overflow and
+harmful underflow. (c) Compare your implementation with
+<code class="docutils literal notranslate"><span class="pre">scipy.special.logsumexp</span></code>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-harmonic">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.11 </span> (Computation: the harmonic series in single precision)</p>
+<section id="exercise-content">
+<p>Sum the harmonic series <span class="math notranslate nohighlight">\(\sum_{k\ge1}1/k\)</span> in binary32 by recursive
+summation, with each term computed as <code class="docutils literal notranslate"><span class="pre">np.float32(1)</span> <span class="pre">/</span> <span class="pre">np.float32(k)</span></code>, until
+the partial sum stops changing. At which <span class="math notranslate nohighlight">\(k\)</span> does this happen, and what is
+the computed sum? Explain the value of <span class="math notranslate nohighlight">\(k\)</span> using the spacing of binary32
+numbers near the computed sum and the ties-to-even rule. Compare the
+computed sum with the exact partial sum, and estimate how many terms the
+same experiment would take in binary64.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-cancel-classify">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.12 </span> (Concept: benign or catastrophic?)</p>
+<section id="exercise-content">
+<p>For each computation, decide whether the cancellation is benign or
+catastrophic, assuming the inputs are floating-point numbers and
+<span class="math notranslate nohighlight">\(x\approx y\)</span>: (a) <span class="math notranslate nohighlight">\(x - y\)</span>; (b) <span class="math notranslate nohighlight">\(x^2 - y^2\)</span> computed as <span class="math notranslate nohighlight">\(x\cdot x - y\cdot y\)</span>;
+(c) <span class="math notranslate nohighlight">\(x^2-y^2\)</span> computed as <span class="math notranslate nohighlight">\((x-y)(x+y)\)</span>; (d) <span class="math notranslate nohighlight">\((1+h)-1\)</span> for a small
+floating-point number <span class="math notranslate nohighlight">\(h\)</span>, as used in a finite-difference formula;
+(e) <span class="math notranslate nohighlight">\(\fl(\exp(x)) - 1\)</span> for small <span class="math notranslate nohighlight">\(x\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch03-floating-point/notes-solution-46">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch03-ex-cancel-classify"> Exercise 3.12 (Concept: benign or catastrophic?)</a></p>
+<section id="solution-content">
+<p>(a) Benign: the operands are exact, and by <a class="reference internal" href="#ch03-lem-sterbenz">Lemma 3.2</a> the
+difference is exact when <span class="math notranslate nohighlight">\(y/2\le x\le2y\)</span>. (b) Catastrophic: <span class="math notranslate nohighlight">\(\fl(x\cdot x)\)</span>
+and <span class="math notranslate nohighlight">\(\fl(y\cdot y)\)</span> each carry a rounding error of relative size up to <span class="math notranslate nohighlight">\(u\)</span>,
+which the subtraction magnifies by <span class="math notranslate nohighlight">\((x^2+y^2)/|x^2-y^2|\)</span>. (c) Benign: <span class="math notranslate nohighlight">\(x-y\)</span>
+is exact, <span class="math notranslate nohighlight">\(x+y\)</span> has relative error at most <span class="math notranslate nohighlight">\(u\)</span>, and the product adds one more
+rounding, so the relative error is at most about <span class="math notranslate nohighlight">\(2u\)</span>. (d) Catastrophic: the
+subtraction is exact, but <span class="math notranslate nohighlight">\(\fl(1+h)\)</span> differs from <span class="math notranslate nohighlight">\(1+h\)</span> by up to <span class="math notranslate nohighlight">\(u\)</span>, which is
+a relative error of up to <span class="math notranslate nohighlight">\(u/|h|\)</span> in the computed <span class="math notranslate nohighlight">\(h\)</span>; this is why
+finite-difference codes use the representable step
+<span class="math notranslate nohighlight">\(\fl(\fl(1+h)-1)\)</span> instead of <span class="math notranslate nohighlight">\(h\)</span>. (e) Catastrophic: <span class="math notranslate nohighlight">\(\fl(e^x)\)</span> has an absolute
+error of about <span class="math notranslate nohighlight">\(u\)</span>, which is a relative error of about <span class="math notranslate nohighlight">\(u/|x|\)</span> in <span class="math notranslate nohighlight">\(e^x-1\)</span>;
+use <code class="docutils literal notranslate"><span class="pre">expm1</span></code>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch03-ex-summation-project">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3.13 </span> (Project: how accurate is a sum?)</p>
+<section id="exercise-content">
+<p>Implement recursive, pairwise and Kahan summation, and use <code class="docutils literal notranslate"><span class="pre">math.fsum</span></code> and
+<code class="docutils literal notranslate"><span class="pre">fractions.Fraction</span></code> as references. (a) Reproduce
+<a class="reference internal" href="#ch03-fig-summation"><span class="std std-numref">Figure 3.2</span></a> in binary32 and in binary64. (b) Construct
+data for which recursive summation attains (up to a factor of two) the bound
+<span class="math notranslate nohighlight">\(\gamma_{n-1}\sum|x_i|\)</span> for several <span class="math notranslate nohighlight">\(n\)</span>. (c) Find data for which
+compensated summation has a relative error larger than <span class="math notranslate nohighlight">\(0.1\)</span>, and explain it
+with <a class="reference internal" href="#equation-ch03-eq-kahan">(3.10)</a>. (d) Implement Neumaier’s variant, which uses
+<span class="math notranslate nohighlight">\(|s|\ge|x_i|\)</span> tests to decide which operand’s error to recover, and compare
+it with Kahan’s algorithm on <span class="math notranslate nohighlight">\((1, 10^{100}, 1, -10^{100})\)</span>. Write a two-page
+report with plots and conclusions that separate observed behavior from
+proven bounds.</p>
+</section>
+</div>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch03-floating-point"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../ch02-svd/case-study-image-compression.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">2.12. </span>Case study: image compression with the SVD</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lab.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">3.14. </span>Lab 3: Floating-point arithmetic</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#floating-point-number-systems">3.1. Floating-point number systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">3.1.1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spacing-of-floating-point-numbers">3.1.2. Spacing of floating-point numbers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-ieee-754-formats">3.1.3. The IEEE 754 formats</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subnormal-numbers-infinities-and-nan">3.2. Subnormal numbers, infinities and NaN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradual-underflow">3.2.1. Gradual underflow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overflow-infinities-signed-zeros-and-nan">3.2.2. Overflow, infinities, signed zeros and NaN</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rounding-and-the-unit-roundoff">3.3. Rounding and the unit roundoff</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#round-to-nearest">3.3.1. Round to nearest</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unit-roundoff-and-machine-epsilon">3.3.2. Unit roundoff and machine epsilon</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-standard-model-of-arithmetic">3.4. The standard model of arithmetic</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#correctly-rounded-operations">3.4.1. Correctly rounded operations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operations-that-are-exact">3.4.2. Operations that are exact</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accumulating-rounding-errors-the-gamma-n-lemma">3.4.3. Accumulating rounding errors: the <span class="math notranslate nohighlight">\(\gamma_n\)</span> lemma</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summation">3.5. Summation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recursive-summation">3.5.1. Recursive summation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pairwise-summation">3.5.2. Pairwise summation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compensated-summation">3.5.3. Compensated summation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inner-products-and-matrix-products">3.6. Inner products and matrix products</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cancellation">3.7. Cancellation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-cancellation-is-and-is-not">3.7.1. What cancellation is and is not</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stable-reformulations">3.7.2. Stable reformulations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overflow-underflow-and-scaling">3.8. Overflow, underflow and scaling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#beyond-the-worst-case">3.9. Beyond the worst case</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">3.10. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">3.11. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">3.12. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">3.13. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

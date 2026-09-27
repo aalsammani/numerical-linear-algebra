@@ -1,0 +1,3451 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proof Index &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'prf-prf';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+
+    <script>
+      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
+    </script>
+
+
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fprf-prf.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+   <h1>Proof Index</h1>
+
+   <div class="modindex-jumpbox">
+   <a href="#cap-ch01-alg-householder"><strong>ch01-alg-householder</strong></a> | 
+   <a href="#cap-ch01-def-frobenius"><strong>ch01-def-frobenius</strong></a> | 
+   <a href="#cap-ch01-def-householder"><strong>ch01-def-householder</strong></a> | 
+   <a href="#cap-ch01-def-induced"><strong>ch01-def-induced</strong></a> | 
+   <a href="#cap-ch01-def-norm"><strong>ch01-def-norm</strong></a> | 
+   <a href="#cap-ch01-def-orthogonal"><strong>ch01-def-orthogonal</strong></a> | 
+   <a href="#cap-ch01-def-product"><strong>ch01-def-product</strong></a> | 
+   <a href="#cap-ch01-exa-hilbert"><strong>ch01-exa-hilbert</strong></a> | 
+   <a href="#cap-ch01-exa-matrix-norms"><strong>ch01-exa-matrix-norms</strong></a> | 
+   <a href="#cap-ch01-exa-three-views"><strong>ch01-exa-three-views</strong></a> | 
+   <a href="#cap-ch01-exa-vector-norms"><strong>ch01-exa-vector-norms</strong></a> | 
+   <a href="#cap-ch01-prop-flops"><strong>ch01-prop-flops</strong></a> | 
+   <a href="#cap-ch01-prop-householder"><strong>ch01-prop-householder</strong></a> | 
+   <a href="#cap-ch01-prop-induced"><strong>ch01-prop-induced</strong></a> | 
+   <a href="#cap-ch01-prop-orthogonal"><strong>ch01-prop-orthogonal</strong></a> | 
+   <a href="#cap-ch01-prop-range-product"><strong>ch01-prop-range-product</strong></a> | 
+   <a href="#cap-ch01-rem-strassen"><strong>ch01-rem-strassen</strong></a> | 
+   <a href="#cap-ch01-thm-frobenius"><strong>ch01-thm-frobenius</strong></a> | 
+   <a href="#cap-ch01-thm-holder"><strong>ch01-thm-holder</strong></a> | 
+   <a href="#cap-ch01-thm-householder-zero"><strong>ch01-thm-householder-zero</strong></a> | 
+   <a href="#cap-ch01-thm-induced-formulas"><strong>ch01-thm-induced-formulas</strong></a> | 
+   <a href="#cap-ch01-thm-norm-equivalence"><strong>ch01-thm-norm-equivalence</strong></a> | 
+   <a href="#cap-ch01-thm-spectral-radius"><strong>ch01-thm-spectral-radius</strong></a> | 
+   <a href="#cap-ch01-thm-unitary-invariance"><strong>ch01-thm-unitary-invariance</strong></a> | 
+   <a href="#cap-ch02-alg-truncated"><strong>ch02-alg-truncated</strong></a> | 
+   <a href="#cap-ch02-cor-perturbation"><strong>ch02-cor-perturbation</strong></a> | 
+   <a href="#cap-ch02-def-numerical-rank"><strong>ch02-def-numerical-rank</strong></a> | 
+   <a href="#cap-ch02-def-pseudoinverse"><strong>ch02-def-pseudoinverse</strong></a> | 
+   <a href="#cap-ch02-def-svd"><strong>ch02-def-svd</strong></a> | 
+   <a href="#cap-ch02-def-truncated"><strong>ch02-def-truncated</strong></a> | 
+   <a href="#cap-ch02-exa-lauchli"><strong>ch02-exa-lauchli</strong></a> | 
+   <a href="#cap-ch02-exa-noisy-low-rank"><strong>ch02-exa-noisy-low-rank</strong></a> | 
+   <a href="#cap-ch02-exa-norms-by-hand"><strong>ch02-exa-norms-by-hand</strong></a> | 
+   <a href="#cap-ch02-exa-pinv-rank-one"><strong>ch02-exa-pinv-rank-one</strong></a> | 
+   <a href="#cap-ch02-exa-rank-one"><strong>ch02-exa-rank-one</strong></a> | 
+   <a href="#cap-ch02-exa-svd-by-hand"><strong>ch02-exa-svd-by-hand</strong></a> | 
+   <a href="#cap-ch02-prop-numerical-rank"><strong>ch02-prop-numerical-rank</strong></a> | 
+   <a href="#cap-ch02-prop-uniqueness"><strong>ch02-prop-uniqueness</strong></a> | 
+   <a href="#cap-ch02-rem-second-proof"><strong>ch02-rem-second-proof</strong></a> | 
+   <a href="#cap-ch02-thm-eckart-young"><strong>ch02-thm-eckart-young</strong></a> | 
+   <a href="#cap-ch02-thm-eigen"><strong>ch02-thm-eigen</strong></a> | 
+   <a href="#cap-ch02-thm-ellipsoid"><strong>ch02-thm-ellipsoid</strong></a> | 
+   <a href="#cap-ch02-thm-min-norm"><strong>ch02-thm-min-norm</strong></a> | 
+   <a href="#cap-ch02-thm-norms"><strong>ch02-thm-norms</strong></a> | 
+   <a href="#cap-ch02-thm-pseudoinverse"><strong>ch02-thm-pseudoinverse</strong></a> | 
+   <a href="#cap-ch02-thm-subspaces"><strong>ch02-thm-subspaces</strong></a> | 
+   <a href="#cap-ch02-thm-svd"><strong>ch02-thm-svd</strong></a> | 
+   <a href="#cap-ch02-thm-weyl"><strong>ch02-thm-weyl</strong></a> | 
+   <a href="#cap-ch03-alg-kahan"><strong>ch03-alg-kahan</strong></a> | 
+   <a href="#cap-ch03-alg-pairwise"><strong>ch03-alg-pairwise</strong></a> | 
+   <a href="#cap-ch03-alg-quadratic"><strong>ch03-alg-quadratic</strong></a> | 
+   <a href="#cap-ch03-alg-recursive-sum"><strong>ch03-alg-recursive-sum</strong></a> | 
+   <a href="#cap-ch03-alg-scaled-norm"><strong>ch03-alg-scaled-norm</strong></a> | 
+   <a href="#cap-ch03-cor-matmul"><strong>ch03-cor-matmul</strong></a> | 
+   <a href="#cap-ch03-def-epsilon"><strong>ch03-def-epsilon</strong></a> | 
+   <a href="#cap-ch03-def-fp-system"><strong>ch03-def-fp-system</strong></a> | 
+   <a href="#cap-ch03-def-gamma"><strong>ch03-def-gamma</strong></a> | 
+   <a href="#cap-ch03-def-rounding"><strong>ch03-def-rounding</strong></a> | 
+   <a href="#cap-ch03-def-ulp"><strong>ch03-def-ulp</strong></a> | 
+   <a href="#cap-ch03-exa-cancel-decimal"><strong>ch03-exa-cancel-decimal</strong></a> | 
+   <a href="#cap-ch03-exa-one-tenth"><strong>ch03-exa-one-tenth</strong></a> | 
+   <a href="#cap-ch03-exa-ordering"><strong>ch03-exa-ordering</strong></a> | 
+   <a href="#cap-ch03-exa-toy"><strong>ch03-exa-toy</strong></a> | 
+   <a href="#cap-ch03-lem-gamma"><strong>ch03-lem-gamma</strong></a> | 
+   <a href="#cap-ch03-lem-gamma-rules"><strong>ch03-lem-gamma-rules</strong></a> | 
+   <a href="#cap-ch03-lem-sterbenz"><strong>ch03-lem-sterbenz</strong></a> | 
+   <a href="#cap-ch03-lem-subnormal-exact"><strong>ch03-lem-subnormal-exact</strong></a> | 
+   <a href="#cap-ch03-prop-cancellation"><strong>ch03-prop-cancellation</strong></a> | 
+   <a href="#cap-ch03-prop-running-bound"><strong>ch03-prop-running-bound</strong></a> | 
+   <a href="#cap-ch03-prop-smallest-eps"><strong>ch03-prop-smallest-eps</strong></a> | 
+   <a href="#cap-ch03-rem-mixed-precision"><strong>ch03-rem-mixed-precision</strong></a> | 
+   <a href="#cap-ch03-rem-probabilistic"><strong>ch03-rem-probabilistic</strong></a> | 
+   <a href="#cap-ch03-thm-dot"><strong>ch03-thm-dot</strong></a> | 
+   <a href="#cap-ch03-thm-kahan"><strong>ch03-thm-kahan</strong></a> | 
+   <a href="#cap-ch03-thm-pairwise"><strong>ch03-thm-pairwise</strong></a> | 
+   <a href="#cap-ch03-thm-recursive-sum"><strong>ch03-thm-recursive-sum</strong></a> | 
+   <a href="#cap-ch03-thm-rounding"><strong>ch03-thm-rounding</strong></a> | 
+   <a href="#cap-ch03-thm-standard-model"><strong>ch03-thm-standard-model</strong></a> | 
+   <a href="#cap-ch03-thm-underflow"><strong>ch03-thm-underflow</strong></a> | 
+   <a href="#cap-ch04-alg-assessment"><strong>ch04-alg-assessment</strong></a> | 
+   <a href="#cap-ch04-def-condition"><strong>ch04-def-condition</strong></a> | 
+   <a href="#cap-ch04-def-errors"><strong>ch04-def-errors</strong></a> | 
+   <a href="#cap-ch04-def-kappa"><strong>ch04-def-kappa</strong></a> | 
+   <a href="#cap-ch04-def-skeel"><strong>ch04-def-skeel</strong></a> | 
+   <a href="#cap-ch04-def-stability"><strong>ch04-def-stability</strong></a> | 
+   <a href="#cap-ch04-exa-exp"><strong>ch04-exa-exp</strong></a> | 
+   <a href="#cap-ch04-exa-hilbert"><strong>ch04-exa-hilbert</strong></a> | 
+   <a href="#cap-ch04-exa-polynomial"><strong>ch04-exa-polynomial</strong></a> | 
+   <a href="#cap-ch04-exa-row-scaling"><strong>ch04-exa-row-scaling</strong></a> | 
+   <a href="#cap-ch04-exa-scalar"><strong>ch04-exa-scalar</strong></a> | 
+   <a href="#cap-ch04-exa-two-by-two"><strong>ch04-exa-two-by-two</strong></a> | 
+   <a href="#cap-ch04-lem-gamma"><strong>ch04-lem-gamma</strong></a> | 
+   <a href="#cap-ch04-lem-neumann"><strong>ch04-lem-neumann</strong></a> | 
+   <a href="#cap-ch04-prop-kappa"><strong>ch04-prop-kappa</strong></a> | 
+   <a href="#cap-ch04-prop-skeel"><strong>ch04-prop-skeel</strong></a> | 
+   <a href="#cap-ch04-rem-charpoly"><strong>ch04-rem-charpoly</strong></a> | 
+   <a href="#cap-ch04-rem-wilkinson"><strong>ch04-rem-wilkinson</strong></a> | 
+   <a href="#cap-ch04-thm-accuracy"><strong>ch04-thm-accuracy</strong></a> | 
+   <a href="#cap-ch04-thm-componentwise"><strong>ch04-thm-componentwise</strong></a> | 
+   <a href="#cap-ch04-thm-distance"><strong>ch04-thm-distance</strong></a> | 
+   <a href="#cap-ch04-thm-inner-product"><strong>ch04-thm-inner-product</strong></a> | 
+   <a href="#cap-ch04-thm-jacobian"><strong>ch04-thm-jacobian</strong></a> | 
+   <a href="#cap-ch04-thm-oettli-prager"><strong>ch04-thm-oettli-prager</strong></a> | 
+   <a href="#cap-ch04-thm-perturbation"><strong>ch04-thm-perturbation</strong></a> | 
+   <a href="#cap-ch04-thm-rigal-gaches"><strong>ch04-thm-rigal-gaches</strong></a> | 
+   <a href="#cap-ch05-alg-back-sub"><strong>ch05-alg-back-sub</strong></a> | 
+   <a href="#cap-ch05-alg-blocked"><strong>ch05-alg-blocked</strong></a> | 
+   <a href="#cap-ch05-alg-gepp"><strong>ch05-alg-gepp</strong></a> | 
+   <a href="#cap-ch05-alg-lu"><strong>ch05-alg-lu</strong></a> | 
+   <a href="#cap-ch05-cor-normwise"><strong>ch05-cor-normwise</strong></a> | 
+   <a href="#cap-ch05-def-gauss"><strong>ch05-def-gauss</strong></a> | 
+   <a href="#cap-ch05-def-growth"><strong>ch05-def-growth</strong></a> | 
+   <a href="#cap-ch05-exa-gepp3"><strong>ch05-exa-gepp3</strong></a> | 
+   <a href="#cap-ch05-exa-lu3"><strong>ch05-exa-lu3</strong></a> | 
+   <a href="#cap-ch05-exa-small-pivot"><strong>ch05-exa-small-pivot</strong></a> | 
+   <a href="#cap-ch05-exa-triangular"><strong>ch05-exa-triangular</strong></a> | 
+   <a href="#cap-ch05-exa-wilkinson"><strong>ch05-exa-wilkinson</strong></a> | 
+   <a href="#cap-ch05-lem-gauss"><strong>ch05-lem-gauss</strong></a> | 
+   <a href="#cap-ch05-prop-lu-cost"><strong>ch05-prop-lu-cost</strong></a> | 
+   <a href="#cap-ch05-rem-rook"><strong>ch05-rem-rook</strong></a> | 
+   <a href="#cap-ch05-thm-complete"><strong>ch05-thm-complete</strong></a> | 
+   <a href="#cap-ch05-thm-gepp"><strong>ch05-thm-gepp</strong></a> | 
+   <a href="#cap-ch05-thm-growth-bound"><strong>ch05-thm-growth-bound</strong></a> | 
+   <a href="#cap-ch05-thm-lu-backward"><strong>ch05-thm-lu-backward</strong></a> | 
+   <a href="#cap-ch05-thm-lu-exists"><strong>ch05-thm-lu-exists</strong></a> | 
+   <a href="#cap-ch05-thm-solve-backward"><strong>ch05-thm-solve-backward</strong></a> | 
+   <a href="#cap-ch05-thm-triangular"><strong>ch05-thm-triangular</strong></a> | 
+   <a href="#cap-ch06-alg-bunch-kaufman"><strong>ch06-alg-bunch-kaufman</strong></a> | 
+   <a href="#cap-ch06-alg-cholesky"><strong>ch06-alg-cholesky</strong></a> | 
+   <a href="#cap-ch06-alg-hager"><strong>ch06-alg-hager</strong></a> | 
+   <a href="#cap-ch06-alg-refinement"><strong>ch06-alg-refinement</strong></a> | 
+   <a href="#cap-ch06-cor-normwise"><strong>ch06-cor-normwise</strong></a> | 
+   <a href="#cap-ch06-def-spd"><strong>ch06-def-spd</strong></a> | 
+   <a href="#cap-ch06-exa-cholesky-3x3"><strong>ch06-exa-cholesky-3x3</strong></a> | 
+   <a href="#cap-ch06-exa-gp-2x2"><strong>ch06-exa-gp-2x2</strong></a> | 
+   <a href="#cap-ch06-exa-hager"><strong>ch06-exa-hager</strong></a> | 
+   <a href="#cap-ch06-exa-hilbert"><strong>ch06-exa-hilbert</strong></a> | 
+   <a href="#cap-ch06-exa-indefinite"><strong>ch06-exa-indefinite</strong></a> | 
+   <a href="#cap-ch06-exa-spd-families"><strong>ch06-exa-spd-families</strong></a> | 
+   <a href="#cap-ch06-lem-hager"><strong>ch06-lem-hager</strong></a> | 
+   <a href="#cap-ch06-lem-schur"><strong>ch06-lem-schur</strong></a> | 
+   <a href="#cap-ch06-prop-cholesky-cost"><strong>ch06-prop-cholesky-cost</strong></a> | 
+   <a href="#cap-ch06-prop-entry-bound"><strong>ch06-prop-entry-bound</strong></a> | 
+   <a href="#cap-ch06-prop-gaussian"><strong>ch06-prop-gaussian</strong></a> | 
+   <a href="#cap-ch06-prop-jitter"><strong>ch06-prop-jitter</strong></a> | 
+   <a href="#cap-ch06-prop-spd-properties"><strong>ch06-prop-spd-properties</strong></a> | 
+   <a href="#cap-ch06-rem-inertia"><strong>ch06-rem-inertia</strong></a> | 
+   <a href="#cap-ch06-thm-backward-error"><strong>ch06-thm-backward-error</strong></a> | 
+   <a href="#cap-ch06-thm-cholesky"><strong>ch06-thm-cholesky</strong></a> | 
+   <a href="#cap-ch06-thm-ldlt"><strong>ch06-thm-ldlt</strong></a> | 
+   <a href="#cap-ch06-thm-refinement"><strong>ch06-thm-refinement</strong></a> | 
+   <a href="#cap-ch06-thm-solve-backward"><strong>ch06-thm-solve-backward</strong></a> | 
+   <a href="#cap-ch06-thm-spd-characterization"><strong>ch06-thm-spd-characterization</strong></a> | 
+   <a href="#cap-ch06-thm-test-pd"><strong>ch06-thm-test-pd</strong></a> | 
+   <a href="#cap-ch07-alg-apply-q"><strong>ch07-alg-apply-q</strong></a> | 
+   <a href="#cap-ch07-alg-cgs"><strong>ch07-alg-cgs</strong></a> | 
+   <a href="#cap-ch07-alg-cgs2"><strong>ch07-alg-cgs2</strong></a> | 
+   <a href="#cap-ch07-alg-givens-qr"><strong>ch07-alg-givens-qr</strong></a> | 
+   <a href="#cap-ch07-alg-householder-qr"><strong>ch07-alg-householder-qr</strong></a> | 
+   <a href="#cap-ch07-alg-mgs"><strong>ch07-alg-mgs</strong></a> | 
+   <a href="#cap-ch07-cor-cholesky"><strong>ch07-cor-cholesky</strong></a> | 
+   <a href="#cap-ch07-def-projector"><strong>ch07-def-projector</strong></a> | 
+   <a href="#cap-ch07-def-qr"><strong>ch07-def-qr</strong></a> | 
+   <a href="#cap-ch07-exa-givens"><strong>ch07-exa-givens</strong></a> | 
+   <a href="#cap-ch07-exa-gs"><strong>ch07-exa-gs</strong></a> | 
+   <a href="#cap-ch07-exa-householder"><strong>ch07-exa-householder</strong></a> | 
+   <a href="#cap-ch07-exa-lauchli"><strong>ch07-exa-lauchli</strong></a> | 
+   <a href="#cap-ch07-exa-projector"><strong>ch07-exa-projector</strong></a> | 
+   <a href="#cap-ch07-prop-gs-cost"><strong>ch07-prop-gs-cost</strong></a> | 
+   <a href="#cap-ch07-prop-gs-residual"><strong>ch07-prop-gs-residual</strong></a> | 
+   <a href="#cap-ch07-prop-householder-cost"><strong>ch07-prop-householder-cost</strong></a> | 
+   <a href="#cap-ch07-prop-oblique"><strong>ch07-prop-oblique</strong></a> | 
+   <a href="#cap-ch07-prop-projector-basis"><strong>ch07-prop-projector-basis</strong></a> | 
+   <a href="#cap-ch07-rem-tall-skinny"><strong>ch07-rem-tall-skinny</strong></a> | 
+   <a href="#cap-ch07-thm-gs-orthogonality"><strong>ch07-thm-gs-orthogonality</strong></a> | 
+   <a href="#cap-ch07-thm-householder-stability"><strong>ch07-thm-householder-stability</strong></a> | 
+   <a href="#cap-ch07-thm-orthogonal-projector"><strong>ch07-thm-orthogonal-projector</strong></a> | 
+   <a href="#cap-ch07-thm-projector"><strong>ch07-thm-projector</strong></a> | 
+   <a href="#cap-ch07-thm-qqt"><strong>ch07-thm-qqt</strong></a> | 
+   <a href="#cap-ch07-thm-qr-exists"><strong>ch07-thm-qr-exists</strong></a> | 
+   <a href="#cap-ch07-thm-qr-unique"><strong>ch07-thm-qr-unique</strong></a> | 
+   <a href="#cap-ch07-thm-qrcp"><strong>ch07-thm-qrcp</strong></a> | 
+   <a href="#cap-ch08-alg-householder"><strong>ch08-alg-householder</strong></a> | 
+   <a href="#cap-ch08-alg-normal"><strong>ch08-alg-normal</strong></a> | 
+   <a href="#cap-ch08-alg-tsvd"><strong>ch08-alg-tsvd</strong></a> | 
+   <a href="#cap-ch08-def-ls"><strong>ch08-def-ls</strong></a> | 
+   <a href="#cap-ch08-def-numerical-rank"><strong>ch08-def-numerical-rank</strong></a> | 
+   <a href="#cap-ch08-exa-line"><strong>ch08-exa-line</strong></a> | 
+   <a href="#cap-ch08-exa-line-qr"><strong>ch08-exa-line-qr</strong></a> | 
+   <a href="#cap-ch08-exa-rank-one"><strong>ch08-exa-rank-one</strong></a> | 
+   <a href="#cap-ch08-prop-discontinuity"><strong>ch08-prop-discontinuity</strong></a> | 
+   <a href="#cap-ch08-rem-scaling"><strong>ch08-rem-scaling</strong></a> | 
+   <a href="#cap-ch08-thm-conditioning"><strong>ch08-thm-conditioning</strong></a> | 
+   <a href="#cap-ch08-thm-existence"><strong>ch08-thm-existence</strong></a> | 
+   <a href="#cap-ch08-thm-householder-stable"><strong>ch08-thm-householder-stable</strong></a> | 
+   <a href="#cap-ch08-thm-min-norm"><strong>ch08-thm-min-norm</strong></a> | 
+   <a href="#cap-ch08-thm-normal-equations"><strong>ch08-thm-normal-equations</strong></a> | 
+   <a href="#cap-ch08-thm-tikhonov"><strong>ch08-thm-tikhonov</strong></a> | 
+   <a href="#cap-ch09-alg-inverse"><strong>ch09-alg-inverse</strong></a> | 
+   <a href="#cap-ch09-alg-power"><strong>ch09-alg-power</strong></a> | 
+   <a href="#cap-ch09-alg-rqi"><strong>ch09-alg-rqi</strong></a> | 
+   <a href="#cap-ch09-alg-subspace"><strong>ch09-alg-subspace</strong></a> | 
+   <a href="#cap-ch09-def-eigen"><strong>ch09-def-eigen</strong></a> | 
+   <a href="#cap-ch09-def-multiplicity"><strong>ch09-def-multiplicity</strong></a> | 
+   <a href="#cap-ch09-def-normal"><strong>ch09-def-normal</strong></a> | 
+   <a href="#cap-ch09-def-pseudospectrum"><strong>ch09-def-pseudospectrum</strong></a> | 
+   <a href="#cap-ch09-def-rayleigh"><strong>ch09-def-rayleigh</strong></a> | 
+   <a href="#cap-ch09-exa-condition"><strong>ch09-exa-condition</strong></a> | 
+   <a href="#cap-ch09-exa-eigvec-gap"><strong>ch09-exa-eigvec-gap</strong></a> | 
+   <a href="#cap-ch09-exa-gershgorin"><strong>ch09-exa-gershgorin</strong></a> | 
+   <a href="#cap-ch09-exa-inverse"><strong>ch09-exa-inverse</strong></a> | 
+   <a href="#cap-ch09-exa-jordan-block"><strong>ch09-exa-jordan-block</strong></a> | 
+   <a href="#cap-ch09-exa-jordan-perturbation"><strong>ch09-exa-jordan-perturbation</strong></a> | 
+   <a href="#cap-ch09-exa-power"><strong>ch09-exa-power</strong></a> | 
+   <a href="#cap-ch09-exa-real-schur"><strong>ch09-exa-real-schur</strong></a> | 
+   <a href="#cap-ch09-exa-rq"><strong>ch09-exa-rq</strong></a> | 
+   <a href="#cap-ch09-exa-rqi"><strong>ch09-exa-rqi</strong></a> | 
+   <a href="#cap-ch09-exa-wilkinson"><strong>ch09-exa-wilkinson</strong></a> | 
+   <a href="#cap-ch09-lem-simple"><strong>ch09-lem-simple</strong></a> | 
+   <a href="#cap-ch09-prop-backward-error"><strong>ch09-prop-backward-error</strong></a> | 
+   <a href="#cap-ch09-prop-companion"><strong>ch09-prop-companion</strong></a> | 
+   <a href="#cap-ch09-prop-inverse-residual"><strong>ch09-prop-inverse-residual</strong></a> | 
+   <a href="#cap-ch09-prop-multiplicity"><strong>ch09-prop-multiplicity</strong></a> | 
+   <a href="#cap-ch09-prop-pseudospectrum"><strong>ch09-prop-pseudospectrum</strong></a> | 
+   <a href="#cap-ch09-prop-rq"><strong>ch09-prop-rq</strong></a> | 
+   <a href="#cap-ch09-thm-abel-ruffini"><strong>ch09-thm-abel-ruffini</strong></a> | 
+   <a href="#cap-ch09-thm-bauer-fike"><strong>ch09-thm-bauer-fike</strong></a> | 
+   <a href="#cap-ch09-thm-courant-fischer"><strong>ch09-thm-courant-fischer</strong></a> | 
+   <a href="#cap-ch09-thm-davis-kahan"><strong>ch09-thm-davis-kahan</strong></a> | 
+   <a href="#cap-ch09-thm-diagonalizable"><strong>ch09-thm-diagonalizable</strong></a> | 
+   <a href="#cap-ch09-thm-eig-condition"><strong>ch09-thm-eig-condition</strong></a> | 
+   <a href="#cap-ch09-thm-gershgorin"><strong>ch09-thm-gershgorin</strong></a> | 
+   <a href="#cap-ch09-thm-inverse"><strong>ch09-thm-inverse</strong></a> | 
+   <a href="#cap-ch09-thm-normal"><strong>ch09-thm-normal</strong></a> | 
+   <a href="#cap-ch09-thm-power"><strong>ch09-thm-power</strong></a> | 
+   <a href="#cap-ch09-thm-real-schur"><strong>ch09-thm-real-schur</strong></a> | 
+   <a href="#cap-ch09-thm-residual-bound"><strong>ch09-thm-residual-bound</strong></a> | 
+   <a href="#cap-ch09-thm-rq-quadratic"><strong>ch09-thm-rq-quadratic</strong></a> | 
+   <a href="#cap-ch09-thm-rqi"><strong>ch09-thm-rqi</strong></a> | 
+   <a href="#cap-ch09-thm-schur"><strong>ch09-thm-schur</strong></a> | 
+   <a href="#cap-ch09-thm-sin-theta-vector"><strong>ch09-thm-sin-theta-vector</strong></a> | 
+   <a href="#cap-ch09-thm-spectral"><strong>ch09-thm-spectral</strong></a> | 
+   <a href="#cap-ch09-thm-subspace"><strong>ch09-thm-subspace</strong></a> | 
+   <a href="#cap-ch09-thm-weyl"><strong>ch09-thm-weyl</strong></a> | 
+   <a href="#cap-ch10-alg-bidiag"><strong>ch10-alg-bidiag</strong></a> | 
+   <a href="#cap-ch10-alg-francis"><strong>ch10-alg-francis</strong></a> | 
+   <a href="#cap-ch10-alg-hessenberg"><strong>ch10-alg-hessenberg</strong></a> | 
+   <a href="#cap-ch10-alg-hessenberg-qr-step"><strong>ch10-alg-hessenberg-qr-step</strong></a> | 
+   <a href="#cap-ch10-alg-symmetric-qr"><strong>ch10-alg-symmetric-qr</strong></a> | 
+   <a href="#cap-ch10-def-hessenberg"><strong>ch10-def-hessenberg</strong></a> | 
+   <a href="#cap-ch10-def-qr-iteration"><strong>ch10-def-qr-iteration</strong></a> | 
+   <a href="#cap-ch10-def-wilkinson"><strong>ch10-def-wilkinson</strong></a> | 
+   <a href="#cap-ch10-exa-cyclic"><strong>ch10-exa-cyclic</strong></a> | 
+   <a href="#cap-ch10-exa-lauchli"><strong>ch10-exa-lauchli</strong></a> | 
+   <a href="#cap-ch10-exa-rayleigh-failure"><strong>ch10-exa-rayleigh-failure</strong></a> | 
+   <a href="#cap-ch10-exa-tridiag"><strong>ch10-exa-tridiag</strong></a> | 
+   <a href="#cap-ch10-exa-two-by-two"><strong>ch10-exa-two-by-two</strong></a> | 
+   <a href="#cap-ch10-prop-deflation"><strong>ch10-prop-deflation</strong></a> | 
+   <a href="#cap-ch10-prop-double-shift"><strong>ch10-prop-double-shift</strong></a> | 
+   <a href="#cap-ch10-prop-hessenberg-cost"><strong>ch10-prop-hessenberg-cost</strong></a> | 
+   <a href="#cap-ch10-prop-real-shift"><strong>ch10-prop-real-shift</strong></a> | 
+   <a href="#cap-ch10-thm-hessenberg"><strong>ch10-thm-hessenberg</strong></a> | 
+   <a href="#cap-ch10-thm-hessenberg-preserved"><strong>ch10-thm-hessenberg-preserved</strong></a> | 
+   <a href="#cap-ch10-thm-hessenberg-stability"><strong>ch10-thm-hessenberg-stability</strong></a> | 
+   <a href="#cap-ch10-thm-implicit-q"><strong>ch10-thm-implicit-q</strong></a> | 
+   <a href="#cap-ch10-thm-powers"><strong>ch10-thm-powers</strong></a> | 
+   <a href="#cap-ch10-thm-unshifted-convergence"><strong>ch10-thm-unshifted-convergence</strong></a> | 
+   <a href="#cap-ch10-thm-wilkinson"><strong>ch10-thm-wilkinson</strong></a> | 
+   <a href="#cap-ch11-alg-arnoldi"><strong>ch11-alg-arnoldi</strong></a> | 
+   <a href="#cap-ch11-alg-cg"><strong>ch11-alg-cg</strong></a> | 
+   <a href="#cap-ch11-alg-csr-matvec"><strong>ch11-alg-csr-matvec</strong></a> | 
+   <a href="#cap-ch11-alg-gmres"><strong>ch11-alg-gmres</strong></a> | 
+   <a href="#cap-ch11-alg-lanczos"><strong>ch11-alg-lanczos</strong></a> | 
+   <a href="#cap-ch11-alg-pcg"><strong>ch11-alg-pcg</strong></a> | 
+   <a href="#cap-ch11-cor-outliers"><strong>ch11-cor-outliers</strong></a> | 
+   <a href="#cap-ch11-def-krylov"><strong>ch11-def-krylov</strong></a> | 
+   <a href="#cap-ch11-exa-arnoldi"><strong>ch11-exa-arnoldi</strong></a> | 
+   <a href="#cap-ch11-exa-arrow"><strong>ch11-exa-arrow</strong></a> | 
+   <a href="#cap-ch11-exa-bcsstk14"><strong>ch11-exa-bcsstk14</strong></a> | 
+   <a href="#cap-ch11-exa-cg-count"><strong>ch11-exa-cg-count</strong></a> | 
+   <a href="#cap-ch11-exa-formats"><strong>ch11-exa-formats</strong></a> | 
+   <a href="#cap-ch11-exa-jacobi"><strong>ch11-exa-jacobi</strong></a> | 
+   <a href="#cap-ch11-exa-laplacian"><strong>ch11-exa-laplacian</strong></a> | 
+   <a href="#cap-ch11-exa-shift"><strong>ch11-exa-shift</strong></a> | 
+   <a href="#cap-ch11-lem-chebyshev"><strong>ch11-lem-chebyshev</strong></a> | 
+   <a href="#cap-ch11-prop-forward-error"><strong>ch11-prop-forward-error</strong></a> | 
+   <a href="#cap-ch11-prop-pcg"><strong>ch11-prop-pcg</strong></a> | 
+   <a href="#cap-ch11-prop-ritz"><strong>ch11-prop-ritz</strong></a> | 
+   <a href="#cap-ch11-thm-arnoldi"><strong>ch11-thm-arnoldi</strong></a> | 
+   <a href="#cap-ch11-thm-backward-error"><strong>ch11-thm-backward-error</strong></a> | 
+   <a href="#cap-ch11-thm-cg-bound"><strong>ch11-thm-cg-bound</strong></a> | 
+   <a href="#cap-ch11-thm-cg-poly"><strong>ch11-thm-cg-poly</strong></a> | 
+   <a href="#cap-ch11-thm-cg-properties"><strong>ch11-thm-cg-properties</strong></a> | 
+   <a href="#cap-ch11-thm-gmres-bound"><strong>ch11-thm-gmres-bound</strong></a> | 
+   <a href="#cap-ch11-thm-laplacian"><strong>ch11-thm-laplacian</strong></a> | 
+   <a href="#cap-ch11-thm-minpoly"><strong>ch11-thm-minpoly</strong></a> | 
+   <a href="#cap-ch11-thm-stationary"><strong>ch11-thm-stationary</strong></a> | 
+   <a href="#cap-ch12-alg-adaptive"><strong>ch12-alg-adaptive</strong></a> | 
+   <a href="#cap-ch12-alg-range-finder"><strong>ch12-alg-range-finder</strong></a> | 
+   <a href="#cap-ch12-alg-rsvd"><strong>ch12-alg-rsvd</strong></a> | 
+   <a href="#cap-ch12-alg-sketch-precondition"><strong>ch12-alg-sketch-precondition</strong></a> | 
+   <a href="#cap-ch12-alg-subspace-iteration"><strong>ch12-alg-subspace-iteration</strong></a> | 
+   <a href="#cap-ch12-cor-power"><strong>ch12-cor-power</strong></a> | 
+   <a href="#cap-ch12-def-gaussian"><strong>ch12-def-gaussian</strong></a> | 
+   <a href="#cap-ch12-def-subspace-embedding"><strong>ch12-def-subspace-embedding</strong></a> | 
+   <a href="#cap-ch12-exa-jl"><strong>ch12-exa-jl</strong></a> | 
+   <a href="#cap-ch12-exa-range-finder"><strong>ch12-exa-range-finder</strong></a> | 
+   <a href="#cap-ch12-exa-sketch-solve"><strong>ch12-exa-sketch-solve</strong></a> | 
+   <a href="#cap-ch12-lem-concentration"><strong>ch12-lem-concentration</strong></a> | 
+   <a href="#cap-ch12-lem-rotation"><strong>ch12-lem-rotation</strong></a> | 
+   <a href="#cap-ch12-prop-embedding-sv"><strong>ch12-prop-embedding-sv</strong></a> | 
+   <a href="#cap-ch12-prop-error-estimator"><strong>ch12-prop-error-estimator</strong></a> | 
+   <a href="#cap-ch12-prop-exact-rank"><strong>ch12-prop-exact-rank</strong></a> | 
+   <a href="#cap-ch12-prop-gaussian-precondition"><strong>ch12-prop-gaussian-precondition</strong></a> | 
+   <a href="#cap-ch12-prop-gaussian-sketch-solve"><strong>ch12-prop-gaussian-sketch-solve</strong></a> | 
+   <a href="#cap-ch12-prop-hutchinson"><strong>ch12-prop-hutchinson</strong></a> | 
+   <a href="#cap-ch12-prop-rsvd-truncation"><strong>ch12-prop-rsvd-truncation</strong></a> | 
+   <a href="#cap-ch12-thm-deterministic"><strong>ch12-thm-deterministic</strong></a> | 
+   <a href="#cap-ch12-thm-eckart-young"><strong>ch12-thm-eckart-young</strong></a> | 
+   <a href="#cap-ch12-thm-frobenius-bound"><strong>ch12-thm-frobenius-bound</strong></a> | 
+   <a href="#cap-ch12-thm-jl"><strong>ch12-thm-jl</strong></a> | 
+   <a href="#cap-ch12-thm-jl-gaussian"><strong>ch12-thm-jl-gaussian</strong></a> | 
+   <a href="#cap-ch12-thm-precondition"><strong>ch12-thm-precondition</strong></a> | 
+   <a href="#cap-ch12-thm-sketch-solve"><strong>ch12-thm-sketch-solve</strong></a> | 
+   <a href="#cap-ch12-thm-spectral-bound"><strong>ch12-thm-spectral-bound</strong></a>
+   </div>
+
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-alg-householder"><td></td><td>
+       <strong>ch01-alg-householder</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-alg-householder"><code class="xref">ch01-alg-householder</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-def-frobenius"><td></td><td>
+       <strong>ch01-def-frobenius</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-def-frobenius"><code class="xref">ch01-def-frobenius</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-def-householder"><td></td><td>
+       <strong>ch01-def-householder</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-def-householder"><code class="xref">ch01-def-householder</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-def-induced"><td></td><td>
+       <strong>ch01-def-induced</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-def-induced"><code class="xref">ch01-def-induced</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-def-norm"><td></td><td>
+       <strong>ch01-def-norm</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-def-norm"><code class="xref">ch01-def-norm</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-def-orthogonal"><td></td><td>
+       <strong>ch01-def-orthogonal</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-def-orthogonal"><code class="xref">ch01-def-orthogonal</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-def-product"><td></td><td>
+       <strong>ch01-def-product</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-def-product"><code class="xref">ch01-def-product</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-exa-hilbert"><td></td><td>
+       <strong>ch01-exa-hilbert</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-exa-hilbert"><code class="xref">ch01-exa-hilbert</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-exa-matrix-norms"><td></td><td>
+       <strong>ch01-exa-matrix-norms</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-exa-matrix-norms"><code class="xref">ch01-exa-matrix-norms</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-exa-three-views"><td></td><td>
+       <strong>ch01-exa-three-views</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-exa-three-views"><code class="xref">ch01-exa-three-views</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-exa-vector-norms"><td></td><td>
+       <strong>ch01-exa-vector-norms</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-exa-vector-norms"><code class="xref">ch01-exa-vector-norms</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-prop-flops"><td></td><td>
+       <strong>ch01-prop-flops</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-prop-flops"><code class="xref">ch01-prop-flops</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-prop-householder"><td></td><td>
+       <strong>ch01-prop-householder</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-prop-householder"><code class="xref">ch01-prop-householder</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-prop-induced"><td></td><td>
+       <strong>ch01-prop-induced</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-prop-induced"><code class="xref">ch01-prop-induced</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-prop-orthogonal"><td></td><td>
+       <strong>ch01-prop-orthogonal</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-prop-orthogonal"><code class="xref">ch01-prop-orthogonal</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-prop-range-product"><td></td><td>
+       <strong>ch01-prop-range-product</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-prop-range-product"><code class="xref">ch01-prop-range-product</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-rem-strassen"><td></td><td>
+       <strong>ch01-rem-strassen</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-rem-strassen"><code class="xref">ch01-rem-strassen</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-thm-frobenius"><td></td><td>
+       <strong>ch01-thm-frobenius</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-thm-frobenius"><code class="xref">ch01-thm-frobenius</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-thm-holder"><td></td><td>
+       <strong>ch01-thm-holder</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-thm-holder"><code class="xref">ch01-thm-holder</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-thm-householder-zero"><td></td><td>
+       <strong>ch01-thm-householder-zero</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-thm-householder-zero"><code class="xref">ch01-thm-householder-zero</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-thm-induced-formulas"><td></td><td>
+       <strong>ch01-thm-induced-formulas</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-thm-induced-formulas"><code class="xref">ch01-thm-induced-formulas</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-thm-norm-equivalence"><td></td><td>
+       <strong>ch01-thm-norm-equivalence</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-thm-norm-equivalence"><code class="xref">ch01-thm-norm-equivalence</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-thm-spectral-radius"><td></td><td>
+       <strong>ch01-thm-spectral-radius</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-thm-spectral-radius"><code class="xref">ch01-thm-spectral-radius</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch01-thm-unitary-invariance"><td></td><td>
+       <strong>ch01-thm-unitary-invariance</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch01-matrix-computations/notes.html#ch01-thm-unitary-invariance"><code class="xref">ch01-thm-unitary-invariance</code></a> <em>(ch01-matrix-computations/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-alg-truncated"><td></td><td>
+       <strong>ch02-alg-truncated</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-alg-truncated"><code class="xref">ch02-alg-truncated</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-cor-perturbation"><td></td><td>
+       <strong>ch02-cor-perturbation</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-cor-perturbation"><code class="xref">ch02-cor-perturbation</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>corollary</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-def-numerical-rank"><td></td><td>
+       <strong>ch02-def-numerical-rank</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-def-numerical-rank"><code class="xref">ch02-def-numerical-rank</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-def-pseudoinverse"><td></td><td>
+       <strong>ch02-def-pseudoinverse</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-def-pseudoinverse"><code class="xref">ch02-def-pseudoinverse</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-def-svd"><td></td><td>
+       <strong>ch02-def-svd</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-def-svd"><code class="xref">ch02-def-svd</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-def-truncated"><td></td><td>
+       <strong>ch02-def-truncated</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-def-truncated"><code class="xref">ch02-def-truncated</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-exa-lauchli"><td></td><td>
+       <strong>ch02-exa-lauchli</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-exa-lauchli"><code class="xref">ch02-exa-lauchli</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-exa-noisy-low-rank"><td></td><td>
+       <strong>ch02-exa-noisy-low-rank</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-exa-noisy-low-rank"><code class="xref">ch02-exa-noisy-low-rank</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-exa-norms-by-hand"><td></td><td>
+       <strong>ch02-exa-norms-by-hand</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-exa-norms-by-hand"><code class="xref">ch02-exa-norms-by-hand</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-exa-pinv-rank-one"><td></td><td>
+       <strong>ch02-exa-pinv-rank-one</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-exa-pinv-rank-one"><code class="xref">ch02-exa-pinv-rank-one</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-exa-rank-one"><td></td><td>
+       <strong>ch02-exa-rank-one</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-exa-rank-one"><code class="xref">ch02-exa-rank-one</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-exa-svd-by-hand"><td></td><td>
+       <strong>ch02-exa-svd-by-hand</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-exa-svd-by-hand"><code class="xref">ch02-exa-svd-by-hand</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-prop-numerical-rank"><td></td><td>
+       <strong>ch02-prop-numerical-rank</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-prop-numerical-rank"><code class="xref">ch02-prop-numerical-rank</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-prop-uniqueness"><td></td><td>
+       <strong>ch02-prop-uniqueness</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-prop-uniqueness"><code class="xref">ch02-prop-uniqueness</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-rem-second-proof"><td></td><td>
+       <strong>ch02-rem-second-proof</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-rem-second-proof"><code class="xref">ch02-rem-second-proof</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-thm-eckart-young"><td></td><td>
+       <strong>ch02-thm-eckart-young</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-thm-eckart-young"><code class="xref">ch02-thm-eckart-young</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-thm-eigen"><td></td><td>
+       <strong>ch02-thm-eigen</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-thm-eigen"><code class="xref">ch02-thm-eigen</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-thm-ellipsoid"><td></td><td>
+       <strong>ch02-thm-ellipsoid</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-thm-ellipsoid"><code class="xref">ch02-thm-ellipsoid</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-thm-min-norm"><td></td><td>
+       <strong>ch02-thm-min-norm</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-thm-min-norm"><code class="xref">ch02-thm-min-norm</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-thm-norms"><td></td><td>
+       <strong>ch02-thm-norms</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-thm-norms"><code class="xref">ch02-thm-norms</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-thm-pseudoinverse"><td></td><td>
+       <strong>ch02-thm-pseudoinverse</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-thm-pseudoinverse"><code class="xref">ch02-thm-pseudoinverse</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-thm-subspaces"><td></td><td>
+       <strong>ch02-thm-subspaces</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-thm-subspaces"><code class="xref">ch02-thm-subspaces</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-thm-svd"><td></td><td>
+       <strong>ch02-thm-svd</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-thm-svd"><code class="xref">ch02-thm-svd</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch02-thm-weyl"><td></td><td>
+       <strong>ch02-thm-weyl</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch02-svd/notes.html#ch02-thm-weyl"><code class="xref">ch02-thm-weyl</code></a> <em>(ch02-svd/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-alg-kahan"><td></td><td>
+       <strong>ch03-alg-kahan</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-alg-kahan"><code class="xref">ch03-alg-kahan</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-alg-pairwise"><td></td><td>
+       <strong>ch03-alg-pairwise</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-alg-pairwise"><code class="xref">ch03-alg-pairwise</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-alg-quadratic"><td></td><td>
+       <strong>ch03-alg-quadratic</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-alg-quadratic"><code class="xref">ch03-alg-quadratic</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-alg-recursive-sum"><td></td><td>
+       <strong>ch03-alg-recursive-sum</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-alg-recursive-sum"><code class="xref">ch03-alg-recursive-sum</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-alg-scaled-norm"><td></td><td>
+       <strong>ch03-alg-scaled-norm</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-alg-scaled-norm"><code class="xref">ch03-alg-scaled-norm</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-cor-matmul"><td></td><td>
+       <strong>ch03-cor-matmul</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-cor-matmul"><code class="xref">ch03-cor-matmul</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>corollary</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-def-epsilon"><td></td><td>
+       <strong>ch03-def-epsilon</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-def-epsilon"><code class="xref">ch03-def-epsilon</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-def-fp-system"><td></td><td>
+       <strong>ch03-def-fp-system</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-def-fp-system"><code class="xref">ch03-def-fp-system</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-def-gamma"><td></td><td>
+       <strong>ch03-def-gamma</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-def-gamma"><code class="xref">ch03-def-gamma</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-def-rounding"><td></td><td>
+       <strong>ch03-def-rounding</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-def-rounding"><code class="xref">ch03-def-rounding</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-def-ulp"><td></td><td>
+       <strong>ch03-def-ulp</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-def-ulp"><code class="xref">ch03-def-ulp</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-exa-cancel-decimal"><td></td><td>
+       <strong>ch03-exa-cancel-decimal</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-exa-cancel-decimal"><code class="xref">ch03-exa-cancel-decimal</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-exa-one-tenth"><td></td><td>
+       <strong>ch03-exa-one-tenth</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-exa-one-tenth"><code class="xref">ch03-exa-one-tenth</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-exa-ordering"><td></td><td>
+       <strong>ch03-exa-ordering</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-exa-ordering"><code class="xref">ch03-exa-ordering</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-exa-toy"><td></td><td>
+       <strong>ch03-exa-toy</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-exa-toy"><code class="xref">ch03-exa-toy</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-lem-gamma"><td></td><td>
+       <strong>ch03-lem-gamma</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-lem-gamma"><code class="xref">ch03-lem-gamma</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-lem-gamma-rules"><td></td><td>
+       <strong>ch03-lem-gamma-rules</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-lem-gamma-rules"><code class="xref">ch03-lem-gamma-rules</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-lem-sterbenz"><td></td><td>
+       <strong>ch03-lem-sterbenz</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-lem-sterbenz"><code class="xref">ch03-lem-sterbenz</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-lem-subnormal-exact"><td></td><td>
+       <strong>ch03-lem-subnormal-exact</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-lem-subnormal-exact"><code class="xref">ch03-lem-subnormal-exact</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-prop-cancellation"><td></td><td>
+       <strong>ch03-prop-cancellation</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-prop-cancellation"><code class="xref">ch03-prop-cancellation</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-prop-running-bound"><td></td><td>
+       <strong>ch03-prop-running-bound</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-prop-running-bound"><code class="xref">ch03-prop-running-bound</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-prop-smallest-eps"><td></td><td>
+       <strong>ch03-prop-smallest-eps</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-prop-smallest-eps"><code class="xref">ch03-prop-smallest-eps</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-rem-mixed-precision"><td></td><td>
+       <strong>ch03-rem-mixed-precision</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-rem-mixed-precision"><code class="xref">ch03-rem-mixed-precision</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-rem-probabilistic"><td></td><td>
+       <strong>ch03-rem-probabilistic</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-rem-probabilistic"><code class="xref">ch03-rem-probabilistic</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-thm-dot"><td></td><td>
+       <strong>ch03-thm-dot</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-thm-dot"><code class="xref">ch03-thm-dot</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-thm-kahan"><td></td><td>
+       <strong>ch03-thm-kahan</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-thm-kahan"><code class="xref">ch03-thm-kahan</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-thm-pairwise"><td></td><td>
+       <strong>ch03-thm-pairwise</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-thm-pairwise"><code class="xref">ch03-thm-pairwise</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-thm-recursive-sum"><td></td><td>
+       <strong>ch03-thm-recursive-sum</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-thm-recursive-sum"><code class="xref">ch03-thm-recursive-sum</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-thm-rounding"><td></td><td>
+       <strong>ch03-thm-rounding</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-thm-rounding"><code class="xref">ch03-thm-rounding</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-thm-standard-model"><td></td><td>
+       <strong>ch03-thm-standard-model</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-thm-standard-model"><code class="xref">ch03-thm-standard-model</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch03-thm-underflow"><td></td><td>
+       <strong>ch03-thm-underflow</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch03-floating-point/notes.html#ch03-thm-underflow"><code class="xref">ch03-thm-underflow</code></a> <em>(ch03-floating-point/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-alg-assessment"><td></td><td>
+       <strong>ch04-alg-assessment</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-alg-assessment"><code class="xref">ch04-alg-assessment</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-def-condition"><td></td><td>
+       <strong>ch04-def-condition</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-def-condition"><code class="xref">ch04-def-condition</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-def-errors"><td></td><td>
+       <strong>ch04-def-errors</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-def-errors"><code class="xref">ch04-def-errors</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-def-kappa"><td></td><td>
+       <strong>ch04-def-kappa</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-def-kappa"><code class="xref">ch04-def-kappa</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-def-skeel"><td></td><td>
+       <strong>ch04-def-skeel</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-def-skeel"><code class="xref">ch04-def-skeel</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-def-stability"><td></td><td>
+       <strong>ch04-def-stability</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-def-stability"><code class="xref">ch04-def-stability</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-exa-exp"><td></td><td>
+       <strong>ch04-exa-exp</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-exa-exp"><code class="xref">ch04-exa-exp</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-exa-hilbert"><td></td><td>
+       <strong>ch04-exa-hilbert</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-exa-hilbert"><code class="xref">ch04-exa-hilbert</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-exa-polynomial"><td></td><td>
+       <strong>ch04-exa-polynomial</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-exa-polynomial"><code class="xref">ch04-exa-polynomial</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-exa-row-scaling"><td></td><td>
+       <strong>ch04-exa-row-scaling</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-exa-row-scaling"><code class="xref">ch04-exa-row-scaling</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-exa-scalar"><td></td><td>
+       <strong>ch04-exa-scalar</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-exa-scalar"><code class="xref">ch04-exa-scalar</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-exa-two-by-two"><td></td><td>
+       <strong>ch04-exa-two-by-two</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-exa-two-by-two"><code class="xref">ch04-exa-two-by-two</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-lem-gamma"><td></td><td>
+       <strong>ch04-lem-gamma</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-lem-gamma"><code class="xref">ch04-lem-gamma</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-lem-neumann"><td></td><td>
+       <strong>ch04-lem-neumann</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-lem-neumann"><code class="xref">ch04-lem-neumann</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-prop-kappa"><td></td><td>
+       <strong>ch04-prop-kappa</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-prop-kappa"><code class="xref">ch04-prop-kappa</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-prop-skeel"><td></td><td>
+       <strong>ch04-prop-skeel</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-prop-skeel"><code class="xref">ch04-prop-skeel</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-rem-charpoly"><td></td><td>
+       <strong>ch04-rem-charpoly</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-rem-charpoly"><code class="xref">ch04-rem-charpoly</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-rem-wilkinson"><td></td><td>
+       <strong>ch04-rem-wilkinson</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-rem-wilkinson"><code class="xref">ch04-rem-wilkinson</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-thm-accuracy"><td></td><td>
+       <strong>ch04-thm-accuracy</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-thm-accuracy"><code class="xref">ch04-thm-accuracy</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-thm-componentwise"><td></td><td>
+       <strong>ch04-thm-componentwise</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-thm-componentwise"><code class="xref">ch04-thm-componentwise</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-thm-distance"><td></td><td>
+       <strong>ch04-thm-distance</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-thm-distance"><code class="xref">ch04-thm-distance</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-thm-inner-product"><td></td><td>
+       <strong>ch04-thm-inner-product</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-thm-inner-product"><code class="xref">ch04-thm-inner-product</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-thm-jacobian"><td></td><td>
+       <strong>ch04-thm-jacobian</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-thm-jacobian"><code class="xref">ch04-thm-jacobian</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-thm-oettli-prager"><td></td><td>
+       <strong>ch04-thm-oettli-prager</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-thm-oettli-prager"><code class="xref">ch04-thm-oettli-prager</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-thm-perturbation"><td></td><td>
+       <strong>ch04-thm-perturbation</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-thm-perturbation"><code class="xref">ch04-thm-perturbation</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch04-thm-rigal-gaches"><td></td><td>
+       <strong>ch04-thm-rigal-gaches</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch04-conditioning-stability/notes.html#ch04-thm-rigal-gaches"><code class="xref">ch04-thm-rigal-gaches</code></a> <em>(ch04-conditioning-stability/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-alg-back-sub"><td></td><td>
+       <strong>ch05-alg-back-sub</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-alg-back-sub"><code class="xref">ch05-alg-back-sub</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-alg-blocked"><td></td><td>
+       <strong>ch05-alg-blocked</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-alg-blocked"><code class="xref">ch05-alg-blocked</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-alg-gepp"><td></td><td>
+       <strong>ch05-alg-gepp</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-alg-gepp"><code class="xref">ch05-alg-gepp</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-alg-lu"><td></td><td>
+       <strong>ch05-alg-lu</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-alg-lu"><code class="xref">ch05-alg-lu</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-cor-normwise"><td></td><td>
+       <strong>ch05-cor-normwise</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-cor-normwise"><code class="xref">ch05-cor-normwise</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>corollary</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-def-gauss"><td></td><td>
+       <strong>ch05-def-gauss</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-def-gauss"><code class="xref">ch05-def-gauss</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-def-growth"><td></td><td>
+       <strong>ch05-def-growth</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-def-growth"><code class="xref">ch05-def-growth</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-exa-gepp3"><td></td><td>
+       <strong>ch05-exa-gepp3</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-exa-gepp3"><code class="xref">ch05-exa-gepp3</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-exa-lu3"><td></td><td>
+       <strong>ch05-exa-lu3</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-exa-lu3"><code class="xref">ch05-exa-lu3</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-exa-small-pivot"><td></td><td>
+       <strong>ch05-exa-small-pivot</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-exa-small-pivot"><code class="xref">ch05-exa-small-pivot</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-exa-triangular"><td></td><td>
+       <strong>ch05-exa-triangular</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-exa-triangular"><code class="xref">ch05-exa-triangular</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-exa-wilkinson"><td></td><td>
+       <strong>ch05-exa-wilkinson</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-exa-wilkinson"><code class="xref">ch05-exa-wilkinson</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-lem-gauss"><td></td><td>
+       <strong>ch05-lem-gauss</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-lem-gauss"><code class="xref">ch05-lem-gauss</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-prop-lu-cost"><td></td><td>
+       <strong>ch05-prop-lu-cost</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-prop-lu-cost"><code class="xref">ch05-prop-lu-cost</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-rem-rook"><td></td><td>
+       <strong>ch05-rem-rook</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-rem-rook"><code class="xref">ch05-rem-rook</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-thm-complete"><td></td><td>
+       <strong>ch05-thm-complete</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-thm-complete"><code class="xref">ch05-thm-complete</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-thm-gepp"><td></td><td>
+       <strong>ch05-thm-gepp</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-thm-gepp"><code class="xref">ch05-thm-gepp</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-thm-growth-bound"><td></td><td>
+       <strong>ch05-thm-growth-bound</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-thm-growth-bound"><code class="xref">ch05-thm-growth-bound</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-thm-lu-backward"><td></td><td>
+       <strong>ch05-thm-lu-backward</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-thm-lu-backward"><code class="xref">ch05-thm-lu-backward</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-thm-lu-exists"><td></td><td>
+       <strong>ch05-thm-lu-exists</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-thm-lu-exists"><code class="xref">ch05-thm-lu-exists</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-thm-solve-backward"><td></td><td>
+       <strong>ch05-thm-solve-backward</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-thm-solve-backward"><code class="xref">ch05-thm-solve-backward</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch05-thm-triangular"><td></td><td>
+       <strong>ch05-thm-triangular</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch05-lu/notes.html#ch05-thm-triangular"><code class="xref">ch05-thm-triangular</code></a> <em>(ch05-lu/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-alg-bunch-kaufman"><td></td><td>
+       <strong>ch06-alg-bunch-kaufman</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-alg-bunch-kaufman"><code class="xref">ch06-alg-bunch-kaufman</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-alg-cholesky"><td></td><td>
+       <strong>ch06-alg-cholesky</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-alg-cholesky"><code class="xref">ch06-alg-cholesky</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-alg-hager"><td></td><td>
+       <strong>ch06-alg-hager</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-alg-hager"><code class="xref">ch06-alg-hager</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-alg-refinement"><td></td><td>
+       <strong>ch06-alg-refinement</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-alg-refinement"><code class="xref">ch06-alg-refinement</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-cor-normwise"><td></td><td>
+       <strong>ch06-cor-normwise</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-cor-normwise"><code class="xref">ch06-cor-normwise</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>corollary</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-def-spd"><td></td><td>
+       <strong>ch06-def-spd</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-def-spd"><code class="xref">ch06-def-spd</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-exa-cholesky-3x3"><td></td><td>
+       <strong>ch06-exa-cholesky-3x3</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-exa-cholesky-3x3"><code class="xref">ch06-exa-cholesky-3x3</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-exa-gp-2x2"><td></td><td>
+       <strong>ch06-exa-gp-2x2</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-exa-gp-2x2"><code class="xref">ch06-exa-gp-2x2</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-exa-hager"><td></td><td>
+       <strong>ch06-exa-hager</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-exa-hager"><code class="xref">ch06-exa-hager</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-exa-hilbert"><td></td><td>
+       <strong>ch06-exa-hilbert</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-exa-hilbert"><code class="xref">ch06-exa-hilbert</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-exa-indefinite"><td></td><td>
+       <strong>ch06-exa-indefinite</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-exa-indefinite"><code class="xref">ch06-exa-indefinite</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-exa-spd-families"><td></td><td>
+       <strong>ch06-exa-spd-families</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-exa-spd-families"><code class="xref">ch06-exa-spd-families</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-lem-hager"><td></td><td>
+       <strong>ch06-lem-hager</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-lem-hager"><code class="xref">ch06-lem-hager</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-lem-schur"><td></td><td>
+       <strong>ch06-lem-schur</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-lem-schur"><code class="xref">ch06-lem-schur</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-prop-cholesky-cost"><td></td><td>
+       <strong>ch06-prop-cholesky-cost</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-prop-cholesky-cost"><code class="xref">ch06-prop-cholesky-cost</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-prop-entry-bound"><td></td><td>
+       <strong>ch06-prop-entry-bound</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-prop-entry-bound"><code class="xref">ch06-prop-entry-bound</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-prop-gaussian"><td></td><td>
+       <strong>ch06-prop-gaussian</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-prop-gaussian"><code class="xref">ch06-prop-gaussian</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-prop-jitter"><td></td><td>
+       <strong>ch06-prop-jitter</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-prop-jitter"><code class="xref">ch06-prop-jitter</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-prop-spd-properties"><td></td><td>
+       <strong>ch06-prop-spd-properties</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-prop-spd-properties"><code class="xref">ch06-prop-spd-properties</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-rem-inertia"><td></td><td>
+       <strong>ch06-rem-inertia</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-rem-inertia"><code class="xref">ch06-rem-inertia</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-thm-backward-error"><td></td><td>
+       <strong>ch06-thm-backward-error</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-thm-backward-error"><code class="xref">ch06-thm-backward-error</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-thm-cholesky"><td></td><td>
+       <strong>ch06-thm-cholesky</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-thm-cholesky"><code class="xref">ch06-thm-cholesky</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-thm-ldlt"><td></td><td>
+       <strong>ch06-thm-ldlt</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-thm-ldlt"><code class="xref">ch06-thm-ldlt</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-thm-refinement"><td></td><td>
+       <strong>ch06-thm-refinement</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-thm-refinement"><code class="xref">ch06-thm-refinement</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-thm-solve-backward"><td></td><td>
+       <strong>ch06-thm-solve-backward</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-thm-solve-backward"><code class="xref">ch06-thm-solve-backward</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-thm-spd-characterization"><td></td><td>
+       <strong>ch06-thm-spd-characterization</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-thm-spd-characterization"><code class="xref">ch06-thm-spd-characterization</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch06-thm-test-pd"><td></td><td>
+       <strong>ch06-thm-test-pd</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch06-cholesky/notes.html#ch06-thm-test-pd"><code class="xref">ch06-thm-test-pd</code></a> <em>(ch06-cholesky/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-alg-apply-q"><td></td><td>
+       <strong>ch07-alg-apply-q</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-alg-apply-q"><code class="xref">ch07-alg-apply-q</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-alg-cgs"><td></td><td>
+       <strong>ch07-alg-cgs</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-alg-cgs"><code class="xref">ch07-alg-cgs</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-alg-cgs2"><td></td><td>
+       <strong>ch07-alg-cgs2</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-alg-cgs2"><code class="xref">ch07-alg-cgs2</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-alg-givens-qr"><td></td><td>
+       <strong>ch07-alg-givens-qr</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-alg-givens-qr"><code class="xref">ch07-alg-givens-qr</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-alg-householder-qr"><td></td><td>
+       <strong>ch07-alg-householder-qr</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-alg-householder-qr"><code class="xref">ch07-alg-householder-qr</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-alg-mgs"><td></td><td>
+       <strong>ch07-alg-mgs</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-alg-mgs"><code class="xref">ch07-alg-mgs</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-cor-cholesky"><td></td><td>
+       <strong>ch07-cor-cholesky</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-cor-cholesky"><code class="xref">ch07-cor-cholesky</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>corollary</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-def-projector"><td></td><td>
+       <strong>ch07-def-projector</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-def-projector"><code class="xref">ch07-def-projector</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-def-qr"><td></td><td>
+       <strong>ch07-def-qr</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-def-qr"><code class="xref">ch07-def-qr</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-exa-givens"><td></td><td>
+       <strong>ch07-exa-givens</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-exa-givens"><code class="xref">ch07-exa-givens</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-exa-gs"><td></td><td>
+       <strong>ch07-exa-gs</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-exa-gs"><code class="xref">ch07-exa-gs</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-exa-householder"><td></td><td>
+       <strong>ch07-exa-householder</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-exa-householder"><code class="xref">ch07-exa-householder</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-exa-lauchli"><td></td><td>
+       <strong>ch07-exa-lauchli</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-exa-lauchli"><code class="xref">ch07-exa-lauchli</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-exa-projector"><td></td><td>
+       <strong>ch07-exa-projector</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-exa-projector"><code class="xref">ch07-exa-projector</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-prop-gs-cost"><td></td><td>
+       <strong>ch07-prop-gs-cost</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-prop-gs-cost"><code class="xref">ch07-prop-gs-cost</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-prop-gs-residual"><td></td><td>
+       <strong>ch07-prop-gs-residual</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-prop-gs-residual"><code class="xref">ch07-prop-gs-residual</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-prop-householder-cost"><td></td><td>
+       <strong>ch07-prop-householder-cost</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-prop-householder-cost"><code class="xref">ch07-prop-householder-cost</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-prop-oblique"><td></td><td>
+       <strong>ch07-prop-oblique</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-prop-oblique"><code class="xref">ch07-prop-oblique</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-prop-projector-basis"><td></td><td>
+       <strong>ch07-prop-projector-basis</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-prop-projector-basis"><code class="xref">ch07-prop-projector-basis</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-rem-tall-skinny"><td></td><td>
+       <strong>ch07-rem-tall-skinny</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-rem-tall-skinny"><code class="xref">ch07-rem-tall-skinny</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-thm-gs-orthogonality"><td></td><td>
+       <strong>ch07-thm-gs-orthogonality</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-thm-gs-orthogonality"><code class="xref">ch07-thm-gs-orthogonality</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-thm-householder-stability"><td></td><td>
+       <strong>ch07-thm-householder-stability</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-thm-householder-stability"><code class="xref">ch07-thm-householder-stability</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-thm-orthogonal-projector"><td></td><td>
+       <strong>ch07-thm-orthogonal-projector</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-thm-orthogonal-projector"><code class="xref">ch07-thm-orthogonal-projector</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-thm-projector"><td></td><td>
+       <strong>ch07-thm-projector</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-thm-projector"><code class="xref">ch07-thm-projector</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-thm-qqt"><td></td><td>
+       <strong>ch07-thm-qqt</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-thm-qqt"><code class="xref">ch07-thm-qqt</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-thm-qr-exists"><td></td><td>
+       <strong>ch07-thm-qr-exists</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-thm-qr-exists"><code class="xref">ch07-thm-qr-exists</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-thm-qr-unique"><td></td><td>
+       <strong>ch07-thm-qr-unique</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-thm-qr-unique"><code class="xref">ch07-thm-qr-unique</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch07-thm-qrcp"><td></td><td>
+       <strong>ch07-thm-qrcp</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch07-qr/notes.html#ch07-thm-qrcp"><code class="xref">ch07-thm-qrcp</code></a> <em>(ch07-qr/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-alg-householder"><td></td><td>
+       <strong>ch08-alg-householder</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-alg-householder"><code class="xref">ch08-alg-householder</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-alg-normal"><td></td><td>
+       <strong>ch08-alg-normal</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-alg-normal"><code class="xref">ch08-alg-normal</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-alg-tsvd"><td></td><td>
+       <strong>ch08-alg-tsvd</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-alg-tsvd"><code class="xref">ch08-alg-tsvd</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-def-ls"><td></td><td>
+       <strong>ch08-def-ls</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-def-ls"><code class="xref">ch08-def-ls</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-def-numerical-rank"><td></td><td>
+       <strong>ch08-def-numerical-rank</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-def-numerical-rank"><code class="xref">ch08-def-numerical-rank</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-exa-line"><td></td><td>
+       <strong>ch08-exa-line</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-exa-line"><code class="xref">ch08-exa-line</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-exa-line-qr"><td></td><td>
+       <strong>ch08-exa-line-qr</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-exa-line-qr"><code class="xref">ch08-exa-line-qr</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-exa-rank-one"><td></td><td>
+       <strong>ch08-exa-rank-one</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-exa-rank-one"><code class="xref">ch08-exa-rank-one</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-prop-discontinuity"><td></td><td>
+       <strong>ch08-prop-discontinuity</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-prop-discontinuity"><code class="xref">ch08-prop-discontinuity</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-rem-scaling"><td></td><td>
+       <strong>ch08-rem-scaling</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-rem-scaling"><code class="xref">ch08-rem-scaling</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>remark</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-thm-conditioning"><td></td><td>
+       <strong>ch08-thm-conditioning</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-thm-conditioning"><code class="xref">ch08-thm-conditioning</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-thm-existence"><td></td><td>
+       <strong>ch08-thm-existence</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-thm-existence"><code class="xref">ch08-thm-existence</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-thm-householder-stable"><td></td><td>
+       <strong>ch08-thm-householder-stable</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-thm-householder-stable"><code class="xref">ch08-thm-householder-stable</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-thm-min-norm"><td></td><td>
+       <strong>ch08-thm-min-norm</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-thm-min-norm"><code class="xref">ch08-thm-min-norm</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-thm-normal-equations"><td></td><td>
+       <strong>ch08-thm-normal-equations</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-thm-normal-equations"><code class="xref">ch08-thm-normal-equations</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch08-thm-tikhonov"><td></td><td>
+       <strong>ch08-thm-tikhonov</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch08-least-squares/notes.html#ch08-thm-tikhonov"><code class="xref">ch08-thm-tikhonov</code></a> <em>(ch08-least-squares/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-alg-inverse"><td></td><td>
+       <strong>ch09-alg-inverse</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-alg-inverse"><code class="xref">ch09-alg-inverse</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-alg-power"><td></td><td>
+       <strong>ch09-alg-power</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-alg-power"><code class="xref">ch09-alg-power</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-alg-rqi"><td></td><td>
+       <strong>ch09-alg-rqi</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-alg-rqi"><code class="xref">ch09-alg-rqi</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-alg-subspace"><td></td><td>
+       <strong>ch09-alg-subspace</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-alg-subspace"><code class="xref">ch09-alg-subspace</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-def-eigen"><td></td><td>
+       <strong>ch09-def-eigen</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-def-eigen"><code class="xref">ch09-def-eigen</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-def-multiplicity"><td></td><td>
+       <strong>ch09-def-multiplicity</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-def-multiplicity"><code class="xref">ch09-def-multiplicity</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-def-normal"><td></td><td>
+       <strong>ch09-def-normal</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-def-normal"><code class="xref">ch09-def-normal</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-def-pseudospectrum"><td></td><td>
+       <strong>ch09-def-pseudospectrum</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-def-pseudospectrum"><code class="xref">ch09-def-pseudospectrum</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-def-rayleigh"><td></td><td>
+       <strong>ch09-def-rayleigh</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-def-rayleigh"><code class="xref">ch09-def-rayleigh</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-condition"><td></td><td>
+       <strong>ch09-exa-condition</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-condition"><code class="xref">ch09-exa-condition</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-eigvec-gap"><td></td><td>
+       <strong>ch09-exa-eigvec-gap</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-eigvec-gap"><code class="xref">ch09-exa-eigvec-gap</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-gershgorin"><td></td><td>
+       <strong>ch09-exa-gershgorin</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-gershgorin"><code class="xref">ch09-exa-gershgorin</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-inverse"><td></td><td>
+       <strong>ch09-exa-inverse</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-inverse"><code class="xref">ch09-exa-inverse</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-jordan-block"><td></td><td>
+       <strong>ch09-exa-jordan-block</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-jordan-block"><code class="xref">ch09-exa-jordan-block</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-jordan-perturbation"><td></td><td>
+       <strong>ch09-exa-jordan-perturbation</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-jordan-perturbation"><code class="xref">ch09-exa-jordan-perturbation</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-power"><td></td><td>
+       <strong>ch09-exa-power</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-power"><code class="xref">ch09-exa-power</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-real-schur"><td></td><td>
+       <strong>ch09-exa-real-schur</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-real-schur"><code class="xref">ch09-exa-real-schur</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-rq"><td></td><td>
+       <strong>ch09-exa-rq</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-rq"><code class="xref">ch09-exa-rq</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-rqi"><td></td><td>
+       <strong>ch09-exa-rqi</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-rqi"><code class="xref">ch09-exa-rqi</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-exa-wilkinson"><td></td><td>
+       <strong>ch09-exa-wilkinson</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-exa-wilkinson"><code class="xref">ch09-exa-wilkinson</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-lem-simple"><td></td><td>
+       <strong>ch09-lem-simple</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-lem-simple"><code class="xref">ch09-lem-simple</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-prop-backward-error"><td></td><td>
+       <strong>ch09-prop-backward-error</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-prop-backward-error"><code class="xref">ch09-prop-backward-error</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-prop-companion"><td></td><td>
+       <strong>ch09-prop-companion</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-prop-companion"><code class="xref">ch09-prop-companion</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-prop-inverse-residual"><td></td><td>
+       <strong>ch09-prop-inverse-residual</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-prop-inverse-residual"><code class="xref">ch09-prop-inverse-residual</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-prop-multiplicity"><td></td><td>
+       <strong>ch09-prop-multiplicity</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-prop-multiplicity"><code class="xref">ch09-prop-multiplicity</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-prop-pseudospectrum"><td></td><td>
+       <strong>ch09-prop-pseudospectrum</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-prop-pseudospectrum"><code class="xref">ch09-prop-pseudospectrum</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-prop-rq"><td></td><td>
+       <strong>ch09-prop-rq</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-prop-rq"><code class="xref">ch09-prop-rq</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-abel-ruffini"><td></td><td>
+       <strong>ch09-thm-abel-ruffini</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-abel-ruffini"><code class="xref">ch09-thm-abel-ruffini</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-bauer-fike"><td></td><td>
+       <strong>ch09-thm-bauer-fike</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-bauer-fike"><code class="xref">ch09-thm-bauer-fike</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-courant-fischer"><td></td><td>
+       <strong>ch09-thm-courant-fischer</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-courant-fischer"><code class="xref">ch09-thm-courant-fischer</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-davis-kahan"><td></td><td>
+       <strong>ch09-thm-davis-kahan</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-davis-kahan"><code class="xref">ch09-thm-davis-kahan</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-diagonalizable"><td></td><td>
+       <strong>ch09-thm-diagonalizable</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-diagonalizable"><code class="xref">ch09-thm-diagonalizable</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-eig-condition"><td></td><td>
+       <strong>ch09-thm-eig-condition</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-eig-condition"><code class="xref">ch09-thm-eig-condition</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-gershgorin"><td></td><td>
+       <strong>ch09-thm-gershgorin</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-gershgorin"><code class="xref">ch09-thm-gershgorin</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-inverse"><td></td><td>
+       <strong>ch09-thm-inverse</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-inverse"><code class="xref">ch09-thm-inverse</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-normal"><td></td><td>
+       <strong>ch09-thm-normal</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-normal"><code class="xref">ch09-thm-normal</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-power"><td></td><td>
+       <strong>ch09-thm-power</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-power"><code class="xref">ch09-thm-power</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-real-schur"><td></td><td>
+       <strong>ch09-thm-real-schur</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-real-schur"><code class="xref">ch09-thm-real-schur</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-residual-bound"><td></td><td>
+       <strong>ch09-thm-residual-bound</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-residual-bound"><code class="xref">ch09-thm-residual-bound</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-rq-quadratic"><td></td><td>
+       <strong>ch09-thm-rq-quadratic</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-rq-quadratic"><code class="xref">ch09-thm-rq-quadratic</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-rqi"><td></td><td>
+       <strong>ch09-thm-rqi</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-rqi"><code class="xref">ch09-thm-rqi</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-schur"><td></td><td>
+       <strong>ch09-thm-schur</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-schur"><code class="xref">ch09-thm-schur</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-sin-theta-vector"><td></td><td>
+       <strong>ch09-thm-sin-theta-vector</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-sin-theta-vector"><code class="xref">ch09-thm-sin-theta-vector</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-spectral"><td></td><td>
+       <strong>ch09-thm-spectral</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-spectral"><code class="xref">ch09-thm-spectral</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-subspace"><td></td><td>
+       <strong>ch09-thm-subspace</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-subspace"><code class="xref">ch09-thm-subspace</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch09-thm-weyl"><td></td><td>
+       <strong>ch09-thm-weyl</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch09-eigenvalues/notes.html#ch09-thm-weyl"><code class="xref">ch09-thm-weyl</code></a> <em>(ch09-eigenvalues/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-alg-bidiag"><td></td><td>
+       <strong>ch10-alg-bidiag</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-alg-bidiag"><code class="xref">ch10-alg-bidiag</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-alg-francis"><td></td><td>
+       <strong>ch10-alg-francis</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-alg-francis"><code class="xref">ch10-alg-francis</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-alg-hessenberg"><td></td><td>
+       <strong>ch10-alg-hessenberg</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-alg-hessenberg"><code class="xref">ch10-alg-hessenberg</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-alg-hessenberg-qr-step"><td></td><td>
+       <strong>ch10-alg-hessenberg-qr-step</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-alg-hessenberg-qr-step"><code class="xref">ch10-alg-hessenberg-qr-step</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-alg-symmetric-qr"><td></td><td>
+       <strong>ch10-alg-symmetric-qr</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-alg-symmetric-qr"><code class="xref">ch10-alg-symmetric-qr</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-def-hessenberg"><td></td><td>
+       <strong>ch10-def-hessenberg</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-def-hessenberg"><code class="xref">ch10-def-hessenberg</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-def-qr-iteration"><td></td><td>
+       <strong>ch10-def-qr-iteration</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-def-qr-iteration"><code class="xref">ch10-def-qr-iteration</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-def-wilkinson"><td></td><td>
+       <strong>ch10-def-wilkinson</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-def-wilkinson"><code class="xref">ch10-def-wilkinson</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-exa-cyclic"><td></td><td>
+       <strong>ch10-exa-cyclic</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-exa-cyclic"><code class="xref">ch10-exa-cyclic</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-exa-lauchli"><td></td><td>
+       <strong>ch10-exa-lauchli</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-exa-lauchli"><code class="xref">ch10-exa-lauchli</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-exa-rayleigh-failure"><td></td><td>
+       <strong>ch10-exa-rayleigh-failure</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-exa-rayleigh-failure"><code class="xref">ch10-exa-rayleigh-failure</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-exa-tridiag"><td></td><td>
+       <strong>ch10-exa-tridiag</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-exa-tridiag"><code class="xref">ch10-exa-tridiag</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-exa-two-by-two"><td></td><td>
+       <strong>ch10-exa-two-by-two</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-exa-two-by-two"><code class="xref">ch10-exa-two-by-two</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-prop-deflation"><td></td><td>
+       <strong>ch10-prop-deflation</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-prop-deflation"><code class="xref">ch10-prop-deflation</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-prop-double-shift"><td></td><td>
+       <strong>ch10-prop-double-shift</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-prop-double-shift"><code class="xref">ch10-prop-double-shift</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-prop-hessenberg-cost"><td></td><td>
+       <strong>ch10-prop-hessenberg-cost</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-prop-hessenberg-cost"><code class="xref">ch10-prop-hessenberg-cost</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-prop-real-shift"><td></td><td>
+       <strong>ch10-prop-real-shift</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-prop-real-shift"><code class="xref">ch10-prop-real-shift</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-thm-hessenberg"><td></td><td>
+       <strong>ch10-thm-hessenberg</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-thm-hessenberg"><code class="xref">ch10-thm-hessenberg</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-thm-hessenberg-preserved"><td></td><td>
+       <strong>ch10-thm-hessenberg-preserved</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-thm-hessenberg-preserved"><code class="xref">ch10-thm-hessenberg-preserved</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-thm-hessenberg-stability"><td></td><td>
+       <strong>ch10-thm-hessenberg-stability</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-thm-hessenberg-stability"><code class="xref">ch10-thm-hessenberg-stability</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-thm-implicit-q"><td></td><td>
+       <strong>ch10-thm-implicit-q</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-thm-implicit-q"><code class="xref">ch10-thm-implicit-q</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-thm-powers"><td></td><td>
+       <strong>ch10-thm-powers</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-thm-powers"><code class="xref">ch10-thm-powers</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-thm-unshifted-convergence"><td></td><td>
+       <strong>ch10-thm-unshifted-convergence</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-thm-unshifted-convergence"><code class="xref">ch10-thm-unshifted-convergence</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch10-thm-wilkinson"><td></td><td>
+       <strong>ch10-thm-wilkinson</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch10-qr-algorithm/notes.html#ch10-thm-wilkinson"><code class="xref">ch10-thm-wilkinson</code></a> <em>(ch10-qr-algorithm/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-alg-arnoldi"><td></td><td>
+       <strong>ch11-alg-arnoldi</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-alg-arnoldi"><code class="xref">ch11-alg-arnoldi</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-alg-cg"><td></td><td>
+       <strong>ch11-alg-cg</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-alg-cg"><code class="xref">ch11-alg-cg</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-alg-csr-matvec"><td></td><td>
+       <strong>ch11-alg-csr-matvec</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-alg-csr-matvec"><code class="xref">ch11-alg-csr-matvec</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-alg-gmres"><td></td><td>
+       <strong>ch11-alg-gmres</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-alg-gmres"><code class="xref">ch11-alg-gmres</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-alg-lanczos"><td></td><td>
+       <strong>ch11-alg-lanczos</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-alg-lanczos"><code class="xref">ch11-alg-lanczos</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-alg-pcg"><td></td><td>
+       <strong>ch11-alg-pcg</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-alg-pcg"><code class="xref">ch11-alg-pcg</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-cor-outliers"><td></td><td>
+       <strong>ch11-cor-outliers</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-cor-outliers"><code class="xref">ch11-cor-outliers</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>corollary</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-def-krylov"><td></td><td>
+       <strong>ch11-def-krylov</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-def-krylov"><code class="xref">ch11-def-krylov</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-exa-arnoldi"><td></td><td>
+       <strong>ch11-exa-arnoldi</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-exa-arnoldi"><code class="xref">ch11-exa-arnoldi</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-exa-arrow"><td></td><td>
+       <strong>ch11-exa-arrow</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-exa-arrow"><code class="xref">ch11-exa-arrow</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-exa-bcsstk14"><td></td><td>
+       <strong>ch11-exa-bcsstk14</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-exa-bcsstk14"><code class="xref">ch11-exa-bcsstk14</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-exa-cg-count"><td></td><td>
+       <strong>ch11-exa-cg-count</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-exa-cg-count"><code class="xref">ch11-exa-cg-count</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-exa-formats"><td></td><td>
+       <strong>ch11-exa-formats</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-exa-formats"><code class="xref">ch11-exa-formats</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-exa-jacobi"><td></td><td>
+       <strong>ch11-exa-jacobi</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-exa-jacobi"><code class="xref">ch11-exa-jacobi</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-exa-laplacian"><td></td><td>
+       <strong>ch11-exa-laplacian</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-exa-laplacian"><code class="xref">ch11-exa-laplacian</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-exa-shift"><td></td><td>
+       <strong>ch11-exa-shift</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-exa-shift"><code class="xref">ch11-exa-shift</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-lem-chebyshev"><td></td><td>
+       <strong>ch11-lem-chebyshev</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-lem-chebyshev"><code class="xref">ch11-lem-chebyshev</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-prop-forward-error"><td></td><td>
+       <strong>ch11-prop-forward-error</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-prop-forward-error"><code class="xref">ch11-prop-forward-error</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-prop-pcg"><td></td><td>
+       <strong>ch11-prop-pcg</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-prop-pcg"><code class="xref">ch11-prop-pcg</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-prop-ritz"><td></td><td>
+       <strong>ch11-prop-ritz</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-prop-ritz"><code class="xref">ch11-prop-ritz</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-thm-arnoldi"><td></td><td>
+       <strong>ch11-thm-arnoldi</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-thm-arnoldi"><code class="xref">ch11-thm-arnoldi</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-thm-backward-error"><td></td><td>
+       <strong>ch11-thm-backward-error</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-thm-backward-error"><code class="xref">ch11-thm-backward-error</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-thm-cg-bound"><td></td><td>
+       <strong>ch11-thm-cg-bound</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-thm-cg-bound"><code class="xref">ch11-thm-cg-bound</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-thm-cg-poly"><td></td><td>
+       <strong>ch11-thm-cg-poly</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-thm-cg-poly"><code class="xref">ch11-thm-cg-poly</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-thm-cg-properties"><td></td><td>
+       <strong>ch11-thm-cg-properties</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-thm-cg-properties"><code class="xref">ch11-thm-cg-properties</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-thm-gmres-bound"><td></td><td>
+       <strong>ch11-thm-gmres-bound</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-thm-gmres-bound"><code class="xref">ch11-thm-gmres-bound</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-thm-laplacian"><td></td><td>
+       <strong>ch11-thm-laplacian</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-thm-laplacian"><code class="xref">ch11-thm-laplacian</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-thm-minpoly"><td></td><td>
+       <strong>ch11-thm-minpoly</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-thm-minpoly"><code class="xref">ch11-thm-minpoly</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch11-thm-stationary"><td></td><td>
+       <strong>ch11-thm-stationary</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch11-krylov/notes.html#ch11-thm-stationary"><code class="xref">ch11-thm-stationary</code></a> <em>(ch11-krylov/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-alg-adaptive"><td></td><td>
+       <strong>ch12-alg-adaptive</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-alg-adaptive"><code class="xref">ch12-alg-adaptive</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-alg-range-finder"><td></td><td>
+       <strong>ch12-alg-range-finder</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-alg-range-finder"><code class="xref">ch12-alg-range-finder</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-alg-rsvd"><td></td><td>
+       <strong>ch12-alg-rsvd</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-alg-rsvd"><code class="xref">ch12-alg-rsvd</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-alg-sketch-precondition"><td></td><td>
+       <strong>ch12-alg-sketch-precondition</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-alg-sketch-precondition"><code class="xref">ch12-alg-sketch-precondition</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-alg-subspace-iteration"><td></td><td>
+       <strong>ch12-alg-subspace-iteration</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-alg-subspace-iteration"><code class="xref">ch12-alg-subspace-iteration</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>algorithm</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-cor-power"><td></td><td>
+       <strong>ch12-cor-power</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-cor-power"><code class="xref">ch12-cor-power</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>corollary</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-def-gaussian"><td></td><td>
+       <strong>ch12-def-gaussian</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-def-gaussian"><code class="xref">ch12-def-gaussian</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-def-subspace-embedding"><td></td><td>
+       <strong>ch12-def-subspace-embedding</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-def-subspace-embedding"><code class="xref">ch12-def-subspace-embedding</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>definition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-exa-jl"><td></td><td>
+       <strong>ch12-exa-jl</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-exa-jl"><code class="xref">ch12-exa-jl</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-exa-range-finder"><td></td><td>
+       <strong>ch12-exa-range-finder</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-exa-range-finder"><code class="xref">ch12-exa-range-finder</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-exa-sketch-solve"><td></td><td>
+       <strong>ch12-exa-sketch-solve</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-exa-sketch-solve"><code class="xref">ch12-exa-sketch-solve</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>example</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-lem-concentration"><td></td><td>
+       <strong>ch12-lem-concentration</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-lem-concentration"><code class="xref">ch12-lem-concentration</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-lem-rotation"><td></td><td>
+       <strong>ch12-lem-rotation</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-lem-rotation"><code class="xref">ch12-lem-rotation</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>lemma</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-prop-embedding-sv"><td></td><td>
+       <strong>ch12-prop-embedding-sv</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-prop-embedding-sv"><code class="xref">ch12-prop-embedding-sv</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-prop-error-estimator"><td></td><td>
+       <strong>ch12-prop-error-estimator</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-prop-error-estimator"><code class="xref">ch12-prop-error-estimator</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-prop-exact-rank"><td></td><td>
+       <strong>ch12-prop-exact-rank</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-prop-exact-rank"><code class="xref">ch12-prop-exact-rank</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-prop-gaussian-precondition"><td></td><td>
+       <strong>ch12-prop-gaussian-precondition</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-prop-gaussian-precondition"><code class="xref">ch12-prop-gaussian-precondition</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-prop-gaussian-sketch-solve"><td></td><td>
+       <strong>ch12-prop-gaussian-sketch-solve</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-prop-gaussian-sketch-solve"><code class="xref">ch12-prop-gaussian-sketch-solve</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-prop-hutchinson"><td></td><td>
+       <strong>ch12-prop-hutchinson</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-prop-hutchinson"><code class="xref">ch12-prop-hutchinson</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-prop-rsvd-truncation"><td></td><td>
+       <strong>ch12-prop-rsvd-truncation</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-prop-rsvd-truncation"><code class="xref">ch12-prop-rsvd-truncation</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>proposition</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-thm-deterministic"><td></td><td>
+       <strong>ch12-thm-deterministic</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-thm-deterministic"><code class="xref">ch12-thm-deterministic</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-thm-eckart-young"><td></td><td>
+       <strong>ch12-thm-eckart-young</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-thm-eckart-young"><code class="xref">ch12-thm-eckart-young</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-thm-frobenius-bound"><td></td><td>
+       <strong>ch12-thm-frobenius-bound</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-thm-frobenius-bound"><code class="xref">ch12-thm-frobenius-bound</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-thm-jl"><td></td><td>
+       <strong>ch12-thm-jl</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-thm-jl"><code class="xref">ch12-thm-jl</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-thm-jl-gaussian"><td></td><td>
+       <strong>ch12-thm-jl-gaussian</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-thm-jl-gaussian"><code class="xref">ch12-thm-jl-gaussian</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-thm-precondition"><td></td><td>
+       <strong>ch12-thm-precondition</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-thm-precondition"><code class="xref">ch12-thm-precondition</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-thm-sketch-solve"><td></td><td>
+       <strong>ch12-thm-sketch-solve</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-thm-sketch-solve"><code class="xref">ch12-thm-sketch-solve</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-ch12-thm-spectral-bound"><td></td><td>
+       <strong>ch12-thm-spectral-bound</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="ch12-randomized/notes.html#ch12-thm-spectral-bound"><code class="xref">ch12-thm-spectral-bound</code></a> <em>(ch12-randomized/notes)</em></td><td>
+       <em>theorem</em></td></tr>
+   </table>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1096 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>2.12. Case study: image compression with the SVD &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch02-svd/case-study-image-compression';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. Floating-point arithmetic" href="../ch03-floating-point/notes.html" />
+    <link rel="prev" title="2.11. Lab 2: The singular value decomposition" href="lab.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="notes.html">2. The singular value decomposition</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/aalsammani/Scientific-Computations-I-Notebooks/main?urlpath=lab/tree/book/ch02-svd/case-study-image-compression.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/aalsammani/Scientific-Computations-I-Notebooks/blob/main/book/ch02-svd/case-study-image-compression.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch02-svd/case-study-image-compression.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch02-svd/case-study-image-compression.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Case study: image compression with the SVD</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data">2.12.1. The data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-svd-of-the-image">2.12.2. The SVD of the image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-fast-do-the-singular-values-decay">2.12.3. How fast do the singular values decay?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-k-approximations">2.12.4. Rank-<span class="math notranslate nohighlight">\(k\)</span> approximations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-from-the-actual-differences">2.12.5. Errors from the actual differences</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-this-good-compression-a-comparison-with-jpeg">2.12.6. Is this good compression? A comparison with JPEG</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-mistakes">2.12.7. Common mistakes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#your-turn">2.12.8. Your turn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">2.12.9. Key takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">2.12.10. Further reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="case-study-image-compression-with-the-svd">
+<h1><span class="section-number">2.12. </span>Case study: image compression with the SVD<a class="headerlink" href="#case-study-image-compression-with-the-svd" title="Link to this heading">#</a></h1>
+<p>A grayscale image is a matrix of gray levels, and the truncated SVD gives its
+best approximation of any prescribed rank (<a class="reference internal" href="notes.html#ch02-thm-eckart-young">Theorem 2.6</a>).
+Storing the factors <span class="math notranslate nohighlight">\(U_k\)</span>, <span class="math notranslate nohighlight">\(\sigma_1,\dots,\sigma_k\)</span>, <span class="math notranslate nohighlight">\(V_k\)</span> of a rank-<span class="math notranslate nohighlight">\(k\)</span>
+approximation of an <span class="math notranslate nohighlight">\(m\times n\)</span> image takes <span class="math notranslate nohighlight">\(k(m+n+1)\)</span> numbers instead of
+<span class="math notranslate nohighlight">\(mn\)</span>. This case study applies the idea to a real photograph, measures the
+errors honestly, and then asks whether this is a good way to compress images.
+(It is not, and understanding why is part of the lesson.)</p>
+<p><strong>Learning objectives.</strong> After working through this case study you should be
+able to</p>
+<ol class="arabic simple">
+<li><p>compute rank-<span class="math notranslate nohighlight">\(k\)</span> approximations of an image and their storage cost;</p></li>
+<li><p>measure the 2-norm and Frobenius errors from the actual difference
+<span class="math notranslate nohighlight">\(A-A_k\)</span> and confirm that they equal <span class="math notranslate nohighlight">\(\sigma_{k+1}\)</span> and
+<span class="math notranslate nohighlight">\((\sum_{i&gt;k}\sigma_i^2)^{1/2}\)</span>;</p></li>
+<li><p>relate the quality of low-rank approximation to the decay of the singular
+values;</p></li>
+<li><p>compare SVD compression with a standard image codec and explain the
+outcome.</p></li>
+</ol>
+<p>The theory is in <a class="reference internal" href="notes.html#ch02-sec-low-rank"><span class="std std-numref">Section 2.4</span></a> of the notes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>                     <span class="c1"># Pillow, installed as a dependency of Matplotlib</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>            <span class="c1"># not used for the data; kept for the exercises</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"figure.figsize"</span><span class="p">:</span> <span class="p">(</span><span class="mf">6.4</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">),</span> <span class="s2">"axes.grid"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"grid.alpha"</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">})</span>
+
+<span class="n">DATA_URL</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/aalsammani/Scientific-Computations-I-Notebooks/main/data/"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">data_file</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return a path to data/&lt;name&gt;, downloading it if it is not available locally."""</span>
+    <span class="n">local</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"../../data"</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="k">if</span> <span class="n">local</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">local</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">DATA_URL</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">target</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="the-data">
+<h2><span class="section-number">2.12.1. </span>The data<a class="headerlink" href="#the-data" title="Link to this heading">#</a></h2>
+<p>The image is the <span class="math notranslate nohighlight">\(512\times512\)</span> 8-bit grayscale photograph “ascent”
+distributed with SciPy as <code class="docutils literal notranslate"><span class="pre">scipy.datasets.ascent()</span></code> <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../back/bibliography.html#id87" title="Pauli Virtanen, Ralf Gommers, Travis E. Oliphant, and others. SciPy 1.0: fundamental algorithms for scientific computing in Python. Nature Methods, 17:261–272, 2020.">Virtanen <em>et al.</em>, 2020</a>]</span>.
+According to the SciPy documentation it is derived from a photograph on
+<a class="reference external" href="https://pixnio.com/people/accent-to-the-top">pixnio.com</a> that is listed as CC0 (public domain). The course repository
+stores it in <code class="docutils literal notranslate"><span class="pre">data/ascent.npz</span></code> under the key <code class="docutils literal notranslate"><span class="pre">image</span></code>: a <code class="docutils literal notranslate"><span class="pre">uint8</span></code> array of shape
+<span class="math notranslate nohighlight">\((512, 512)\)</span> whose entries are gray levels from 0 (black) to 255 (white).
+The file was produced from the checksum-verified SciPy file without changing
+any value (see <code class="docutils literal notranslate"><span class="pre">data/README.md</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">(</span><span class="s2">"ascent.npz"</span><span class="p">))[</span><span class="s2">"image"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="s2">"min"</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="s2">"max"</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">"mean </span><span class="si">{</span><span class="n">img</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span> <span class="ow">and</span> <span class="n">img</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>                     <span class="c1"># work in double precision</span>
+<span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"The original image (512 x 512, 8 bits per pixel)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(512, 512) uint8 min 0 max 255 mean 87.5
+</pre></div>
+</div>
+<img alt="../_images/b3f3fe1f53994c28a610588e14044c2bce733cafbc7f2f53789bf8813a41ecdc.png" src="../_images/b3f3fe1f53994c28a610588e14044c2bce733cafbc7f2f53789bf8813a41ecdc.png" />
+</div>
+</div>
+</section>
+<section id="the-svd-of-the-image">
+<h2><span class="section-number">2.12.2. </span>The SVD of the image<a class="headerlink" href="#the-svd-of-the-image" title="Link to this heading">#</a></h2>
+<p>The full SVD of a <span class="math notranslate nohighlight">\(512\times512\)</span> matrix takes a fraction of a second. We
+verify it with the backward-stability tolerance used in the lab.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">U</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">Vh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="p">(</span><span class="n">U</span> <span class="o">*</span> <span class="n">s</span><span class="p">)</span> <span class="o">@</span> <span class="n">Vh</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"||A - U Sigma V^T||_2 / ||A||_2 = </span><span class="si">{</span><span class="n">recon</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">recon</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"sigma_1 = </span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, sigma_2 = </span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, sigma_512 = </span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"kappa_2(A) = </span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">;  numerical rank (NumPy default tolerance) = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>||A - U Sigma V^T||_2 / ||A||_2 = 6.8e-15
+sigma_1 = 45559.5, sigma_2 = 11410.8, sigma_512 = 0.150
+kappa_2(A) = 3.03e+05;  numerical rank (NumPy default tolerance) = 512
+</pre></div>
+</div>
+</div>
+</div>
+<p>The image matrix has full numerical rank: there is no exact low-rank
+structure to find. The first singular value is much larger than the others
+because all entries are nonnegative with mean about 87; the rank-one term
+<span class="math notranslate nohighlight">\(\sigma_1u_1v_1^T\)</span> mostly captures the average brightness pattern.</p>
+</section>
+<section id="how-fast-do-the-singular-values-decay">
+<h2><span class="section-number">2.12.3. </span>How fast do the singular values decay?<a class="headerlink" href="#how-fast-do-the-singular-values-decay" title="Link to this heading">#</a></h2>
+<p>The error of the best rank-<span class="math notranslate nohighlight">\(k\)</span> approximation is determined entirely by the
+singular values that are discarded, so their decay is what matters. We also
+report the fraction of <span class="math notranslate nohighlight">\(\|A\|_F^2 = \sum_i\sigma_i^2\)</span> (often called the
+“energy”) captured by the first <span class="math notranslate nohighlight">\(k\)</span> terms.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">frac</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">):</span>
+    <span class="n">k_needed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">frac</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">frac</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">% of ||A||_F^2 captured by the first </span><span class="si">{</span><span class="n">k_needed</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2"> singular values"</span><span class="p">)</span>
+
+<span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="o">/</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"."</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"index $i$"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"$\sigma_i/\sigma_1$"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Singular values (semilog)"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="o">/</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"."</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"index $i$"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"$\sigma_i/\sigma_1$"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Singular values (log-log)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"sigma_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">/sigma_1 = </span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="n">idx</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 90.0% of ||A||_F^2 captured by the first   6 singular values
+ 99.0% of ||A||_F^2 captured by the first  69 singular values
+ 99.9% of ||A||_F^2 captured by the first 190 singular values
+</pre></div>
+</div>
+<img alt="../_images/e54a3d6ca58e5d35ac93854741fac9c29851fed3d2a75366903c28d4f5dd0789.png" src="../_images/e54a3d6ca58e5d35ac93854741fac9c29851fed3d2a75366903c28d4f5dd0789.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sigma_2/sigma_1 = 0.2505
+sigma_10/sigma_1 = 0.0825
+sigma_100/sigma_1 = 0.0113
+sigma_300/sigma_1 = 0.0018
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ninety percent of the “energy” sits in six terms, but that is mostly the
+average brightness. After the first few, the singular values decrease slowly
+and without any gap: <span class="math notranslate nohighlight">\(\sigma_{10}/\sigma_1\approx0.08\)</span>,
+<span class="math notranslate nohighlight">\(\sigma_{100}/\sigma_1\approx0.011\)</span> and <span class="math notranslate nohighlight">\(\sigma_{300}/\sigma_1\approx0.0018\)</span>,
+so beyond the first ten terms each reduction of <span class="math notranslate nohighlight">\(\sigma_{k+1}/\sigma_1\)</span> by a
+factor of ten costs more than a hundred additional terms; only the last few
+dozen singular values drop quickly. For comparison, the noisy low-rank matrix
+of the notes
+(<a class="reference internal" href="notes.html#ch02-fig-low-rank"><span class="std std-numref">Figure 2.3</span></a>) dropped by two orders of magnitude after
+<span class="math notranslate nohighlight">\(\sigma_8\)</span>. Slow decay means that reducing the error requires many more
+terms, and there is no natural rank at which to stop.</p>
+</section>
+<section id="rank-k-approximations">
+<h2><span class="section-number">2.12.4. </span>Rank-<span class="math notranslate nohighlight">\(k\)</span> approximations<a class="headerlink" href="#rank-k-approximations" title="Link to this heading">#</a></h2>
+<p>We now form <span class="math notranslate nohighlight">\(A_k\)</span> for several <span class="math notranslate nohighlight">\(k\)</span> and look at them. The displayed images are
+clipped to <span class="math notranslate nohighlight">\([0,255]\)</span> for display only; all errors below are computed from the
+unclipped double-precision matrices.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">ks</span><span class="p">):</span>
+    <span class="n">Ak</span> <span class="o">=</span> <span class="p">(</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span><span class="p">[:</span><span class="n">k</span><span class="p">])</span> <span class="o">@</span> <span class="n">Vh</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">Ak</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"k = </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">% of numbers"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"original"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9bb4a0e620bb1c82d19da0db5e80aec2fd288f56668104021c246508a80d5d62.png" src="../_images/9bb4a0e620bb1c82d19da0db5e80aec2fd288f56668104021c246508a80d5d62.png" />
+</div>
+</div>
+</section>
+<section id="errors-from-the-actual-differences">
+<h2><span class="section-number">2.12.5. </span>Errors from the actual differences<a class="headerlink" href="#errors-from-the-actual-differences" title="Link to this heading">#</a></h2>
+<p>The Eckart–Young–Mirsky theorem predicts
+<span class="math notranslate nohighlight">\(\|A-A_k\|_2 = \sigma_{k+1}\)</span> and <span class="math notranslate nohighlight">\(\|A-A_k\|_F = (\sum_{i&gt;k}\sigma_i^2)^{1/2}\)</span>.
+We do not assume this: we compute both norms of the difference <span class="math notranslate nohighlight">\(A-A_k\)</span> and
+compare. The two sides may differ only by rounding errors, of order
+<span class="math notranslate nohighlight">\(nu\sigma_1\)</span> in absolute terms.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">]</span>
+<span class="n">tail</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">((</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>           <span class="c1"># tail[k] = sqrt(sum_{i&gt;k} sigma_i^2)</span>
+<span class="n">normF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="s2">"fro"</span><span class="p">)</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"   k   storage   rel. 2-err  sigma_{k+1}/sigma_1   rel. F-err   tail/||A||_F"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ks</span><span class="p">:</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">A</span> <span class="o">-</span> <span class="p">(</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span><span class="p">[:</span><span class="n">k</span><span class="p">])</span> <span class="o">@</span> <span class="n">Vh</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">e2</span><span class="p">,</span> <span class="n">eF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="s2">"fro"</span><span class="p">)</span>
+    <span class="n">storage</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">e2</span> <span class="o">/</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">eF</span> <span class="o">/</span> <span class="n">normF</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">storage</span><span class="si">:</span><span class="s2">7.3f</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">e2</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">10.4f</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">19.4f</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">eF</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">normF</span><span class="si">:</span><span class="s2">10.4f</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">tail</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">normF</span><span class="si">:</span><span class="s2">12.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">e2</span> <span class="o">-</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">eF</span> <span class="o">-</span> <span class="n">tail</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   k   storage   rel. 2-err  sigma_{k+1}/sigma_1   rel. F-err   tail/||A||_F
+   1     0.004       0.2505                0.2505       0.4590         0.4590
+   2     0.008       0.1668                0.1668       0.4015         0.4015
+   5     0.020       0.1122                0.1122       0.3310         0.3310
+  10     0.039       0.0792                0.0792       0.2712         0.2712
+  20     0.078       0.0473                0.0473       0.2068         0.2068
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  50     0.196       0.0219                0.0219       0.1243         0.1243
+ 100     0.391       0.0112                0.0112       0.0719         0.0719
+ 200     0.782       0.0044                0.0044       0.0287         0.0287
+ 300     1.173       0.0018                0.0018       0.0107         0.0107
+</pre></div>
+</div>
+</div>
+</div>
+<p>The computed errors agree with the predictions to every printed digit. Note
+how different the two error measures are: for <span class="math notranslate nohighlight">\(k = 50\)</span> the relative 2-norm
+error is about <span class="math notranslate nohighlight">\(0.022\)</span> but the relative Frobenius error is about <span class="math notranslate nohighlight">\(0.124\)</span>. The
+2-norm error measures the single worst direction; the Frobenius error
+measures the root-mean-square pixel error, since
+<span class="math notranslate nohighlight">\(\|A-A_k\|_F/\sqrt{mn}\)</span> is the RMS error per pixel.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">rows</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">rows</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\|A-A_k\|_2/\|A\|_2$ (computed)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">rows</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">rows</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="s2">"s-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"$\|A-A_k\|_F/\|A\|_F$ (computed)"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">st</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">eF</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">"k=</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">eF</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">"offset points"</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"storage $k(m+n+1)/(mn)$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"relative error"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Truncated SVD of the image: error against storage"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/aff5e8f4632cb56b0bbff7ec14510a4560a3a7640a51fcd4080b008202f21003.png" src="../_images/aff5e8f4632cb56b0bbff7ec14510a4560a3a7640a51fcd4080b008202f21003.png" />
+</div>
+</div>
+<p>Once the storage passes <span class="math notranslate nohighlight">\(100\%\)</span> (at <span class="math notranslate nohighlight">\(k\approx256\)</span>) the “compression” is an
+expansion, and even at <span class="math notranslate nohighlight">\(k = 100\)</span>, with <span class="math notranslate nohighlight">\(39\%\)</span> of the numbers, the RMS error is
+about <span class="math notranslate nohighlight">\(7\%\)</span> of the RMS gray level.</p>
+</section>
+<section id="is-this-good-compression-a-comparison-with-jpeg">
+<h2><span class="section-number">2.12.6. </span>Is this good compression? A comparison with JPEG<a class="headerlink" href="#is-this-good-compression-a-comparison-with-jpeg" title="Link to this heading">#</a></h2>
+<p>The count <span class="math notranslate nohighlight">\(k(m+n+1)\)</span> compares <em>numbers</em>, but files store <em>bytes</em>. The image
+uses one byte per pixel. The SVD factors are real numbers; stored as 32-bit
+floats they need four bytes each. Even under the unrealistically generous
+assumption that each factor entry could be stored in one byte without any
+additional error, we can ask how the SVD compares with JPEG, which Pillow
+provides. For each JPEG quality setting we record the file size and the
+relative Frobenius error, and find the smallest <span class="math notranslate nohighlight">\(k\)</span> whose truncated SVD is at
+least as accurate. Byte counts depend on the JPEG library version, so treat
+them as observations for the software that executed this notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"quality   JPEG bytes   JPEG rel. F-err    k   SVD bytes (1 byte/number)   SVD bytes (float32)"</span><span class="p">)</span>
+<span class="n">comparison</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">quality</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">):</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+    <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"JPEG"</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">)</span>
+    <span class="n">nbytes</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+    <span class="n">buf</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">errJ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="n">J</span><span class="p">,</span> <span class="s2">"fro"</span><span class="p">)</span> <span class="o">/</span> <span class="n">normF</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">tail</span> <span class="o">/</span> <span class="n">normF</span> <span class="o">&lt;=</span> <span class="n">errJ</span><span class="p">))</span>            <span class="c1"># smallest k with SVD error &lt;= JPEG error</span>
+    <span class="n">comparison</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">quality</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">,</span> <span class="n">errJ</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">quality</span><span class="si">:</span><span class="s2">7d</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">nbytes</span><span class="si">:</span><span class="s2">10d</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">errJ</span><span class="si">:</span><span class="s2">15.4f</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="n">k</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">25d</span><span class="si">}</span><span class="s2">   </span><span class="si">{</span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">19d</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"raw image: </span><span class="si">{</span><span class="n">m</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="si">}</span><span class="s2"> bytes"</span><span class="p">)</span>
+<span class="c1"># The SVD needs more bytes than JPEG at every quality level, even at one byte per number.</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">nbytes</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">nbytes</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">comparison</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>quality   JPEG bytes   JPEG rel. F-err    k   SVD bytes (1 byte/number)   SVD bytes (float32)
+     10        10496            0.1082     62                       63550                254200
+     25        18214            0.0746     97                       99425                397700
+     50        27285            0.0546    130                      133250                533000
+     75        39855            0.0368    173                      177325                709300
+     90        64705            0.0202    238                      243950                975800
+raw image: 262144 bytes
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Interpretation.</strong> At every quality level, JPEG reaches the same Frobenius
+error with several times fewer bytes than the truncated SVD, even when we
+pretend that the SVD factors cost one byte per number; with 32-bit floats the
+SVD “compressed” image is often larger than the raw image. The reasons are
+structural:</p>
+<ul class="simple">
+<li><p><em>The basis must be stored.</em> The SVD adapts its basis to the image, which is
+why it is optimal, but the <span class="math notranslate nohighlight">\(k\)</span> columns of <span class="math notranslate nohighlight">\(U_k\)</span> and <span class="math notranslate nohighlight">\(V_k\)</span> are part of the
+compressed data. JPEG uses a fixed basis (the discrete cosine transform on
+<span class="math notranslate nohighlight">\(8\times8\)</span> blocks) that costs nothing to store.</p></li>
+<li><p><em>Singular values of natural images decay slowly.</em> As seen above, there is
+no gap, so a small relative error needs a large <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p><em>Global versus local.</em> Images are locally smooth with sharp edges. A
+low-rank matrix is a sum of a few separable patterns <span class="math notranslate nohighlight">\(u_iv_i^T\)</span> spread over
+the whole image, which represents edges that are not horizontal or vertical
+poorly (look at the diagonal structures in the rank-20 image).</p></li>
+<li><p><em>Quantization and entropy coding.</em> JPEG quantizes its coefficients according
+to a model of human vision and then compresses the resulting integers
+losslessly. Our SVD count does neither.</p></li>
+<li><p><em>The error measure.</em> The Frobenius norm is not a perceptual measure; JPEG is
+designed to put its errors where the eye does not notice them, so at equal
+Frobenius error it usually looks better too.</p></li>
+</ul>
+<p><strong>Why study SVD compression at all?</strong> Because it is the cleanest possible
+illustration of the Eckart–Young–Mirsky theorem on real data: the
+truncated SVD is provably the best rank-<span class="math notranslate nohighlight">\(k\)</span> approximation, and we have
+verified the error formulas from actual differences. The failure as a codec
+is not a failure of the theorem but a consequence of what it optimizes: the
+best approximation <em>of a given rank</em> in the 2- or Frobenius norm, counting
+numbers rather than bits. The same machinery is the right tool when data
+really are close to low rank, as in the noisy matrix of the notes, principal
+component analysis, or the randomized methods of
+<a class="reference internal" href="../ch12-randomized/notes.html#ch12"><span class="std std-numref">Chapter 12</span></a>, which compute <span class="math notranslate nohighlight">\(A_k\)</span> approximately without a full
+SVD.</p>
+</section>
+<section id="common-mistakes">
+<h2><span class="section-number">2.12.7. </span>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Reporting <span class="math notranslate nohighlight">\(\sigma_{k+1}\)</span> as the Frobenius error, or computing “errors” from
+the singular values without forming <span class="math notranslate nohighlight">\(A-A_k\)</span>.</p></li>
+<li><p>Comparing storage in numbers with file sizes in bytes.</p></li>
+<li><p>Using integer arithmetic: <code class="docutils literal notranslate"><span class="pre">img</span></code> is <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, and differences such as
+<code class="docutils literal notranslate"><span class="pre">img</span> <span class="pre">-</span> <span class="pre">Ak</span></code> wrap around modulo 256 if <code class="docutils literal notranslate"><span class="pre">Ak</span></code> is also converted to <code class="docutils literal notranslate"><span class="pre">uint8</span></code>.
+Convert to floating point first.</p></li>
+<li><p>Judging an approximation only by the energy fraction captured; here <span class="math notranslate nohighlight">\(90\%\)</span>
+of <span class="math notranslate nohighlight">\(\|A\|_F^2\)</span> is captured by six terms that produce an unrecognizable image.</p></li>
+</ul>
+</section>
+<section id="your-turn">
+<h2><span class="section-number">2.12.8. </span>Your turn<a class="headerlink" href="#your-turn" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Subtract the mean gray level from <span class="math notranslate nohighlight">\(A\)</span> before computing the SVD, and store
+the mean separately. How do the energy fractions and the errors change?</p></li>
+<li><p>Do <a class="reference internal" href="notes.html#ch02-ex-block-svd"><span class="std std-numref">Exercise 2.13</span></a>: compress <span class="math notranslate nohighlight">\(b\times b\)</span> blocks separately and
+compare with the global truncated SVD at equal storage.</p></li>
+<li><p>Quantize the factors <span class="math notranslate nohighlight">\(U_k\Sigma_k^{1/2}\)</span> and <span class="math notranslate nohighlight">\(\Sigma_k^{1/2}V_k^T\)</span> to 8 bits
+(with one scale factor per column) and measure the additional error. Is the
+one-byte-per-number assumption above really optimistic?</p></li>
+<li><p>Compute the relative 2-norm error of the JPEG images and compare it with
+<span class="math notranslate nohighlight">\(\sigma_{k+1}/\sigma_1\)</span> for the matched <span class="math notranslate nohighlight">\(k\)</span>. Which method wins in the
+2-norm, and why is that consistent with the theorem?</p></li>
+</ol>
+</section>
+<section id="key-takeaways">
+<h2><span class="section-number">2.12.9. </span>Key takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The truncated SVD is the best approximation of a given rank, and the
+computed errors <span class="math notranslate nohighlight">\(\|A-A_k\|_2\)</span> and <span class="math notranslate nohighlight">\(\|A-A_k\|_F\)</span> agree with <span class="math notranslate nohighlight">\(\sigma_{k+1}\)</span>
+and <span class="math notranslate nohighlight">\((\sum_{i&gt;k}\sigma_i^2)^{1/2}\)</span> to rounding error.</p></li>
+<li><p>The 2-norm and Frobenius errors are different numbers and answer different
+questions.</p></li>
+<li><p>How well a matrix can be approximated by low rank is decided by the decay of
+its singular values; natural images decay slowly.</p></li>
+<li><p>Optimality in rank is not optimality in bytes: practical codecs beat the
+SVD by using fixed local bases, quantization and entropy coding.</p></li>
+</ul>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">2.12.10. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id2">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span>, Lecture 5, discusses low-rank approximation.
+<span class="bibtex-citation" id="id3">Hansen <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id14" title="Per Christian Hansen, James G. Nagy, and Dianne P. O'Leary. Deblurring Images: Matrices, Spectra, and Filtering. SIAM, Philadelphia, 2006.">2006</a>]</span> (Chapters 5 and 6) use the SVD of image-related matrices
+for spectral filtering in image deblurring, a setting where the SVD is the
+method of choice. <span class="bibtex-citation" id="id4">Halko <em>et al.</em> [<a class="reference internal" href="../back/bibliography.html#id71" title="N. Halko, P. G. Martinsson, and J. A. Tropp. Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions. SIAM Review, 53(2):217–288, 2011.">2011</a>]</span> compute low-rank approximations of
+large matrices by randomized methods.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch02-svd"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lab.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">2.11. </span>Lab 2: The singular value decomposition</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../ch03-floating-point/notes.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Floating-point arithmetic</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data">2.12.1. The data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-svd-of-the-image">2.12.2. The SVD of the image</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-fast-do-the-singular-values-decay">2.12.3. How fast do the singular values decay?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-k-approximations">2.12.4. Rank-<span class="math notranslate nohighlight">\(k\)</span> approximations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errors-from-the-actual-differences">2.12.5. Errors from the actual differences</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-this-good-compression-a-comparison-with-jpeg">2.12.6. Is this good compression? A comparison with JPEG</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-mistakes">2.12.7. Common mistakes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#your-turn">2.12.8. Your turn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">2.12.9. Key takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">2.12.10. Further reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1233 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>10.17. Case study: spectral partitioning of Zachary’s karate club &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch10-qr-algorithm/case-study-spectral-clustering';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="11. Sparse matrices and Krylov subspace methods" href="../ch11-krylov/notes.html" />
+    <link rel="prev" title="10.16. Lab 10: The QR algorithm" href="lab.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="notes.html">10. The QR algorithm</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/aalsammani/Scientific-Computations-I-Notebooks/main?urlpath=lab/tree/book/ch10-qr-algorithm/case-study-spectral-clustering.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/aalsammani/Scientific-Computations-I-Notebooks/blob/main/book/ch10-qr-algorithm/case-study-spectral-clustering.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch10-qr-algorithm/case-study-spectral-clustering.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch10-qr-algorithm/case-study-spectral-clustering.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Case study: spectral partitioning of Zachary’s karate club</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data">10.17.1. 1. The data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-graph-laplacian">10.17.2. 2. The graph Laplacian</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-the-fiedler-vector-partitions-a-graph">10.17.2.1. Why the Fiedler vector partitions a graph</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eigenvalues-by-the-qr-algorithm">10.17.3. 3. Eigenvalues by the QR algorithm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-fiedler-partition">10.17.4. 4. The Fiedler partition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">10.17.4.1. Visualization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normalized-laplacian">10.17.5. 5. The normalized Laplacian</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-result-shows-and-what-it-does-not">10.17.6. 6. What the result shows, and what it does not</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#your-turn">10.17.7. Your turn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">10.17.8. Key takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">10.17.9. Further reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="case-study-spectral-partitioning-of-zachary-s-karate-club">
+<h1><span class="section-number">10.17. </span>Case study: spectral partitioning of Zachary’s karate club<a class="headerlink" href="#case-study-spectral-partitioning-of-zachary-s-karate-club" title="Link to this heading">#</a></h1>
+<p>This case study accompanies <a class="reference internal" href="notes.html#ch10"><span class="std std-numref">Chapter 10</span></a>. We compute the
+eigenvalues and eigenvectors of a graph Laplacian with our own implementation
+of the symmetric QR algorithm (<a class="reference internal" href="notes.html#ch10-alg-symmetric-qr">Algorithm 10.3</a>), compare with
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.eigh</span></code>, and use the eigenvector of the second smallest eigenvalue
+to split a social network in two.</p>
+<p><strong>Learning objectives.</strong> After working through this case study you should be
+able to</p>
+<ol class="arabic simple">
+<li><p>form the Laplacian of a graph and state its basic spectral properties;</p></li>
+<li><p>compute its eigenpairs by Householder tridiagonalization followed by the
+Wilkinson-shifted QR algorithm with deflation, and check them against LAPACK;</p></li>
+<li><p>explain the spectral partitioning heuristic as a relaxation of a
+combinatorial cut problem;</p></li>
+<li><p>evaluate the result against recorded ground truth, and say clearly what the
+comparison does and does not show.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sla</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">1977</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span> <span class="o">/</span> <span class="mi">2</span>          <span class="c1"># unit roundoff, 2**-53</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"figure.figsize"</span><span class="p">:</span> <span class="p">(</span><span class="mf">6.4</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">),</span> <span class="s2">"axes.grid"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"grid.alpha"</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">})</span>
+
+<span class="n">DATA_URL</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/aalsammani/Scientific-Computations-I-Notebooks/main/data/"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">data_file</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return a path to data/&lt;name&gt;, downloading it if it is not available locally."""</span>
+    <span class="n">local</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"../../data"</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="k">if</span> <span class="n">local</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">local</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">DATA_URL</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">target</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="the-data">
+<h2><span class="section-number">10.17.1. </span>1. The data<a class="headerlink" href="#the-data" title="Link to this heading">#</a></h2>
+<p>W. W. Zachary studied the members of a university karate club
+<span class="bibtex-citation" id="id1">[<a class="reference internal" href="../back/bibliography.html#id82" title="Wayne W. Zachary. An information flow model for conflict and fission in small groups. Journal of Anthropological Research, 33(4):452–473, 1977.">Zachary, 1977</a>]</span>. A conflict between the instructor (“Mr. Hi”) and the
+club’s administrator (the “Officer”) split the club into two groups. Zachary
+recorded the social ties between the members and which group each member
+joined after the split.</p>
+<p>The file <code class="docutils literal notranslate"><span class="pre">karate_club.npz</span></code> (see <code class="docutils literal notranslate"><span class="pre">data/README.md</span></code>) contains</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">adjacency</span></code>: the symmetric <span class="math notranslate nohighlight">\(34\times34\)</span> 0/1 adjacency matrix of the
+friendship network (an edge means that the two members interacted), without
+self-loops. It is the unweighted version of the transcription distributed
+with NetworkX;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">faction</span></code>: for each member (0-based index), the group joined after the
+split, <span class="math notranslate nohighlight">\(0\)</span> for Mr. Hi’s group and <span class="math notranslate nohighlight">\(1\)</span> for the Officer’s group.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">(</span><span class="s2">"karate_club.npz"</span><span class="p">))</span> <span class="k">as</span> <span class="n">data</span><span class="p">:</span>
+    <span class="n">Adj</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"adjacency"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">faction</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"faction"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">Adj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">deg</span> <span class="o">=</span> <span class="n">Adj</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> members, </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">Adj</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> edges, factions of sizes </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">faction</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"symmetric: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">Adj</span><span class="p">,</span><span class="w"> </span><span class="n">Adj</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s2">, self-loops: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">Adj</span><span class="p">))</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"degrees from </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">deg</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">deg</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="si">}</span><span class="s2">; the two largest degrees belong to "</span>
+      <span class="sa">f</span><span class="s2">"members </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">deg</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span><span class="si">}</span><span class="s2"> (factions </span><span class="si">{</span><span class="n">faction</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">deg</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">34</span> <span class="ow">and</span> <span class="n">Adj</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">156</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">Adj</span><span class="p">,</span> <span class="n">Adj</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>34 members, 78 edges, factions of sizes [17 17]
+symmetric: True, self-loops: 0
+degrees from 1 to 17; the two largest degrees belong to members [ 0 33] (factions [0 1])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-graph-laplacian">
+<h2><span class="section-number">10.17.2. </span>2. The graph Laplacian<a class="headerlink" href="#the-graph-laplacian" title="Link to this heading">#</a></h2>
+<p>With the degree matrix <span class="math notranslate nohighlight">\(D = \operatorname{diag}(d_1,\dots,d_n)\)</span>, the
+<em>Laplacian</em> of the graph is <span class="math notranslate nohighlight">\(L = D - A\)</span>. For every <span class="math notranslate nohighlight">\(x\in\mathbb{R}^n\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+x^TLx = \sum_{\{i,j\}\ \text{edge}}(x_i - x_j)^2 ,
+\]</div>
+<p>so <span class="math notranslate nohighlight">\(L\)</span> is symmetric positive semidefinite, and <span class="math notranslate nohighlight">\(L\mathbf 1 = 0\)</span> for the vector
+of ones. The eigenvalue <span class="math notranslate nohighlight">\(0\)</span> has multiplicity equal to the number of connected
+components; in particular the second smallest eigenvalue <span class="math notranslate nohighlight">\(\lambda_2\)</span>, which
+<span class="bibtex-citation" id="id2">Fiedler [<a class="reference internal" href="../back/bibliography.html#id79" title="Miroslav Fiedler. Algebraic connectivity of graphs. Czechoslovak Mathematical Journal, 23(2):298–305, 1973.">1973</a>]</span> called the <em>algebraic connectivity</em>, is positive exactly
+when the graph is connected. An eigenvector for <span class="math notranslate nohighlight">\(\lambda_2\)</span> is called a
+<em>Fiedler vector</em>.</p>
+<section id="why-the-fiedler-vector-partitions-a-graph">
+<h3><span class="section-number">10.17.2.1. </span>Why the Fiedler vector partitions a graph<a class="headerlink" href="#why-the-fiedler-vector-partitions-a-graph" title="Link to this heading">#</a></h3>
+<p>Split the vertices into a set <span class="math notranslate nohighlight">\(S\)</span> and its complement <span class="math notranslate nohighlight">\(\bar S\)</span>, and let
+<span class="math notranslate nohighlight">\(\operatorname{cut}(S,\bar S)\)</span> be the number of edges between them. A small cut
+alone favors splitting off a single vertex, so one balances it by the sizes,</p>
+<div class="math notranslate nohighlight">
+\[
+\operatorname{RatioCut}(S,\bar S) = \operatorname{cut}(S,\bar S)\Big(\frac1{|S|} + \frac1{|\bar S|}\Big).
+\]</div>
+<p>Following <span class="bibtex-citation" id="id3">von Luxburg [<a class="reference internal" href="../back/bibliography.html#id80" title="Ulrike von Luxburg. A tutorial on spectral clustering. Statistics and Computing, 17(4):395–416, 2007.">2007</a>]</span> (Section 5.1), define <span class="math notranslate nohighlight">\(f_i = \sqrt{|\bar S|/|S|}\)</span>
+for <span class="math notranslate nohighlight">\(i\in S\)</span> and <span class="math notranslate nohighlight">\(f_i = -\sqrt{|S|/|\bar S|}\)</span> for <span class="math notranslate nohighlight">\(i\in\bar S\)</span>. A short
+computation gives <span class="math notranslate nohighlight">\(f^T\mathbf 1 = 0\)</span>, <span class="math notranslate nohighlight">\(\|f\|_2^2 = n\)</span> and
+<span class="math notranslate nohighlight">\(f^TLf = n\operatorname{RatioCut}(S,\bar S)\)</span>. Minimizing the RatioCut over all
+partitions is a hard combinatorial problem. Dropping the requirement that <span class="math notranslate nohighlight">\(f\)</span>
+take only two values and minimizing <span class="math notranslate nohighlight">\(f^TLf/f^Tf\)</span> over all <span class="math notranslate nohighlight">\(f\perp\mathbf 1\)</span>
+gives, by the Courant–Fischer theorem (<a class="reference internal" href="../ch09-eigenvalues/notes.html#ch09"><span class="std std-numref">Chapter 9</span></a>), the
+value <span class="math notranslate nohighlight">\(\lambda_2\)</span>, attained at the Fiedler vector. Hence</p>
+<div class="math notranslate nohighlight">
+\[
+\lambda_2\le\operatorname{RatioCut}(S,\bar S)\quad\text{for every partition,}
+\]</div>
+<p>and the heuristic is to split the vertices by the signs of the Fiedler vector.
+It is a relaxation: nothing guarantees that the sign pattern of the relaxed
+solution is the best partition.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">deg</span><span class="p">)</span> <span class="o">-</span> <span class="n">Adj</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">Adj</span><span class="p">)))</span>
+<span class="n">quad</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"x^T L x = </span><span class="si">{</span><span class="n">x</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">x</span><span class="si">:</span><span class="s2">.12f</span><span class="si">}</span><span class="s2">,  sum over edges = </span><span class="si">{</span><span class="n">quad</span><span class="si">:</span><span class="s2">.12f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"||L 1||_inf = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">L</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">,  ||L||_2 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">L</span> <span class="o">@</span> <span class="n">x</span> <span class="o">-</span> <span class="n">quad</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">**</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x^T L x = 101.709704551968,  sum over edges = 101.709704551968
+||L 1||_inf = 0.0,  ||L||_2 = 18.1367
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="eigenvalues-by-the-qr-algorithm">
+<h2><span class="section-number">10.17.3. </span>3. Eigenvalues by the QR algorithm<a class="headerlink" href="#eigenvalues-by-the-qr-algorithm" title="Link to this heading">#</a></h2>
+<p>We copy the functions of the lab: Householder tridiagonalization and the
+implicitly shifted symmetric QR algorithm with the Wilkinson shift and
+deflation, with accumulation of the rotations so that we also obtain
+eigenvectors. The eigenvector matrix is <span class="math notranslate nohighlight">\(X = Q_0Q_1\)</span>, where <span class="math notranslate nohighlight">\(Q_0\)</span> comes from
+the tridiagonalization and <span class="math notranslate nohighlight">\(Q_1\)</span> accumulates the QR steps.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">house</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Householder vector v (v[0] = 1) and beta with (I - beta v v^T) x = alpha e_1."""</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">normx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">normx</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">v</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="mf">0.0</span>
+    <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">normx</span>
+    <span class="n">v</span> <span class="o">/=</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">v</span> <span class="o">@</span> <span class="n">v</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tridiagonalize</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return T = Q^T S Q tridiagonal (symmetrized band) and Q, by Householder reflectors."""</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">house</span><span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:,</span> <span class="n">k</span><span class="p">])</span>
+        <span class="n">H</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:,</span> <span class="n">k</span><span class="p">:]</span> <span class="o">-=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span> <span class="o">@</span> <span class="n">H</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:,</span> <span class="n">k</span><span class="p">:])</span>
+        <span class="n">H</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">-=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">H</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">@</span> <span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="n">Q</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">-=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">Q</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">@</span> <span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">T</span> <span class="o">+</span> <span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">Q</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">givens</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""c, s with [[c, s], [-s, c]] @ [a, b] = [r, 0]."""</span>
+    <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span> <span class="o">/</span> <span class="n">r</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">wilkinson_shift</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Eigenvalue of [[a, b], [b, c]] closer to c."""</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="n">denom</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">denom</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">c</span>
+    <span class="k">return</span> <span class="n">c</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span> <span class="o">*</span> <span class="n">b</span> <span class="o">/</span> <span class="n">denom</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tridiag_qr_step</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Implicit symmetric QR step with shift mu on T[lo:hi+1, lo:hi+1], in place."""</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">lo</span><span class="p">,</span> <span class="n">lo</span><span class="p">]</span> <span class="o">-</span> <span class="n">mu</span><span class="p">,</span> <span class="n">T</span><span class="p">[</span><span class="n">lo</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lo</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">):</span>
+        <span class="n">c</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">givens</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">]])</span>
+        <span class="n">a0</span><span class="p">,</span> <span class="n">a1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lo</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">hi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[</span><span class="n">k</span><span class="p">:</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a0</span><span class="p">:</span><span class="n">a1</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span> <span class="o">@</span> <span class="n">T</span><span class="p">[</span><span class="n">k</span><span class="p">:</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">a0</span><span class="p">:</span><span class="n">a1</span><span class="p">]</span>
+        <span class="n">T</span><span class="p">[</span><span class="n">a0</span><span class="p">:</span><span class="n">a1</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">a0</span><span class="p">:</span><span class="n">a1</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">@</span> <span class="n">G</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">if</span> <span class="n">Q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">Q</span><span class="p">[:,</span> <span class="n">k</span><span class="p">:</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[:,</span> <span class="n">k</span><span class="p">:</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">@</span> <span class="n">G</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">lo</span><span class="p">:</span>
+            <span class="n">T</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">hi</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">T</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tridiag_eig</span><span class="p">(</span><span class="n">T0</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">10_000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Wilkinson-shifted symmetric tridiagonal QR with deflation; returns eigenvalues and step count."""</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">T0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">hi</span><span class="p">,</span> <span class="n">steps</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">hi</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">hi</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])):</span>
+                <span class="n">T</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">if</span> <span class="n">T</span><span class="p">[</span><span class="n">hi</span><span class="p">,</span> <span class="n">hi</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">hi</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">continue</span>
+        <span class="n">lo</span> <span class="o">=</span> <span class="n">hi</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">lo</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">T</span><span class="p">[</span><span class="n">lo</span><span class="p">,</span> <span class="n">lo</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">lo</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">steps</span> <span class="o">&gt;=</span> <span class="n">maxiter</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"no convergence"</span><span class="p">)</span>
+        <span class="n">tridiag_qr_step</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">wilkinson_shift</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">hi</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">hi</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">T</span><span class="p">[</span><span class="n">hi</span><span class="p">,</span> <span class="n">hi</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">T</span><span class="p">[</span><span class="n">hi</span><span class="p">,</span> <span class="n">hi</span><span class="p">]),</span> <span class="n">Q</span><span class="p">)</span>
+        <span class="n">steps</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">steps</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">T</span><span class="p">,</span> <span class="n">Q0</span> <span class="o">=</span> <span class="n">tridiagonalize</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+<span class="n">Q1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">lam_qr</span><span class="p">,</span> <span class="n">steps</span> <span class="o">=</span> <span class="n">tridiag_eig</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="n">Q1</span><span class="p">)</span>
+<span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">lam_qr</span><span class="p">)</span>
+<span class="n">lam_qr</span><span class="p">,</span> <span class="n">X_qr</span> <span class="o">=</span> <span class="n">lam_qr</span><span class="p">[</span><span class="n">order</span><span class="p">],</span> <span class="p">(</span><span class="n">Q0</span> <span class="o">@</span> <span class="n">Q1</span><span class="p">)[:,</span> <span class="n">order</span><span class="p">]</span>
+
+<span class="n">lam_ref</span><span class="p">,</span> <span class="n">X_ref</span> <span class="o">=</span> <span class="n">sla</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>          <span class="c1"># LAPACK dsyevr (MRRR), the default driver</span>
+<span class="n">normL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lam_qr</span> <span class="o">-</span> <span class="n">lam_ref</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"QR steps: </span><span class="si">{</span><span class="n">steps</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> eigenvalues (</span><span class="si">{</span><span class="n">steps</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">n</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> per eigenvalue)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"max |lambda_QR - lambda_eigh| = </span><span class="si">{</span><span class="n">diff</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">diff</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">u</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">normL</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> u ||L||_2"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"residual ||L X - X Lambda||_F / ||L||_2 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">L</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">X_qr</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">X_qr</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">lam_qr</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">normL</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"orthogonality ||X^T X - I||_F = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X_qr</span><span class="o">.</span><span class="n">T</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">X_qr</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"smallest eigenvalue: QR </span><span class="si">{</span><span class="n">lam_qr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">, eigh </span><span class="si">{</span><span class="n">lam_ref</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2"> (exact value 0)"</span><span class="p">)</span>
+<span class="c1"># Both computations are backward stable; by Weyl's theorem each eigenvalue has an absolute error</span>
+<span class="c1"># of a modest multiple of u ||L||_2, so their difference is bounded by twice that.</span>
+<span class="k">assert</span> <span class="n">diff</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">normL</span>
+<span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lam_qr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">normL</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">lam_ref</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">normL</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>QR steps: 56 for 34 eigenvalues (1.65 per eigenvalue)
+max |lambda_QR - lambda_eigh| = 3.6e-14 = 17.6 u ||L||_2
+residual ||L X - X Lambda||_F / ||L||_2 = 3.8e-15
+orthogonality ||X^T X - I||_F = 8.3e-15
+smallest eigenvalue: QR -3.90e-16, eigh 1.56e-15 (exact value 0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The two computations agree to a small multiple of <span class="math notranslate nohighlight">\(u\|L\|_2\)</span>, as backward
+stability and Weyl’s theorem predict. The exact eigenvalue <span class="math notranslate nohighlight">\(0\)</span> is not computed
+as <span class="math notranslate nohighlight">\(0\)</span> but as a number of order <span class="math notranslate nohighlight">\(10^{-15}\)</span>, possibly negative: the error bound
+is absolute, and relative to <span class="math notranslate nohighlight">\(\|L\|_2\approx18\)</span> this is at the level of
+rounding errors. Fewer than two QR steps per eigenvalue were needed, in line
+with the counts for the random matrices of the lab.</p>
+<p>The spectrum contains the eigenvalue <span class="math notranslate nohighlight">\(2\)</span> with multiplicity five. The QR
+algorithm has no difficulty with repeated eigenvalues of a symmetric matrix;
+only the individual eigenvectors for <span class="math notranslate nohighlight">\(\lambda = 2\)</span> are not unique. The
+multiplicity has a combinatorial explanation: if two nonadjacent vertices <span class="math notranslate nohighlight">\(i\)</span>
+and <span class="math notranslate nohighlight">\(j\)</span> have the same neighbors, then <span class="math notranslate nohighlight">\(L(e_i - e_j) = d_i(e_i - e_j)\)</span>. Five
+members of degree <span class="math notranslate nohighlight">\(2\)</span> share the neighbors <span class="math notranslate nohighlight">\(32\)</span> and <span class="math notranslate nohighlight">\(33\)</span>, and two more share the
+neighbors <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(1\)</span>, which gives <span class="math notranslate nohighlight">\(4 + 1\)</span> independent eigenvectors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"eigenvalues:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">lam_ref</span><span class="p">[:</span><span class="mi">8</span><span class="p">],</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">"..."</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">lam_ref</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:],</span> <span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"multiplicity of 2:"</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lam_ref</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">)))</span>
+<span class="n">twins</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+         <span class="k">if</span> <span class="n">Adj</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">Adj</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Adj</span><span class="p">[</span><span class="n">j</span><span class="p">])]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"pairs of nonadjacent vertices with identical neighbors:"</span><span class="p">,</span> <span class="n">twins</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"their neighbors:"</span><span class="p">,</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">Adj</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">21</span><span class="p">)})</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">twins</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">twins</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">L</span> <span class="o">@</span> <span class="n">e</span><span class="p">,</span> <span class="n">deg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>eigenvalues: [0.     0.4685 0.9092 1.125  1.2594 1.5993 1.7619 1.8261] ... [13.3061 17.0552 18.1367]
+multiplicity of 2: 5
+pairs of nonadjacent vertices with identical neighbors: [(14, 15), (14, 18), (14, 20), (14, 22), (15, 18), (15, 20), (15, 22), (17, 21), (18, 20), (18, 22), (20, 22)]
+their neighbors: {14: [32, 33], 15: [32, 33], 18: [32, 33], 20: [32, 33], 22: [32, 33], 17: [0, 1], 21: [0, 1]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>The graph is connected, since <span class="math notranslate nohighlight">\(\lambda_1 = 0\)</span> is simple and
+<span class="math notranslate nohighlight">\(\lambda_2 = 0.4685 &gt; 0\)</span>.</p>
+</section>
+<section id="the-fiedler-partition">
+<h2><span class="section-number">10.17.4. </span>4. The Fiedler partition<a class="headerlink" href="#the-fiedler-partition" title="Link to this heading">#</a></h2>
+<p>Eigenvectors are determined only up to sign, so we fix the sign of the Fiedler
+vector so that member 33 (the vertex of largest degree, in the Officer’s group)
+has a positive entry, and put the members with positive entries in group 1.
+The eigenvectors from our QR code and from <code class="docutils literal notranslate"><span class="pre">eigh</span></code> agree up to that sign,
+because <span class="math notranslate nohighlight">\(\lambda_2\)</span> is simple and well separated from <span class="math notranslate nohighlight">\(\lambda_1\)</span> and
+<span class="math notranslate nohighlight">\(\lambda_3\)</span> (gaps of about <span class="math notranslate nohighlight">\(0.47\)</span> and <span class="math notranslate nohighlight">\(0.44\)</span>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v2</span> <span class="o">=</span> <span class="n">X_qr</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">X_qr</span><span class="p">[</span><span class="mi">33</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">v2_ref</span> <span class="o">=</span> <span class="n">X_ref</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">X_ref</span><span class="p">[</span><span class="mi">33</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"lambda_2 = </span><span class="si">{</span><span class="n">lam_ref</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">; ||v2_QR - v2_eigh||_2 = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v2_ref</span><span class="p">)</span><span class="si">:</span><span class="s2">.1e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># eigenvector perturbation ~ u ||L|| / gap; gap = min(lambda_2 - lambda_1, lambda_3 - lambda_2)</span>
+<span class="n">gap</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lam_ref</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">lam_ref</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lam_ref</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">lam_ref</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v2</span> <span class="o">-</span> <span class="n">v2_ref</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">normL</span> <span class="o">/</span> <span class="n">gap</span>
+
+<span class="n">group</span> <span class="o">=</span> <span class="p">(</span><span class="n">v2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">wrong</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">group</span> <span class="o">!=</span> <span class="n">faction</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"group sizes </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">group</span><span class="p">)</span><span class="si">}</span><span class="s2">; members placed differently from their faction: </span><span class="si">{</span><span class="n">wrong</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"their recorded factions: </span><span class="si">{</span><span class="n">faction</span><span class="p">[</span><span class="n">wrong</span><span class="p">]</span><span class="si">}</span><span class="s2">; their Fiedler entries: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">v2</span><span class="p">[</span><span class="n">wrong</span><span class="p">],</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"the five smallest |v2| entries belong to members </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v2</span><span class="p">))[:</span><span class="mi">5</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">cut</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">Adj</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">g</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">g</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ratio_cut</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">cut</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">g</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">g</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"Fiedler sign split"</span><span class="p">,</span> <span class="n">group</span><span class="p">),</span> <span class="p">(</span><span class="s2">"recorded factions"</span><span class="p">,</span> <span class="n">faction</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">19s</span><span class="si">}</span><span class="s2">: cut = </span><span class="si">{</span><span class="n">cut</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2"> edges, RatioCut = </span><span class="si">{</span><span class="n">ratio_cut</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">lam_ref</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">ratio_cut</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lambda_2 = 0.4685; ||v2_QR - v2_eigh||_2 = 2.6e-15
+group sizes [15 19]; members placed differently from their faction: [2 8]
+their recorded factions: [0 0]; their Fiedler entries: [0.0232 0.0516]
+the five smallest |v2| entries belong to members [19 13  2  1  8]
+Fiedler sign split : cut = 10 edges, RatioCut = 1.1930
+recorded factions  : cut = 11 edges, RatioCut = 1.2941
+</pre></div>
+</div>
+</div>
+</div>
+<p>The sign of the Fiedler vector reproduces the recorded split for <span class="math notranslate nohighlight">\(32\)</span> of the
+<span class="math notranslate nohighlight">\(34\)</span> members. The two exceptions, members <span class="math notranslate nohighlight">\(2\)</span> and <span class="math notranslate nohighlight">\(8\)</span> (members <span class="math notranslate nohighlight">\(3\)</span> and <span class="math notranslate nohighlight">\(9\)</span> in
+Zachary’s 1-based numbering), joined Mr. Hi’s group but are placed with the
+Officer’s group, and both have entries of small magnitude, <span class="math notranslate nohighlight">\(0.023\)</span> and
+<span class="math notranslate nohighlight">\(0.052\)</span>: they sit near the boundary of the relaxed solution. The Fiedler
+partition cuts <span class="math notranslate nohighlight">\(10\)</span> edges, the recorded split <span class="math notranslate nohighlight">\(11\)</span>, and the Fiedler partition
+also has the smaller RatioCut. By the criterion that the method optimizes
+(approximately), it has found a <em>better</em> partition than the one that happened.
+Both RatioCuts are above <span class="math notranslate nohighlight">\(\lambda_2\)</span>, as the bound of Section 2 requires.</p>
+<section id="visualization">
+<h3><span class="section-number">10.17.4.1. </span>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h3>
+<p>A standard way to draw a graph without a layout library is to place vertex
+<span class="math notranslate nohighlight">\(i\)</span> at the point <span class="math notranslate nohighlight">\((x_2(i), x_3(i))\)</span> given by the eigenvectors of <span class="math notranslate nohighlight">\(\lambda_2\)</span> and
+<span class="math notranslate nohighlight">\(\lambda_3\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v3</span> <span class="o">=</span> <span class="n">X_qr</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">4.6</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">v2</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span> <span class="p">[</span><span class="n">v3</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">v3</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="s2">"0.8"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">fac</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"C0"</span><span class="p">,</span> <span class="s2">"Mr. Hi's group"</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"C1"</span><span class="p">,</span> <span class="s2">"Officer's group"</span><span class="p">)):</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">faction</span> <span class="o">==</span> <span class="n">fac</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">v2</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">v3</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">v2</span><span class="p">[</span><span class="n">wrong</span><span class="p">],</span> <span class="n">v3</span><span class="p">[</span><span class="n">wrong</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">"none"</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="s2">"sign split disagrees"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="o">*</span><span class="n">wrong</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="p">(</span><span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">v3</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">"offset points"</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">"--"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Fiedler vector entry $x_2(i)$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"third eigenvector entry $x_3(i)$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Spectral layout of the karate club (colors: recorded factions)"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">"lower left"</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">order_v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">faction</span><span class="p">[</span><span class="n">order_v2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"C0"</span><span class="p">,</span> <span class="s2">"C1"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">v2</span><span class="p">[</span><span class="n">order_v2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"members sorted by Fiedler vector entry"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"$x_2(i)$"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Sorted Fiedler vector (blue: Mr. Hi, orange: Officer)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8a5a4e80bc793daed56be165a50035b730aa3d12be3904ab0791d2803aebf2d6.png" src="../_images/8a5a4e80bc793daed56be165a50035b730aa3d12be3904ab0791d2803aebf2d6.png" />
+</div>
+</div>
+<p>In the left panel the horizontal coordinate separates the two groups, with
+the two circled members just to the right of the dashed line at zero. The
+vertical coordinate is less informative: one peripheral vertex has a much
+larger entry of <span class="math notranslate nohighlight">\(x_3\)</span> than all the others, so the layout is uneven. In the
+right panel the entries of Mr. Hi’s group (blue) are all negative except the
+two small positive ones.</p>
+</section>
+</section>
+<section id="the-normalized-laplacian">
+<h2><span class="section-number">10.17.5. </span>5. The normalized Laplacian<a class="headerlink" href="#the-normalized-laplacian" title="Link to this heading">#</a></h2>
+<p>The RatioCut measures the size of a group by its number of vertices. The
+<em>normalized cut</em> measures it by the sum of the degrees, and its relaxation
+leads to the normalized Laplacian
+<span class="math notranslate nohighlight">\(L_{\text{sym}} = I - D^{-1/2}AD^{-1/2}\)</span>: one splits by the signs of
+<span class="math notranslate nohighlight">\(D^{-1/2}y_2\)</span>, where <span class="math notranslate nohighlight">\(y_2\)</span> is the eigenvector for the second smallest
+eigenvalue of <span class="math notranslate nohighlight">\(L_{\text{sym}}\)</span> <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../back/bibliography.html#id80" title="Ulrike von Luxburg. A tutorial on spectral clustering. Statistics and Computing, 17(4):395–416, 2007.">von Luxburg, 2007</a>]</span>. We compute it with
+our QR code as well.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">deg</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">L_sym</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">Dm</span> <span class="o">@</span> <span class="n">Adj</span> <span class="o">@</span> <span class="n">Dm</span>
+<span class="n">T_s</span><span class="p">,</span> <span class="n">Q0_s</span> <span class="o">=</span> <span class="n">tridiagonalize</span><span class="p">(</span><span class="n">L_sym</span><span class="p">)</span>
+<span class="n">Q1_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">mu_s</span><span class="p">,</span> <span class="n">steps_s</span> <span class="o">=</span> <span class="n">tridiag_eig</span><span class="p">(</span><span class="n">T_s</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="n">Q1_s</span><span class="p">)</span>
+<span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">mu_s</span><span class="p">)</span>
+<span class="n">mu_s</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">mu_s</span><span class="p">[</span><span class="n">order</span><span class="p">],</span> <span class="p">(</span><span class="n">Q0_s</span> <span class="o">@</span> <span class="n">Q1_s</span><span class="p">)[:,</span> <span class="n">order</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Dm</span> <span class="o">@</span> <span class="n">Y</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">33</span><span class="p">])</span>
+<span class="n">group_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">steps_s</span><span class="si">}</span><span class="s2"> QR steps; second eigenvalue of L_sym = </span><span class="si">{</span><span class="n">mu_s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> "</span>
+      <span class="sa">f</span><span class="s2">"(eigh: </span><span class="si">{</span><span class="n">sla</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">L_sym</span><span class="p">,</span><span class="w"> </span><span class="n">eigvals_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"members placed differently from their faction: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">group_n</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">faction</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>53 QR steps; second eigenvalue of L_sym = 0.1323 (eigh: 0.1323)
+members placed differently from their faction: [2 8]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The normalized version places the same two members differently from their
+recorded faction. On this small graph the two relaxations lead to the same
+partition.</p>
+</section>
+<section id="what-the-result-shows-and-what-it-does-not">
+<h2><span class="section-number">10.17.6. </span>6. What the result shows, and what it does not<a class="headerlink" href="#what-the-result-shows-and-what-it-does-not" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The <em>numerical</em> part of the case study is unambiguous: our QR
+implementation and LAPACK agree to rounding level in every eigenvalue, and
+the Fiedler vectors agree to within the accuracy that the eigenvalue gap
+allows.</p></li>
+<li><p>The <em>modeling</em> part is weaker than the familiar headline “spectral
+clustering finds the two factions” suggests. The sign split agrees with the
+recorded outcome for <span class="math notranslate nohighlight">\(32\)</span> of <span class="math notranslate nohighlight">\(34\)</span> members, and it finds a partition with a
+smaller cut and a smaller RatioCut than the real one. The friendship graph
+explains most of the split, but not all of it; the remaining two members are
+close to the boundary, and their choices presumably depended on things the
+graph does not record.</p></li>
+<li><p>Other splitting rules give other answers. Splitting at the median of the
+Fiedler vector (Your turn, exercise 2) happens to reproduce the recorded
+factions exactly, but that rule uses the knowledge that the two groups have
+equal size, which one would not have in advance. Choosing a rule after seeing
+the answer is not a fair evaluation.</p></li>
+<li><p>One network with <span class="math notranslate nohighlight">\(34\)</span> vertices is an illustration, not a validation of
+spectral clustering. It is a good illustration because the ground truth was
+recorded independently of the method, and because the graph is small enough
+to inspect every disagreement.</p></li>
+</ul>
+</section>
+<section id="your-turn">
+<h2><span class="section-number">10.17.7. </span>Your turn<a class="headerlink" href="#your-turn" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Verify the identities <span class="math notranslate nohighlight">\(f^T\mathbf 1 = 0\)</span>, <span class="math notranslate nohighlight">\(\|f\|_2^2 = n\)</span> and
+<span class="math notranslate nohighlight">\(f^TLf = n\operatorname{RatioCut}(S,\bar S)\)</span> numerically for the recorded
+factions.</p></li>
+<li><p>Split at the median of the Fiedler vector instead of at zero. How many
+members are placed differently from their faction? Why is this not a fair
+test?</p></li>
+<li><p>Our file contains the unweighted graph. The NetworkX transcription
+described in <code class="docutils literal notranslate"><span class="pre">data/README.md</span></code> also records interaction counts. Using those
+counts as edge weights (<span class="math notranslate nohighlight">\(L = D - W\)</span> with weighted degrees), repeat the
+partition and compare.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">scipy.linalg.eigh(L,</span> <span class="pre">subset_by_index=[0,</span> <span class="pre">2])</span></code> to compute only the three
+smallest eigenpairs. Which LAPACK algorithm does this use, according to
+<a class="reference internal" href="notes.html#ch10-sec-software"><span class="std std-numref">Section 10.11</span></a>?</p></li>
+</ol>
+</section>
+<section id="key-takeaways">
+<h2><span class="section-number">10.17.8. </span>Key takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The graph Laplacian is symmetric positive semidefinite; its small
+eigenvalues and their eigenvectors describe how the graph can be cut.</p></li>
+<li><p>Tridiagonalization plus Wilkinson-shifted QR with deflation computes all
+eigenpairs in about two steps per eigenvalue, in agreement with LAPACK to
+rounding level; the zero eigenvalue is computed with an absolute, not a
+relative, error of order <span class="math notranslate nohighlight">\(u\|L\|_2\)</span>.</p></li>
+<li><p>The Fiedler vector solves a relaxation of the RatioCut problem. On the
+karate club it agrees with the recorded split for 32 of 34 members, and it
+finds a partition with a smaller cut than the recorded one.</p></li>
+</ul>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">10.17.9. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id5">Zachary [<a class="reference internal" href="../back/bibliography.html#id82" title="Wayne W. Zachary. An information flow model for conflict and fission in small groups. Journal of Anthropological Research, 33(4):452–473, 1977.">1977</a>]</span> for the data and the sociological background;
+<span class="bibtex-citation" id="id6">Fiedler [<a class="reference internal" href="../back/bibliography.html#id79" title="Miroslav Fiedler. Algebraic connectivity of graphs. Czechoslovak Mathematical Journal, 23(2):298–305, 1973.">1973</a>]</span> for algebraic connectivity; <span class="bibtex-citation" id="id7">von Luxburg [<a class="reference internal" href="../back/bibliography.html#id80" title="Ulrike von Luxburg. A tutorial on spectral clustering. Statistics and Computing, 17(4):395–416, 2007.">2007</a>]</span>
+for a tutorial on spectral clustering, including the RatioCut and normalized
+cut relaxations; <span class="bibtex-citation" id="id8">Parlett [<a class="reference internal" href="../back/bibliography.html#id10" title="Beresford N. Parlett. The Symmetric Eigenvalue Problem. Classics in Applied Mathematics. SIAM, Philadelphia, 1998.">1998</a>]</span> and <span class="bibtex-citation" id="id9">Demmel [<a class="reference internal" href="../back/bibliography.html#id5" title="James W. Demmel. Applied Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Chapter 5)
+for the symmetric eigenvalue algorithms.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch10-qr-algorithm"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lab.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">10.16. </span>Lab 10: The QR algorithm</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../ch11-krylov/notes.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">11. </span>Sparse matrices and Krylov subspace methods</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data">10.17.1. 1. The data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-graph-laplacian">10.17.2. 2. The graph Laplacian</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-the-fiedler-vector-partitions-a-graph">10.17.2.1. Why the Fiedler vector partitions a graph</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eigenvalues-by-the-qr-algorithm">10.17.3. 3. Eigenvalues by the QR algorithm</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-fiedler-partition">10.17.4. 4. The Fiedler partition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization">10.17.4.1. Visualization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-normalized-laplacian">10.17.5. 5. The normalized Laplacian</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-result-shows-and-what-it-does-not">10.17.6. 6. What the result shows, and what it does not</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#your-turn">10.17.7. Your turn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">10.17.8. Key takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">10.17.9. Further reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

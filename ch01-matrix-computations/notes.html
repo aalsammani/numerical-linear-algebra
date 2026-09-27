@@ -1,0 +1,1558 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. Matrix computations, orthogonality, and norms &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch01-matrix-computations/notes';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.9. Lab 1: Matrix computations, orthogonality, and norms" href="lab.html" />
+    <link rel="prev" title="Software setup" href="../front/setup.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">1. Matrix computations, orthogonality, and norms</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch06-cholesky/notes.html">6. Cholesky factorization and iterative refinement</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch06-cholesky/lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch01-matrix-computations/notes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch01-matrix-computations/notes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Matrix computations, orthogonality, and norms</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-products-and-their-cost">1.1. Matrix products and their cost</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-views-of-the-product">1.1.1. Three views of the product</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#block-matrices">1.1.2. Block matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#counting-operations">1.1.3. Counting operations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flops-are-not-the-whole-story">1.1.4. Flops are not the whole story</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality">1.2. Orthogonality</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-vectors-and-matrices">1.2.1. Orthogonal vectors and matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#householder-reflectors">1.2.2. Householder reflectors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#givens-rotations">1.2.3. Givens rotations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-norms">1.3. Vector norms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-norms">1.4. Matrix norms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#induced-norms">1.4.1. Induced norms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-frobenius-norm">1.4.2. The Frobenius norm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unitary-invariance">1.4.3. Unitary invariance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#norms-and-eigenvalues">1.4.4. Norms and eigenvalues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-norms-in-practice">1.4.5. Computing norms in practice</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">1.5. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">1.6. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">1.7. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.8. Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="matrix-computations-orthogonality-and-norms">
+<span id="ch01"></span><h1><span class="section-number">1. </span>Matrix computations, orthogonality, and norms<a class="headerlink" href="#matrix-computations-orthogonality-and-norms" title="Link to this heading">#</a></h1>
+<p>Numerical linear algebra studies how to solve the basic problems of linear
+algebra (linear systems, least-squares problems, eigenvalue problems and
+singular value problems) on computers that store only finitely many digits
+and that are much faster at some patterns of arithmetic than at others. Before
+we can analyze any algorithm we need three pieces of vocabulary. The first is
+the matrix product, viewed in several equivalent ways, together with its cost.
+The second is orthogonality, because orthogonal transformations are the
+building blocks of the most reliable algorithms in the subject. The third is
+the family of vector and matrix norms, the rulers with which we measure the
+size of errors, residuals and perturbations.</p>
+<p>Most of this chapter will be familiar in outline from a first course in linear
+algebra. The emphasis here is different: we care about how many operations a
+computation takes, which formulation of a product maps well onto modern
+hardware, which transformations can be applied without magnifying errors, and
+which norms can be computed cheaply.</p>
+<div class="admonition-learning-objectives admonition">
+<p class="admonition-title">Learning objectives</p>
+<p>After working through this chapter you should be able to:</p>
+<ol class="arabic simple">
+<li><p>interpret a matrix product in the inner-product, column, and outer-product
+views, and use block partitioning to reason about it;</p></li>
+<li><p>count the floating-point operations of basic matrix computations and
+explain why the observed speed of a computation also depends on data
+movement;</p></li>
+<li><p>state and prove the basic properties of orthogonal matrices, and construct
+Householder reflectors and Givens rotations that introduce zeros into a
+vector;</p></li>
+<li><p>work with vector <span class="math notranslate nohighlight">\(p\)</span>-norms, their equivalence constants, and Hölder’s
+inequality;</p></li>
+<li><p>derive the formulas for the induced 1-, 2- and <span class="math notranslate nohighlight">\(\infty\)</span>-norms, relate the
+Frobenius norm to the 2-norm, and explain unitary invariance;</p></li>
+<li><p>verify all of the above numerically with NumPy.</p></li>
+</ol>
+</div>
+<section id="matrix-products-and-their-cost">
+<span id="ch01-sec-products"></span><h2><span class="section-number">1.1. </span>Matrix products and their cost<a class="headerlink" href="#matrix-products-and-their-cost" title="Link to this heading">#</a></h2>
+<section id="three-views-of-the-product">
+<h3><span class="section-number">1.1.1. </span>Three views of the product<a class="headerlink" href="#three-views-of-the-product" title="Link to this heading">#</a></h3>
+<div class="proof definition admonition" id="ch01-def-product">
+<p class="admonition-title"><span class="caption-number">Definition 1.1 </span> (Matrix product)</p>
+<section class="definition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A \in \R^{m\times k}\)</span> and <span class="math notranslate nohighlight">\(B \in \R^{k\times n}\)</span>. The product
+<span class="math notranslate nohighlight">\(C = AB \in \R^{m\times n}\)</span> has entries</p>
+<div class="math notranslate nohighlight" id="equation-ch01-eq-product">
+<span class="eqno">(1.1)<a class="headerlink" href="#equation-ch01-eq-product" title="Link to this equation">#</a></span>\[
+c_{ij} = \sum_{\ell=1}^{k} a_{i\ell}\, b_{\ell j}, \qquad 1\le i\le m,\ 1\le j\le n.
+\]</div>
+</section>
+</div><p>The formula <a class="reference internal" href="#equation-ch01-eq-product">(1.1)</a> can be read in three ways, and each is
+useful. Write <span class="math notranslate nohighlight">\(a_\ell\)</span> for the <span class="math notranslate nohighlight">\(\ell\)</span>th column of <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(\tilde a_i^T\)</span> for the
+<span class="math notranslate nohighlight">\(i\)</span>th row of <span class="math notranslate nohighlight">\(A\)</span>, and similarly <span class="math notranslate nohighlight">\(b_j\)</span> and <span class="math notranslate nohighlight">\(\tilde b_\ell^T\)</span> for the columns
+and rows of <span class="math notranslate nohighlight">\(B\)</span>.</p>
+<p><em>Inner-product view.</em> The entry <span class="math notranslate nohighlight">\(c_{ij} = \tilde a_i^T b_j\)</span> is the inner
+product of row <span class="math notranslate nohighlight">\(i\)</span> of <span class="math notranslate nohighlight">\(A\)</span> with column <span class="math notranslate nohighlight">\(j\)</span> of <span class="math notranslate nohighlight">\(B\)</span>.</p>
+<p><em>Column view.</em> Column <span class="math notranslate nohighlight">\(j\)</span> of <span class="math notranslate nohighlight">\(C\)</span> is a linear combination of the columns of
+<span class="math notranslate nohighlight">\(A\)</span> with coefficients taken from column <span class="math notranslate nohighlight">\(j\)</span> of <span class="math notranslate nohighlight">\(B\)</span>:</p>
+<div class="math notranslate nohighlight" id="equation-ch01-eq-column-view">
+<span class="eqno">(1.2)<a class="headerlink" href="#equation-ch01-eq-column-view" title="Link to this equation">#</a></span>\[
+c_j = A b_j = \sum_{\ell=1}^{k} b_{\ell j}\, a_\ell .
+\]</div>
+<p><em>Outer-product view.</em> The product is a sum of <span class="math notranslate nohighlight">\(k\)</span> rank-one matrices:</p>
+<div class="math notranslate nohighlight" id="equation-ch01-eq-outer-view">
+<span class="eqno">(1.3)<a class="headerlink" href="#equation-ch01-eq-outer-view" title="Link to this equation">#</a></span>\[
+AB = \sum_{\ell=1}^{k} a_\ell\, \tilde b_\ell^T .
+\]</div>
+<p>The column view is the natural language for subspaces. Because every column of
+<span class="math notranslate nohighlight">\(AB\)</span> is a combination of columns of <span class="math notranslate nohighlight">\(A\)</span>, we get the following facts at once.</p>
+<div class="proof proposition admonition" id="ch01-prop-range-product">
+<p class="admonition-title"><span class="caption-number">Proposition 1.1 </span> (Range and rank of a product)</p>
+<section class="proposition-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(A\in\R^{m\times k}\)</span> and <span class="math notranslate nohighlight">\(B\in\R^{k\times n}\)</span>,
+<span class="math notranslate nohighlight">\(\range(AB) \subseteq \range(A)\)</span>, and
+<span class="math notranslate nohighlight">\(\rank(AB) \le \min\{\rank(A), \rank(B)\}\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The inclusion is <a class="reference internal" href="#equation-ch01-eq-column-view">(1.2)</a>. It gives
+<span class="math notranslate nohighlight">\(\rank(AB)\le\rank(A)\)</span>. Applying the same argument to
+<span class="math notranslate nohighlight">\((AB)^T = B^TA^T\)</span> gives <span class="math notranslate nohighlight">\(\rank(AB) = \rank(B^TA^T) \le \rank(B^T) = \rank(B)\)</span>.</p>
+</div>
+<p>The outer-product view <a class="reference internal" href="#equation-ch01-eq-outer-view">(1.3)</a> shows that the product of an
+<span class="math notranslate nohighlight">\(m\times k\)</span> and a <span class="math notranslate nohighlight">\(k\times n\)</span> matrix has rank at most <span class="math notranslate nohighlight">\(k\)</span>, whatever <span class="math notranslate nohighlight">\(m\)</span> and
+<span class="math notranslate nohighlight">\(n\)</span> are. Storing <span class="math notranslate nohighlight">\(A\in\R^{m\times k}\)</span> and <span class="math notranslate nohighlight">\(B\in\R^{k\times n}\)</span> instead of
+their product costs <span class="math notranslate nohighlight">\(k(m+n)\)</span> numbers rather than <span class="math notranslate nohighlight">\(mn\)</span>, which is the starting
+point for low-rank approximation (<a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a>) and for
+randomized algorithms (<a class="reference internal" href="../ch12-randomized/notes.html#ch12"><span class="std std-numref">Chapter 12</span></a>).</p>
+<div class="proof example admonition" id="ch01-exa-three-views">
+<p class="admonition-title"><span class="caption-number">Example 1.1 </span> (The three views on a small product)</p>
+<section class="example-content" id="proof-content">
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix} 1 &amp; 2\\ 0 &amp; 1\\ 3 &amp; 0 \end{bmatrix},\qquad
+B = \begin{bmatrix} 2 &amp; -1\\ 1 &amp; 4 \end{bmatrix}.
+\end{split}\]</div>
+<p>The inner-product view gives <span class="math notranslate nohighlight">\(c_{11} = 1\cdot 2 + 2\cdot 1 = 4\)</span>. The column
+view gives the first column of <span class="math notranslate nohighlight">\(C\)</span> as <span class="math notranslate nohighlight">\(2a_1 + 1a_2 = (2,0,6)^T + (2,1,0)^T =
+(4,1,6)^T\)</span>. The outer-product view writes</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+AB = \begin{bmatrix}1\\0\\3\end{bmatrix}\begin{bmatrix}2 &amp; -1\end{bmatrix}
+   + \begin{bmatrix}2\\1\\0\end{bmatrix}\begin{bmatrix}1 &amp; 4\end{bmatrix}
+   = \begin{bmatrix}2 &amp; -1\\ 0 &amp; 0\\ 6 &amp; -3\end{bmatrix}
+   + \begin{bmatrix}2 &amp; 8\\ 1 &amp; 4\\ 0 &amp; 0\end{bmatrix}
+   = \begin{bmatrix}4 &amp; 7\\ 1 &amp; 4\\ 6 &amp; -3\end{bmatrix}.
+\end{split}\]</div>
+<p>All three views give the same matrix, as they must. What differs is the order
+in which the <span class="math notranslate nohighlight">\(mnk = 12\)</span> multiplications are carried out.</p>
+</section>
+</div></section>
+<section id="block-matrices">
+<h3><span class="section-number">1.1.2. </span>Block matrices<a class="headerlink" href="#block-matrices" title="Link to this heading">#</a></h3>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are partitioned into blocks whose sizes are compatible, the
+product can be computed blockwise with exactly the same formula as for
+scalars,</p>
+<div class="math notranslate nohighlight">
+\[
+C_{IJ} = \sum_{L} A_{IL} B_{LJ},
+\]</div>
+<p>provided we keep the order of the factors in each block product, since
+matrices do not commute. For example, with a <span class="math notranslate nohighlight">\(2\times 2\)</span> partitioning,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix} A_{11} &amp; A_{12}\\ A_{21} &amp; A_{22}\end{bmatrix}
+\begin{bmatrix} B_{11} &amp; B_{12}\\ B_{21} &amp; B_{22}\end{bmatrix}
+=
+\begin{bmatrix} A_{11}B_{11}+A_{12}B_{21} &amp; A_{11}B_{12}+A_{12}B_{22}\\
+A_{21}B_{11}+A_{22}B_{21} &amp; A_{21}B_{12}+A_{22}B_{22}\end{bmatrix}.
+\end{split}\]</div>
+<p>Block partitioning is used constantly in proofs, for instance in the inductive
+proofs of the Cholesky factorization and the Schur decomposition later in the
+course. It is equally important in practice, as we now explain.</p>
+</section>
+<section id="counting-operations">
+<h3><span class="section-number">1.1.3. </span>Counting operations<a class="headerlink" href="#counting-operations" title="Link to this heading">#</a></h3>
+<p>We measure arithmetic work in <em>flops</em>: one flop is one floating-point
+addition, subtraction, multiplication or division.</p>
+<div class="proof proposition admonition" id="ch01-prop-flops">
+<p class="admonition-title"><span class="caption-number">Proposition 1.2 </span> (Cost of matrix products)</p>
+<section class="proposition-content" id="proof-content">
+<p>Computing <span class="math notranslate nohighlight">\(y = Ax\)</span> for <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> by <a class="reference internal" href="#equation-ch01-eq-product">(1.1)</a> takes
+<span class="math notranslate nohighlight">\(m(2n-1)\)</span> flops. Computing <span class="math notranslate nohighlight">\(C = AB\)</span> for <span class="math notranslate nohighlight">\(A\in\R^{m\times k}\)</span> and
+<span class="math notranslate nohighlight">\(B\in\R^{k\times n}\)</span> takes <span class="math notranslate nohighlight">\(mn(2k-1)\)</span> flops. For square matrices of order <span class="math notranslate nohighlight">\(n\)</span>
+the latter is <span class="math notranslate nohighlight">\(2n^3 - n^2\)</span> flops.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Each of the <span class="math notranslate nohighlight">\(mn\)</span> entries of <span class="math notranslate nohighlight">\(C\)</span> is an inner product of length <span class="math notranslate nohighlight">\(k\)</span>, which
+takes <span class="math notranslate nohighlight">\(k\)</span> multiplications and <span class="math notranslate nohighlight">\(k-1\)</span> additions. The matrix-vector product is
+the case <span class="math notranslate nohighlight">\(n=1\)</span> with the roles of the dimensions renamed.</p>
+</div>
+<p>We usually keep only the leading term and say that a matrix-matrix product
+costs <span class="math notranslate nohighlight">\(2mnk\)</span> flops, or <span class="math notranslate nohighlight">\(2n^3\)</span> for square matrices. The order in which a chain
+of products is evaluated can change the cost dramatically: for
+<span class="math notranslate nohighlight">\(A, B\in\R^{n\times n}\)</span> and <span class="math notranslate nohighlight">\(x\in\R^n\)</span>, computing <span class="math notranslate nohighlight">\((AB)x\)</span> costs about
+<span class="math notranslate nohighlight">\(2n^3\)</span> flops, whereas <span class="math notranslate nohighlight">\(A(Bx)\)</span> costs about <span class="math notranslate nohighlight">\(4n^2\)</span> (<a class="reference internal" href="#ch01-ex-chain"><span class="std std-numref">Exercise 1.2</span></a>).</p>
+</section>
+<section id="flops-are-not-the-whole-story">
+<h3><span class="section-number">1.1.4. </span>Flops are not the whole story<a class="headerlink" href="#flops-are-not-the-whole-story" title="Link to this heading">#</a></h3>
+<p>Two algorithms with the same flop count can run at very different speeds. On
+a modern processor an arithmetic operation is far cheaper than moving a
+number from main memory into a register, so the speed of a computation
+depends on how often each number fetched from memory is reused. Linear
+algebra libraries organize their work around three levels of the <em>Basic
+Linear Algebra Subprograms</em> (BLAS).</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Level</p></th>
+<th class="head"><p>Typical operation</p></th>
+<th class="head"><p>Flops</p></th>
+<th class="head"><p>Data</p></th>
+<th class="head"><p>Flops per datum</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><span class="math notranslate nohighlight">\(y \leftarrow \alpha x + y\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2n\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(3n\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\bigO(1)\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><span class="math notranslate nohighlight">\(y \leftarrow Ax + y\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2n^2\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(n^2\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\bigO(1)\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><span class="math notranslate nohighlight">\(C \leftarrow AB + C\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2n^3\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(4n^2\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\bigO(n)\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Only level 3 performs asymptotically more arithmetic than data movement. A
+level-3 routine partitions the matrices into blocks small enough to stay in
+fast cache memory and applies the block formula above, so that each number
+loaded from memory takes part in many operations. This is why algorithms in
+libraries such as LAPACK <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../back/bibliography.html#id24" title="E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen. LAPACK Users' Guide. SIAM, Philadelphia, 3rd edition, 1999.">Anderson <em>et al.</em>, 1999</a>]</span> are reorganized, whenever
+possible, so that most of their flops occur in matrix-matrix products.</p>
+<p>In the lab notebook you will time a triple loop written in Python against
+NumPy’s <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">&#64;</span> <span class="pre">B</span></code>, which calls an optimized level-3 BLAS routine. Both perform
+<span class="math notranslate nohighlight">\(2n^3\)</span> flops up to lower-order terms. The measured ratio of their run times
+is large, but it is an observation about one machine, one BLAS library and
+one interpreter, not a property of the algorithms; the flop count is the
+machine-independent quantity.</p>
+<div class="proof remark admonition" id="ch01-rem-strassen">
+<p class="admonition-title"><span class="caption-number">Remark 1.1 </span> (Fast matrix multiplication)</p>
+<section class="remark-content" id="proof-content">
+<p>The count <span class="math notranslate nohighlight">\(2n^3\)</span> is not a lower bound. Strassen’s algorithm
+<span class="bibtex-citation" id="id2">[<a class="reference internal" href="../back/bibliography.html#id39" title="Volker Strassen. Gaussian elimination is not optimal. Numerische Mathematik, 13(4):354–356, 1969.">Strassen, 1969</a>]</span> multiplies <span class="math notranslate nohighlight">\(2\times2\)</span> block matrices with seven block
+products instead of eight and, applied recursively, uses
+<span class="math notranslate nohighlight">\(\bigO(n^{\log_2 7}) \approx \bigO(n^{2.81})\)</span> flops. It is used in some
+libraries for very large matrices. Its rounding errors satisfy a normwise
+bound but not the stronger componentwise bound enjoyed by the conventional
+algorithm <span class="bibtex-citation" id="id3">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Chapter 23), which is one reason why the
+conventional algorithm remains the default.</p>
+</section>
+</div><div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>Let <span class="math notranslate nohighlight">\(u, v\in\R^n\)</span> be nonzero. What is the rank of <span class="math notranslate nohighlight">\(uv^T\)</span>, what is its range,
+and how many flops does it take to form it? How many flops does it take to
+compute <span class="math notranslate nohighlight">\((uv^T)x\)</span> if you first form <span class="math notranslate nohighlight">\(uv^T\)</span>, and how many if you instead
+compute <span class="math notranslate nohighlight">\(u(v^Tx)\)</span>?</p>
+<p><em>Answer.</em> The rank is one and the range is <span class="math notranslate nohighlight">\(\Span\{u\}\)</span>. Forming <span class="math notranslate nohighlight">\(uv^T\)</span> takes
+<span class="math notranslate nohighlight">\(n^2\)</span> multiplications. Then <span class="math notranslate nohighlight">\((uv^T)x\)</span> costs another <span class="math notranslate nohighlight">\(2n^2-n\)</span> flops, while
+<span class="math notranslate nohighlight">\(u(v^Tx)\)</span> costs <span class="math notranslate nohighlight">\(2n-1\)</span> flops for the inner product plus <span class="math notranslate nohighlight">\(n\)</span> multiplications,
+that is <span class="math notranslate nohighlight">\(3n-1\)</span> flops in total.</p>
+</div>
+</section>
+</section>
+<section id="orthogonality">
+<span id="ch01-sec-orthogonality"></span><h2><span class="section-number">1.2. </span>Orthogonality<a class="headerlink" href="#orthogonality" title="Link to this heading">#</a></h2>
+<section id="orthogonal-vectors-and-matrices">
+<h3><span class="section-number">1.2.1. </span>Orthogonal vectors and matrices<a class="headerlink" href="#orthogonal-vectors-and-matrices" title="Link to this heading">#</a></h3>
+<div class="proof definition admonition" id="ch01-def-orthogonal">
+<p class="admonition-title"><span class="caption-number">Definition 1.2 </span> (Orthogonality)</p>
+<section class="definition-content" id="proof-content">
+<p>Vectors <span class="math notranslate nohighlight">\(x,y\in\R^n\)</span> are <em>orthogonal</em> if <span class="math notranslate nohighlight">\(x^Ty = 0\)</span>. A set of vectors
+<span class="math notranslate nohighlight">\(\{q_1,\dots,q_k\}\)</span> is <em>orthonormal</em> if <span class="math notranslate nohighlight">\(q_i^Tq_j = \delta_{ij}\)</span> for all <span class="math notranslate nohighlight">\(i\)</span>
+and <span class="math notranslate nohighlight">\(j\)</span>. A square matrix <span class="math notranslate nohighlight">\(Q\in\R^{n\times n}\)</span> is <em>orthogonal</em> if
+<span class="math notranslate nohighlight">\(Q^TQ = I\)</span>. A rectangular matrix <span class="math notranslate nohighlight">\(Q\in\R^{m\times n}\)</span> with <span class="math notranslate nohighlight">\(m\ge n\)</span> has
+<em>orthonormal columns</em> if <span class="math notranslate nohighlight">\(Q^TQ = I_n\)</span>.</p>
+</section>
+</div><p>For a square matrix, <span class="math notranslate nohighlight">\(Q^TQ = I\)</span> implies that <span class="math notranslate nohighlight">\(Q\)</span> is invertible with
+<span class="math notranslate nohighlight">\(Q^{-1} = Q^T\)</span>, so also <span class="math notranslate nohighlight">\(QQ^T = I\)</span>: the rows of an orthogonal matrix are
+orthonormal as well. For a rectangular <span class="math notranslate nohighlight">\(Q\in\R^{m\times n}\)</span> with orthonormal
+columns and <span class="math notranslate nohighlight">\(m&gt;n\)</span>, however, <span class="math notranslate nohighlight">\(QQ^T \neq I_m\)</span>. Instead <span class="math notranslate nohighlight">\(QQ^T\)</span> is the orthogonal
+projector onto <span class="math notranslate nohighlight">\(\range(Q)\)</span>, an object we study in <a class="reference internal" href="../ch07-qr/notes.html#ch07"><span class="std std-numref">Chapter 7</span></a>.</p>
+<div class="proof proposition admonition" id="ch01-prop-orthogonal">
+<p class="admonition-title"><span class="caption-number">Proposition 1.3 </span> (Properties of orthogonal matrices)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(Q\in\R^{n\times n}\)</span> be orthogonal. Then</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\((Qx)^T(Qy) = x^Ty\)</span> and <span class="math notranslate nohighlight">\(\|Qx\|_2 = \|x\|_2\)</span> for all <span class="math notranslate nohighlight">\(x,y\in\R^n\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\det Q = \pm1\)</span>;</p></li>
+<li><p>every eigenvalue <span class="math notranslate nohighlight">\(\lambda\in\C\)</span> of <span class="math notranslate nohighlight">\(Q\)</span> satisfies <span class="math notranslate nohighlight">\(|\lambda| = 1\)</span>;</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(Q_1\)</span> and <span class="math notranslate nohighlight">\(Q_2\)</span> are orthogonal, so is <span class="math notranslate nohighlight">\(Q_1Q_2\)</span>.</p></li>
+</ol>
+<p>Property 1 also holds for rectangular <span class="math notranslate nohighlight">\(Q\)</span> with orthonormal columns.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1) <span class="math notranslate nohighlight">\((Qx)^T(Qy) = x^TQ^TQy = x^Ty\)</span>; take <span class="math notranslate nohighlight">\(y=x\)</span> for the norm. Only <span class="math notranslate nohighlight">\(Q^TQ=I\)</span>
+was used, so the argument applies to rectangular <span class="math notranslate nohighlight">\(Q\)</span> with orthonormal columns.
+(2) <span class="math notranslate nohighlight">\(1 = \det(Q^TQ) = \det(Q)^2\)</span>. (3) If <span class="math notranslate nohighlight">\(Qx = \lambda x\)</span> with
+<span class="math notranslate nohighlight">\(0\ne x\in\C^n\)</span>, then <span class="math notranslate nohighlight">\(x^*Q^TQx = x^*x\)</span> because <span class="math notranslate nohighlight">\(Q\)</span> is real, while
+<span class="math notranslate nohighlight">\(x^*Q^TQx = (Qx)^*(Qx) = |\lambda|^2 x^*x\)</span>. Hence <span class="math notranslate nohighlight">\(|\lambda|=1\)</span>.
+(4) <span class="math notranslate nohighlight">\((Q_1Q_2)^T(Q_1Q_2) = Q_2^TQ_1^TQ_1Q_2 = Q_2^TQ_2 = I\)</span>.</p>
+</div>
+<p>Geometrically, orthogonal matrices are exactly the linear maps that preserve
+lengths and angles. The two families that numerical algorithms use to
+introduce zeros are reflections and plane rotations.</p>
+</section>
+<section id="householder-reflectors">
+<span id="ch01-sec-householder"></span><h3><span class="section-number">1.2.2. </span>Householder reflectors<a class="headerlink" href="#householder-reflectors" title="Link to this heading">#</a></h3>
+<div class="proof definition admonition" id="ch01-def-householder">
+<p class="admonition-title"><span class="caption-number">Definition 1.3 </span> (Householder reflector)</p>
+<section class="definition-content" id="proof-content">
+<p>For a nonzero <span class="math notranslate nohighlight">\(v\in\R^m\)</span>, the <em>Householder reflector</em> determined by <span class="math notranslate nohighlight">\(v\)</span> is</p>
+<div class="math notranslate nohighlight" id="equation-ch01-eq-householder">
+<span class="eqno">(1.4)<a class="headerlink" href="#equation-ch01-eq-householder" title="Link to this equation">#</a></span>\[
+H = I - 2\,\frac{vv^T}{v^Tv}.
+\]</div>
+</section>
+</div><div class="proof proposition admonition" id="ch01-prop-householder">
+<p class="admonition-title"><span class="caption-number">Proposition 1.4 </span> (Properties of Householder reflectors)</p>
+<section class="proposition-content" id="proof-content">
+<p>The matrix <span class="math notranslate nohighlight">\(H\)</span> in <a class="reference internal" href="#equation-ch01-eq-householder">(1.4)</a> is symmetric and orthogonal, and
+<span class="math notranslate nohighlight">\(H^2 = I\)</span>. It maps <span class="math notranslate nohighlight">\(v\)</span> to <span class="math notranslate nohighlight">\(-v\)</span> and fixes every vector orthogonal to <span class="math notranslate nohighlight">\(v\)</span>, so it
+is the reflection across the hyperplane <span class="math notranslate nohighlight">\(v^\perp=\{x : v^Tx = 0\}\)</span>. Its
+eigenvalues are <span class="math notranslate nohighlight">\(-1\)</span> (once) and <span class="math notranslate nohighlight">\(1\)</span> (<span class="math notranslate nohighlight">\(m-1\)</span> times), and <span class="math notranslate nohighlight">\(\det H = -1\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Symmetry is clear. Let <span class="math notranslate nohighlight">\(P = vv^T/(v^Tv)\)</span>; then <span class="math notranslate nohighlight">\(P^2 = P\)</span>, so
+<span class="math notranslate nohighlight">\(H^2 = I - 4P + 4P^2 = I\)</span>, and with <span class="math notranslate nohighlight">\(H^T = H\)</span> this gives <span class="math notranslate nohighlight">\(H^TH = I\)</span>. Next,
+<span class="math notranslate nohighlight">\(Hv = v - 2v = -v\)</span>, and if <span class="math notranslate nohighlight">\(v^Tw = 0\)</span> then <span class="math notranslate nohighlight">\(Hw = w\)</span>. Choosing an orthonormal
+basis of <span class="math notranslate nohighlight">\(v^\perp\)</span> and adding <span class="math notranslate nohighlight">\(v/\|v\|_2\)</span> gives an orthonormal basis of
+eigenvectors with eigenvalues <span class="math notranslate nohighlight">\(1,\dots,1,-1\)</span>, and the determinant is their
+product.</p>
+</div>
+<p>The key use of reflectors is to map a given vector onto a multiple of the
+first coordinate vector <span class="math notranslate nohighlight">\(e_1\)</span>, which zeros all of its other entries.</p>
+<div class="proof theorem admonition" id="ch01-thm-householder-zero">
+<p class="admonition-title"><span class="caption-number">Theorem 1.1 </span> (Zeroing a vector with a reflector)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(0\ne x\in\R^m\)</span>, choose <span class="math notranslate nohighlight">\(\alpha\in\{\|x\|_2, -\|x\|_2\}\)</span> with
+<span class="math notranslate nohighlight">\(x\ne\alpha e_1\)</span>, and set <span class="math notranslate nohighlight">\(v = x - \alpha e_1\)</span>. (Since <span class="math notranslate nohighlight">\(x\neq0\)</span>, at least one
+of the two values qualifies; both do unless <span class="math notranslate nohighlight">\(x\)</span> is a multiple of <span class="math notranslate nohighlight">\(e_1\)</span>.) Then
+<span class="math notranslate nohighlight">\(v\neq0\)</span> and the reflector <span class="math notranslate nohighlight">\(H\)</span> determined by <span class="math notranslate nohighlight">\(v\)</span> satisfies <span class="math notranslate nohighlight">\(Hx = \alpha e_1\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The two values <span class="math notranslate nohighlight">\(\pm\|x\|_2e_1\)</span> are distinct because <span class="math notranslate nohighlight">\(x\ne0\)</span>, so <span class="math notranslate nohighlight">\(x\)</span> equals at
+most one of them, and <span class="math notranslate nohighlight">\(v\ne0\)</span> by the choice of <span class="math notranslate nohighlight">\(\alpha\)</span>. Because
+<span class="math notranslate nohighlight">\(\alpha^2 = \|x\|_2^2\)</span> we have
+<span class="math notranslate nohighlight">\(v^Tv = \|x\|_2^2 - 2\alpha x_1 + \alpha^2 = 2(\|x\|_2^2 - \alpha x_1) = 2v^Tx\)</span>.
+Hence <span class="math notranslate nohighlight">\(Hx = x - 2v\,(v^Tx)/(v^Tv) = x - v = \alpha e_1\)</span>.</p>
+</div>
+<p>Mathematically both signs of <span class="math notranslate nohighlight">\(\alpha\)</span> work. Numerically they do not. The first
+entry of <span class="math notranslate nohighlight">\(v\)</span> is <span class="math notranslate nohighlight">\(v_1 = x_1 - \alpha\)</span>, and if <span class="math notranslate nohighlight">\(\alpha\)</span> has the same sign as
+<span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(|x_1|\approx\|x\|_2\)</span> (the vector is already nearly a multiple of
+<span class="math notranslate nohighlight">\(e_1\)</span>), this subtraction cancels and loses relative accuracy. The remedy is
+to choose <span class="math notranslate nohighlight">\(\alpha = -\sign(x_1)\|x\|_2\)</span>, so that
+<span class="math notranslate nohighlight">\(v_1 = x_1 + \sign(x_1)\|x\|_2\)</span> is a sum of two numbers of the same sign. We
+use the convention <span class="math notranslate nohighlight">\(\sign(0) = 1\)</span>, which is what makes the formula below well
+defined when <span class="math notranslate nohighlight">\(x_1 = 0\)</span>.</p>
+<div class="proof algorithm admonition" id="ch01-alg-householder">
+<p class="admonition-title"><span class="caption-number">Algorithm 1.1 </span> (Householder vector)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(x\in\R^m\)</span>, <span class="math notranslate nohighlight">\(x\neq 0\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(v\in\R^m\)</span> with <span class="math notranslate nohighlight">\(v_1 = 1\)</span> and <span class="math notranslate nohighlight">\(\beta\in\R\)</span> such that
+<span class="math notranslate nohighlight">\((I - \beta vv^T)x = \alpha e_1\)</span> with <span class="math notranslate nohighlight">\(|\alpha| = \|x\|_2\)</span>.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(s \leftarrow 1\)</span> if <span class="math notranslate nohighlight">\(x_1\ge 0\)</span>, otherwise <span class="math notranslate nohighlight">\(s\leftarrow -1\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha \leftarrow -s\|x\|_2\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(v \leftarrow x\)</span>; <span class="math notranslate nohighlight">\(v_1 \leftarrow x_1 - \alpha = x_1 + s\|x\|_2\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(v \leftarrow v / v_1\)</span> (normalize so that <span class="math notranslate nohighlight">\(v_1 = 1\)</span>).</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta \leftarrow 2/(v^Tv)\)</span>.</p></li>
+</ol>
+</section>
+</div><p>Normalizing <span class="math notranslate nohighlight">\(v_1=1\)</span> lets libraries store the rest of <span class="math notranslate nohighlight">\(v\)</span> in the zeros that
+the reflector creates. Applying <span class="math notranslate nohighlight">\(H = I - \beta vv^T\)</span> to a vector <span class="math notranslate nohighlight">\(y\)</span> never
+requires forming <span class="math notranslate nohighlight">\(H\)</span>: compute <span class="math notranslate nohighlight">\(y - \beta v (v^Ty)\)</span>, which costs about <span class="math notranslate nohighlight">\(4m\)</span>
+flops instead of the <span class="math notranslate nohighlight">\(2m^2\)</span> of a general matrix-vector product. The lab
+demonstrates what goes wrong numerically if the sign in step 2 is reversed
+(<a class="reference internal" href="#ch01-ex-householder-sign"><span class="std std-numref">Exercise 1.6</span></a>).</p>
+</section>
+<section id="givens-rotations">
+<h3><span class="section-number">1.2.3. </span>Givens rotations<a class="headerlink" href="#givens-rotations" title="Link to this heading">#</a></h3>
+<p>A <em>Givens rotation</em> <span class="math notranslate nohighlight">\(G(i,j,\theta)\in\R^{m\times m}\)</span> is the identity matrix
+except in rows and columns <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{bmatrix} g_{ii} &amp; g_{ij}\\ g_{ji} &amp; g_{jj}\end{bmatrix}
+= \begin{bmatrix} c &amp; s\\ -s &amp; c\end{bmatrix},\qquad c = \cos\theta,\ s=\sin\theta .
+\end{split}\]</div>
+<p>It is orthogonal with determinant <span class="math notranslate nohighlight">\(1\)</span> and rotates the <span class="math notranslate nohighlight">\((i,j)\)</span> coordinate
+plane by the angle <span class="math notranslate nohighlight">\(\theta\)</span> (clockwise, in this sign convention). Applied to
+<span class="math notranslate nohighlight">\(x\)</span>, it changes only entries <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span>:
+<span class="math notranslate nohighlight">\((Gx)_i = cx_i + sx_j\)</span> and <span class="math notranslate nohighlight">\((Gx)_j = -sx_i + cx_j\)</span>. If
+<span class="math notranslate nohighlight">\(r = \sqrt{x_i^2 + x_j^2} &gt; 0\)</span> and we choose <span class="math notranslate nohighlight">\(c = x_i/r\)</span> and <span class="math notranslate nohighlight">\(s = x_j/r\)</span>, then
+<span class="math notranslate nohighlight">\((Gx)_i = r\)</span> and <span class="math notranslate nohighlight">\((Gx)_j = 0\)</span>.</p>
+<p>Where a reflector zeros a whole subvector at once, a rotation zeros one entry
+at a time. Rotations are preferred when the matrix already has many zeros
+that must be preserved, as in the QR algorithm for Hessenberg matrices
+(<a class="reference internal" href="../ch10-qr-algorithm/notes.html#ch10"><span class="std std-numref">Chapter 10</span></a>) and when updating a factorization after a
+low-rank change. To avoid overflow and underflow in <span class="math notranslate nohighlight">\(x_i^2 + x_j^2\)</span>, <span class="math notranslate nohighlight">\(r\)</span>
+should be computed as <code class="docutils literal notranslate"><span class="pre">hypot(x_i,</span> <span class="pre">x_j)</span></code>, which scales internally.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A common statement is that “orthogonal transformations do not amplify
+errors.” The precise statement has two parts. In exact arithmetic,
+<span class="math notranslate nohighlight">\(\|Q(x+\delta x) - Qx\|_2 = \|\delta x\|_2\)</span>, so an orthogonal map does not
+enlarge perturbations that are already present. In floating-point arithmetic,
+the computed result of applying a Householder reflector or Givens rotation
+is the exact result of applying an exactly orthogonal matrix to a slightly
+perturbed input; in the language of <a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a> the operation
+is backward stable <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Chapter 19). Neither statement says
+that an algorithm built from orthogonal transformations gives an accurate
+answer to an ill-conditioned problem.</p>
+</div>
+</section>
+</section>
+<section id="vector-norms">
+<span id="ch01-sec-vector-norms"></span><h2><span class="section-number">1.3. </span>Vector norms<a class="headerlink" href="#vector-norms" title="Link to this heading">#</a></h2>
+<div class="proof definition admonition" id="ch01-def-norm">
+<p class="admonition-title"><span class="caption-number">Definition 1.4 </span> (Vector norm)</p>
+<section class="definition-content" id="proof-content">
+<p>A <em>norm</em> on <span class="math notranslate nohighlight">\(\R^n\)</span> is a function <span class="math notranslate nohighlight">\(\|\cdot\|:\R^n\to\R\)</span> such that for all
+<span class="math notranslate nohighlight">\(x,y\in\R^n\)</span> and <span class="math notranslate nohighlight">\(\alpha\in\R\)</span>,</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\|x\|\ge0\)</span>, and <span class="math notranslate nohighlight">\(\|x\| = 0\)</span> only if <span class="math notranslate nohighlight">\(x = 0\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\|\alpha x\| = |\alpha|\,\|x\|\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\|x+y\|\le\|x\|+\|y\|\)</span> (the triangle inequality).</p></li>
+</ol>
+</section>
+</div><p>The most important examples are the <span class="math notranslate nohighlight">\(p\)</span>-norms,</p>
+<div class="math notranslate nohighlight" id="equation-ch01-eq-pnorm">
+<span class="eqno">(1.5)<a class="headerlink" href="#equation-ch01-eq-pnorm" title="Link to this equation">#</a></span>\[
+\|x\|_p = \Big(\sum_{i=1}^n |x_i|^p\Big)^{1/p}\quad(1\le p&lt;\infty),\qquad
+\|x\|_\infty = \max_{1\le i\le n}|x_i| .
+\]</div>
+<p>For <span class="math notranslate nohighlight">\(p&lt;1\)</span> the formula does not define a norm because the triangle inequality
+fails. The case <span class="math notranslate nohighlight">\(p=2\)</span> is the Euclidean norm, <span class="math notranslate nohighlight">\(\|x\|_2 = (x^Tx)^{1/2}\)</span>.
+<a class="reference internal" href="#ch01-fig-unit-balls"><span class="std std-numref">Figure 1.1</span></a> shows the unit spheres of the three norms used
+most often in numerical analysis.</p>
+<figure class="align-default" id="ch01-fig-unit-balls">
+<a class="reference internal image-reference" href="../_images/ch01-unit-balls.png"><img alt="The unit spheres of the 1-, 2- and infinity-norms in the plane: a diamond inside a circle inside a square." src="../_images/ch01-unit-balls.png" style="width: 45%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 1.1 </span><span class="caption-text">Unit spheres of the 1-, 2- and <span class="math notranslate nohighlight">\(\infty\)</span>-norms in <span class="math notranslate nohighlight">\(\R^2\)</span>. The inclusions of
+the three sets are the inequalities <span class="math notranslate nohighlight">\(\|x\|_\infty\le\|x\|_2\le\|x\|_1\)</span>.</span><a class="headerlink" href="#ch01-fig-unit-balls" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="proof theorem admonition" id="ch01-thm-holder">
+<p class="admonition-title"><span class="caption-number">Theorem 1.2 </span> (Hölder’s inequality)</p>
+<section class="theorem-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(1\le p,q\le\infty\)</span> and <span class="math notranslate nohighlight">\(1/p + 1/q = 1\)</span>, then
+<span class="math notranslate nohighlight">\(|x^Ty| \le \|x\|_p\,\|y\|_q\)</span> for all <span class="math notranslate nohighlight">\(x,y\in\R^n\)</span>. The case <span class="math notranslate nohighlight">\(p=q=2\)</span> is the
+Cauchy–Schwarz inequality <span class="math notranslate nohighlight">\(|x^Ty|\le\|x\|_2\|y\|_2\)</span>.</p>
+</section>
+</div><p>We use Hölder’s inequality without proof; see <span class="bibtex-citation" id="id5">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span>
+(Section 2.2) or <span class="bibtex-citation" id="id6">Horn and Johnson [<a class="reference internal" href="../back/bibliography.html#id6" title="Roger A. Horn and Charles R. Johnson. Matrix Analysis. Cambridge University Press, Cambridge, 2nd edition, 2013.">2013</a>]</span> (Chapter 5). The triangle inequality for
+<span class="math notranslate nohighlight">\(\|\cdot\|_p\)</span>, <span class="math notranslate nohighlight">\(1&lt;p&lt;\infty\)</span>, is Minkowski’s inequality and follows from
+Hölder’s.</p>
+<p>In finite dimensions all norms are equivalent: for any two norms there are
+constants <span class="math notranslate nohighlight">\(c_1, c_2&gt;0\)</span> with <span class="math notranslate nohighlight">\(c_1\|x\|_a \le \|x\|_b\le c_2\|x\|_a\)</span> for all
+<span class="math notranslate nohighlight">\(x\)</span>. A statement such as “<span class="math notranslate nohighlight">\(x^{(k)}\to x\)</span>” therefore does not depend on the
+norm. The constants do depend on <span class="math notranslate nohighlight">\(n\)</span>, however, and error bounds inherit them.</p>
+<div class="proof theorem admonition" id="ch01-thm-norm-equivalence">
+<p class="admonition-title"><span class="caption-number">Theorem 1.3 </span> (Equivalence of the 1-, 2- and <span class="math notranslate nohighlight">\(\infty\)</span>-norms)</p>
+<section class="theorem-content" id="proof-content">
+<p>For every <span class="math notranslate nohighlight">\(x\in\R^n\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\|x\|_\infty\le\|x\|_2\le\sqrt n\,\|x\|_\infty,\qquad
+\|x\|_2\le\|x\|_1\le\sqrt n\,\|x\|_2,\qquad
+\|x\|_\infty\le\|x\|_1\le n\,\|x\|_\infty .
+\]</div>
+<p>Each inequality is attained: the left-hand ones by <span class="math notranslate nohighlight">\(x = e_1\)</span> and the
+right-hand ones by <span class="math notranslate nohighlight">\(x = (1,1,\dots,1)^T\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. If <span class="math notranslate nohighlight">\(|x_k| = \|x\|_\infty\)</span> then <span class="math notranslate nohighlight">\(\|x\|_\infty^2 = x_k^2 \le \sum_i x_i^2
+\le n\|x\|_\infty^2\)</span>, which gives the first pair. For the second pair,
+<span class="math notranslate nohighlight">\(\|x\|_1^2 = \sum_{i,j}|x_i||x_j| \ge \sum_i x_i^2 = \|x\|_2^2\)</span>, and the
+Cauchy–Schwarz inequality applied to the vectors <span class="math notranslate nohighlight">\((|x_1|,\dots,|x_n|)\)</span> and
+<span class="math notranslate nohighlight">\((1,\dots,1)\)</span> gives <span class="math notranslate nohighlight">\(\|x\|_1 \le \sqrt n\,\|x\|_2\)</span>. The third pair follows
+from <span class="math notranslate nohighlight">\(|x_k|\le\sum_i|x_i|\le n\max_i|x_i|\)</span>. The cases of equality are checked
+directly.</p>
+</div>
+<div class="proof example admonition" id="ch01-exa-vector-norms">
+<p class="admonition-title"><span class="caption-number">Example 1.2 </span> (Three norms of one vector)</p>
+<section class="example-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(x = (3,-4,0,12)^T\)</span> we have <span class="math notranslate nohighlight">\(\|x\|_1 = 19\)</span>, <span class="math notranslate nohighlight">\(\|x\|_2 = \sqrt{169} = 13\)</span>
+and <span class="math notranslate nohighlight">\(\|x\|_\infty = 12\)</span>. The bounds of <a class="reference internal" href="#ch01-thm-norm-equivalence">Theorem 1.3</a>
+with <span class="math notranslate nohighlight">\(n=4\)</span> read <span class="math notranslate nohighlight">\(12\le 13\le 24\)</span>, <span class="math notranslate nohighlight">\(13\le 19\le 26\)</span> and <span class="math notranslate nohighlight">\(12\le19\le48\)</span>.</p>
+</section>
+</div></section>
+<section id="matrix-norms">
+<span id="ch01-sec-matrix-norms"></span><h2><span class="section-number">1.4. </span>Matrix norms<a class="headerlink" href="#matrix-norms" title="Link to this heading">#</a></h2>
+<section id="induced-norms">
+<h3><span class="section-number">1.4.1. </span>Induced norms<a class="headerlink" href="#induced-norms" title="Link to this heading">#</a></h3>
+<p>The space <span class="math notranslate nohighlight">\(\R^{m\times n}\)</span> is a vector space, so any vector norm on
+<span class="math notranslate nohighlight">\(\R^{mn}\)</span> is a norm on matrices. For analysis we want more: a bound on how
+much a matrix can magnify the vectors it acts on.</p>
+<div class="proof definition admonition" id="ch01-def-induced">
+<p class="admonition-title"><span class="caption-number">Definition 1.5 </span> (Induced matrix norm)</p>
+<section class="definition-content" id="proof-content">
+<p>Given norms <span class="math notranslate nohighlight">\(\|\cdot\|\)</span> on <span class="math notranslate nohighlight">\(\R^n\)</span> and <span class="math notranslate nohighlight">\(\R^m\)</span>, the <em>induced</em> (or operator)
+norm of <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> is</p>
+<div class="math notranslate nohighlight" id="equation-ch01-eq-induced">
+<span class="eqno">(1.6)<a class="headerlink" href="#equation-ch01-eq-induced" title="Link to this equation">#</a></span>\[
+\|A\| = \max_{x\neq0}\frac{\|Ax\|}{\|x\|} = \max_{\|x\|=1}\|Ax\| .
+\]</div>
+<p>We write <span class="math notranslate nohighlight">\(\|A\|_p\)</span> when both vector norms are <span class="math notranslate nohighlight">\(p\)</span>-norms.</p>
+</section>
+</div><p>The maximum exists because <span class="math notranslate nohighlight">\(x\mapsto\|Ax\|\)</span> is continuous and the unit
+sphere is compact. That <a class="reference internal" href="#equation-ch01-eq-induced">(1.6)</a> is a norm follows directly from
+the vector norm axioms.</p>
+<div class="proof proposition admonition" id="ch01-prop-induced">
+<p class="admonition-title"><span class="caption-number">Proposition 1.5 </span> (Properties of induced norms)</p>
+<section class="proposition-content" id="proof-content">
+<p>Every induced norm satisfies <span class="math notranslate nohighlight">\(\|Ax\|\le\|A\|\,\|x\|\)</span> for all <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(\|I\| = 1\)</span>
+when the same vector norm is used on the domain and the codomain of <span class="math notranslate nohighlight">\(I\)</span>,
+and the submultiplicative inequality <span class="math notranslate nohighlight">\(\|AB\|\le\|A\|\,\|B\|\)</span> whenever the
+product is defined and each factor carries the norm induced by the vector
+norms on its domain and codomain.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The first inequality is the definition. <span class="math notranslate nohighlight">\(\|Ix\|/\|x\| = 1\)</span> for every
+<span class="math notranslate nohighlight">\(x\neq0\)</span>. Finally <span class="math notranslate nohighlight">\(\|ABx\|\le\|A\|\,\|Bx\|\le\|A\|\,\|B\|\,\|x\|\)</span>; divide by
+<span class="math notranslate nohighlight">\(\|x\|\)</span> and maximize.</p>
+</div>
+<div class="proof theorem admonition" id="ch01-thm-induced-formulas">
+<p class="admonition-title"><span class="caption-number">Theorem 1.4 </span> (Formulas for the induced 1-, 2- and <span class="math notranslate nohighlight">\(\infty\)</span>-norms)</p>
+<section class="theorem-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-ch01-eq-induced-formulas">
+<span class="eqno">(1.7)<a class="headerlink" href="#equation-ch01-eq-induced-formulas" title="Link to this equation">#</a></span>\[
+\|A\|_1 = \max_{1\le j\le n}\sum_{i=1}^m |a_{ij}|,\qquad
+\|A\|_\infty = \max_{1\le i\le m}\sum_{j=1}^n |a_{ij}|,\qquad
+\|A\|_2 = \sqrt{\lambda_{\max}(A^TA)} ,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda_{\max}(A^TA)\)</span> is the largest eigenvalue of the symmetric
+positive semidefinite matrix <span class="math notranslate nohighlight">\(A^TA\)</span>. In words: the maximum absolute column
+sum, the maximum absolute row sum, and the square root of the largest
+eigenvalue of <span class="math notranslate nohighlight">\(A^TA\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <em>1-norm.</em> Let <span class="math notranslate nohighlight">\(\mu = \max_j\sum_i|a_{ij}|\)</span>, attained at column <span class="math notranslate nohighlight">\(k\)</span>. For any
+<span class="math notranslate nohighlight">\(x\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\|Ax\|_1 = \sum_i\Big|\sum_j a_{ij}x_j\Big|
+\le \sum_j |x_j|\sum_i|a_{ij}| \le \mu\,\|x\|_1 ,
+\]</div>
+<p>so <span class="math notranslate nohighlight">\(\|A\|_1\le\mu\)</span>, and <span class="math notranslate nohighlight">\(x = e_k\)</span> gives <span class="math notranslate nohighlight">\(\|Ae_k\|_1 = \mu = \mu\|e_k\|_1\)</span>.</p>
+<p><em><span class="math notranslate nohighlight">\(\infty\)</span>-norm.</em> This is <a class="reference internal" href="#ch01-ex-inf-norm"><span class="std std-numref">Exercise 1.3</span></a>.</p>
+<p><em>2-norm.</em> <span class="math notranslate nohighlight">\(A^TA\)</span> is symmetric, so by the spectral theorem there is an
+orthogonal <span class="math notranslate nohighlight">\(V\)</span> with <span class="math notranslate nohighlight">\(A^TA = V\Lambda V^T\)</span> and
+<span class="math notranslate nohighlight">\(\Lambda = \diag(\lambda_1,\dots,\lambda_n)\)</span>, <span class="math notranslate nohighlight">\(\lambda_1\ge\dots\ge\lambda_n\)</span>.
+The eigenvalues are nonnegative because <span class="math notranslate nohighlight">\(\lambda_i = v_i^TA^TAv_i =
+\|Av_i\|_2^2\)</span>. For <span class="math notranslate nohighlight">\(\|x\|_2 = 1\)</span> put <span class="math notranslate nohighlight">\(y = V^Tx\)</span>, so <span class="math notranslate nohighlight">\(\|y\|_2 = 1\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[
+\|Ax\|_2^2 = x^TA^TAx = y^T\Lambda y = \sum_i \lambda_i y_i^2 \le \lambda_1 .
+\]</div>
+<p>Equality holds for <span class="math notranslate nohighlight">\(x = v_1\)</span>, the eigenvector belonging to <span class="math notranslate nohighlight">\(\lambda_1\)</span>.</p>
+</div>
+<p>In <a class="reference internal" href="../ch02-svd/notes.html#ch02"><span class="std std-numref">Chapter 2</span></a> we will recognize <span class="math notranslate nohighlight">\(\sqrt{\lambda_i(A^TA)}\)</span> as
+the singular values <span class="math notranslate nohighlight">\(\sigma_i\)</span> of <span class="math notranslate nohighlight">\(A\)</span>, so that <span class="math notranslate nohighlight">\(\|A\|_2 = \sigma_1\)</span>: the
+2-norm is the length of the longest semi-axis of the ellipsoid
+<span class="math notranslate nohighlight">\(\{Ax:\|x\|_2 = 1\}\)</span>.</p>
+<div class="proof example admonition" id="ch01-exa-matrix-norms">
+<p class="admonition-title"><span class="caption-number">Example 1.3 </span> (Norms of a <span class="math notranslate nohighlight">\(2\times2\)</span> matrix)</p>
+<section class="example-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(B = \begin{bmatrix}3&amp;0\\4&amp;5\end{bmatrix}\)</span>. The column sums are 7 and 5,
+so <span class="math notranslate nohighlight">\(\|B\|_1 = 7\)</span>; the row sums are 3 and 9, so <span class="math notranslate nohighlight">\(\|B\|_\infty = 9\)</span>. Next,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+B^TB = \begin{bmatrix}25&amp;20\\20&amp;25\end{bmatrix}
+\end{split}\]</div>
+<p>has eigenvalues <span class="math notranslate nohighlight">\(45\)</span> and <span class="math notranslate nohighlight">\(5\)</span> with eigenvectors <span class="math notranslate nohighlight">\((1,1)^T/\sqrt2\)</span> and
+<span class="math notranslate nohighlight">\((1,-1)^T/\sqrt2\)</span>. Therefore <span class="math notranslate nohighlight">\(\|B\|_2 = \sqrt{45} = 3\sqrt5\approx6.708\)</span>, and
+the unit vector stretched most is <span class="math notranslate nohighlight">\(v_1 = (1,1)^T/\sqrt2\)</span>, which is mapped to
+<span class="math notranslate nohighlight">\(Bv_1 = (3,9)^T/\sqrt2\)</span>. <a class="reference internal" href="#ch01-fig-induced-norm"><span class="std std-numref">Figure 1.2</span></a> shows the unit circle
+and its image, an ellipse with semi-axes <span class="math notranslate nohighlight">\(3\sqrt5\)</span> and <span class="math notranslate nohighlight">\(\sqrt5\)</span>.</p>
+</section>
+</div><figure class="align-default" id="ch01-fig-induced-norm">
+<a class="reference internal image-reference" href="../_images/ch01-induced-norm.png"><img alt="Left, the unit circle with the vector v1 at 45 degrees. Right, the image ellipse under B, whose longest semi-axis is B v1." src="../_images/ch01-induced-norm.png" style="width: 85%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 1.2 </span><span class="caption-text">The matrix <span class="math notranslate nohighlight">\(B\)</span> of <a class="reference internal" href="#ch01-exa-matrix-norms">Example 1.3</a> maps the unit circle to an
+ellipse. The induced 2-norm <span class="math notranslate nohighlight">\(\|B\|_2 = 3\sqrt5\)</span> is the length of the longest
+semi-axis, attained at <span class="math notranslate nohighlight">\(x = v_1\)</span>.</span><a class="headerlink" href="#ch01-fig-induced-norm" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="the-frobenius-norm">
+<h3><span class="section-number">1.4.2. </span>The Frobenius norm<a class="headerlink" href="#the-frobenius-norm" title="Link to this heading">#</a></h3>
+<div class="proof definition admonition" id="ch01-def-frobenius">
+<p class="admonition-title"><span class="caption-number">Definition 1.6 </span> (Frobenius norm)</p>
+<section class="definition-content" id="proof-content">
+<p>The <em>Frobenius norm</em> of <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[
+\|A\|_F = \Big(\sum_{i=1}^m\sum_{j=1}^n a_{ij}^2\Big)^{1/2} = \big(\trace(A^TA)\big)^{1/2}.
+\]</div>
+</section>
+</div><p>The Frobenius norm is the 2-norm of <span class="math notranslate nohighlight">\(A\)</span> regarded as a vector in <span class="math notranslate nohighlight">\(\R^{mn}\)</span>.
+It costs only <span class="math notranslate nohighlight">\(2mn\)</span> flops to evaluate, whereas the 2-norm requires an
+eigenvalue or singular value computation. It is not an induced norm: every
+induced norm has <span class="math notranslate nohighlight">\(\|I\| = 1\)</span>, but <span class="math notranslate nohighlight">\(\|I_n\|_F = \sqrt n\)</span>.</p>
+<div class="proof theorem admonition" id="ch01-thm-frobenius">
+<p class="admonition-title"><span class="caption-number">Theorem 1.5 </span> (Frobenius and 2-norms)</p>
+<section class="theorem-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span> with <span class="math notranslate nohighlight">\(r = \rank(A)\)</span> and any <span class="math notranslate nohighlight">\(B\in\R^{n\times p}\)</span>,</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\|AB\|_F\le\|A\|_2\,\|B\|_F\le\|A\|_F\,\|B\|_F\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\|A\|_2\le\|A\|_F\le\sqrt r\,\|A\|_2\)</span>.</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1) With <span class="math notranslate nohighlight">\(b_j\)</span> the columns of <span class="math notranslate nohighlight">\(B\)</span>,
+<span class="math notranslate nohighlight">\(\|AB\|_F^2 = \sum_j\|Ab_j\|_2^2\le\|A\|_2^2\sum_j\|b_j\|_2^2 = \|A\|_2^2\|B\|_F^2\)</span>.
+The second inequality follows from the first half of (2).</p>
+<p>(2) The eigenvalues <span class="math notranslate nohighlight">\(\lambda_1\ge\dots\ge\lambda_n\ge0\)</span> of <span class="math notranslate nohighlight">\(A^TA\)</span> satisfy
+<span class="math notranslate nohighlight">\(\|A\|_F^2 = \trace(A^TA) = \sum_i\lambda_i\)</span> and <span class="math notranslate nohighlight">\(\|A\|_2^2 = \lambda_1\)</span>, so
+<span class="math notranslate nohighlight">\(\|A\|_2^2\le\|A\|_F^2\)</span>. Moreover <span class="math notranslate nohighlight">\(\rank(A^TA) = \rank(A) = r\)</span> (because
+<span class="math notranslate nohighlight">\(A^TAx = 0\)</span> implies <span class="math notranslate nohighlight">\(\|Ax\|_2^2 = x^TA^TAx = 0\)</span>), and a symmetric matrix of
+rank <span class="math notranslate nohighlight">\(r\)</span> has exactly <span class="math notranslate nohighlight">\(r\)</span> nonzero eigenvalues. Hence
+<span class="math notranslate nohighlight">\(\sum_i\lambda_i\le r\lambda_1\)</span>.</p>
+</div>
+</section>
+<section id="unitary-invariance">
+<h3><span class="section-number">1.4.3. </span>Unitary invariance<a class="headerlink" href="#unitary-invariance" title="Link to this heading">#</a></h3>
+<div class="proof theorem admonition" id="ch01-thm-unitary-invariance">
+<p class="admonition-title"><span class="caption-number">Theorem 1.6 </span> (Unitary invariance of the 2- and Frobenius norms)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>, let <span class="math notranslate nohighlight">\(U\in\R^{p\times m}\)</span> have orthonormal columns
+(<span class="math notranslate nohighlight">\(p \ge m\)</span>) and let <span class="math notranslate nohighlight">\(V\in\R^{n\times n}\)</span> be orthogonal. Then
+<span class="math notranslate nohighlight">\(\|UAV\|_2 = \|A\|_2\)</span> and <span class="math notranslate nohighlight">\(\|UAV\|_F = \|A\|_F\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. For every <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(\|UAVx\|_2 = \|AVx\|_2\)</span> by <a class="reference internal" href="#ch01-prop-orthogonal">Proposition 1.3</a>,
+and as <span class="math notranslate nohighlight">\(x\)</span> ranges over the unit sphere so does <span class="math notranslate nohighlight">\(Vx\)</span>; hence
+<span class="math notranslate nohighlight">\(\|UAV\|_2 = \|A\|_2\)</span>. For the Frobenius norm,
+<span class="math notranslate nohighlight">\(\|UA\|_F^2 = \trace(A^TU^TUA) = \|A\|_F^2\)</span>, and
+<span class="math notranslate nohighlight">\(\|AV\|_F = \|V^TA^T\|_F = \|A^T\|_F = \|A\|_F\)</span> by the same argument.</p>
+</div>
+<p>Unitary invariance is the reason the 2- and Frobenius norms are the natural
+choices for analyzing algorithms built from orthogonal transformations. The
+1- and <span class="math notranslate nohighlight">\(\infty\)</span>-norms are not unitarily invariant (<a class="reference internal" href="#ch01-ex-not-invariant"><span class="std std-numref">Exercise 1.9</span></a>).</p>
+</section>
+<section id="norms-and-eigenvalues">
+<h3><span class="section-number">1.4.4. </span>Norms and eigenvalues<a class="headerlink" href="#norms-and-eigenvalues" title="Link to this heading">#</a></h3>
+<p>The <em>spectral radius</em> of a square matrix is
+<span class="math notranslate nohighlight">\(\rho(A) = \max\{|\lambda| : \lambda \text{ an eigenvalue of } A\}\)</span>.</p>
+<div class="proof theorem admonition" id="ch01-thm-spectral-radius">
+<p class="admonition-title"><span class="caption-number">Theorem 1.7 </span> (Spectral radius and norms)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(\|\cdot\|\)</span> be a norm on <span class="math notranslate nohighlight">\(\C^{n\times n}\)</span> that is submultiplicative,
+<span class="math notranslate nohighlight">\(\|AB\|\le\|A\|\,\|B\|\)</span>. Then <span class="math notranslate nohighlight">\(\rho(A)\le\|A\|\)</span> for every
+<span class="math notranslate nohighlight">\(A\in\C^{n\times n}\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Let <span class="math notranslate nohighlight">\(Ax = \lambda x\)</span> with <span class="math notranslate nohighlight">\(x\ne0\)</span> and <span class="math notranslate nohighlight">\(|\lambda| = \rho(A)\)</span>, and let
+<span class="math notranslate nohighlight">\(X = [x,x,\dots,x]\in\C^{n\times n}\)</span>. Then <span class="math notranslate nohighlight">\(AX = \lambda X\)</span>, so
+<span class="math notranslate nohighlight">\(|\lambda|\,\|X\| = \|AX\|\le\|A\|\,\|X\|\)</span>, and <span class="math notranslate nohighlight">\(\|X\|&gt;0\)</span>.</p>
+</div>
+<p>The theorem applies to all induced norms (on <span class="math notranslate nohighlight">\(\C^n\)</span>) and to the Frobenius
+norm. The inequality can be very weak: <span class="math notranslate nohighlight">\(A = \begin{bmatrix}0&amp;1\\0&amp;0\end{bmatrix}\)</span>
+has <span class="math notranslate nohighlight">\(\rho(A) = 0\)</span> but <span class="math notranslate nohighlight">\(\|A\|_p = 1\)</span> for every <span class="math notranslate nohighlight">\(p\)</span>. It is sharp in a limiting
+sense: for every <span class="math notranslate nohighlight">\(A\)</span> and every <span class="math notranslate nohighlight">\(\epsilon&gt;0\)</span> there is an induced norm with
+<span class="math notranslate nohighlight">\(\|A\|\le\rho(A)+\epsilon\)</span> <span class="bibtex-citation" id="id7">[<a class="reference internal" href="../back/bibliography.html#id6" title="Roger A. Horn and Charles R. Johnson. Matrix Analysis. Cambridge University Press, Cambridge, 2nd edition, 2013.">Horn and Johnson, 2013</a>]</span> (Lemma 5.6.10). The gap between
+<span class="math notranslate nohighlight">\(\rho(A)\)</span> and <span class="math notranslate nohighlight">\(\|A\|\)</span> reappears in <a class="reference internal" href="../ch09-eigenvalues/notes.html#ch09"><span class="std std-numref">Chapter 9</span></a> and
+<a class="reference internal" href="../ch11-krylov/notes.html#ch11"><span class="std std-numref">Chapter 11</span></a>, where it separates the long-term behavior of
+powers <span class="math notranslate nohighlight">\(A^k\)</span> from their transient growth.</p>
+<div class="proof example admonition" id="ch01-exa-hilbert">
+<p class="admonition-title"><span class="caption-number">Example 1.4 </span> (Small norms do not mean an easy problem)</p>
+<section class="example-content" id="proof-content">
+<p>The Hilbert matrix <span class="math notranslate nohighlight">\(H_n\)</span> has entries <span class="math notranslate nohighlight">\(h_{ij} = 1/(i+j-1)\)</span>. For <span class="math notranslate nohighlight">\(n = 10\)</span> its
+norms are all modest:
+<span class="math notranslate nohighlight">\(\|H_{10}\|_1 = \|H_{10}\|_\infty \approx 2.929\)</span> (the first row sum
+<span class="math notranslate nohighlight">\(1+\tfrac12+\dots+\tfrac1{10}\)</span>), <span class="math notranslate nohighlight">\(\|H_{10}\|_2\approx 1.752\)</span> and
+<span class="math notranslate nohighlight">\(\|H_{10}\|_F\approx1.786\)</span>. Yet its smallest eigenvalue is about
+<span class="math notranslate nohighlight">\(1.1\times10^{-13}\)</span>, and the ratio of largest to smallest eigenvalue, which for
+this symmetric positive definite matrix is the 2-norm condition number
+<span class="math notranslate nohighlight">\(\kappa_2(H_{10})\)</span>, is about <span class="math notranslate nohighlight">\(1.6\times10^{13}\)</span>. The size of a matrix says
+nothing about how close it is to being singular; that is measured relative
+to its size, as we will see in <a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>.</p>
+</section>
+</div><div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>Why is <span class="math notranslate nohighlight">\(\|A\|_2\le\|A\|_F\)</span> never an equality for the identity matrix <span class="math notranslate nohighlight">\(I_n\)</span>
+with <span class="math notranslate nohighlight">\(n\ge2\)</span>, and for which matrices is it an equality?</p>
+<p><em>Answer.</em> <span class="math notranslate nohighlight">\(\|I_n\|_2 = 1 &lt; \sqrt n = \|I_n\|_F\)</span>. By the proof of
+<a class="reference internal" href="#ch01-thm-frobenius">Theorem 1.5</a>, equality holds exactly when <span class="math notranslate nohighlight">\(A^TA\)</span> has at most
+one nonzero eigenvalue, that is, when <span class="math notranslate nohighlight">\(\rank(A)\le1\)</span>.</p>
+</div>
+</section>
+<section id="computing-norms-in-practice">
+<h3><span class="section-number">1.4.5. </span>Computing norms in practice<a class="headerlink" href="#computing-norms-in-practice" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">numpy.linalg.norm(x,</span> <span class="pre">p)</span></code> evaluates vector <span class="math notranslate nohighlight">\(p\)</span>-norms, and
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.norm(A,</span> <span class="pre">p)</span></code> with <code class="docutils literal notranslate"><span class="pre">p</span></code> in <code class="docutils literal notranslate"><span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">numpy.inf,</span> <span class="pre">'fro'</span></code> evaluates the
+matrix norms of this chapter. The 1-, <span class="math notranslate nohighlight">\(\infty\)</span>- and Frobenius norms cost
+<span class="math notranslate nohighlight">\(\bigO(mn)\)</span> flops. The 2-norm is computed from the singular values, which
+costs <span class="math notranslate nohighlight">\(\bigO(mn\min(m,n))\)</span> flops; for large matrices one estimates it
+instead with a few steps of the power method (<a class="reference internal" href="../ch09-eigenvalues/notes.html#ch09"><span class="std std-numref">Chapter 9</span></a>).
+Even the simplest norm must be evaluated with some care in floating point:
+squaring entries of size <span class="math notranslate nohighlight">\(10^{200}\)</span> overflows, which is why library routines
+rescale internally (<a class="reference internal" href="../ch03-floating-point/notes.html#ch03"><span class="std std-numref">Chapter 3</span></a>).</p>
+</section>
+</section>
+<section id="computational-laboratory">
+<h2><span class="section-number">1.5. </span>Computational laboratory<a class="headerlink" href="#computational-laboratory" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="lab.html"><span class="std std-doc">The lab notebook for this chapter</span></a> implements matrix
+multiplication in the inner-product, column and outer-product forms and checks
+them against <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">&#64;</span> <span class="pre">B</span></code>, and it measures the cost of these forms against the
+optimized BLAS product. It builds Householder reflectors and Givens rotations
+from scratch, verifies orthogonality to within a small multiple of the unit
+roundoff, and shows the cancellation that occurs when the wrong sign is used
+in <a class="reference internal" href="#ch01-alg-householder">Algorithm 1.1</a>. Finally, it computes the norms of this
+chapter, checks <a class="reference internal" href="#ch01-thm-induced-formulas">Theorem 1.4</a> and
+<a class="reference internal" href="#ch01-thm-frobenius">Theorem 1.5</a> on random matrices, and estimates <span class="math notranslate nohighlight">\(\|A\|_2\)</span> by
+sampling the unit sphere, which always underestimates it.</p>
+</section>
+<section id="summary">
+<h2><span class="section-number">1.6. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>A matrix product can be read entrywise, columnwise or as a sum of rank-one
+terms; the last two views explain range and rank, and block partitioning
+explains both inductive proofs and fast library implementations. Flop counts
+are the machine-independent measure of cost, but speed also depends on data
+reuse, which is why level-3 BLAS operations dominate numerical software.
+Orthogonal matrices preserve inner products and 2-norms. Householder
+reflectors and Givens rotations are orthogonal matrices that introduce zeros,
+and the sign choice in the reflector avoids cancellation. Norms measure
+errors; the induced 1-, <span class="math notranslate nohighlight">\(\infty\)</span>- and 2-norms have explicit formulas, the
+2-norm is unitarily invariant, and the Frobenius norm is a cheap
+unitarily invariant upper bound for it.</p>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">1.7. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id8">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> treat this material in Lectures 1–3, and
+<span class="bibtex-citation" id="id9">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span> in Chapters 1 and 2, including the organization of
+algorithms around the BLAS and a thorough discussion of norms. The rounding
+errors of matrix multiplication and of fast methods such as Strassen’s are
+analyzed by <span class="bibtex-citation" id="id10">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> (Chapters 3 and 23). <span class="bibtex-citation" id="id11">Horn and Johnson [<a class="reference internal" href="../back/bibliography.html#id6" title="Roger A. Horn and Charles R. Johnson. Matrix Analysis. Cambridge University Press, Cambridge, 2nd edition, 2013.">2013</a>]</span>
+(Chapter 5) is the standard reference for vector and matrix norms. The
+original sources for reflectors and rotations are <span class="bibtex-citation" id="id12">Householder [<a class="reference internal" href="../back/bibliography.html#id40" title="Alston S. Householder. Unitary triangularization of a nonsymmetric matrix. Journal of the ACM, 5(4):339–342, 1958.">1958</a>]</span>
+and <span class="bibtex-citation" id="id13">Givens [<a class="reference internal" href="../back/bibliography.html#id41" title="Wallace Givens. Computation of plane unitary rotations transforming a general matrix to triangular form. Journal of the Society for Industrial and Applied Mathematics, 6(1):26–50, 1958.">1958</a>]</span>.</p>
+</section>
+<section id="exercises">
+<span id="ch01-sec-exercises"></span><h2><span class="section-number">1.8. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<div class="exercise admonition" id="ch01-ex-rank-product">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.1 </span> (Concept: rank of a product)</p>
+<section id="exercise-content">
+<p>Give <span class="math notranslate nohighlight">\(2\times2\)</span> matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>, both of rank one, such that <span class="math notranslate nohighlight">\(AB = 0\)</span>.
+Then give <span class="math notranslate nohighlight">\(2\times2\)</span> matrices of rank one with <span class="math notranslate nohighlight">\(\rank(AB) = 1\)</span>. Explain, using
+the column view, what determines which case occurs for rank-one matrices
+<span class="math notranslate nohighlight">\(A = xy^T\)</span> and <span class="math notranslate nohighlight">\(B = wz^T\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-chain">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.2 </span> (Computation: the order of evaluation)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A,B\in\R^{n\times n}\)</span> and <span class="math notranslate nohighlight">\(x\in\R^n\)</span>. Count the flops needed to evaluate
+<span class="math notranslate nohighlight">\(ABx\)</span> as <span class="math notranslate nohighlight">\((AB)x\)</span> and as <span class="math notranslate nohighlight">\(A(Bx)\)</span>. Then let <span class="math notranslate nohighlight">\(A\in\R^{m\times k}\)</span>,
+<span class="math notranslate nohighlight">\(B\in\R^{k\times n}\)</span>, <span class="math notranslate nohighlight">\(C\in\R^{n\times p}\)</span> and find a condition on
+<span class="math notranslate nohighlight">\(m,k,n,p\)</span> under which <span class="math notranslate nohighlight">\((AB)C\)</span> is cheaper than <span class="math notranslate nohighlight">\(A(BC)\)</span> (count only the leading
+terms <span class="math notranslate nohighlight">\(2\times\)</span> the products of dimensions).</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch01-matrix-computations/notes-solution-26">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch01-ex-chain"> Exercise 1.2 (Computation: the order of evaluation)</a></p>
+<section id="solution-content">
+<p><span class="math notranslate nohighlight">\((AB)x\)</span> costs <span class="math notranslate nohighlight">\(n^2(2n-1)\)</span> flops for <span class="math notranslate nohighlight">\(AB\)</span> plus <span class="math notranslate nohighlight">\(n(2n-1)\)</span> for the product with
+<span class="math notranslate nohighlight">\(x\)</span>, about <span class="math notranslate nohighlight">\(2n^3\)</span> in total. <span class="math notranslate nohighlight">\(A(Bx)\)</span> costs two matrix-vector products,
+<span class="math notranslate nohighlight">\(2n(2n-1)\approx4n^2\)</span> flops. For the general chain, <span class="math notranslate nohighlight">\((AB)C\)</span> costs
+<span class="math notranslate nohighlight">\(2mkn + 2mnp\)</span> and <span class="math notranslate nohighlight">\(A(BC)\)</span> costs <span class="math notranslate nohighlight">\(2knp+2mkp\)</span>, so <span class="math notranslate nohighlight">\((AB)C\)</span> is cheaper when
+<span class="math notranslate nohighlight">\(mn(k+p) &lt; kp(m+n)\)</span>, equivalently <span class="math notranslate nohighlight">\(1/k + 1/p &lt; 1/m + 1/n\)</span> after dividing
+by <span class="math notranslate nohighlight">\(mnkp\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-inf-norm">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.3 </span> (Theory: the induced <span class="math notranslate nohighlight">\(\infty\)</span>-norm)</p>
+<section id="exercise-content">
+<p>Prove that <span class="math notranslate nohighlight">\(\|A\|_\infty = \max_i\sum_j|a_{ij}|\)</span> for <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>,
+and deduce that <span class="math notranslate nohighlight">\(\|A\|_\infty = \|A^T\|_1\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch01-matrix-computations/notes-solution-28">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch01-ex-inf-norm"> Exercise 1.3 (Theory: the induced <span class="math notranslate nohighlight">\(\infty\)</span>-norm)</a></p>
+<section id="solution-content">
+<p>Let <span class="math notranslate nohighlight">\(\mu = \max_i\sum_j|a_{ij}|\)</span>, attained at row <span class="math notranslate nohighlight">\(k\)</span>. For any <span class="math notranslate nohighlight">\(x\)</span> and any
+<span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(|(Ax)_i|\le\sum_j|a_{ij}||x_j|\le\|x\|_\infty\sum_j|a_{ij}|\le
+\mu\|x\|_\infty\)</span>, so <span class="math notranslate nohighlight">\(\|A\|_\infty\le\mu\)</span>. For equality take
+<span class="math notranslate nohighlight">\(x_j = \sign(a_{kj})\)</span> (with <span class="math notranslate nohighlight">\(\sign(0)=1\)</span>); then <span class="math notranslate nohighlight">\(\|x\|_\infty = 1\)</span> and
+<span class="math notranslate nohighlight">\((Ax)_k = \sum_j|a_{kj}| = \mu\)</span>. The rows of <span class="math notranslate nohighlight">\(A\)</span> are the columns of <span class="math notranslate nohighlight">\(A^T\)</span>, so
+the formula for <span class="math notranslate nohighlight">\(\|A^T\|_1\)</span> is the same maximum.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-two-norm-bound">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.4 </span> (Theory: a bound for the 2-norm)</p>
+<section id="exercise-content">
+<p>Prove that <span class="math notranslate nohighlight">\(\|A\|_2\le\sqrt{\|A\|_1\|A\|_\infty}\)</span>. Evaluate both sides for
+the matrix <span class="math notranslate nohighlight">\(B\)</span> of <a class="reference internal" href="#ch01-exa-matrix-norms">Example 1.3</a>. <em>Hint:</em> use
+<a class="reference internal" href="#ch01-thm-spectral-radius">Theorem 1.7</a> for the matrix <span class="math notranslate nohighlight">\(A^TA\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-matrix-equivalence">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.5 </span> (Theory: equivalence constants for matrix norms)</p>
+<section id="exercise-content">
+<p>Show that for <span class="math notranslate nohighlight">\(A\in\R^{m\times n}\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{\sqrt n}\|A\|_\infty\le\|A\|_2\le\sqrt m\,\|A\|_\infty,
+\qquad
+\frac{1}{\sqrt m}\|A\|_1\le\|A\|_2\le\sqrt n\,\|A\|_1 ,
+\]</div>
+<p>and find matrices that attain two of these four bounds.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-householder-sign">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.6 </span> (Computation: the sign in the Householder vector)</p>
+<section id="exercise-content">
+<p>Take <span class="math notranslate nohighlight">\(x = (1, 10^{-9})^T\)</span>. Compute in double precision the Householder vector
+<span class="math notranslate nohighlight">\(v = x - \alpha e_1\)</span> once with <span class="math notranslate nohighlight">\(\alpha = -\|x\|_2\)</span> (the choice of
+<a class="reference internal" href="#ch01-alg-householder">Algorithm 1.1</a>) and once with <span class="math notranslate nohighlight">\(\alpha = +\|x\|_2\)</span>. For each,
+form <span class="math notranslate nohighlight">\(Hx\)</span> and report the relative error <span class="math notranslate nohighlight">\(\|Hx - \alpha e_1\|_2/\|x\|_2\)</span>.
+Explain the result by computing the first entry of <span class="math notranslate nohighlight">\(v\)</span> by hand.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-two-by-two">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.7 </span> (Theory: <span class="math notranslate nohighlight">\(2\times2\)</span> orthogonal matrices)</p>
+<section id="exercise-content">
+<p>Show that every orthogonal <span class="math notranslate nohighlight">\(Q\in\R^{2\times2}\)</span> is either a rotation
+<span class="math notranslate nohighlight">\(\begin{bmatrix}c&amp;-s\\s&amp;c\end{bmatrix}\)</span> or a reflection
+<span class="math notranslate nohighlight">\(\begin{bmatrix}c&amp;s\\s&amp;-c\end{bmatrix}\)</span> with <span class="math notranslate nohighlight">\(c^2+s^2=1\)</span>. Show that every
+such reflection is a Householder reflector, and determine the vectors <span class="math notranslate nohighlight">\(v\)</span> in
+<a class="reference internal" href="#equation-ch01-eq-householder">(1.4)</a> that produce it.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-not-induced">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.8 </span> (Concept: norms that are not induced)</p>
+<section id="exercise-content">
+<p>Show that the max-entry norm <span class="math notranslate nohighlight">\(\|A\|_{\max} = \max_{i,j}|a_{ij}|\)</span> is a norm on
+<span class="math notranslate nohighlight">\(\R^{n\times n}\)</span> that is not submultiplicative for <span class="math notranslate nohighlight">\(n\ge2\)</span>. Show that
+<span class="math notranslate nohighlight">\(\sqrt n\,\|A\|_{\max}\)</span> is not submultiplicative either, but <span class="math notranslate nohighlight">\(n\|A\|_{\max}\)</span>
+is.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-not-invariant">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.9 </span> (Concept: unitary invariance fails for the 1-norm)</p>
+<section id="exercise-content">
+<p>Find an orthogonal <span class="math notranslate nohighlight">\(Q\in\R^{2\times2}\)</span> and a vector <span class="math notranslate nohighlight">\(x\)</span> with
+<span class="math notranslate nohighlight">\(\|Qx\|_1\ne\|x\|_1\)</span>. Then find an orthogonal <span class="math notranslate nohighlight">\(Q\)</span> with <span class="math notranslate nohighlight">\(\|Q\|_1 = \sqrt2\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch01-matrix-computations/notes-solution-35">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch01-ex-not-invariant"> Exercise 1.9 (Concept: unitary invariance fails for the 1-norm)</a></p>
+<section id="solution-content">
+<p>Let <span class="math notranslate nohighlight">\(Q\)</span> be the rotation by <span class="math notranslate nohighlight">\(45^\circ\)</span>,
+<span class="math notranslate nohighlight">\(Q = \tfrac1{\sqrt2}\begin{bmatrix}1&amp;-1\\1&amp;1\end{bmatrix}\)</span>, and <span class="math notranslate nohighlight">\(x = e_1\)</span>.
+Then <span class="math notranslate nohighlight">\(Qx = (1,1)^T/\sqrt2\)</span>, so <span class="math notranslate nohighlight">\(\|Qx\|_1 = \sqrt2 \neq 1 = \|x\|_1\)</span>. The same
+<span class="math notranslate nohighlight">\(Q\)</span> has column sums <span class="math notranslate nohighlight">\(\sqrt2\)</span> in absolute value, so <span class="math notranslate nohighlight">\(\|Q\|_1 = \sqrt2\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-powers">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.10 </span> (Theory: spectral radius and powers)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> and let <span class="math notranslate nohighlight">\(\|\cdot\|\)</span> be an induced norm. Show that if
+<span class="math notranslate nohighlight">\(\|A\|&lt;1\)</span> then <span class="math notranslate nohighlight">\(A^k\to0\)</span> as <span class="math notranslate nohighlight">\(k\to\infty\)</span>. Give an example of a <span class="math notranslate nohighlight">\(2\times2\)</span>
+matrix with <span class="math notranslate nohighlight">\(\rho(A)&lt;1\)</span> and <span class="math notranslate nohighlight">\(\|A\|_2&gt;1\)</span>, and compute <span class="math notranslate nohighlight">\(\|A^k\|_2\)</span> for
+<span class="math notranslate nohighlight">\(k = 1,\dots,10\)</span>. What do you observe?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-sampling">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.11 </span> (Computation: estimating the 2-norm by sampling)</p>
+<section id="exercise-content">
+<p>Estimate <span class="math notranslate nohighlight">\(\|A\|_2\)</span> for a random <span class="math notranslate nohighlight">\(50\times50\)</span> matrix by evaluating
+<span class="math notranslate nohighlight">\(\|Ax\|_2\)</span> for <span class="math notranslate nohighlight">\(10^5\)</span> random unit vectors <span class="math notranslate nohighlight">\(x\)</span> (normalized Gaussian vectors).
+Compare with <code class="docutils literal notranslate"><span class="pre">numpy.linalg.norm(A,</span> <span class="pre">2)</span></code>. Explain why the estimate is always
+too small, and why it becomes much worse as the dimension grows. How does the
+first step of the power method, <span class="math notranslate nohighlight">\(\|A^TAx\|_2/\|Ax\|_2\)</span>, compare?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch01-ex-blocked">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1.12 </span> (Project: blocked matrix multiplication)</p>
+<section id="exercise-content">
+<p>Implement <span class="math notranslate nohighlight">\(C = AB\)</span> for square matrices as a triple loop over blocks of size
+<span class="math notranslate nohighlight">\(b\)</span>, computing each block product with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>. For <span class="math notranslate nohighlight">\(n = 1024\)</span>, measure the median
+run time over several repetitions for <span class="math notranslate nohighlight">\(b = 16, 32, \dots, 1024\)</span> and plot it.
+Relate the result to the table of BLAS levels, and state clearly which
+aspects of your plot you expect to depend on the machine.</p>
+</section>
+</div>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch01-matrix-computations"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../front/setup.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Software setup</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lab.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">1.9. </span>Lab 1: Matrix computations, orthogonality, and norms</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-products-and-their-cost">1.1. Matrix products and their cost</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-views-of-the-product">1.1.1. Three views of the product</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#block-matrices">1.1.2. Block matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#counting-operations">1.1.3. Counting operations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flops-are-not-the-whole-story">1.1.4. Flops are not the whole story</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality">1.2. Orthogonality</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-vectors-and-matrices">1.2.1. Orthogonal vectors and matrices</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#householder-reflectors">1.2.2. Householder reflectors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#givens-rotations">1.2.3. Givens rotations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-norms">1.3. Vector norms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-norms">1.4. Matrix norms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#induced-norms">1.4.1. Induced norms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-frobenius-norm">1.4.2. The Frobenius norm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unitary-invariance">1.4.3. Unitary invariance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#norms-and-eigenvalues">1.4.4. Norms and eigenvalues</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-norms-in-practice">1.4.5. Computing norms in practice</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">1.5. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">1.6. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">1.7. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.8. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

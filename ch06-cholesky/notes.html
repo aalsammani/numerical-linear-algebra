@@ -1,0 +1,2189 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. Cholesky factorization and iterative refinement &#8212; Numerical Linear Algebra: Theory, Algorithms, and Computation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=8c6b312c" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css?v=982b99e0" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"R": "\\mathbb{R}", "C": "\\mathbb{C}", "fl": "\\operatorname{fl}", "rank": "\\operatorname{rank}", "range": "\\operatorname{range}", "nullsp": "\\operatorname{null}", "diag": "\\operatorname{diag}", "sign": "\\operatorname{sign}", "trace": "\\operatorname{tr}", "Span": "\\operatorname{span}", "bigO": "\\mathcal{O}", "argmin": "\\operatorname*{arg\\,min}", "epsmach": "\\epsilon_{\\mathrm{mach}}"}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ch06-cholesky/notes';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.12. Lab 6: Cholesky factorization and iterative refinement" href="lab.html" />
+    <link rel="prev" title="5.11. Lab 5: Gaussian elimination and LU factorization" href="../ch05-lu/lab.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Numerical Linear Algebra: Theory, Algorithms, and Computation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Numerical Linear Algebra: Theory, Algorithms, and Computation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../front/syllabus.html">About the course</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/notation.html">Notation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../front/setup.html">Software setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part I: Foundations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch01-matrix-computations/notes.html">1. Matrix computations, orthogonality, and norms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch01-matrix-computations/lab.html">1.9. Lab 1: Matrix computations, orthogonality, and norms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch02-svd/notes.html">2. The singular value decomposition</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/lab.html">2.11. Lab 2: The singular value decomposition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch02-svd/case-study-image-compression.html">2.12. Case study: image compression with the SVD</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part II: Floating point, conditioning, and stability</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch03-floating-point/notes.html">3. Floating-point arithmetic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch03-floating-point/lab.html">3.14. Lab 3: Floating-point arithmetic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch04-conditioning-stability/notes.html">4. Conditioning and stability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch04-conditioning-stability/lab.html">4.13. Lab 4: Conditioning and stability</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part III: Linear systems</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch05-lu/notes.html">5. Gaussian elimination and LU factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch05-lu/lab.html">5.11. Lab 5: Gaussian elimination and LU factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">6. Cholesky factorization and iterative refinement</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab.html">6.12. Lab 6: Cholesky factorization and iterative refinement</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part IV: Orthogonalization and least squares</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch07-qr/notes.html">7. QR factorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch07-qr/lab.html">7.12. Lab 7: QR factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch08-least-squares/notes.html">8. Linear least-squares problems</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/lab.html">8.13. Lab 8: Linear least-squares problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch08-least-squares/case-study-co2.html">8.14. Case study: the Mauna Loa carbon dioxide record</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part V: Eigenvalue problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch09-eigenvalues/notes.html">9. Eigenvalues: theory and vector iterations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch09-eigenvalues/lab.html">9.15. Lab 9: Eigenvalues: theory and vector iterations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch10-qr-algorithm/notes.html">10. The QR algorithm</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/lab.html">10.16. Lab 10: The QR algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch10-qr-algorithm/case-study-spectral-clustering.html">10.17. Case study: spectral partitioning of Zachary’s karate club</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part VI: Large-scale methods</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch11-krylov/notes.html">11. Sparse matrices and Krylov subspace methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/lab.html">11.17. Lab 11: Sparse matrices and Krylov subspace methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch11-krylov/case-study-structural-cg.html">11.18. Case study: conjugate gradients on a structural stiffness matrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ch12-randomized/notes.html">12. Randomized numerical linear algebra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch12-randomized/lab.html">12.14. Lab 12: Randomized numerical linear algebra</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Back matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../back/bibliography.html">Bibliography</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks/issues/new?title=Issue%20on%20page%20%2Fch06-cholesky/notes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ch06-cholesky/notes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Cholesky factorization and iterative refinement</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetric-positive-definite-matrices">6.1. Symmetric positive definite matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cholesky-factorization">6.2. The Cholesky factorization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#existence-and-uniqueness">6.2.1. Existence and uniqueness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-algorithm">6.2.2. Derivation of the algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bounded-entries-and-no-pivoting">6.2.3. Bounded entries and no pivoting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-and-cholesky-as-a-test-for-definiteness">6.3. Stability, and Cholesky as a test for definiteness</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-error-analysis">6.3.1. Backward error analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-test-for-positive-definiteness">6.3.2. A test for positive definiteness</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ldl-t-and-symmetric-indefinite-matrices">6.4. <span class="math notranslate nohighlight">\(LDL^T\)</span> and symmetric indefinite matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-ldl-t-factorization">6.4.1. The <span class="math notranslate nohighlight">\(LDL^T\)</span> factorization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bunch-kaufman-pivoting">6.4.2. Bunch–Kaufman pivoting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-distributions-and-gaussian-processes">6.5. Gaussian distributions and Gaussian processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#log-determinants-and-sampling">6.5.1. Log-determinants and sampling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-process-regression">6.5.2. Gaussian-process regression</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iterative-refinement">6.6. Iterative refinement</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-algorithm">6.6.1. The algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-does-it-converge">6.6.2. When does it converge?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-condition-numbers">6.7. Estimating condition numbers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-estimate">6.7.1. Why estimate?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hager-s-estimator">6.7.2. Hager’s estimator</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimators-in-lapack-and-scipy">6.7.3. Estimators in LAPACK and SciPy</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">6.8. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">6.9. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">6.10. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.11. Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="cholesky-factorization-and-iterative-refinement">
+<span id="ch06"></span><h1><span class="section-number">6. </span>Cholesky factorization and iterative refinement<a class="headerlink" href="#cholesky-factorization-and-iterative-refinement" title="Link to this heading">#</a></h1>
+<p>Symmetric positive definite matrices are everywhere in scientific computing.
+They are the covariance matrices of statistics and machine learning, the
+stiffness and mass matrices of finite-element models, the discretizations of
+diffusion operators, the normal-equation matrices <span class="math notranslate nohighlight">\(A^TA\)</span> of least-squares
+problems, and the Hessians of smooth functions at nondegenerate local minimizers.
+For these matrices Gaussian elimination can be replaced by a factorization
+that exploits symmetry and positivity: the Cholesky factorization
+<span class="math notranslate nohighlight">\(A = LL^T\)</span>. It needs half the arithmetic and half the storage of LU
+factorization, it needs no pivoting, and it is backward stable. It also
+doubles as a cheap and reliable test of whether a symmetric matrix is
+positive definite.</p>
+<p>The second half of the chapter is about what one does <em>after</em> a
+factorization has been computed. Iterative refinement improves a computed
+solution by reusing the factors, and in its modern mixed-precision form it
+lets a fast low-precision factorization deliver a solution as accurate as a
+double-precision one. Condition estimation turns the error bounds of
+<a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a> into computable quantities at a cost of
+<span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> flops instead of the <span class="math notranslate nohighlight">\(\bigO(n^3)\)</span> needed to form <span class="math notranslate nohighlight">\(A^{-1}\)</span>.
+Along the way we treat symmetric indefinite matrices, for which the
+Bunch–Kaufman <span class="math notranslate nohighlight">\(LDL^T\)</span> factorization plays the role of Cholesky, and the
+Gaussian-process computations (log-determinants and sampling) where
+Cholesky is the workhorse.</p>
+<p>Throughout, <span class="math notranslate nohighlight">\(u = 2^{-53}\)</span> is the unit roundoff of IEEE double precision
+(binary64) and <span class="math notranslate nohighlight">\(\gamma_n = nu/(1-nu)\)</span>; we write <span class="math notranslate nohighlight">\(u_{32} = 2^{-24}\approx
+5.96\times10^{-8}\)</span> for the unit roundoff of single precision (binary32).
+Trefethen and Bau <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span> write <span class="math notranslate nohighlight">\(\epsilon_{\text{machine}}\)</span>
+for <span class="math notranslate nohighlight">\(u\)</span>; we translate their statements into <span class="math notranslate nohighlight">\(u\)</span>.</p>
+<div class="admonition-learning-objectives admonition">
+<p class="admonition-title">Learning objectives</p>
+<p>After working through this chapter you should be able to:</p>
+<ol class="arabic simple">
+<li><p>state and prove the basic properties of symmetric positive definite
+matrices, including the positivity of Schur complements;</p></li>
+<li><p>prove the existence and uniqueness of the Cholesky factorization and
+derive the column-oriented algorithm with its cost of <span class="math notranslate nohighlight">\(\tfrac13 n^3\)</span> flops;</p></li>
+<li><p>explain why Cholesky needs no pivoting, quote its backward error bound,
+and distinguish its backward stability from the accuracy of the computed
+solution;</p></li>
+<li><p>use Cholesky as a test for positive definiteness and explain its limits
+in floating-point arithmetic, including the role of symmetry;</p></li>
+<li><p>describe the <span class="math notranslate nohighlight">\(LDL^T\)</span> factorization and the Bunch–Kaufman pivoting
+strategy for symmetric indefinite matrices;</p></li>
+<li><p>compute Gaussian log-likelihoods and samples with Cholesky, and explain
+the effect of a diagonal “jitter” on conditioning;</p></li>
+<li><p>analyze fixed-precision and mixed-precision iterative refinement and
+state the conditions under which it converges;</p></li>
+<li><p>explain and implement Hager’s 1-norm condition estimator and use the
+LAPACK estimators available in SciPy.</p></li>
+</ol>
+</div>
+<section id="symmetric-positive-definite-matrices">
+<span id="ch06-sec-spd"></span><h2><span class="section-number">6.1. </span>Symmetric positive definite matrices<a class="headerlink" href="#symmetric-positive-definite-matrices" title="Link to this heading">#</a></h2>
+<div class="proof definition admonition" id="ch06-def-spd">
+<p class="admonition-title"><span class="caption-number">Definition 6.1 </span> (Symmetric positive definite matrix)</p>
+<section class="definition-content" id="proof-content">
+<p>A matrix <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> is <em>symmetric positive definite</em> (SPD) if
+<span class="math notranslate nohighlight">\(A = A^T\)</span> and <span class="math notranslate nohighlight">\(x^TAx&gt;0\)</span> for every nonzero <span class="math notranslate nohighlight">\(x\in\R^n\)</span>. It is <em>symmetric
+positive semidefinite</em> if <span class="math notranslate nohighlight">\(A=A^T\)</span> and <span class="math notranslate nohighlight">\(x^TAx\ge0\)</span> for all <span class="math notranslate nohighlight">\(x\)</span>.</p>
+</section>
+</div><p>Symmetry is part of the definition. The quadratic form <span class="math notranslate nohighlight">\(x^TAx\)</span> only sees
+the symmetric part <span class="math notranslate nohighlight">\((A+A^T)/2\)</span> of <span class="math notranslate nohighlight">\(A\)</span>, so a nonsymmetric matrix such as
+<span class="math notranslate nohighlight">\(\begin{bmatrix}1&amp;1\\-1&amp;1\end{bmatrix}\)</span> satisfies <span class="math notranslate nohighlight">\(x^TAx = \|x\|_2^2&gt;0\)</span> but
+is not SPD, and nothing in this chapter applies to it.</p>
+<div class="proof example admonition" id="ch06-exa-spd-families">
+<p class="admonition-title"><span class="caption-number">Example 6.1 </span> (Three families of SPD matrices)</p>
+<section class="example-content" id="proof-content">
+<p><em>Gram matrices.</em> If <span class="math notranslate nohighlight">\(B\in\R^{m\times n}\)</span> has linearly independent columns,
+then <span class="math notranslate nohighlight">\(A = B^TB\)</span> is SPD, since <span class="math notranslate nohighlight">\(x^TB^TBx = \|Bx\|_2^2&gt;0\)</span> for <span class="math notranslate nohighlight">\(x\ne0\)</span>. The
+normal-equation matrix of a full-rank least-squares problem is of this
+form (<a class="reference internal" href="../ch08-least-squares/notes.html#ch08"><span class="std std-numref">Chapter 8</span></a>).</p>
+<p><em>Discrete Laplacians.</em> The matrix <span class="math notranslate nohighlight">\(T_n = \operatorname{tridiag}(-1,2,-1)\)</span>
+of order <span class="math notranslate nohighlight">\(n\)</span>, which discretizes <span class="math notranslate nohighlight">\(-d^2/dt^2\)</span> with zero boundary values,
+satisfies</p>
+<div class="math notranslate nohighlight">
+\[
+x^TT_nx = x_1^2 + \sum_{i=1}^{n-1}(x_i-x_{i+1})^2 + x_n^2 ,
+\]</div>
+<p>which vanishes only if <span class="math notranslate nohighlight">\(x_1 = 0\)</span> and all <span class="math notranslate nohighlight">\(x_i\)</span> are equal, that is, only if
+<span class="math notranslate nohighlight">\(x = 0\)</span>. Its eigenvalues are <span class="math notranslate nohighlight">\(4\sin^2\big(k\pi/(2(n+1))\big)\)</span>,
+<span class="math notranslate nohighlight">\(k = 1,\dots,n\)</span>. The two-dimensional Laplacian on an <span class="math notranslate nohighlight">\(m\times m\)</span> grid,
+<span class="math notranslate nohighlight">\(I_m\otimes T_m + T_m\otimes I_m\)</span>, has as eigenvalues all sums of two
+eigenvalues of <span class="math notranslate nohighlight">\(T_m\)</span>, so it is SPD as well.</p>
+<p><em>Covariance and kernel matrices.</em> If <span class="math notranslate nohighlight">\(X\)</span> is a random vector with finite
+second moments and mean <span class="math notranslate nohighlight">\(\mu\)</span>, its covariance
+<span class="math notranslate nohighlight">\(K = \mathbb{E}[(X-\mu)(X-\mu)^T]\)</span> is positive semidefinite because
+<span class="math notranslate nohighlight">\(v^TKv = \mathbb{E}[(v^T(X-\mu))^2]\ge0\)</span>, and it is SPD unless some
+nontrivial linear combination of the components of <span class="math notranslate nohighlight">\(X\)</span> is almost surely
+constant. The squared-exponential kernel matrix
+<span class="math notranslate nohighlight">\(K_{ij} = \sigma_f^2\exp(-(t_i-t_j)^2/(2\ell^2))\)</span> is SPD for distinct
+points <span class="math notranslate nohighlight">\(t_1,\dots,t_n\)</span>. (<em>Sketch:</em> the kernel is the Fourier transform of
+a Gaussian density <span class="math notranslate nohighlight">\(p(\omega)&gt;0\)</span>, so
+<span class="math notranslate nohighlight">\(c^TKc = \sigma_f^2\int|\sum_jc_je^{i\omega t_j}|^2p(\omega)\,d\omega\)</span>,
+which vanishes only if <span class="math notranslate nohighlight">\(\sum_jc_je^{i\omega t_j} = 0\)</span> for all <span class="math notranslate nohighlight">\(\omega\)</span>,
+and exponentials with distinct frequencies <span class="math notranslate nohighlight">\(t_j\)</span> are linearly independent.)
+Kernels and their positive definiteness are discussed by
+<span class="bibtex-citation" id="id2">Rasmussen and Williams [<a class="reference internal" href="../back/bibliography.html#id89" title="Carl Edward Rasmussen and Christopher K. I. Williams. Gaussian Processes for Machine Learning. MIT Press, Cambridge, MA, 2006.">2006</a>]</span> (Chapter 4). We return to this example in
+<a class="reference internal" href="#ch06-sec-gaussian"><span class="std std-numref">Section 6.5</span></a>.</p>
+</section>
+</div><p>The following properties are used constantly. Each is a direct consequence
+of the definition.</p>
+<div class="proof proposition admonition" id="ch06-prop-spd-properties">
+<p class="admonition-title"><span class="caption-number">Proposition 6.1 </span> (Properties of SPD matrices)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> be SPD. Then:</p>
+<ol class="arabic simple">
+<li><p>all eigenvalues of <span class="math notranslate nohighlight">\(A\)</span> are positive; consequently <span class="math notranslate nohighlight">\(A\)</span> is nonsingular,
+<span class="math notranslate nohighlight">\(\det A&gt;0\)</span>, <span class="math notranslate nohighlight">\(A^{-1}\)</span> is SPD, <span class="math notranslate nohighlight">\(\|A\|_2 = \lambda_{\max}(A)\)</span> and
+<span class="math notranslate nohighlight">\(\kappa_2(A) = \lambda_{\max}(A)/\lambda_{\min}(A)\)</span>. Conversely, a
+symmetric matrix with positive eigenvalues is SPD;</p></li>
+<li><p>every principal submatrix <span class="math notranslate nohighlight">\(A(\mathcal I,\mathcal I)\)</span>,
+<span class="math notranslate nohighlight">\(\mathcal I\subseteq\{1,\dots,n\}\)</span>, is SPD; in particular <span class="math notranslate nohighlight">\(a_{ii}&gt;0\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(|a_{ij}|&lt;\sqrt{a_{ii}a_{jj}}\)</span> for <span class="math notranslate nohighlight">\(i\ne j\)</span>; in particular the largest
+entry of <span class="math notranslate nohighlight">\(A\)</span> in absolute value lies on the diagonal;</p></li>
+<li><p><span class="math notranslate nohighlight">\(X^TAX\)</span> is SPD for every <span class="math notranslate nohighlight">\(X\in\R^{n\times k}\)</span> with linearly independent
+columns.</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1) If <span class="math notranslate nohighlight">\(Aq = \lambda q\)</span> with <span class="math notranslate nohighlight">\(\|q\|_2 = 1\)</span> then <span class="math notranslate nohighlight">\(\lambda = q^TAq&gt;0\)</span>. The
+determinant is the product of the eigenvalues, and <span class="math notranslate nohighlight">\(A^{-1}\)</span> is symmetric
+with eigenvalues <span class="math notranslate nohighlight">\(1/\lambda_i&gt;0\)</span>. For symmetric <span class="math notranslate nohighlight">\(A\)</span> the formula
+<span class="math notranslate nohighlight">\(\|A\|_2^2 = \lambda_{\max}(A^TA) = \lambda_{\max}(A^2)\)</span> of
+<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-induced-formulas">Theorem 1.4</a> gives <span class="math notranslate nohighlight">\(\|A\|_2 = \lambda_{\max}(A)\)</span>, and
+applying it to <span class="math notranslate nohighlight">\(A^{-1}\)</span> gives the condition number. Conversely, if
+<span class="math notranslate nohighlight">\(A = Q\Lambda Q^T\)</span> with <span class="math notranslate nohighlight">\(Q\)</span> orthogonal and <span class="math notranslate nohighlight">\(\Lambda&gt;0\)</span>, then
+<span class="math notranslate nohighlight">\(x^TAx = \sum_i\lambda_i(q_i^Tx)^2&gt;0\)</span> for <span class="math notranslate nohighlight">\(x\ne0\)</span>.</p>
+<p>(2) Given <span class="math notranslate nohighlight">\(y\ne0\)</span> indexed by <span class="math notranslate nohighlight">\(\mathcal I\)</span>, extend it by zeros to
+<span class="math notranslate nohighlight">\(x\in\R^n\)</span>. Then <span class="math notranslate nohighlight">\(y^TA(\mathcal I,\mathcal I)y = x^TAx&gt;0\)</span>. The case
+<span class="math notranslate nohighlight">\(\mathcal I = \{i\}\)</span> gives <span class="math notranslate nohighlight">\(a_{ii}&gt;0\)</span>.</p>
+<p>(3) By (2) with <span class="math notranslate nohighlight">\(\mathcal I = \{i,j\}\)</span> the matrix
+<span class="math notranslate nohighlight">\(\begin{bmatrix}a_{ii}&amp;a_{ij}\\a_{ij}&amp;a_{jj}\end{bmatrix}\)</span> is SPD, so by
+(1) its determinant <span class="math notranslate nohighlight">\(a_{ii}a_{jj}-a_{ij}^2\)</span> is positive. Hence
+<span class="math notranslate nohighlight">\(|a_{ij}|&lt;\sqrt{a_{ii}a_{jj}}\le\max(a_{ii},a_{jj})\)</span>.</p>
+<p>(4) <span class="math notranslate nohighlight">\(X^TAX\)</span> is symmetric, and for <span class="math notranslate nohighlight">\(y\ne0\)</span> we have <span class="math notranslate nohighlight">\(Xy\ne0\)</span>, so
+<span class="math notranslate nohighlight">\(y^TX^TAXy = (Xy)^TA(Xy)&gt;0\)</span>.</p>
+</div>
+<p>Property 4 with a nonsingular <span class="math notranslate nohighlight">\(X\)</span> says that SPD-ness is preserved by
+<em>congruence</em> <span class="math notranslate nohighlight">\(A\mapsto X^TAX\)</span>, although eigenvalues are not. The key to
+everything that follows is that eliminating one variable from an SPD system
+leaves an SPD system.</p>
+<div class="proof lemma admonition" id="ch06-lem-schur">
+<p class="admonition-title"><span class="caption-number">Lemma 6.1 </span> (Schur complements of SPD matrices)</p>
+<section class="lemma-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A = A^T\)</span> be partitioned as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix} A_{11} &amp; A_{21}^T\\ A_{21} &amp; A_{22}\end{bmatrix},
+\qquad A_{11}\in\R^{k\times k}.
+\end{split}\]</div>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> is SPD, then <span class="math notranslate nohighlight">\(A_{11}\)</span> and the <em>Schur complement</em>
+<span class="math notranslate nohighlight">\(S = A_{22} - A_{21}A_{11}^{-1}A_{21}^T\)</span> are SPD. Conversely, if <span class="math notranslate nohighlight">\(A_{11}\)</span>
+and <span class="math notranslate nohighlight">\(S\)</span> are SPD, then <span class="math notranslate nohighlight">\(A\)</span> is SPD.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Suppose <span class="math notranslate nohighlight">\(A\)</span> is SPD. Then <span class="math notranslate nohighlight">\(A_{11}\)</span> is SPD by
+<a class="reference internal" href="#ch06-prop-spd-properties">Proposition 6.1</a>, part 2, so it is invertible and <span class="math notranslate nohighlight">\(S\)</span> is
+defined and symmetric. Given <span class="math notranslate nohighlight">\(y\ne0\)</span>, set
+<span class="math notranslate nohighlight">\(z = \begin{bmatrix}-A_{11}^{-1}A_{21}^Ty\\ y\end{bmatrix}\)</span>, which is
+nonzero because its second block is. Writing <span class="math notranslate nohighlight">\(w = -A_{11}^{-1}A_{21}^Ty\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+z^TAz = w^TA_{11}w + 2w^TA_{21}^Ty + y^TA_{22}y
+= y^TA_{21}A_{11}^{-1}A_{21}^Ty - 2y^TA_{21}A_{11}^{-1}A_{21}^Ty + y^TA_{22}y
+= y^TSy ,
+\]</div>
+<p>so <span class="math notranslate nohighlight">\(y^TSy = z^TAz&gt;0\)</span>. For the converse, multiply out to check the block
+factorization</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix} I &amp; 0\\ A_{21}A_{11}^{-1} &amp; I\end{bmatrix}
+\begin{bmatrix} A_{11} &amp; 0\\ 0 &amp; S\end{bmatrix}
+\begin{bmatrix} I &amp; A_{11}^{-1}A_{21}^T\\ 0 &amp; I\end{bmatrix}.
+\end{split}\]</div>
+<p>The middle factor is SPD when <span class="math notranslate nohighlight">\(A_{11}\)</span> and <span class="math notranslate nohighlight">\(S\)</span> are, and the outer factors
+are <span class="math notranslate nohighlight">\(X^T\)</span> and <span class="math notranslate nohighlight">\(X\)</span> for a nonsingular <span class="math notranslate nohighlight">\(X\)</span>, so <span class="math notranslate nohighlight">\(A\)</span> is SPD by
+<a class="reference internal" href="#ch06-prop-spd-properties">Proposition 6.1</a>, part 4.</p>
+</div>
+<p>For <span class="math notranslate nohighlight">\(k = 1\)</span>, writing <span class="math notranslate nohighlight">\(\alpha = a_{11}\)</span> and <span class="math notranslate nohighlight">\(b = A(2{:}n,1)\)</span>, the Schur
+complement is <span class="math notranslate nohighlight">\(S = A_{22} - bb^T/\alpha\)</span>: exactly the matrix that remains
+after one step of Gaussian elimination without pivoting
+(<a class="reference internal" href="../ch05-lu/notes.html#ch05"><span class="std std-numref">Chapter 5</span></a>). The lemma therefore says that Gaussian
+elimination on an SPD matrix never meets a zero or negative pivot.</p>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>Is <span class="math notranslate nohighlight">\(A = \begin{bmatrix}1&amp;2\\2&amp;5\end{bmatrix}\)</span> SPD? Is
+<span class="math notranslate nohighlight">\(B = \begin{bmatrix}1&amp;2\\2&amp;3\end{bmatrix}\)</span>? Answer using a Schur
+complement rather than eigenvalues.</p>
+<p><em>Answer.</em> For <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(a_{11} = 1&gt;0\)</span> and <span class="math notranslate nohighlight">\(S = 5 - 2\cdot2/1 = 1&gt;0\)</span>, so <span class="math notranslate nohighlight">\(A\)</span> is
+SPD by <a class="reference internal" href="#ch06-lem-schur">Lemma 6.1</a>. For <span class="math notranslate nohighlight">\(B\)</span>, <span class="math notranslate nohighlight">\(S = 3-4 = -1&lt;0\)</span>, so <span class="math notranslate nohighlight">\(B\)</span> is not
+SPD; indeed <span class="math notranslate nohighlight">\(x = (-2,1)^T\)</span> gives <span class="math notranslate nohighlight">\(x^TBx = -1\)</span>, which is the vector <span class="math notranslate nohighlight">\(z\)</span> of
+the proof. Note that <span class="math notranslate nohighlight">\(B\)</span> has a positive diagonal: property 2 of
+<a class="reference internal" href="#ch06-prop-spd-properties">Proposition 6.1</a> is necessary, not sufficient, and <span class="math notranslate nohighlight">\(B\)</span>
+violates property 3 since <span class="math notranslate nohighlight">\(|b_{12}| = 2&gt;\sqrt3\)</span>.</p>
+</div>
+</section>
+<section id="the-cholesky-factorization">
+<span id="ch06-sec-cholesky"></span><h2><span class="section-number">6.2. </span>The Cholesky factorization<a class="headerlink" href="#the-cholesky-factorization" title="Link to this heading">#</a></h2>
+<section id="existence-and-uniqueness">
+<h3><span class="section-number">6.2.1. </span>Existence and uniqueness<a class="headerlink" href="#existence-and-uniqueness" title="Link to this heading">#</a></h3>
+<p>We use the convention <span class="math notranslate nohighlight">\(A = LL^T\)</span> with <span class="math notranslate nohighlight">\(L\)</span> lower triangular throughout this
+chapter. The equivalent upper-triangular form <span class="math notranslate nohighlight">\(A = R^TR\)</span> with <span class="math notranslate nohighlight">\(R = L^T\)</span> is
+used by Trefethen and Bau, by Higham, and by SciPy by default; we translate
+results stated for <span class="math notranslate nohighlight">\(R\)</span> when we quote them.</p>
+<div class="proof theorem admonition" id="ch06-thm-cholesky">
+<p class="admonition-title"><span class="caption-number">Theorem 6.1 </span> (Cholesky factorization)</p>
+<section class="theorem-content" id="proof-content">
+<p>Every SPD matrix <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> has a unique factorization
+<span class="math notranslate nohighlight">\(A = LL^T\)</span> in which <span class="math notranslate nohighlight">\(L\in\R^{n\times n}\)</span> is lower triangular with positive
+diagonal entries. The matrix <span class="math notranslate nohighlight">\(L\)</span> is the <em>Cholesky factor</em> of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. We use induction on <span class="math notranslate nohighlight">\(n\)</span>. For <span class="math notranslate nohighlight">\(n = 1\)</span>, <span class="math notranslate nohighlight">\(A = (a_{11})\)</span> with <span class="math notranslate nohighlight">\(a_{11}&gt;0\)</span>, and
+<span class="math notranslate nohighlight">\(L = (\sqrt{a_{11}})\)</span> is the only <span class="math notranslate nohighlight">\(1\times1\)</span> factor with a positive entry.</p>
+<p>Let <span class="math notranslate nohighlight">\(n&gt;1\)</span> and suppose the result holds for order <span class="math notranslate nohighlight">\(n-1\)</span>. Partition</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}\alpha &amp; b^T\\ b &amp; C\end{bmatrix},\qquad
+L = \begin{bmatrix}\lambda &amp; 0\\ \ell &amp; L_S\end{bmatrix},
+\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(\alpha,\lambda\in\R\)</span>, <span class="math notranslate nohighlight">\(b,\ell\in\R^{n-1}\)</span> and <span class="math notranslate nohighlight">\(C,L_S\in\R^{(n-1)\times(n-1)}\)</span>.
+Multiplying out,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+LL^T = \begin{bmatrix}\lambda^2 &amp; \lambda\ell^T\\
+\lambda\ell &amp; \ell\ell^T + L_SL_S^T\end{bmatrix},
+\end{split}\]</div>
+<p>so <span class="math notranslate nohighlight">\(A = LL^T\)</span> holds if and only if</p>
+<div class="math notranslate nohighlight">
+\[
+\lambda^2 = \alpha,\qquad \lambda\ell = b,\qquad
+L_SL_S^T = C - \ell\ell^T .
+\]</div>
+<p>Since <span class="math notranslate nohighlight">\(\alpha = a_{11}&gt;0\)</span>, the first equation has exactly one positive
+solution, <span class="math notranslate nohighlight">\(\lambda = \sqrt\alpha\)</span>. The second then forces
+<span class="math notranslate nohighlight">\(\ell = b/\lambda\)</span>, and the third becomes
+<span class="math notranslate nohighlight">\(L_SL_S^T = C - bb^T/\alpha = S\)</span>, the Schur complement of <span class="math notranslate nohighlight">\(\alpha\)</span>. By
+<a class="reference internal" href="#ch06-lem-schur">Lemma 6.1</a>, <span class="math notranslate nohighlight">\(S\)</span> is SPD of order <span class="math notranslate nohighlight">\(n-1\)</span>, so by the induction
+hypothesis there is exactly one lower triangular <span class="math notranslate nohighlight">\(L_S\)</span> with positive
+diagonal satisfying the third equation. Every choice in the construction
+was forced, which proves both existence and uniqueness.</p>
+</div>
+<p>The positivity of the diagonal is what makes the factor unique: changing
+the sign of any column of <span class="math notranslate nohighlight">\(L\)</span> leaves <span class="math notranslate nohighlight">\(LL^T\)</span> unchanged.</p>
+<div class="proof theorem admonition" id="ch06-thm-spd-characterization">
+<p class="admonition-title"><span class="caption-number">Theorem 6.2 </span> (Characterizations of positive definiteness)</p>
+<section class="theorem-content" id="proof-content">
+<p>For a symmetric <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> the following are equivalent:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(A\)</span> is SPD;</p></li>
+<li><p><span class="math notranslate nohighlight">\(A = LL^T\)</span> with <span class="math notranslate nohighlight">\(L\)</span> lower triangular with positive diagonal;</p></li>
+<li><p><span class="math notranslate nohighlight">\(A = B^TB\)</span> for some nonsingular <span class="math notranslate nohighlight">\(B\in\R^{n\times n}\)</span>;</p></li>
+<li><p>every leading principal minor <span class="math notranslate nohighlight">\(\det A_k\)</span>, <span class="math notranslate nohighlight">\(A_k = A(1{:}k,1{:}k)\)</span>, is
+positive (Sylvester’s criterion).</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1)<span class="math notranslate nohighlight">\(\Rightarrow\)</span>(2) is <a class="reference internal" href="#ch06-thm-cholesky">Theorem 6.1</a>, (2)<span class="math notranslate nohighlight">\(\Rightarrow\)</span>(3)
+takes <span class="math notranslate nohighlight">\(B = L^T\)</span>, and (3)<span class="math notranslate nohighlight">\(\Rightarrow\)</span>(1) is the Gram-matrix argument of
+<a class="reference internal" href="#ch06-exa-spd-families">Example 6.1</a>. (1)<span class="math notranslate nohighlight">\(\Rightarrow\)</span>(4) holds because each
+<span class="math notranslate nohighlight">\(A_k\)</span> is SPD and so has positive determinant. For (4)<span class="math notranslate nohighlight">\(\Rightarrow\)</span>(2) use
+induction on <span class="math notranslate nohighlight">\(n\)</span> as in the proof of <a class="reference internal" href="#ch06-thm-cholesky">Theorem 6.1</a>: <span class="math notranslate nohighlight">\(\alpha =
+\det A_1&gt;0\)</span>, and for <span class="math notranslate nohighlight">\(k\le n-1\)</span> the leading <span class="math notranslate nohighlight">\(k\times k\)</span> block of
+<span class="math notranslate nohighlight">\(S = C - bb^T/\alpha\)</span> is the Schur complement of <span class="math notranslate nohighlight">\(\alpha\)</span> in <span class="math notranslate nohighlight">\(A_{k+1}\)</span>, so
+<span class="math notranslate nohighlight">\(\det A_{k+1} = \alpha\det S_k\)</span> and <span class="math notranslate nohighlight">\(\det S_k&gt;0\)</span>. By induction
+<span class="math notranslate nohighlight">\(S = L_SL_S^T\)</span>, and <span class="math notranslate nohighlight">\(L\)</span> is assembled from <span class="math notranslate nohighlight">\(\sqrt\alpha\)</span>, <span class="math notranslate nohighlight">\(b/\sqrt\alpha\)</span>
+and <span class="math notranslate nohighlight">\(L_S\)</span> as before.</p>
+</div>
+<p>The proof shows more: the squared diagonal entries of <span class="math notranslate nohighlight">\(L\)</span> are ratios of
+leading principal minors, <span class="math notranslate nohighlight">\(\ell_{kk}^2 = \det A_k/\det A_{k-1}\)</span>
+(<a class="reference internal" href="#ch06-ex-pivots-minors"><span class="std std-numref">Exercise 6.2</span></a>), so <span class="math notranslate nohighlight">\(\det A = \prod_k\ell_{kk}^2\)</span>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Library conventions.</strong> <code class="docutils literal notranslate"><span class="pre">numpy.linalg.cholesky(A)</span></code> returns the lower
+triangular <span class="math notranslate nohighlight">\(L\)</span> with <span class="math notranslate nohighlight">\(A = LL^T\)</span> (in the NumPy 2 release used here, the
+keyword <code class="docutils literal notranslate"><span class="pre">upper=True</span></code> returns <span class="math notranslate nohighlight">\(L^T\)</span> instead). <code class="docutils literal notranslate"><span class="pre">scipy.linalg.cholesky(A)</span></code> returns the
+<em>upper</em> triangular <span class="math notranslate nohighlight">\(R = L^T\)</span> with <span class="math notranslate nohighlight">\(A = R^TR\)</span> unless <code class="docutils literal notranslate"><span class="pre">lower=True</span></code> is passed.
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.cho_factor</span></code> returns a pair <code class="docutils literal notranslate"><span class="pre">(c,</span> <span class="pre">lower)</span></code> intended only for
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.cho_solve</span></code>; it also defaults to the upper triangle, and its
+documentation warns that the unused triangle of <code class="docutils literal notranslate"><span class="pre">c</span></code> may contain arbitrary
+data (in SciPy 1.18 this happens when <code class="docutils literal notranslate"><span class="pre">overwrite_a=True</span></code>). All of these call
+the LAPACK routine <code class="docutils literal notranslate"><span class="pre">?potrf</span></code>, and all of them read only one triangle of <span class="math notranslate nohighlight">\(A\)</span>
+without checking symmetry. <code class="docutils literal notranslate"><span class="pre">scipy.linalg.solve(A,</span> <span class="pre">b,</span> <span class="pre">assume_a=&quot;pos&quot;)</span></code>
+solves an SPD system by Cholesky.</p>
+</div>
+</section>
+<section id="derivation-of-the-algorithm">
+<h3><span class="section-number">6.2.2. </span>Derivation of the algorithm<a class="headerlink" href="#derivation-of-the-algorithm" title="Link to this heading">#</a></h3>
+<p>The proof of <a class="reference internal" href="#ch06-thm-cholesky">Theorem 6.1</a> is already an algorithm: compute
+<span class="math notranslate nohighlight">\(\lambda\)</span> and <span class="math notranslate nohighlight">\(\ell\)</span>, form the Schur complement, and repeat. An equivalent
+column-by-column form comes from equating entries. For <span class="math notranslate nohighlight">\(i\ge j\)</span> the <span class="math notranslate nohighlight">\((i,j)\)</span>
+entry of <span class="math notranslate nohighlight">\(LL^T\)</span> is <span class="math notranslate nohighlight">\(\sum_{k=1}^{j}\ell_{ik}\ell_{jk}\)</span>, because <span class="math notranslate nohighlight">\(\ell_{jk} = 0\)</span>
+for <span class="math notranslate nohighlight">\(k&gt;j\)</span>. Solving for the last term of each sum gives</p>
+<div class="math notranslate nohighlight" id="equation-ch06-eq-cholesky-entries">
+<span class="eqno">(6.1)<a class="headerlink" href="#equation-ch06-eq-cholesky-entries" title="Link to this equation">#</a></span>\[
+\ell_{jj} = \Big(a_{jj} - \sum_{k=1}^{j-1}\ell_{jk}^2\Big)^{1/2},\qquad
+\ell_{ij} = \frac{1}{\ell_{jj}}\Big(a_{ij} - \sum_{k=1}^{j-1}\ell_{ik}\ell_{jk}\Big),
+\quad i = j+1,\dots,n .
+\]</div>
+<p>Column <span class="math notranslate nohighlight">\(j\)</span> of <span class="math notranslate nohighlight">\(L\)</span> depends only on columns <span class="math notranslate nohighlight">\(1,\dots,j-1\)</span>, so the columns can
+be computed from left to right. The sums over <span class="math notranslate nohighlight">\(k\)</span> for all <span class="math notranslate nohighlight">\(i&gt;j\)</span> at once
+form a matrix-vector product, which is how the algorithm should be written
+in NumPy.</p>
+<div class="proof algorithm admonition" id="ch06-alg-cholesky">
+<p class="admonition-title"><span class="caption-number">Algorithm 6.1 </span> (Cholesky factorization (column-oriented))</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> a symmetric <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> (only its lower triangle is read).</p>
+<p><strong>Output:</strong> the lower triangular <span class="math notranslate nohighlight">\(L\)</span> with <span class="math notranslate nohighlight">\(A = LL^T\)</span>, or a report that <span class="math notranslate nohighlight">\(A\)</span>
+is not positive definite.</p>
+<ol class="arabic simple">
+<li><p>For <span class="math notranslate nohighlight">\(j = 1,\dots,n\)</span>:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(d \leftarrow a_{jj} - L(j,1{:}j-1)\,L(j,1{:}j-1)^T\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(d\le0\)</span>, stop: <span class="math notranslate nohighlight">\(A\)</span> is not positive definite.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\ell_{jj}\leftarrow\sqrt d\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(L(j+1{:}n,\,j)\leftarrow\big(A(j+1{:}n,\,j) - L(j+1{:}n,\,1{:}j-1)\,L(j,1{:}j-1)^T\big)/\ell_{jj}\)</span>.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p>The last step of the loop is a matrix-vector product with the already
+computed part of <span class="math notranslate nohighlight">\(L\)</span> (level-2 BLAS). Production codes such as LAPACK’s
+<code class="docutils literal notranslate"><span class="pre">?potrf</span></code> use a blocked version in which most of the work is done by
+matrix-matrix operations (level-3 BLAS), for the reasons explained in
+<a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01"><span class="std std-numref">Chapter 1</span></a>; see <span class="bibtex-citation" id="id3">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span> (Section 4.2).</p>
+<div class="proof proposition admonition" id="ch06-prop-cholesky-cost">
+<p class="admonition-title"><span class="caption-number">Proposition 6.2 </span> (Cost of the Cholesky factorization)</p>
+<section class="proposition-content" id="proof-content">
+<p><a class="reference internal" href="#ch06-alg-cholesky">Algorithm 6.1</a> performs
+<span class="math notranslate nohighlight">\(\tfrac13n^3 + \tfrac12n^2 - \tfrac56n\)</span> flops and <span class="math notranslate nohighlight">\(n\)</span> square roots. The
+leading term <span class="math notranslate nohighlight">\(\tfrac13n^3\)</span> is half the <span class="math notranslate nohighlight">\(\tfrac23n^3\)</span> flops of LU
+factorization.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. At step <span class="math notranslate nohighlight">\(j\)</span>, forming <span class="math notranslate nohighlight">\(d\)</span> takes <span class="math notranslate nohighlight">\(j-1\)</span> multiplications and <span class="math notranslate nohighlight">\(j-1\)</span>
+subtractions. Each of the <span class="math notranslate nohighlight">\(n-j\)</span> entries <span class="math notranslate nohighlight">\(\ell_{ij}\)</span>, <span class="math notranslate nohighlight">\(i&gt;j\)</span>, takes <span class="math notranslate nohighlight">\(j-1\)</span>
+multiplications, <span class="math notranslate nohighlight">\(j-1\)</span> subtractions and one division. The total is</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{j=1}^n\big[2(j-1) + (n-j)(2j-1)\big]
+= n(n-1) + \frac{n(n-1)(n-2)}{3} + \frac{n(n-1)}{2},
+\]</div>
+<p>using <span class="math notranslate nohighlight">\(\sum_{j=1}^n(n-j)(j-1) = n(n-1)(n-2)/6\)</span> and
+<span class="math notranslate nohighlight">\(\sum_{j=1}^n(n-j) = n(n-1)/2\)</span>. Expanding gives
+<span class="math notranslate nohighlight">\(\tfrac13n^3 + \tfrac12n^2 - \tfrac56n\)</span>.</p>
+</div>
+<p>Once <span class="math notranslate nohighlight">\(L\)</span> is known, <span class="math notranslate nohighlight">\(Ax = b\)</span> is solved by forward substitution <span class="math notranslate nohighlight">\(Ly = b\)</span> and
+back substitution <span class="math notranslate nohighlight">\(L^Tx = y\)</span>, each costing <span class="math notranslate nohighlight">\(n^2\)</span> flops to leading order, so
+a solve costs <span class="math notranslate nohighlight">\(\tfrac13n^3 + 2n^2\)</span> flops. Only the <span class="math notranslate nohighlight">\(n(n+1)/2\)</span> entries of
+the lower triangle of <span class="math notranslate nohighlight">\(A\)</span> are read, and <span class="math notranslate nohighlight">\(L\)</span> can overwrite them.</p>
+<div class="proof example admonition" id="ch06-exa-cholesky-3x3">
+<p class="admonition-title"><span class="caption-number">Example 6.2 </span> (A <span class="math notranslate nohighlight">\(3\times3\)</span> Cholesky factorization by hand)</p>
+<section class="example-content" id="proof-content">
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A = \begin{bmatrix}1&amp;1&amp;0\\1&amp;2&amp;2\\0&amp;2&amp;5\end{bmatrix},\qquad
+b = \begin{bmatrix}2\\5\\7\end{bmatrix}.
+\end{split}\]</div>
+<p>Column 1: <span class="math notranslate nohighlight">\(\ell_{11} = \sqrt1 = 1\)</span>, <span class="math notranslate nohighlight">\(\ell_{21} = 1/1 = 1\)</span>, <span class="math notranslate nohighlight">\(\ell_{31} = 0\)</span>.
+Column 2: <span class="math notranslate nohighlight">\(\ell_{22} = \sqrt{2-1^2} = 1\)</span> and <span class="math notranslate nohighlight">\(\ell_{32} = (2 - 0\cdot1)/1 = 2\)</span>.
+Column 3: <span class="math notranslate nohighlight">\(\ell_{33} = \sqrt{5 - 0^2 - 2^2} = 1\)</span>. Hence</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+L = \begin{bmatrix}1&amp;0&amp;0\\1&amp;1&amp;0\\0&amp;2&amp;1\end{bmatrix},
+\end{split}\]</div>
+<p>and one checks <span class="math notranslate nohighlight">\(LL^T = A\)</span>. Forward substitution in <span class="math notranslate nohighlight">\(Ly = b\)</span> gives
+<span class="math notranslate nohighlight">\(y = (2, 3, 1)^T\)</span>, and back substitution in <span class="math notranslate nohighlight">\(L^Tx = y\)</span> gives
+<span class="math notranslate nohighlight">\(x = (1,1,1)^T\)</span>. Finally <span class="math notranslate nohighlight">\(\det A = (\ell_{11}\ell_{22}\ell_{33})^2 = 1\)</span>.
+Note that <span class="math notranslate nohighlight">\(\ell_{32} = 2\)</span> is larger than the diagonal entry <span class="math notranslate nohighlight">\(\ell_{22} = 1\)</span>
+of its column; we return to this below.</p>
+</section>
+</div></section>
+<section id="bounded-entries-and-no-pivoting">
+<h3><span class="section-number">6.2.3. </span>Bounded entries and no pivoting<a class="headerlink" href="#bounded-entries-and-no-pivoting" title="Link to this heading">#</a></h3>
+<p>For LU factorization, pivoting is needed to keep the entries of the factors
+from growing (<a class="reference internal" href="../ch05-lu/notes.html#ch05"><span class="std std-numref">Chapter 5</span></a>). For Cholesky no pivoting is
+needed, because the entries of <span class="math notranslate nohighlight">\(L\)</span> are bounded by the entries of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<div class="proof proposition admonition" id="ch06-prop-entry-bound">
+<p class="admonition-title"><span class="caption-number">Proposition 6.3 </span> (Entry bound and growth)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A = LL^T\)</span> be SPD. Then</p>
+<div class="math notranslate nohighlight">
+\[
+|\ell_{ij}|\le\sqrt{a_{ii}}\quad\text{for all } j\le i,
+\qquad \ell_{jj}\le\sqrt{a_{jj}} .
+\]</div>
+<p>Moreover, every entry of every Schur complement produced by the algorithm
+(equivalently, by Gaussian elimination without pivoting) is bounded in
+absolute value by <span class="math notranslate nohighlight">\(\max_{i}a_{ii} = \max_{i,j}|a_{ij}|\)</span>, so the growth
+factor of Gaussian elimination without pivoting on an SPD matrix equals 1.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The diagonal entry <span class="math notranslate nohighlight">\((i,i)\)</span> of <span class="math notranslate nohighlight">\(A = LL^T\)</span> is
+<span class="math notranslate nohighlight">\(a_{ii} = \sum_{k=1}^{i}\ell_{ik}^2\)</span>, a sum of nonnegative terms, so each
+term is at most <span class="math notranslate nohighlight">\(a_{ii}\)</span>. For the growth statement, the diagonal entries of
+<span class="math notranslate nohighlight">\(S = C - bb^T/\alpha\)</span> are <span class="math notranslate nohighlight">\(s_{ii} = c_{ii} - b_i^2/\alpha\le c_{ii}\)</span>, so
+diagonal entries never increase; <span class="math notranslate nohighlight">\(S\)</span> is SPD by <a class="reference internal" href="#ch06-lem-schur">Lemma 6.1</a>,
+so its largest entry is on its diagonal by
+<a class="reference internal" href="#ch06-prop-spd-properties">Proposition 6.1</a>, part 3. By induction the entries of
+all Schur complements are bounded by <span class="math notranslate nohighlight">\(\max_ia_{ii}\)</span>, which by the same
+part 3 equals <span class="math notranslate nohighlight">\(\max_{i,j}|a_{ij}|\)</span>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is <em>not</em> true that <span class="math notranslate nohighlight">\(|\ell_{ij}|\le\ell_{jj}\)</span>, a statement that appeared
+in an earlier version of these notes. The <span class="math notranslate nohighlight">\(2\times2\)</span> matrix
+<span class="math notranslate nohighlight">\(\begin{bmatrix}1&amp;2\\2&amp;5\end{bmatrix}\)</span> has
+<span class="math notranslate nohighlight">\(L = \begin{bmatrix}1&amp;0\\2&amp;1\end{bmatrix}\)</span> with <span class="math notranslate nohighlight">\(\ell_{21} = 2&gt;\ell_{11} =
+1\)</span>, and <a class="reference internal" href="#ch06-exa-cholesky-3x3">Example 6.2</a> has <span class="math notranslate nohighlight">\(\ell_{32} = 2&gt;\ell_{22} = 1\)</span>.
+The correct bound runs along <em>rows</em> of <span class="math notranslate nohighlight">\(L\)</span>: <span class="math notranslate nohighlight">\(|\ell_{ij}|\le\sqrt{a_{ii}}\)</span>
+(here <span class="math notranslate nohighlight">\(2\le\sqrt5\)</span>). The lab counts the violations of the false bound on
+random SPD matrices.</p>
+</div>
+<p>For a general matrix the reason for pivoting is that the multipliers and
+the Schur complements can be large. For an SPD matrix neither can happen,
+and the diagonal pivot is always the right choice in the sense that it is
+positive. Symmetric pivoting <span class="math notranslate nohighlight">\(PAP^T\)</span> is still useful for other purposes,
+such as computing a rank-revealing factorization of a positive
+<em>semidefinite</em> matrix (LAPACK’s <code class="docutils literal notranslate"><span class="pre">?pstrf</span></code>; see <span class="bibtex-citation" id="id4">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>,
+Section 10.3) or reducing fill-in for sparse matrices
+(<a class="reference internal" href="../ch11-krylov/notes.html#ch11"><span class="std std-numref">Chapter 11</span></a>).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Half the flops does not mean half the time. In the lab, SciPy’s
+<code class="docutils literal notranslate"><span class="pre">lu_factor</span></code> (LAPACK <code class="docutils literal notranslate"><span class="pre">?getrf</span></code>) and <code class="docutils literal notranslate"><span class="pre">cho_factor</span></code> (LAPACK <code class="docutils literal notranslate"><span class="pre">?potrf</span></code>) are timed
+on the same SPD matrices, and the measured ratio of their run times need
+not be close to 2 on the machine that executes it. The two routines differ
+in more than the flop count: LU searches for pivots and interchanges rows,
+and the two blocked codes are parallelized differently. An earlier version
+of these notes compared Cholesky with <code class="docutils literal notranslate"><span class="pre">scipy.linalg.lu</span></code>, which in addition
+forms the explicit matrices <span class="math notranslate nohighlight">\(P\)</span>, <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(U\)</span>, and then called the
+resulting ratio a confirmation of “theory”. The flop ratio is the
+machine-independent prediction; a timing is an observation on one machine.</p>
+</div>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>The matrix <span class="math notranslate nohighlight">\(A = \begin{bmatrix}4&amp;2\\2&amp;2\end{bmatrix}\)</span> is SPD. Find its
+Cholesky factor, and verify the entry bound.</p>
+<p><em>Answer.</em> <span class="math notranslate nohighlight">\(\ell_{11} = 2\)</span>, <span class="math notranslate nohighlight">\(\ell_{21} = 2/2 = 1\)</span> and
+<span class="math notranslate nohighlight">\(\ell_{22} = \sqrt{2-1} = 1\)</span>, so <span class="math notranslate nohighlight">\(L = \begin{bmatrix}2&amp;0\\1&amp;1\end{bmatrix}\)</span>.
+Row 2 gives <span class="math notranslate nohighlight">\(\ell_{21}^2+\ell_{22}^2 = 2 = a_{22}\)</span>, and indeed
+<span class="math notranslate nohighlight">\(|\ell_{21}|,\ell_{22}\le\sqrt2\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="stability-and-cholesky-as-a-test-for-definiteness">
+<span id="ch06-sec-stability"></span><h2><span class="section-number">6.3. </span>Stability, and Cholesky as a test for definiteness<a class="headerlink" href="#stability-and-cholesky-as-a-test-for-definiteness" title="Link to this heading">#</a></h2>
+<section id="backward-error-analysis">
+<h3><span class="section-number">6.3.1. </span>Backward error analysis<a class="headerlink" href="#backward-error-analysis" title="Link to this heading">#</a></h3>
+<p>The entry bound makes the rounding error analysis of Cholesky short and
+its conclusion strong. We quote the results in our notation; Higham states
+them for <span class="math notranslate nohighlight">\(R = L^T\)</span>.</p>
+<div class="proof theorem admonition" id="ch06-thm-backward-error">
+<p class="admonition-title"><span class="caption-number">Theorem 6.3 </span> (Backward error of the Cholesky factorization)</p>
+<section class="theorem-content" id="proof-content">
+<p>If <a class="reference internal" href="#ch06-alg-cholesky">Algorithm 6.1</a> applied to the SPD matrix <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span>
+runs to completion in floating-point arithmetic with unit roundoff <span class="math notranslate nohighlight">\(u\)</span>, the
+computed factor <span class="math notranslate nohighlight">\(\widehat L\)</span> satisfies</p>
+<div class="math notranslate nohighlight" id="equation-ch06-eq-backward">
+<span class="eqno">(6.2)<a class="headerlink" href="#equation-ch06-eq-backward" title="Link to this equation">#</a></span>\[
+\widehat L\widehat L^T = A + \Delta A,\qquad
+|\Delta A|\le\gamma_{n+1}\,|\widehat L|\,|\widehat L|^T ,
+\]</div>
+<p>where absolute values and inequalities hold entrywise
+<span class="bibtex-citation" id="id5">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Theorem 10.3).</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. We only sketch the argument. Each computed entry <span class="math notranslate nohighlight">\(\hat\ell_{ij}\)</span> is obtained from
+<a class="reference internal" href="#equation-ch06-eq-cholesky-entries">(6.1)</a> by an inner product, a subtraction and a
+division (or square root). The standard analysis of such “solve for the
+last term” computations <span class="bibtex-citation" id="id6">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Chapter 8) shows that
+<span class="math notranslate nohighlight">\(\big|a_{ij} - \sum_{k=1}^{j}\hat\ell_{ik}\hat\ell_{jk}\big|
+\le\gamma_j\sum_{k=1}^{j}|\hat\ell_{ik}||\hat\ell_{jk}|\)</span> for <span class="math notranslate nohighlight">\(i&gt;j\)</span>; the
+square root on the diagonal contributes one more rounding error and
+<span class="math notranslate nohighlight">\(\gamma_{j+1}\)</span>. Since <span class="math notranslate nohighlight">\(\gamma_j\le\gamma_{n+1}\)</span>, this is
+<a class="reference internal" href="#equation-ch06-eq-backward">(6.2)</a> entry by entry.</p>
+</div>
+<p>The bound is componentwise, but relative to <span class="math notranslate nohighlight">\(|\widehat L||\widehat L|^T\)</span>
+rather than to <span class="math notranslate nohighlight">\(|A|\)</span>. What makes it useful is that <span class="math notranslate nohighlight">\(|\widehat L||\widehat
+L|^T\)</span> cannot be large compared with <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<div class="proof corollary admonition" id="ch06-cor-normwise">
+<p class="admonition-title"><span class="caption-number">Corollary 6.1 </span> (Normwise backward stability)</p>
+<section class="corollary-content" id="proof-content">
+<p>Under the hypotheses of <a class="reference internal" href="#ch06-thm-backward-error">Theorem 6.3</a>, if
+<span class="math notranslate nohighlight">\(\gamma_{n+1}&lt;1\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\|\Delta A\|_2\le\frac{\gamma_{n+1}}{1-\gamma_{n+1}}\,\trace(A)
+\le\frac{n\gamma_{n+1}}{1-\gamma_{n+1}}\,\|A\|_2 .
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. For a matrix <span class="math notranslate nohighlight">\(M\)</span> and a nonnegative matrix <span class="math notranslate nohighlight">\(N\ge|M|\)</span> we have
+<span class="math notranslate nohighlight">\(\|M\|_2\le\|N\|_2\)</span>, because <span class="math notranslate nohighlight">\(\|Mx\|_2\le\|N|x|\|_2\)</span> for every <span class="math notranslate nohighlight">\(x\)</span>. Hence
+<span class="math notranslate nohighlight">\(\|\Delta A\|_2\le\gamma_{n+1}\|\,|\widehat L|\,|\widehat L|^T\|_2 =
+\gamma_{n+1}\|\,|\widehat L|\,\|_2^2\le\gamma_{n+1}\|\widehat L\|_F^2\)</span>,
+using <span class="math notranslate nohighlight">\(\|B\|_2\le\|B\|_F\)</span> from <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-frobenius">Theorem 1.5</a>. Next,
+<span class="math notranslate nohighlight">\(\|\widehat L\|_F^2 = \trace(\widehat L\widehat L^T) = \trace(A) +
+\trace(\Delta A)\)</span>, and the diagonal of <a class="reference internal" href="#equation-ch06-eq-backward">(6.2)</a> gives
+<span class="math notranslate nohighlight">\(|\trace(\Delta A)|\le\gamma_{n+1}\trace(|\widehat L||\widehat L|^T) =
+\gamma_{n+1}\|\widehat L\|_F^2\)</span>. Therefore
+<span class="math notranslate nohighlight">\(\|\widehat L\|_F^2\le\trace(A)/(1-\gamma_{n+1})\)</span>. Finally
+<span class="math notranslate nohighlight">\(\trace(A) = \sum_i\lambda_i\le n\lambda_{\max} = n\|A\|_2\)</span>.</p>
+</div>
+<p>The constant <span class="math notranslate nohighlight">\(n\gamma_{n+1}\approx n^2u\)</span> is a worst-case bound; the
+backward errors observed in practice are of order <span class="math notranslate nohighlight">\(u\)</span>, as
+<a class="reference internal" href="#ch06-fig-stability"><span class="std std-numref">Figure 6.1</span></a> shows. What matters is that no growth factor
+appears: in contrast with LU with partial pivoting
+(<a class="reference internal" href="../ch05-lu/notes.html#ch05"><span class="std std-numref">Chapter 5</span></a>), there is no matrix for which the bound is
+large compared with <span class="math notranslate nohighlight">\(n^2u\|A\|_2\)</span>. The triangular solves are backward
+stable too, and the complete solution process satisfies the following.</p>
+<div class="proof theorem admonition" id="ch06-thm-solve-backward">
+<p class="admonition-title"><span class="caption-number">Theorem 6.4 </span> (Backward error of a Cholesky solve)</p>
+<section class="theorem-content" id="proof-content">
+<p>If Cholesky factorization of the SPD matrix <span class="math notranslate nohighlight">\(A\)</span> runs to completion, the
+computed solution <span class="math notranslate nohighlight">\(\hat x\)</span> of <span class="math notranslate nohighlight">\(Ax = b\)</span> obtained by forward and back
+substitution with <span class="math notranslate nohighlight">\(\widehat L\)</span> satisfies</p>
+<div class="math notranslate nohighlight">
+\[
+(A+\Delta A)\hat x = b,\qquad |\Delta A|\le\gamma_{3n+1}|\widehat L||\widehat L|^T
+\]</div>
+<p><span class="bibtex-citation" id="id7">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Theorem 10.4). Consequently
+<span class="math notranslate nohighlight">\(\|\Delta A\|_2\le n\gamma_{3n+1}\|A\|_2/(1-\gamma_{n+1})\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\|x-\hat x\|_2}{\|\hat x\|_2}\le\kappa_2(A)\,\frac{\|\Delta A\|_2}{\|A\|_2}.
+\]</div>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The normwise bound follows exactly as in <a class="reference internal" href="#ch06-cor-normwise">Corollary 6.1</a>. For
+the forward error, subtract <span class="math notranslate nohighlight">\(Ax = b\)</span> from <span class="math notranslate nohighlight">\((A+\Delta A)\hat x = b\)</span> to get
+<span class="math notranslate nohighlight">\(x - \hat x = A^{-1}\Delta A\,\hat x\)</span>, and take norms.</p>
+</div>
+<p>Cholesky is thus backward stable in the sense of
+<a class="reference internal" href="../ch04-conditioning-stability/notes.html#ch04"><span class="std std-numref">Chapter 4</span></a>, and the forward error of the computed solution
+is at most about <span class="math notranslate nohighlight">\(\kappa_2(A)\)</span> times the backward error. Trefethen and Bau
+<span class="bibtex-citation" id="id8">[<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">Trefethen and Bau, 1997</a>]</span> (Lecture 23) state the same conclusion normwise, as
+<span class="math notranslate nohighlight">\(\|\Delta A\|/\|A\| = \bigO(u)\)</span>.</p>
+<figure class="align-default" id="ch06-fig-stability">
+<a class="reference internal image-reference" href="../_images/ch06-stability.png"><img alt="Log-log plot against the condition number. The backward errors of the factorization and of the solve stay near the unit roundoff, while the forward error grows in proportion to the condition number, below the line kappa times u." src="../_images/ch06-stability.png" style="width: 70%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6.1 </span><span class="caption-text">Cholesky solves of <span class="math notranslate nohighlight">\(Ax = b\)</span> for random SPD matrices of order <span class="math notranslate nohighlight">\(n = 100\)</span> with
+prescribed <span class="math notranslate nohighlight">\(\kappa_2(A)\)</span> from <span class="math notranslate nohighlight">\(10^1\)</span> to <span class="math notranslate nohighlight">\(10^{15}\)</span>. The backward errors of
+the factorization and of the solve never exceed <span class="math notranslate nohighlight">\(2u\)</span>, whatever the
+conditioning; the forward error grows like <span class="math notranslate nohighlight">\(\kappa_2(A)u\)</span>. Backward
+stability does not mean accuracy for ill-conditioned problems.</span><a class="headerlink" href="#ch06-fig-stability" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="a-test-for-positive-definiteness">
+<h3><span class="section-number">6.3.2. </span>A test for positive definiteness<a class="headerlink" href="#a-test-for-positive-definiteness" title="Link to this heading">#</a></h3>
+<p>Because the algorithm breaks down exactly when a nonpositive pivot appears,
+it decides positive definiteness.</p>
+<div class="proof theorem admonition" id="ch06-thm-test-pd">
+<p class="admonition-title"><span class="caption-number">Theorem 6.5 </span> (Cholesky decides positive definiteness)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> be symmetric. In exact arithmetic,
+<a class="reference internal" href="#ch06-alg-cholesky">Algorithm 6.1</a> runs to completion (all <span class="math notranslate nohighlight">\(d&gt;0\)</span>) if and only if
+<span class="math notranslate nohighlight">\(A\)</span> is positive definite. If it stops at step <span class="math notranslate nohighlight">\(j\)</span> with <span class="math notranslate nohighlight">\(d\le0\)</span>, then the
+leading submatrix <span class="math notranslate nohighlight">\(A_j\)</span> is not positive definite, and the vector
+<span class="math notranslate nohighlight">\(z = \big[-(L_{j-1}^{-T}L_{j-1}^{-1}A(1{:}j-1,j))^T,\ 1,\ 0,\dots,0\big]^T\)</span>
+satisfies <span class="math notranslate nohighlight">\(z^TAz = d\le0\)</span>, where <span class="math notranslate nohighlight">\(L_{j-1}\)</span> is the computed leading block.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. If <span class="math notranslate nohighlight">\(A\)</span> is SPD, the algorithm computes the factor of
+<a class="reference internal" href="#ch06-thm-cholesky">Theorem 6.1</a>, and <span class="math notranslate nohighlight">\(d = \ell_{jj}^2&gt;0\)</span> at every step. If it
+completes, <span class="math notranslate nohighlight">\(A = LL^T\)</span> with positive diagonal, which is SPD by
+<a class="reference internal" href="#ch06-thm-spd-characterization">Theorem 6.2</a>. Suppose it stops at step <span class="math notranslate nohighlight">\(j\)</span>.
+Steps <span class="math notranslate nohighlight">\(1,\dots,j-1\)</span> succeeded, so <span class="math notranslate nohighlight">\(A_{j-1} = L_{j-1}L_{j-1}^T\)</span> is SPD,
+and <span class="math notranslate nohighlight">\(d = a_{jj} - c^TA_{j-1}^{-1}c\)</span> with <span class="math notranslate nohighlight">\(c = A(1{:}j-1,j)\)</span> is the Schur
+complement of <span class="math notranslate nohighlight">\(A_{j-1}\)</span> in <span class="math notranslate nohighlight">\(A_j\)</span>, because the computed row
+<span class="math notranslate nohighlight">\(L(j,1{:}j-1)^T = L_{j-1}^{-1}c\)</span> gives
+<span class="math notranslate nohighlight">\(L(j,1{:}j-1)L(j,1{:}j-1)^T = c^TA_{j-1}^{-1}c\)</span>. The vector
+<span class="math notranslate nohighlight">\(w = [-(A_{j-1}^{-1}c)^T, 1]^T\)</span> is the vector of the proof of
+<a class="reference internal" href="#ch06-lem-schur">Lemma 6.1</a>, so <span class="math notranslate nohighlight">\(w^TA_jw = d\le0\)</span>, and <span class="math notranslate nohighlight">\(z\)</span> is <span class="math notranslate nohighlight">\(w\)</span> padded
+with zeros.</p>
+</div>
+<p>The test costs at most <span class="math notranslate nohighlight">\(\tfrac13n^3\)</span> flops, several times less than
+computing eigenvalues, and when it fails it produces a certificate <span class="math notranslate nohighlight">\(z\)</span>.
+In floating-point arithmetic three caveats apply.</p>
+<p><em>Symmetry is assumed, not tested.</em> The algorithm reads only the lower
+triangle, so applied to a nonsymmetric matrix it factors a different,
+symmetric matrix. For <span class="math notranslate nohighlight">\(A = \begin{bmatrix}4&amp;3\\1&amp;2\end{bmatrix}\)</span> it computes
+<span class="math notranslate nohighlight">\(\ell_{11} = 2\)</span>, <span class="math notranslate nohighlight">\(\ell_{21} = 1/2\)</span>, <span class="math notranslate nohighlight">\(\ell_{22} = \sqrt{7}/2\)</span> and “succeeds”,
+but <span class="math notranslate nohighlight">\(LL^T = \begin{bmatrix}4&amp;1\\1&amp;2\end{bmatrix}\ne A\)</span>. An earlier version of
+the lab reported exactly this outcome as “succeeded (unexpected)”.
+Library routines document this behavior, and which triangle they read
+matters: <code class="docutils literal notranslate"><span class="pre">numpy.linalg.cholesky</span></code> reads the lower triangle and returns the
+factor above, whereas <code class="docutils literal notranslate"><span class="pre">scipy.linalg.cholesky</span></code>, which by default reads the
+upper triangle, sees the indefinite matrix
+<span class="math notranslate nohighlight">\(\begin{bmatrix}4&amp;3\\3&amp;2\end{bmatrix}\)</span> and raises <code class="docutils literal notranslate"><span class="pre">LinAlgError</span></code>. Our own
+implementation must choose a convention and state it. In the lab we reject input unless
+<span class="math notranslate nohighlight">\(\max_{i,j}|a_{ij}-a_{ji}|\le10nu\max_{i,j}|a_{ij}|\)</span>, which admits
+matrices that are symmetric up to rounding errors (such as a computed
+<span class="math notranslate nohighlight">\(B^TB\)</span>), and then read only the lower triangle. If a matrix is known to be
+symmetric in exact arithmetic but was computed with rounding errors, the
+right repair is <span class="math notranslate nohighlight">\((A+A^T)/2\)</span>, the nearest symmetric matrix in the Frobenius
+norm (<a class="reference internal" href="#ch06-ex-nearest-symmetric"><span class="std std-numref">Exercise 6.3</span></a>).</p>
+<p><em>Success certifies a nearby matrix.</em> By
+<a class="reference internal" href="#ch06-thm-backward-error">Theorem 6.3</a>, successful completion shows that
+<span class="math notranslate nohighlight">\(A+\Delta A\)</span> is SPD for a <span class="math notranslate nohighlight">\(\Delta A\)</span> of relative size about <span class="math notranslate nohighlight">\(n^2u\)</span>. It does
+not prove that <span class="math notranslate nohighlight">\(A\)</span> itself is positive definite when <span class="math notranslate nohighlight">\(A\)</span> has eigenvalues of
+size <span class="math notranslate nohighlight">\(\bigO(n^2u\|A\|_2)\)</span>.</p>
+<p><em>Failure can occur for SPD matrices that are nearly singular.</em> A sufficient
+condition for success, due to Demmel, requires the smallest eigenvalue of
+the scaled matrix <span class="math notranslate nohighlight">\(D^{-1}AD^{-1}\)</span>, <span class="math notranslate nohighlight">\(D = \diag(a_{ii}^{1/2})\)</span>, to exceed a
+quantity of order <span class="math notranslate nohighlight">\(n^2u\)</span> <span class="bibtex-citation" id="id9">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Section 10.1). For matrices
+closer to singularity the algorithm may meet <span class="math notranslate nohighlight">\(d\le0\)</span>, and often the stored
+matrix is no longer positive definite at all.</p>
+<div class="proof example admonition" id="ch06-exa-hilbert">
+<p class="admonition-title"><span class="caption-number">Example 6.3 </span> (The Hilbert matrix of order 14)</p>
+<section class="example-content" id="proof-content">
+<p>The Hilbert matrix <span class="math notranslate nohighlight">\(H_n\)</span>, <span class="math notranslate nohighlight">\(h_{ij} = 1/(i+j-1)\)</span>, is SPD for every <span class="math notranslate nohighlight">\(n\)</span>: it is
+the Gram matrix of the monomials <span class="math notranslate nohighlight">\(1,t,\dots,t^{n-1}\)</span> in <span class="math notranslate nohighlight">\(L^2(0,1)\)</span>. In
+double precision, <code class="docutils literal notranslate"><span class="pre">numpy.linalg.cholesky</span></code> succeeds for <span class="math notranslate nohighlight">\(H_{13}\)</span> and fails
+for <span class="math notranslate nohighlight">\(H_{14}\)</span>. The failure is correct. Computing the <span class="math notranslate nohighlight">\(LDL^T\)</span> factorization of
+the <em>stored</em> matrix <span class="math notranslate nohighlight">\(\fl(H_{14})\)</span> exactly, in rational arithmetic, gives a
+negative pivot: rounding the entries of <span class="math notranslate nohighlight">\(H_{14}\)</span> to double precision has
+already destroyed positive definiteness, because the smallest eigenvalue of
+<span class="math notranslate nohighlight">\(H_{14}\)</span> is far smaller than the rounding errors in its entries. The same
+exact computation shows that <span class="math notranslate nohighlight">\(\fl(H_{13})\)</span> is still positive definite. The
+lab carries out both computations.</p>
+</section>
+</div></section>
+</section>
+<section id="ldl-t-and-symmetric-indefinite-matrices">
+<span id="ch06-sec-ldlt"></span><h2><span class="section-number">6.4. </span><span class="math notranslate nohighlight">\(LDL^T\)</span> and symmetric indefinite matrices<a class="headerlink" href="#ldl-t-and-symmetric-indefinite-matrices" title="Link to this heading">#</a></h2>
+<section id="the-ldl-t-factorization">
+<h3><span class="section-number">6.4.1. </span>The <span class="math notranslate nohighlight">\(LDL^T\)</span> factorization<a class="headerlink" href="#the-ldl-t-factorization" title="Link to this heading">#</a></h3>
+<p>Pulling the diagonal out of the Cholesky factor gives a square-root-free
+variant: if <span class="math notranslate nohighlight">\(A = LL^T\)</span> and <span class="math notranslate nohighlight">\(D_0 = \diag(\ell_{11},\dots,\ell_{nn})\)</span>, then
+<span class="math notranslate nohighlight">\(A = (LD_0^{-1})D_0^2(LD_0^{-1})^T\)</span> with a <em>unit</em> lower triangular factor.
+The same form exists for many indefinite matrices.</p>
+<div class="proof theorem admonition" id="ch06-thm-ldlt">
+<p class="admonition-title"><span class="caption-number">Theorem 6.6 </span> (<span class="math notranslate nohighlight">\(LDL^T\)</span> factorization)</p>
+<section class="theorem-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> be symmetric with all leading principal
+submatrices <span class="math notranslate nohighlight">\(A_1,\dots,A_n\)</span> nonsingular. Then there is a unique
+factorization <span class="math notranslate nohighlight">\(A = LDL^T\)</span> with <span class="math notranslate nohighlight">\(L\)</span> unit lower triangular and <span class="math notranslate nohighlight">\(D\)</span> diagonal.
+Moreover <span class="math notranslate nohighlight">\(d_k = \det A_k/\det A_{k-1}\)</span> (with <span class="math notranslate nohighlight">\(\det A_0 = 1\)</span>), so <span class="math notranslate nohighlight">\(A\)</span> is SPD
+if and only if all <span class="math notranslate nohighlight">\(d_k&gt;0\)</span>, in which case <span class="math notranslate nohighlight">\(LD^{1/2}\)</span> is the Cholesky factor.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Under the hypothesis, <span class="math notranslate nohighlight">\(A\)</span> has a unique factorization <span class="math notranslate nohighlight">\(A = LU\)</span> with <span class="math notranslate nohighlight">\(L\)</span> unit
+lower triangular and <span class="math notranslate nohighlight">\(U\)</span> upper triangular and nonsingular
+(<a class="reference internal" href="../ch05-lu/notes.html#ch05"><span class="std std-numref">Chapter 5</span></a>). Let <span class="math notranslate nohighlight">\(D = \diag(u_{11},\dots,u_{nn})\)</span> and
+<span class="math notranslate nohighlight">\(M^T = D^{-1}U\)</span>, which is unit upper triangular. Then
+<span class="math notranslate nohighlight">\(A = LDM^T\)</span>, and <span class="math notranslate nohighlight">\(A = A^T = M(DL^T)\)</span> is another factorization into a unit
+lower triangular matrix <span class="math notranslate nohighlight">\(M\)</span> and an upper triangular matrix <span class="math notranslate nohighlight">\(DL^T\)</span>. By
+uniqueness of the LU factorization, <span class="math notranslate nohighlight">\(M = L\)</span>. Comparing leading blocks,
+<span class="math notranslate nohighlight">\(\det A_k = \prod_{i\le k}d_i\)</span>, which gives the formula for <span class="math notranslate nohighlight">\(d_k\)</span>. If all
+<span class="math notranslate nohighlight">\(d_k&gt;0\)</span>, <span class="math notranslate nohighlight">\(A = (LD^{1/2})(LD^{1/2})^T\)</span> is SPD; conversely an SPD matrix has
+positive leading minors by <a class="reference internal" href="#ch06-thm-spd-characterization">Theorem 6.2</a>.
+Uniqueness of <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(D\)</span> follows from the uniqueness of the LU
+factorization.</p>
+</div>
+<p>For SPD matrices <span class="math notranslate nohighlight">\(LDL^T\)</span> offers little beyond avoiding <span class="math notranslate nohighlight">\(n\)</span> square roots;
+its flop count also has leading term <span class="math notranslate nohighlight">\(\tfrac13n^3\)</span>
+(<a class="reference internal" href="#ch06-ex-flops"><span class="std std-numref">Exercise 6.4</span></a>). For a symmetric <em>indefinite</em> matrix it is not
+enough, for two reasons.</p>
+<div class="proof example admonition" id="ch06-exa-indefinite">
+<p class="admonition-title"><span class="caption-number">Example 6.4 </span> (Why symmetric indefinite matrices need <span class="math notranslate nohighlight">\(2\times2\)</span> pivots)</p>
+<section class="example-content" id="proof-content">
+<p>The matrix <span class="math notranslate nohighlight">\(A = \begin{bmatrix}0&amp;1\\1&amp;0\end{bmatrix}\)</span> is symmetric,
+nonsingular and indefinite (eigenvalues <span class="math notranslate nohighlight">\(\pm1\)</span>), but it has no <span class="math notranslate nohighlight">\(LDL^T\)</span>
+factorization with diagonal <span class="math notranslate nohighlight">\(D\)</span>, since that would require <span class="math notranslate nohighlight">\(d_1 = a_{11} = 0\)</span>
+and then <span class="math notranslate nohighlight">\(\ell_{21}d_1 = a_{21} = 1\)</span>. Symmetric permutations <span class="math notranslate nohighlight">\(PAP^T\)</span> do not
+help, because they only reorder the diagonal, which is zero. For
+<span class="math notranslate nohighlight">\(A(\epsilon) = \begin{bmatrix}\epsilon&amp;1\\1&amp;1\end{bmatrix}\)</span> with small
+<span class="math notranslate nohighlight">\(\epsilon\neq0\)</span> the factorization exists,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+A(\epsilon) = \begin{bmatrix}1&amp;0\\1/\epsilon&amp;1\end{bmatrix}
+\begin{bmatrix}\epsilon&amp;0\\0&amp;1-1/\epsilon\end{bmatrix}
+\begin{bmatrix}1&amp;1/\epsilon\\0&amp;1\end{bmatrix},
+\end{split}\]</div>
+<p>but its entries are of size <span class="math notranslate nohighlight">\(1/\epsilon\)</span>, which is the instability of
+Gaussian elimination without pivoting all over again. Row interchanges as in
+partial pivoting would cure it but destroy symmetry.</p>
+</section>
+</div></section>
+<section id="bunch-kaufman-pivoting">
+<h3><span class="section-number">6.4.2. </span>Bunch–Kaufman pivoting<a class="headerlink" href="#bunch-kaufman-pivoting" title="Link to this heading">#</a></h3>
+<p>The remedy of Bunch and Kaufman <span class="bibtex-citation" id="id10">[<a class="reference internal" href="../back/bibliography.html#id38" title="James R. Bunch and Linda Kaufman. Some stable methods for calculating inertia and solving symmetric linear systems. Mathematics of Computation, 31(137):163–179, 1977.">Bunch and Kaufman, 1977</a>]</span> is to allow <span class="math notranslate nohighlight">\(2\times2\)</span>
+diagonal blocks and to choose them by a symmetric pivoting strategy that
+inspects only two columns per step. The result is a factorization</p>
+<div class="math notranslate nohighlight">
+\[
+PAP^T = LDL^T,
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(P\)</span> a permutation, <span class="math notranslate nohighlight">\(L\)</span> unit lower triangular and <span class="math notranslate nohighlight">\(D\)</span> block diagonal
+with blocks of order 1 and 2. At each step a pivot block <span class="math notranslate nohighlight">\(E\)</span> (of order
+<span class="math notranslate nohighlight">\(s = 1\)</span> or <span class="math notranslate nohighlight">\(2\)</span>) is moved to the top left of the remaining matrix, and the
+Schur complement of <span class="math notranslate nohighlight">\(E\)</span> is formed, exactly as in
+<a class="reference internal" href="#ch06-lem-schur">Lemma 6.1</a>. The strategy below uses the constant
+<span class="math notranslate nohighlight">\(\alpha = (1+\sqrt{17})/8\approx0.6404\)</span>.</p>
+<div class="proof algorithm admonition" id="ch06-alg-bunch-kaufman">
+<p class="admonition-title"><span class="caption-number">Algorithm 6.2 </span> (Bunch–Kaufman pivot choice (one step))</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> the current symmetric matrix <span class="math notranslate nohighlight">\(A\)</span> (the active Schur complement).</p>
+<p><strong>Output:</strong> a pivot of order 1 or 2 and the symmetric interchange that brings
+it to the top left.</p>
+<ol class="arabic simple">
+<li><p>Let <span class="math notranslate nohighlight">\(\omega_1 = \max_{i&gt;1}|a_{i1}|\)</span>, attained at row <span class="math notranslate nohighlight">\(r\)</span>. If
+<span class="math notranslate nohighlight">\(\omega_1 = 0\)</span>, the first column is already eliminated; take <span class="math notranslate nohighlight">\(a_{11}\)</span> as a
+<span class="math notranslate nohighlight">\(1\times1\)</span> pivot (no elimination is needed).</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(|a_{11}|\ge\alpha\omega_1\)</span>, use <span class="math notranslate nohighlight">\(a_{11}\)</span> as a <span class="math notranslate nohighlight">\(1\times1\)</span> pivot.</p></li>
+<li><p>Otherwise let <span class="math notranslate nohighlight">\(\omega_r = \max_{i\ne r}|a_{ir}|\)</span> (so <span class="math notranslate nohighlight">\(\omega_r\ge\omega_1\)</span>).</p>
+<ol class="arabic simple">
+<li><p>If <span class="math notranslate nohighlight">\(|a_{11}|\,\omega_r\ge\alpha\omega_1^2\)</span>, use <span class="math notranslate nohighlight">\(a_{11}\)</span> as a
+<span class="math notranslate nohighlight">\(1\times1\)</span> pivot.</p></li>
+<li><p>Else, if <span class="math notranslate nohighlight">\(|a_{rr}|\ge\alpha\omega_r\)</span>, interchange rows and columns 1
+and <span class="math notranslate nohighlight">\(r\)</span> and use <span class="math notranslate nohighlight">\(a_{rr}\)</span> as a <span class="math notranslate nohighlight">\(1\times1\)</span> pivot.</p></li>
+<li><p>Else interchange rows and columns 2 and <span class="math notranslate nohighlight">\(r\)</span> and use
+<span class="math notranslate nohighlight">\(E = \begin{bmatrix}a_{11}&amp;a_{r1}\\a_{r1}&amp;a_{rr}\end{bmatrix}\)</span> as a
+<span class="math notranslate nohighlight">\(2\times2\)</span> pivot.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p>The value of <span class="math notranslate nohighlight">\(\alpha\)</span> is chosen so that the worst-case growth of the
+entries over two <span class="math notranslate nohighlight">\(1\times1\)</span> steps equals that over one <span class="math notranslate nohighlight">\(2\times2\)</span> step
+(<a class="reference internal" href="#ch06-ex-bunch-kaufman"><span class="std std-numref">Exercise 6.7</span></a>). With this choice the growth factor
+satisfies <span class="math notranslate nohighlight">\(\rho_n\le(1+1/\alpha)^{n-1}&lt;2.57^{n-1}\)</span> <span class="bibtex-citation" id="id11">[<a class="reference internal" href="../back/bibliography.html#id38" title="James R. Bunch and Linda Kaufman. Some stable methods for calculating inertia and solving symmetric linear systems. Mathematics of Computation, 31(137):163–179, 1977.">Bunch and Kaufman, 1977</a>]</span>,
+comparable to the bound <span class="math notranslate nohighlight">\(2^{n-1}\)</span> for partial pivoting, and the method is
+normwise backward stable <span class="bibtex-citation" id="id12">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Chapter 11). It costs
+<span class="math notranslate nohighlight">\(\tfrac13n^3\)</span> flops, like Cholesky, plus <span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> comparisons, and
+stores only one triangle. One caveat is worth knowing: the entries of <span class="math notranslate nohighlight">\(L\)</span>
+are not bounded by a constant, which matters in some applications and has
+led to variants such as rook pivoting. See <span class="bibtex-citation" id="id13">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> (Chapter 11) and
+<span class="bibtex-citation" id="id14">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span> (Section 4.4) for these and for Aasen’s alternative.</p>
+<div class="proof remark admonition" id="ch06-rem-inertia">
+<p class="admonition-title"><span class="caption-number">Remark 6.1 </span> (Inertia)</p>
+<section class="remark-content" id="proof-content">
+<p>By Sylvester’s law of inertia, the congruent matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(D\)</span> have the
+same numbers of positive, negative and zero eigenvalues. Each <span class="math notranslate nohighlight">\(2\times2\)</span>
+block chosen in the last case of the pivot choice has one positive and one negative eigenvalue,
+because its determinant is negative: from the failed tests,
+<span class="math notranslate nohighlight">\(|a_{11}a_{rr}|\le\alpha|a_{11}|\,\omega_r&lt;\alpha^2\omega_1^2&lt;a_{r1}^2\)</span>,
+using <span class="math notranslate nohighlight">\(|a_{rr}|&lt;\alpha\omega_r\)</span>, then <span class="math notranslate nohighlight">\(|a_{11}|\omega_r&lt;\alpha\omega_1^2\)</span>,
+then <span class="math notranslate nohighlight">\(\alpha&lt;1\)</span> and <span class="math notranslate nohighlight">\(\omega_1 = |a_{r1}|\)</span>.
+Counting signs in <span class="math notranslate nohighlight">\(D\)</span> therefore gives the inertia of <span class="math notranslate nohighlight">\(A\)</span> at the cost of one
+factorization; this is how the number of eigenvalues of a symmetric matrix
+below a shift <span class="math notranslate nohighlight">\(\sigma\)</span> is computed, by factoring <span class="math notranslate nohighlight">\(A-\sigma I\)</span>.</p>
+</section>
+</div><p>In SciPy, <code class="docutils literal notranslate"><span class="pre">scipy.linalg.ldl</span></code> returns the factors of the LAPACK routine
+<code class="docutils literal notranslate"><span class="pre">?sytrf</span></code>, which implements Bunch–Kaufman pivoting, and
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.solve(A,</span> <span class="pre">b,</span> <span class="pre">assume_a=&quot;sym&quot;)</span></code> solves a symmetric indefinite
+system with it. For <span class="math notranslate nohighlight">\(A(\epsilon)\)</span> above with <span class="math notranslate nohighlight">\(\epsilon = 10^{-8}\)</span>, the
+strategy interchanges the two rows and columns (second case of step 3,
+since
+<span class="math notranslate nohighlight">\(|a_{22}| = 1\ge\alpha\)</span>) and produces factors with entries of size 1; for
+<span class="math notranslate nohighlight">\(\begin{bmatrix}0&amp;1\\1&amp;0\end{bmatrix}\)</span> it returns <span class="math notranslate nohighlight">\(D = A\)</span> as a single
+<span class="math notranslate nohighlight">\(2\times2\)</span> block.</p>
+</section>
+</section>
+<section id="gaussian-distributions-and-gaussian-processes">
+<span id="ch06-sec-gaussian"></span><h2><span class="section-number">6.5. </span>Gaussian distributions and Gaussian processes<a class="headerlink" href="#gaussian-distributions-and-gaussian-processes" title="Link to this heading">#</a></h2>
+<section id="log-determinants-and-sampling">
+<h3><span class="section-number">6.5.1. </span>Log-determinants and sampling<a class="headerlink" href="#log-determinants-and-sampling" title="Link to this heading">#</a></h3>
+<p>A Gaussian random vector <span class="math notranslate nohighlight">\(y\sim N(\mu,K)\)</span> in <span class="math notranslate nohighlight">\(\R^n\)</span> with SPD covariance <span class="math notranslate nohighlight">\(K\)</span>
+has log-density</p>
+<div class="math notranslate nohighlight" id="equation-ch06-eq-loglik">
+<span class="eqno">(6.3)<a class="headerlink" href="#equation-ch06-eq-loglik" title="Link to this equation">#</a></span>\[
+\log p(y) = -\tfrac12(y-\mu)^TK^{-1}(y-\mu) - \tfrac12\log\det K - \tfrac n2\log(2\pi).
+\]</div>
+<p>Every term is computed from the Cholesky factor <span class="math notranslate nohighlight">\(K = LL^T\)</span> without forming
+<span class="math notranslate nohighlight">\(K^{-1}\)</span> or <span class="math notranslate nohighlight">\(\det K\)</span>.</p>
+<div class="proof proposition admonition" id="ch06-prop-gaussian">
+<p class="admonition-title"><span class="caption-number">Proposition 6.4 </span> (Gaussian computations with the Cholesky factor)</p>
+<section class="proposition-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(K = LL^T\)</span> be SPD.</p>
+<ol class="arabic simple">
+<li><p>With <span class="math notranslate nohighlight">\(z = L^{-1}(y-\mu)\)</span> (one forward substitution),
+<span class="math notranslate nohighlight">\((y-\mu)^TK^{-1}(y-\mu) = \|z\|_2^2\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\log\det K = 2\sum_{i=1}^n\log\ell_{ii}\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(w\sim N(0,I_n)\)</span>, then <span class="math notranslate nohighlight">\(y = \mu + Lw\sim N(\mu,K)\)</span>. Conversely
+<span class="math notranslate nohighlight">\(L^{-1}(y-\mu)\sim N(0,I_n)\)</span> (“whitening”).</p></li>
+</ol>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. (1) <span class="math notranslate nohighlight">\(K^{-1} = L^{-T}L^{-1}\)</span>, so the quadratic form is
+<span class="math notranslate nohighlight">\((L^{-1}(y-\mu))^T(L^{-1}(y-\mu))\)</span>. (2) <span class="math notranslate nohighlight">\(\det K = \det(L)^2 =
+\prod_i\ell_{ii}^2\)</span>, and all <span class="math notranslate nohighlight">\(\ell_{ii}&gt;0\)</span>. (3) An affine image of a
+Gaussian vector is Gaussian, with mean <span class="math notranslate nohighlight">\(\mu+L\,\mathbb{E}w = \mu\)</span> and
+covariance <span class="math notranslate nohighlight">\(\mathbb{E}[Lww^TL^T] = LL^T = K\)</span>; the converse is the same
+computation with <span class="math notranslate nohighlight">\(L^{-1}\)</span>.</p>
+</div>
+<p>Any factorization <span class="math notranslate nohighlight">\(K = BB^T\)</span> could be used for sampling (for instance the
+symmetric square root), but the Cholesky factor is the cheapest and its
+triangular structure makes the solves in part 1 cheap as well. Working with
+logarithms is not optional. For <span class="math notranslate nohighlight">\(n\)</span> in the hundreds, <span class="math notranslate nohighlight">\(\det K\)</span> routinely
+overflows or underflows: <span class="math notranslate nohighlight">\(\det(10I_{400}) = 10^{400}\)</span> is not representable
+in double precision, and for the kernel matrix of
+<a class="reference internal" href="#ch06-fig-gp"><span class="std std-numref">Figure 6.2</span></a> with a jitter of <span class="math notranslate nohighlight">\(10^{-6}\)</span>, <code class="docutils literal notranslate"><span class="pre">numpy.linalg.det</span></code>
+returns <span class="math notranslate nohighlight">\(0\)</span> while <span class="math notranslate nohighlight">\(2\sum_i\log\ell_{ii}\approx-2506\)</span> agrees with
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.slogdet</span></code>.</p>
+<div class="proof example admonition" id="ch06-exa-gp-2x2">
+<p class="admonition-title"><span class="caption-number">Example 6.5 </span> (A <span class="math notranslate nohighlight">\(2\times2\)</span> Gaussian log-density)</p>
+<section class="example-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(K = \begin{bmatrix}4&amp;2\\2&amp;2\end{bmatrix}\)</span>, <span class="math notranslate nohighlight">\(\mu = 0\)</span> and
+<span class="math notranslate nohighlight">\(y = (2,0)^T\)</span>. From the check above, <span class="math notranslate nohighlight">\(L = \begin{bmatrix}2&amp;0\\1&amp;1\end{bmatrix}\)</span>.
+Forward substitution gives <span class="math notranslate nohighlight">\(z = (1,-1)^T\)</span>, so <span class="math notranslate nohighlight">\(y^TK^{-1}y = 2\)</span>, and
+<span class="math notranslate nohighlight">\(\log\det K = 2(\log2+\log1) = \log4\)</span>, consistent with <span class="math notranslate nohighlight">\(\det K = 4\)</span>.
+Hence <span class="math notranslate nohighlight">\(\log p(y) = -1 - \log2 - \log(2\pi)\)</span>. A sample of <span class="math notranslate nohighlight">\(N(0,K)\)</span> is
+<span class="math notranslate nohighlight">\((2w_1,\ w_1+w_2)^T\)</span> with independent standard normal <span class="math notranslate nohighlight">\(w_1,w_2\)</span>; its
+variances are <span class="math notranslate nohighlight">\(4\)</span> and <span class="math notranslate nohighlight">\(2\)</span> and its covariance is <span class="math notranslate nohighlight">\(2\)</span>, as required.</p>
+</section>
+</div></section>
+<section id="gaussian-process-regression">
+<h3><span class="section-number">6.5.2. </span>Gaussian-process regression<a class="headerlink" href="#gaussian-process-regression" title="Link to this heading">#</a></h3>
+<p>In Gaussian-process regression <span class="bibtex-citation" id="id15">[<a class="reference internal" href="../back/bibliography.html#id89" title="Carl Edward Rasmussen and Christopher K. I. Williams. Gaussian Processes for Machine Learning. MIT Press, Cambridge, MA, 2006.">Rasmussen and Williams, 2006</a>]</span> (Chapter 2) one
+observes <span class="math notranslate nohighlight">\(y_i = f(t_i) + \varepsilon_i\)</span>, <span class="math notranslate nohighlight">\(i = 1,\dots,n\)</span>, where <span class="math notranslate nohighlight">\(f\)</span> has a
+Gaussian-process prior with covariance function <span class="math notranslate nohighlight">\(k\)</span> and the noise
+<span class="math notranslate nohighlight">\(\varepsilon_i\sim N(0,\sigma^2)\)</span> is independent. With <span class="math notranslate nohighlight">\(K_{ij} = k(t_i,t_j)\)</span>
+and <span class="math notranslate nohighlight">\(K_y = K+\sigma^2I\)</span>, the posterior mean at a new point <span class="math notranslate nohighlight">\(t_*\)</span> is
+<span class="math notranslate nohighlight">\(k_*^TK_y^{-1}y\)</span>, where <span class="math notranslate nohighlight">\((k_*)_i = k(t_*,t_i)\)</span>, and the log marginal
+likelihood used to fit the parameters of <span class="math notranslate nohighlight">\(k\)</span> is <a class="reference internal" href="#equation-ch06-eq-loglik">(6.3)</a> with
+<span class="math notranslate nohighlight">\(K = K_y\)</span> and <span class="math notranslate nohighlight">\(\mu = 0\)</span>. The standard implementation
+<span class="bibtex-citation" id="id16">[<a class="reference internal" href="../back/bibliography.html#id89" title="Carl Edward Rasmussen and Christopher K. I. Williams. Gaussian Processes for Machine Learning. MIT Press, Cambridge, MA, 2006.">Rasmussen and Williams, 2006</a>]</span> (Algorithm 2.1) is: compute <span class="math notranslate nohighlight">\(L\)</span> with <span class="math notranslate nohighlight">\(K_y = LL^T\)</span>;
+solve <span class="math notranslate nohighlight">\(Lz = y\)</span> and <span class="math notranslate nohighlight">\(L^Ta = z\)</span>; then the posterior mean is <span class="math notranslate nohighlight">\(k_*^Ta\)</span> and the
+log likelihood is <span class="math notranslate nohighlight">\(-\tfrac12\|z\|_2^2 - \sum_i\log\ell_{ii} - \tfrac
+n2\log(2\pi)\)</span>. The cost is <span class="math notranslate nohighlight">\(\tfrac13n^3\)</span> flops for the factorization and
+<span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> for everything else.</p>
+<p>Kernel matrices of smooth covariance functions are notoriously ill
+conditioned. For the squared-exponential kernel on closely spaced points
+the eigenvalues decay faster than exponentially, and most of them are
+smaller than the rounding errors <span class="math notranslate nohighlight">\(u\lambda_{\max}\)</span> made in forming <span class="math notranslate nohighlight">\(K\)</span>
+(left panel of <a class="reference internal" href="#ch06-fig-gp"><span class="std std-numref">Figure 6.2</span></a>). The computed matrix is then
+typically indefinite, and Cholesky fails. The standard fix is to add a
+small multiple of the identity, called <em>jitter</em> or a <em>nugget</em>, which is the
+same as assuming a small observation noise <span class="math notranslate nohighlight">\(\sigma^2\)</span>.</p>
+<div class="proof proposition admonition" id="ch06-prop-jitter">
+<p class="admonition-title"><span class="caption-number">Proposition 6.5 </span> (Conditioning of a jittered kernel matrix)</p>
+<section class="proposition-content" id="proof-content">
+<p>If <span class="math notranslate nohighlight">\(K\)</span> is symmetric positive semidefinite and <span class="math notranslate nohighlight">\(\sigma^2&gt;0\)</span>, then
+<span class="math notranslate nohighlight">\(K+\sigma^2I\)</span> is SPD and</p>
+<div class="math notranslate nohighlight">
+\[
+\kappa_2(K+\sigma^2I)\le1+\frac{\trace(K)}{\sigma^2}.
+\]</div>
+<p>For a stationary kernel with <span class="math notranslate nohighlight">\(k(t,t) = \sigma_f^2\)</span>, <span class="math notranslate nohighlight">\(\trace(K) = n\sigma_f^2\)</span>
+and the bound is <span class="math notranslate nohighlight">\(1+n\sigma_f^2/\sigma^2\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. The eigenvalues of <span class="math notranslate nohighlight">\(K+\sigma^2I\)</span> are <span class="math notranslate nohighlight">\(\lambda_i(K)+\sigma^2\)</span> with
+<span class="math notranslate nohighlight">\(0\le\lambda_i(K)\le\sum_j\lambda_j(K) = \trace(K)\)</span>. Hence they lie in
+<span class="math notranslate nohighlight">\([\sigma^2,\trace(K)+\sigma^2]\)</span>, and <span class="math notranslate nohighlight">\(\kappa_2\)</span> is the ratio of the largest
+to the smallest by <a class="reference internal" href="#ch06-prop-spd-properties">Proposition 6.1</a>.</p>
+</div>
+<p>The bound is attained when all <span class="math notranslate nohighlight">\(n\)</span> points coincide
+(<a class="reference internal" href="#ch06-ex-jitter"><span class="std std-numref">Exercise 6.10</span></a>), and the right panel of <a class="reference internal" href="#ch06-fig-gp"><span class="std std-numref">Figure 6.2</span></a>
+shows that it is within a small factor of the truth for the
+squared-exponential kernel. For <span class="math notranslate nohighlight">\(n = 200\)</span> equispaced points on <span class="math notranslate nohighlight">\([0,1]\)</span>,
+<span class="math notranslate nohighlight">\(\ell = 0.1\)</span> and <span class="math notranslate nohighlight">\(\sigma_f = 1\)</span>, Cholesky of the computed <span class="math notranslate nohighlight">\(K\)</span> fails, while
+<span class="math notranslate nohighlight">\(\kappa_2(K+10^{-8}I)\approx4.8\times10^9\)</span>, below the bound <span class="math notranslate nohighlight">\(1+2\times10^{10}\)</span>.</p>
+<figure class="align-default" id="ch06-fig-gp">
+<a class="reference internal image-reference" href="../_images/ch06-gp.png"><img alt="Left, the computed eigenvalues of a 200 by 200 squared-exponential kernel matrix decay rapidly to about 1e-14, below which many are negative. Right, the condition number of the jittered matrix decreases like one over the jitter, just below the dashed bound." src="../_images/ch06-gp.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6.2 </span><span class="caption-text">Left: computed eigenvalues of the squared-exponential kernel matrix <span class="math notranslate nohighlight">\(K\)</span> for
+<span class="math notranslate nohighlight">\(n = 200\)</span> equispaced points on <span class="math notranslate nohighlight">\([0,1]\)</span>, <span class="math notranslate nohighlight">\(\ell = 0.1\)</span>, <span class="math notranslate nohighlight">\(\sigma_f = 1\)</span>. Below
+about <span class="math notranslate nohighlight">\(u\lambda_1\)</span> the computed eigenvalues are rounding noise, and many are
+negative. Right: <span class="math notranslate nohighlight">\(\kappa_2(K+\sigma^2I)\)</span> as a function of the jitter
+<span class="math notranslate nohighlight">\(\sigma^2\)</span> for three length scales, with the bound of
+<a class="reference internal" href="#ch06-prop-jitter">Proposition 6.5</a>. For <span class="math notranslate nohighlight">\(\sigma^2\approx10^{-14}\)</span>, comparable to
+the rounding errors in the computed eigenvalues, the exact-arithmetic bound
+no longer applies to the computed matrix.</span><a class="headerlink" href="#ch06-fig-gp" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Jitter is not a free numerical trick. Adding <span class="math notranslate nohighlight">\(\sigma^2I\)</span> changes the model
+(it asserts observation noise of variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>) and therefore the
+posterior and the likelihood. It is harmless when <span class="math notranslate nohighlight">\(\sigma^2\)</span> is small
+compared with the actual noise level, but for ill-conditioned <span class="math notranslate nohighlight">\(K\)</span> the
+solution <span class="math notranslate nohighlight">\((K+\sigma^2I)^{-1}y\)</span> can depend strongly on <span class="math notranslate nohighlight">\(\sigma^2\)</span>. Choose
+<span class="math notranslate nohighlight">\(\sigma^2\)</span> large enough that <span class="math notranslate nohighlight">\(\kappa_2(K+\sigma^2I)\,u\)</span> is comfortably below
+1 (for example with <a class="reference internal" href="#ch06-prop-jitter">Proposition 6.5</a>), report it, and check that
+the quantities of interest do not change when it is varied.</p>
+</div>
+</section>
+</section>
+<section id="iterative-refinement">
+<span id="ch06-sec-refinement"></span><h2><span class="section-number">6.6. </span>Iterative refinement<a class="headerlink" href="#iterative-refinement" title="Link to this heading">#</a></h2>
+<section id="the-algorithm">
+<h3><span class="section-number">6.6.1. </span>The algorithm<a class="headerlink" href="#the-algorithm" title="Link to this heading">#</a></h3>
+<p>Suppose we have computed <span class="math notranslate nohighlight">\(\hat x\approx x\)</span> for <span class="math notranslate nohighlight">\(Ax = b\)</span> and have the factors
+of <span class="math notranslate nohighlight">\(A\)</span> available. The error <span class="math notranslate nohighlight">\(e = x-\hat x\)</span> satisfies <span class="math notranslate nohighlight">\(Ae = r\)</span> with the
+residual <span class="math notranslate nohighlight">\(r = b - A\hat x\)</span>, a linear system with the <em>same</em> matrix. Solving
+it with the existing factors costs only <span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> flops, and
+<span class="math notranslate nohighlight">\(\hat x + \hat e\)</span> should be better than <span class="math notranslate nohighlight">\(\hat x\)</span>. Repeating this is
+<em>iterative refinement</em>. Its modern formulation distinguishes three
+precisions <span class="bibtex-citation" id="id17">[<a class="reference internal" href="../back/bibliography.html#id35" title="Erin Carson and Nicholas J. Higham. Accelerating the solution of linear systems by iterative refinement in three precisions. SIAM Journal on Scientific Computing, 40(2):A817–A847, 2018.">Carson and Higham, 2018</a>]</span>: <span class="math notranslate nohighlight">\(u_f\)</span> for the factorization, <span class="math notranslate nohighlight">\(u\)</span> for the
+working precision in which <span class="math notranslate nohighlight">\(x\)</span> is stored, and <span class="math notranslate nohighlight">\(u_r\)</span> for the residual, with
+<span class="math notranslate nohighlight">\(u_r\le u\le u_f\)</span>.</p>
+<div class="proof algorithm admonition" id="ch06-alg-refinement">
+<p class="admonition-title"><span class="caption-number">Algorithm 6.3 </span> (Iterative refinement)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> (SPD here; LU is used for general <span class="math notranslate nohighlight">\(A\)</span>),
+<span class="math notranslate nohighlight">\(b\in\R^n\)</span>, precisions <span class="math notranslate nohighlight">\(u_f\ge u\ge u_r\)</span>.</p>
+<p><strong>Output:</strong> approximations <span class="math notranslate nohighlight">\(x^{(0)},x^{(1)},\dots\)</span> to <span class="math notranslate nohighlight">\(x = A^{-1}b\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Compute the Cholesky factorization <span class="math notranslate nohighlight">\(A\approx\widehat L\widehat L^T\)</span> in
+precision <span class="math notranslate nohighlight">\(u_f\)</span>.</p></li>
+<li><p>Solve <span class="math notranslate nohighlight">\(\widehat L\widehat L^Tx^{(0)} = b\)</span> with the factors and store
+<span class="math notranslate nohighlight">\(x^{(0)}\)</span> in precision <span class="math notranslate nohighlight">\(u\)</span>.</p></li>
+<li><p>For <span class="math notranslate nohighlight">\(i = 0,1,2,\dots\)</span> until converged:</p>
+<ol class="arabic simple">
+<li><p>compute <span class="math notranslate nohighlight">\(r^{(i)} = b - Ax^{(i)}\)</span> in precision <span class="math notranslate nohighlight">\(u_r\)</span> with the
+original <span class="math notranslate nohighlight">\(A\)</span>, and round it to precision <span class="math notranslate nohighlight">\(u\)</span>;</p></li>
+<li><p>solve <span class="math notranslate nohighlight">\(\widehat L\widehat L^Td^{(i)} = r^{(i)}\)</span> with the factors;</p></li>
+<li><p><span class="math notranslate nohighlight">\(x^{(i+1)} \leftarrow x^{(i)} + d^{(i)}\)</span> in precision <span class="math notranslate nohighlight">\(u\)</span>.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p>Each step costs about <span class="math notranslate nohighlight">\(4n^2\)</span> flops (<span class="math notranslate nohighlight">\(2n^2\)</span> for the residual and <span class="math notranslate nohighlight">\(2n^2\)</span> for
+the two triangular solves), negligible next to the <span class="math notranslate nohighlight">\(\tfrac13n^3\)</span> of the
+factorization when <span class="math notranslate nohighlight">\(n\)</span> is large. The residual must be computed with the
+original matrix: rounding <span class="math notranslate nohighlight">\(A\)</span> to precision <span class="math notranslate nohighlight">\(u_f\)</span> is part of the error that
+the refinement is meant to correct. In practice one also scales <span class="math notranslate nohighlight">\(r^{(i)}\)</span>
+before converting it to a low precision, to avoid underflow.</p>
+</section>
+<section id="when-does-it-converge">
+<h3><span class="section-number">6.6.2. </span>When does it converge?<a class="headerlink" href="#when-does-it-converge" title="Link to this heading">#</a></h3>
+<p>The following idealized analysis ignores the rounding errors in the
+residual and in the update and keeps only those of the correction solves.
+It explains the convergence condition.</p>
+<div class="proof theorem admonition" id="ch06-thm-refinement">
+<p class="admonition-title"><span class="caption-number">Theorem 6.7 </span> (Convergence of iterative refinement (idealized))</p>
+<section class="theorem-content" id="proof-content">
+<p>Suppose each correction satisfies <span class="math notranslate nohighlight">\((A+\Delta A_i)d^{(i)} = r^{(i)}\)</span> with
+<span class="math notranslate nohighlight">\(\theta = \kappa(A)\max_i\|\Delta A_i\|/\|A\|&lt;\tfrac12\)</span> in some
+subordinate norm, and that the residuals and updates are computed exactly.
+Then</p>
+<div class="math notranslate nohighlight">
+\[
+\|x-x^{(i+1)}\|\le\frac{\theta}{1-\theta}\,\|x-x^{(i)}\| ,
+\]</div>
+<p>so the iterates converge linearly to <span class="math notranslate nohighlight">\(x\)</span> with rate at most
+<span class="math notranslate nohighlight">\(\theta/(1-\theta)&lt;1\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. Let <span class="math notranslate nohighlight">\(e^{(i)} = x - x^{(i)}\)</span>, so <span class="math notranslate nohighlight">\(r^{(i)} = Ae^{(i)}\)</span>. Then
+<span class="math notranslate nohighlight">\(d^{(i)} = (A+\Delta A_i)^{-1}Ae^{(i)}\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[
+e^{(i+1)} = e^{(i)} - d^{(i)} = (A+\Delta A_i)^{-1}\big[(A+\Delta A_i) - A\big]e^{(i)}
+= (I + A^{-1}\Delta A_i)^{-1}A^{-1}\Delta A_i\,e^{(i)} .
+\]</div>
+<p>Since <span class="math notranslate nohighlight">\(\|A^{-1}\Delta A_i\|\le\|A^{-1}\|\|\Delta A_i\|\le\theta&lt;1\)</span>, the
+Neumann series gives <span class="math notranslate nohighlight">\(\|(I+A^{-1}\Delta A_i)^{-1}\|\le1/(1-\theta)\)</span>, and
+the result follows.</p>
+</div>
+<p>For a Cholesky factorization computed in precision <span class="math notranslate nohighlight">\(u_f\)</span>,
+<a class="reference internal" href="#ch06-thm-solve-backward">Theorem 6.4</a> (applied with <span class="math notranslate nohighlight">\(u_f\)</span> in place of <span class="math notranslate nohighlight">\(u\)</span>,
+after including the rounding of <span class="math notranslate nohighlight">\(A\)</span> to precision <span class="math notranslate nohighlight">\(u_f\)</span>) gives
+<span class="math notranslate nohighlight">\(\|\Delta A_i\|_2/\|A\|_2\le c_nu_f\)</span> with <span class="math notranslate nohighlight">\(c_n\)</span> a modest multiple of <span class="math notranslate nohighlight">\(n^2\)</span>,
+so the condition is <span class="math notranslate nohighlight">\(\kappa_2(A)\,c_nu_f&lt;\tfrac12\)</span>. The dimensional
+constant is pessimistic, and the rule of thumb supported by the analyses
+of <span class="bibtex-citation" id="id18">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span> (Chapter 12) and <span class="bibtex-citation" id="id19">Carson and Higham [<a class="reference internal" href="../back/bibliography.html#id35" title="Erin Carson and Nicholas J. Higham. Accelerating the solution of linear systems by iterative refinement in three precisions. SIAM Journal on Scientific Computing, 40(2):A817–A847, 2018.">2018</a>]</span> is that
+<em>refinement with a factorization in precision <span class="math notranslate nohighlight">\(u_f\)</span> converges when
+<span class="math notranslate nohighlight">\(\kappa(A)\,u_f\)</span> is sufficiently smaller than 1, and the smaller
+<span class="math notranslate nohighlight">\(\kappa(A)u_f\)</span>, the faster it converges.</em></p>
+<p>What the iteration converges <em>to</em> is determined by the rounding errors that
+the idealized analysis ignored. The computed residual has an error of order
+<span class="math notranslate nohighlight">\(u_r(|b|+|A||x^{(i)}|)\)</span> and the update an error of order <span class="math notranslate nohighlight">\(u|x^{(i)}|\)</span>, and
+these set a limiting accuracy. We summarize the three classical regimes;
+precise statements with all hypotheses are in the cited sources.</p>
+<p><em>Fixed precision (<span class="math notranslate nohighlight">\(u_f = u = u_r\)</span>).</em> Refinement in the working precision
+cannot reduce the forward error much below <span class="math notranslate nohighlight">\(\kappa(A)u\)</span>, the accuracy of a
+backward stable solve. It does improve the <em>componentwise</em> backward error</p>
+<div class="math notranslate nohighlight">
+\[
+\omega(\hat x) = \min\{\epsilon : (A+\Delta A)\hat x = b+\Delta b,\
+|\Delta A|\le\epsilon|A|,\ |\Delta b|\le\epsilon|b|\}
+= \max_i\frac{|b-A\hat x|_i}{(|A||\hat x|+|b|)_i}
+\]</div>
+<p>(the formula is the Oettli–Prager theorem; <span class="bibtex-citation" id="id20">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>,
+Chapter 7). <span class="bibtex-citation" id="id21">Skeel [<a class="reference internal" href="../back/bibliography.html#id33" title="Robert D. Skeel. Iterative refinement implies numerical stability for Gaussian elimination. Mathematics of Computation, 35(151):817–832, 1980.">1980</a>]</span> proved that for Gaussian elimination with
+partial pivoting one step of fixed-precision refinement makes <span class="math notranslate nohighlight">\(\omega\)</span> of
+order <span class="math notranslate nohighlight">\(u\)</span>, provided <span class="math notranslate nohighlight">\(A\)</span> is not too ill conditioned and the vector
+<span class="math notranslate nohighlight">\(|A||x|\)</span> is not too badly scaled. Higham’s analysis extends the result to
+general solvers that satisfy a suitable backward error bound, including
+Cholesky <span class="bibtex-citation" id="id22">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Chapter 12). This matters because the bound
+<a class="reference internal" href="#equation-ch06-eq-backward">(6.2)</a> is relative to <span class="math notranslate nohighlight">\(|\widehat L||\widehat L|^T\)</span>, which
+can be nonzero where <span class="math notranslate nohighlight">\(A\)</span> has zeros; for the two-dimensional Laplacian with a
+solution whose entries vary over ten orders of magnitude, <span class="math notranslate nohighlight">\(\omega\)</span> is
+typically thousands to millions of times <span class="math notranslate nohighlight">\(u\)</span> (depending on the random
+solution), and the lab shows it dropping below <span class="math notranslate nohighlight">\(2u\)</span> after one step.</p>
+<p><em>Extra-precise residuals (<span class="math notranslate nohighlight">\(u_f = u\)</span>, <span class="math notranslate nohighlight">\(u_r = u^2\)</span>).</em> This is the classical
+form analyzed by <span class="bibtex-citation" id="id23">Moler [<a class="reference internal" href="../back/bibliography.html#id34" title="Cleve B. Moler. Iterative refinement in floating point. Journal of the ACM, 14(2):316–321, 1967.">1967</a>]</span>, going back to Wilkinson. If
+<span class="math notranslate nohighlight">\(\kappa(A)u\)</span> is sufficiently smaller than 1, the iteration converges to a
+solution with relative forward error of order <span class="math notranslate nohighlight">\(u\)</span>: it is as accurate as the
+working precision allows, independently of the condition number.</p>
+<p><em>Low-precision factorization (<span class="math notranslate nohighlight">\(u_f&gt;u\)</span>).</em> Here the factorization, the
+expensive <span class="math notranslate nohighlight">\(\bigO(n^3)\)</span> part, is done in a faster low precision, and the
+<span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> refinement steps restore accuracy. With <span class="math notranslate nohighlight">\(u_r = u\)</span> the limiting
+accuracy is that of a backward stable solve in precision <span class="math notranslate nohighlight">\(u\)</span>, and with
+<span class="math notranslate nohighlight">\(u_r = u^2\)</span> it is of order <span class="math notranslate nohighlight">\(u\)</span>; convergence requires <span class="math notranslate nohighlight">\(\kappa(A)u_f\)</span>
+sufficiently smaller than 1 <span class="bibtex-citation" id="id24">[<a class="reference internal" href="../back/bibliography.html#id35" title="Erin Carson and Nicholas J. Higham. Accelerating the solution of linear systems by iterative refinement in three precisions. SIAM Journal on Scientific Computing, 40(2):A817–A847, 2018.">Carson and Higham, 2018</a>]</span>. Carson and Higham also
+show that replacing the correction solve by GMRES preconditioned with the
+low-precision factors extends convergence to considerably more
+ill-conditioned matrices.</p>
+<figure class="align-default" id="ch06-fig-refinement">
+<a class="reference internal image-reference" href="../_images/ch06-refinement.png"><img alt="Left, forward error against refinement step for single-precision Cholesky with double-precision residuals; the curves for condition numbers up to 1e7 drop to dotted reference levels, the curve for 1e8 grows. Right, for scaled Hilbert matrices the error with exact residuals falls to zero, while with double residuals it stagnates." src="../_images/ch06-refinement.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6.3 </span><span class="caption-text">Left: Cholesky in binary32 with residuals and updates in binary64, for
+random SPD matrices of order 100. For <span class="math notranslate nohighlight">\(\kappa_2(A)\le10^7\)</span>
+(<span class="math notranslate nohighlight">\(\kappa_2u_{32}\le0.6\)</span>) the error converges, at a rate that slows as
+<span class="math notranslate nohighlight">\(\kappa_2u_{32}\)</span> grows, to the level of a binary64 Cholesky solve (dotted);
+for <span class="math notranslate nohighlight">\(\kappa_2 = 10^8\)</span> (<span class="math notranslate nohighlight">\(\kappa_2u_{32}\approx6\)</span>) it diverges, and for
+<span class="math notranslate nohighlight">\(\kappa_2 = 10^{10}\)</span> (not shown) the binary32 factorization fails. Right:
+binary64 Cholesky for scaled Hilbert matrices with integer entries and an
+exactly known integer solution. With exactly rounded residuals (solid) the
+error falls below <span class="math notranslate nohighlight">\(u\)</span> within a few steps, and for <span class="math notranslate nohighlight">\(n = 10\)</span> and <span class="math notranslate nohighlight">\(11\)</span> the
+iterates become exactly the integer solution; with binary64 residuals
+(dashed) the error stagnates far above <span class="math notranslate nohighlight">\(u\)</span>, below the level <span class="math notranslate nohighlight">\(\kappa_2(A)u\)</span>.</span><a class="headerlink" href="#ch06-fig-refinement" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p><a class="reference internal" href="#ch06-fig-refinement"><span class="std std-numref">Figure 6.3</span></a> illustrates the second and third regimes.
+In the right panel, <span class="math notranslate nohighlight">\(H\)</span> is <span class="math notranslate nohighlight">\(\operatorname{lcm}(1,\dots,2n-1)\)</span> times the
+Hilbert matrix, so its entries are integers and <span class="math notranslate nohighlight">\(b = Hx\)</span> is exact for an
+integer <span class="math notranslate nohighlight">\(x\)</span>. For <span class="math notranslate nohighlight">\(n = 10\)</span> (<span class="math notranslate nohighlight">\(\kappa_2\approx1.6\times10^{13}\)</span>) the initial
+Cholesky solution has relative error about <span class="math notranslate nohighlight">\(10^{-4}\)</span>, consistent with
+<span class="math notranslate nohighlight">\(\kappa_2u\approx2\times10^{-3}\)</span>; fixed-precision refinement leaves it
+there, while refinement with residuals computed exactly and rounded once
+(by error-free transformations and <code class="docutils literal notranslate"><span class="pre">math.fsum</span></code>, as in the lab) reaches the
+exact solution after four steps.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Iterative refinement does not make an ill-conditioned problem well
+conditioned, and it cannot rescue a factorization that is useless. With
+residuals in the working precision, the forward error stays at about
+<span class="math notranslate nohighlight">\(\kappa(A)u\)</span>, however many steps are taken. With a low-precision
+factorization, <span class="math notranslate nohighlight">\(\kappa(A)u_f\gtrsim1\)</span> means that the corrections are
+essentially random, and the iteration stagnates or diverges, as for
+<span class="math notranslate nohighlight">\(\kappa_2 = 10^8\)</span> in <a class="reference internal" href="#ch06-fig-refinement"><span class="std std-numref">Figure 6.3</span></a>.</p>
+</div>
+<div class="dropdown admonition">
+<p class="admonition-title">Check your understanding</p>
+<p>A matrix has <span class="math notranslate nohighlight">\(\kappa_2(A)\approx10^{5}\)</span>. Which of these combinations can be
+expected to give a solution with forward error near <span class="math notranslate nohighlight">\(10^{-16}\)</span>:
+(a) binary64 Cholesky, no refinement; (b) binary32 Cholesky with binary64
+residuals; (c) binary64 Cholesky with residuals in quadruple precision?</p>
+<p><em>Answer.</em> Only (c). A backward stable binary64 solve has forward error up to
+about <span class="math notranslate nohighlight">\(\kappa u\approx10^{-11}\)</span>. In (b), <span class="math notranslate nohighlight">\(\kappa u_{32}\approx6\times10^{-3}\)</span>,
+so the iteration converges, but with <span class="math notranslate nohighlight">\(u_r = u\)</span> its limit is again that of a
+binary64 solve, about <span class="math notranslate nohighlight">\(10^{-11}\)</span>; its benefit is speed, not accuracy. In
+(c), <span class="math notranslate nohighlight">\(\kappa u\ll1\)</span> and <span class="math notranslate nohighlight">\(u_r = u^2\)</span>, so the limit is of order <span class="math notranslate nohighlight">\(u\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="estimating-condition-numbers">
+<span id="ch06-sec-condest"></span><h2><span class="section-number">6.7. </span>Estimating condition numbers<a class="headerlink" href="#estimating-condition-numbers" title="Link to this heading">#</a></h2>
+<section id="why-estimate">
+<h3><span class="section-number">6.7.1. </span>Why estimate?<a class="headerlink" href="#why-estimate" title="Link to this heading">#</a></h3>
+<p>The bound of <a class="reference internal" href="#ch06-thm-solve-backward">Theorem 6.4</a> turns a backward error into
+a forward error bound only if <span class="math notranslate nohighlight">\(\kappa(A) = \|A\|\,\|A^{-1}\|\)</span> is known.
+Computing <span class="math notranslate nohighlight">\(\|A\|_1\)</span> costs <span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> flops, but computing <span class="math notranslate nohighlight">\(\|A^{-1}\|_1\)</span>
+from its definition requires <span class="math notranslate nohighlight">\(A^{-1}\)</span>: solving with all <span class="math notranslate nohighlight">\(n\)</span> columns of the
+identity costs another <span class="math notranslate nohighlight">\(2n^3\)</span> flops if the zeros are not exploited, which
+is more than the <span class="math notranslate nohighlight">\(\tfrac13n^3\)</span> of the Cholesky factorization itself. Since
+an error bound only needs the order of magnitude of <span class="math notranslate nohighlight">\(\kappa(A)\)</span>, we want an
+<em>estimate</em> of <span class="math notranslate nohighlight">\(\|A^{-1}\|_1\)</span> in <span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> flops, given the factors.
+<code class="docutils literal notranslate"><span class="pre">numpy.linalg.cond</span></code> provides no such estimate: it computes an SVD for the
+2-norm and the explicit inverse for the 1-, <span class="math notranslate nohighlight">\(\infty\)</span>- and Frobenius norms.</p>
+</section>
+<section id="hager-s-estimator">
+<h3><span class="section-number">6.7.2. </span>Hager’s estimator<a class="headerlink" href="#hager-s-estimator" title="Link to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(B\in\R^{n\times n}\)</span> (for us <span class="math notranslate nohighlight">\(B = A^{-1}\)</span>) be available only through
+products <span class="math notranslate nohighlight">\(Bx\)</span> and <span class="math notranslate nohighlight">\(B^Tx\)</span>. By <a class="reference internal" href="../ch01-matrix-computations/notes.html#ch01-thm-induced-formulas">Theorem 1.4</a>,
+<span class="math notranslate nohighlight">\(\|B\|_1 = \max_j\|Be_j\|_1\)</span> is the maximum of the convex function
+<span class="math notranslate nohighlight">\(f(x) = \|Bx\|_1\)</span> over the unit ball <span class="math notranslate nohighlight">\(\{x:\|x\|_1\le1\}\)</span>, attained at a
+vertex <span class="math notranslate nohighlight">\(\pm e_j\)</span>. <span class="bibtex-citation" id="id25">Hager [<a class="reference internal" href="../back/bibliography.html#id36" title="William W. Hager. Condition estimates. SIAM Journal on Scientific and Statistical Computing, 5(2):311–316, 1984.">1984</a>]</span> proposed a gradient ascent
+over this ball.</p>
+<div class="proof lemma admonition" id="ch06-lem-hager">
+<p class="admonition-title"><span class="caption-number">Lemma 6.2 </span> (The ascent step)</p>
+<section class="lemma-content" id="proof-content">
+<p>Let <span class="math notranslate nohighlight">\(\|x\|_1 = 1\)</span>, <span class="math notranslate nohighlight">\(\xi = \sign(Bx)\)</span> entrywise (with <span class="math notranslate nohighlight">\(\sign(0) = 1\)</span>) and
+<span class="math notranslate nohighlight">\(z = B^T\xi\)</span>. Then <span class="math notranslate nohighlight">\(f(x) = z^Tx\)</span> and <span class="math notranslate nohighlight">\(f(y)\ge f(x) + z^T(y-x)\)</span> for all
+<span class="math notranslate nohighlight">\(y\)</span>. In particular, if <span class="math notranslate nohighlight">\(\|z\|_\infty&gt;z^Tx\)</span> and <span class="math notranslate nohighlight">\(|z_j| = \|z\|_\infty\)</span>,
+then <span class="math notranslate nohighlight">\(f(e_j)&gt;f(x)\)</span>.</p>
+</section>
+</div><div class="proof admonition" id="proof">
+<p>Proof. <span class="math notranslate nohighlight">\(f(x) = \sum_i|(Bx)_i| = \xi^TBx = z^Tx\)</span>. For any <span class="math notranslate nohighlight">\(y\)</span>, since
+<span class="math notranslate nohighlight">\(|\xi_i| = 1\)</span>, <span class="math notranslate nohighlight">\(f(y) = \|By\|_1\ge\xi^TBy = z^Ty = f(x) + z^T(y-x)\)</span>. With
+<span class="math notranslate nohighlight">\(y = \sign(z_j)e_j\)</span> this gives <span class="math notranslate nohighlight">\(f(y)\ge f(x) + |z_j| - z^Tx&gt;f(x)\)</span>, and
+<span class="math notranslate nohighlight">\(f(e_j) = f(-e_j)\)</span>.</p>
+</div>
+<div class="proof algorithm admonition" id="ch06-alg-hager">
+<p class="admonition-title"><span class="caption-number">Algorithm 6.4 </span> (Hager’s 1-norm estimator)</p>
+<section class="algorithm-content" id="proof-content">
+<p><strong>Input:</strong> functions computing <span class="math notranslate nohighlight">\(Bx\)</span> and <span class="math notranslate nohighlight">\(B^Tx\)</span>.</p>
+<p><strong>Output:</strong> <span class="math notranslate nohighlight">\(\gamma\le\|B\|_1\)</span>.</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(x\leftarrow(1/n,\dots,1/n)^T\)</span>.</p></li>
+<li><p>Repeat:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(y\leftarrow Bx\)</span>, <span class="math notranslate nohighlight">\(\gamma\leftarrow\|y\|_1\)</span>, <span class="math notranslate nohighlight">\(\xi\leftarrow\sign(y)\)</span>,
+<span class="math notranslate nohighlight">\(z\leftarrow B^T\xi\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(\|z\|_\infty\le z^Tx\)</span>, return <span class="math notranslate nohighlight">\(\gamma\)</span>.</p></li>
+<li><p>Otherwise <span class="math notranslate nohighlight">\(x\leftarrow e_j\)</span> with <span class="math notranslate nohighlight">\(|z_j| = \|z\|_\infty\)</span>.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</div><p>Every estimate is a lower bound, <span class="math notranslate nohighlight">\(\gamma = \|Bx\|_1\le\|B\|_1\)</span> with
+<span class="math notranslate nohighlight">\(\|x\|_1 = 1\)</span>. After the first iteration <span class="math notranslate nohighlight">\(x\)</span> is a vertex <span class="math notranslate nohighlight">\(e_j\)</span>, and by
+<a class="reference internal" href="#ch06-lem-hager">Lemma 6.2</a> each further iteration strictly increases
+<span class="math notranslate nohighlight">\(f\)</span>, so no vertex is visited twice and the algorithm terminates; in
+practice it stops after two to five iterations, each costing one product
+with <span class="math notranslate nohighlight">\(B\)</span> and one with <span class="math notranslate nohighlight">\(B^T\)</span>. For <span class="math notranslate nohighlight">\(B = A^{-1}\)</span> with <span class="math notranslate nohighlight">\(A = LL^T\)</span>, each product
+is a pair of triangular solves, <span class="math notranslate nohighlight">\(2n^2\)</span> flops. The stopping test is a
+local-optimality condition, so the estimate can be too small; for
+specially constructed matrices it can be poor by an arbitrary factor, but in
+practice it is usually exact or within a small factor
+<span class="bibtex-citation" id="id26">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Chapter 15).</p>
+<div class="proof example admonition" id="ch06-exa-hager">
+<p class="admonition-title"><span class="caption-number">Example 6.6 </span> (Hager’s estimator on a <span class="math notranslate nohighlight">\(2\times2\)</span> matrix)</p>
+<section class="example-content" id="proof-content">
+<p>For <span class="math notranslate nohighlight">\(A = \begin{bmatrix}4&amp;2\\2&amp;2\end{bmatrix}\)</span>,
+<span class="math notranslate nohighlight">\(A^{-1} = \begin{bmatrix}0.5&amp;-0.5\\-0.5&amp;1\end{bmatrix}\)</span> and
+<span class="math notranslate nohighlight">\(\|A^{-1}\|_1 = 1.5\)</span>. Starting from <span class="math notranslate nohighlight">\(x = (0.5,0.5)^T\)</span>: <span class="math notranslate nohighlight">\(y = A^{-1}x =
+(0,0.25)^T\)</span>, <span class="math notranslate nohighlight">\(\gamma = 0.25\)</span>, <span class="math notranslate nohighlight">\(\xi = (1,1)^T\)</span>, <span class="math notranslate nohighlight">\(z = A^{-1}\xi = (0,0.5)^T\)</span>.
+Since <span class="math notranslate nohighlight">\(\|z\|_\infty = 0.5&gt;z^Tx = 0.25\)</span>, move to <span class="math notranslate nohighlight">\(x = e_2\)</span>: <span class="math notranslate nohighlight">\(y = (-0.5,1)^T\)</span>,
+<span class="math notranslate nohighlight">\(\gamma = 1.5\)</span>, <span class="math notranslate nohighlight">\(\xi = (-1,1)^T\)</span>, <span class="math notranslate nohighlight">\(z = (-1,1.5)^T\)</span>, and now
+<span class="math notranslate nohighlight">\(\|z\|_\infty = 1.5 = z^Tx\)</span>, so the algorithm stops with the exact value
+<span class="math notranslate nohighlight">\(1.5\)</span>. With <span class="math notranslate nohighlight">\(\|A\|_1 = 6\)</span> this gives <span class="math notranslate nohighlight">\(\kappa_1(A) = 9\)</span>.</p>
+</section>
+</div><figure class="align-default" id="ch06-fig-condest">
+<a class="reference internal image-reference" href="../_images/ch06-condest.png"><img alt="Scatter plot of the ratio of Hager's estimate to the exact norm of the inverse against the exact norm, for 200 SPD and 200 general matrices; most ratios equal one and all are at least about 0.38." src="../_images/ch06-condest.png" style="width: 70%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 6.4 </span><span class="caption-text">Ratio of Hager’s estimate to the exact <span class="math notranslate nohighlight">\(\|A^{-1}\|_1\)</span> for 200 random SPD
+matrices (products with <span class="math notranslate nohighlight">\(A^{-1}\)</span> via Cholesky) and 200 random Gaussian
+matrices (via LU), all of order 50. The estimate equals the exact value, to
+rounding error, for about four fifths of the matrices of either kind (80
+percent of the SPD and 82 percent of the general matrices), and it is never
+smaller than <span class="math notranslate nohighlight">\(0.38\)</span> times the exact value.</span><a class="headerlink" href="#ch06-fig-condest" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="estimators-in-lapack-and-scipy">
+<h3><span class="section-number">6.7.3. </span>Estimators in LAPACK and SciPy<a class="headerlink" href="#estimators-in-lapack-and-scipy" title="Link to this heading">#</a></h3>
+<p>LAPACK’s condition estimators use Higham’s refinement of Hager’s method,
+which adds an extra, carefully chosen test vector to guard against the
+worst cases <span class="bibtex-citation" id="id27">[<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">Higham, 2002</a>]</span> (Chapter 15). <code class="docutils literal notranslate"><span class="pre">?pocon</span></code> estimates the
+reciprocal condition number <span class="math notranslate nohighlight">\(1/(\|A\|_1\|A^{-1}\|_1)\)</span> of an SPD matrix from
+its Cholesky factor, and <code class="docutils literal notranslate"><span class="pre">?gecon</span></code> does the same from an LU factorization.
+Both need <span class="math notranslate nohighlight">\(\|A\|_1\)</span> as an input, which must be computed from <span class="math notranslate nohighlight">\(A\)</span> before it
+is overwritten by the factorization. In SciPy these routines are available
+as <code class="docutils literal notranslate"><span class="pre">scipy.linalg.lapack.dpocon(c,</span> <span class="pre">anorm)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.lapack.dgecon(lu,</span> <span class="pre">anorm)</span></code>, where <code class="docutils literal notranslate"><span class="pre">c</span></code> comes from
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.lapack.dpotrf</span></code> (or <code class="docutils literal notranslate"><span class="pre">cho_factor</span></code>) and <code class="docutils literal notranslate"><span class="pre">lu</span></code> from <code class="docutils literal notranslate"><span class="pre">lu_factor</span></code>.
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.solve</span></code> computes such an estimate internally and, in the
+SciPy 1.18 used here, issues a <code class="docutils literal notranslate"><span class="pre">LinAlgWarning</span></code> when the estimated
+reciprocal condition number is below <span class="math notranslate nohighlight">\(\epsmach\)</span>.
+The block generalization of Hager’s method by <span class="bibtex-citation" id="id28">Higham and Tisseur [<a class="reference internal" href="../back/bibliography.html#id37" title="Nicholas J. Higham and Françoise Tisseur. A block algorithm for matrix 1-norm estimation, with an application to 1-norm pseudospectra. SIAM Journal on Matrix Analysis and Applications, 21(4):1185–1201, 2000.">2000</a>]</span>, which
+iterates with several vectors at once and is more reliable, is implemented
+in <code class="docutils literal notranslate"><span class="pre">scipy.sparse.linalg.onenormest</span></code>; it accepts any linear operator, so it
+can estimate <span class="math notranslate nohighlight">\(\|A^{-1}\|_1\)</span> given only a solver.</p>
+</section>
+</section>
+<section id="computational-laboratory">
+<h2><span class="section-number">6.8. </span>Computational laboratory<a class="headerlink" href="#computational-laboratory" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="lab.html"><span class="std std-doc">The lab notebook for this chapter</span></a> builds SPD test matrices (one-
+and two-dimensional Laplacians and a squared-exponential kernel matrix) and
+checks their properties. It implements <a class="reference internal" href="#ch06-alg-cholesky">Algorithm 6.1</a> with a
+symmetry check, verifies it against NumPy and SciPy with the lower/upper
+conventions made explicit, tests the entry bound of
+<a class="reference internal" href="#ch06-prop-entry-bound">Proposition 6.3</a> and counts violations of the false bound,
+reproduces the failures on indefinite, nonsymmetric and Hilbert matrices
+(including the exact rational test of <a class="reference internal" href="#ch06-exa-hilbert">Example 6.3</a>), and
+measures backward errors against <a class="reference internal" href="#ch06-cor-normwise">Corollary 6.1</a>. It times
+<code class="docutils literal notranslate"><span class="pre">lu_factor</span></code> against <code class="docutils literal notranslate"><span class="pre">cho_factor</span></code>, explores Bunch–Kaufman with
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.ldl</span></code>, computes a Gaussian-process log-likelihood by Cholesky
+and compares it with <code class="docutils literal notranslate"><span class="pre">slogdet</span></code>, and studies jitter. Finally it carries out
+the three refinement experiments of <a class="reference internal" href="#ch06-sec-refinement"><span class="std std-numref">Section 6.6</span></a>
+(componentwise backward error, binary32 factorization, exactly rounded
+residuals) and implements Hager’s estimator and compares it with the exact
+norm, <code class="docutils literal notranslate"><span class="pre">dpocon</span></code> and <code class="docutils literal notranslate"><span class="pre">onenormest</span></code>.</p>
+</section>
+<section id="summary">
+<h2><span class="section-number">6.9. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>A symmetric matrix is positive definite exactly when it has a Cholesky
+factorization <span class="math notranslate nohighlight">\(A = LL^T\)</span> with positive diagonal, and the factorization is
+computed by eliminating one variable at a time, each step leaving an SPD
+Schur complement. It costs <span class="math notranslate nohighlight">\(\tfrac13n^3\)</span> flops, half of LU; its entries
+are bounded by <span class="math notranslate nohighlight">\(|\ell_{ij}|\le\sqrt{a_{ii}}\)</span>, so no pivoting is needed; and
+the computed factor is the exact factor of <span class="math notranslate nohighlight">\(A+\Delta A\)</span> with <span class="math notranslate nohighlight">\(\Delta A\)</span> of
+relative size at most about <span class="math notranslate nohighlight">\(n^2u\)</span>. The algorithm is the standard test for
+positive definiteness, with the caveats that it trusts symmetry and that
+nearly singular SPD matrices may fail. Symmetric indefinite matrices need
+<span class="math notranslate nohighlight">\(2\times2\)</span> pivots, provided by Bunch–Kaufman pivoting. The Cholesky factor
+gives Gaussian log-determinants and samples directly, and jitter makes
+kernel matrices factorizable at the price of changing the model. Iterative
+refinement reuses the factors to improve a solution: in fixed precision it
+repairs the componentwise backward error, with extra-precise residuals it
+gives full working accuracy, and with a low-precision factorization it
+trades cheap <span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> corrections for an expensive <span class="math notranslate nohighlight">\(\bigO(n^3)\)</span>
+factorization, provided <span class="math notranslate nohighlight">\(\kappa(A)u_f\)</span> is sufficiently small. Condition
+numbers are estimated, not computed, by Hager’s method and its refinements
+in <span class="math notranslate nohighlight">\(\bigO(n^2)\)</span> flops.</p>
+</section>
+<section id="further-reading">
+<h2><span class="section-number">6.10. </span>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p><span class="bibtex-citation" id="id29">Trefethen and Bau [<a class="reference internal" href="../back/bibliography.html#id2" title="Lloyd N. Trefethen and David Bau, III. Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> present Cholesky factorization in Lecture 23, and
+<span class="bibtex-citation" id="id30">Golub and Van Loan [<a class="reference internal" href="../back/bibliography.html#id3" title="Gene H. Golub and Charles F. Van Loan. Matrix Computations. Johns Hopkins University Press, Baltimore, 4th edition, 2013.">2013</a>]</span> treat symmetric and positive definite systems in
+Sections 4.1–4.2, symmetric indefinite systems in Section 4.4, and
+iterative refinement and condition estimation in Section 3.5.
+<span class="bibtex-citation" id="id31">Demmel [<a class="reference internal" href="../back/bibliography.html#id5" title="James W. Demmel. Applied Numerical Linear Algebra. SIAM, Philadelphia, 1997.">1997</a>]</span> (Section 2.7) is a concise account of the special
+linear systems of this chapter. The definitive treatment of the rounding
+error analysis is <span class="bibtex-citation" id="id32">Higham [<a class="reference internal" href="../back/bibliography.html#id4" title="Nicholas J. Higham. Accuracy and Stability of Numerical Algorithms. SIAM, Philadelphia, 2nd edition, 2002.">2002</a>]</span>: Chapter 10 for Cholesky (including
+the semidefinite case and the conditions for success), Chapter 11 for
+symmetric indefinite factorizations, Chapter 12 for iterative refinement,
+and Chapter 15 for condition estimation. The original papers are
+<span class="bibtex-citation" id="id33">Bunch and Kaufman [<a class="reference internal" href="../back/bibliography.html#id38" title="James R. Bunch and Linda Kaufman. Some stable methods for calculating inertia and solving symmetric linear systems. Mathematics of Computation, 31(137):163–179, 1977.">1977</a>]</span> for Bunch–Kaufman pivoting, <span class="bibtex-citation" id="id34">Moler [<a class="reference internal" href="../back/bibliography.html#id34" title="Cleve B. Moler. Iterative refinement in floating point. Journal of the ACM, 14(2):316–321, 1967.">1967</a>]</span> and
+<span class="bibtex-citation" id="id35">Skeel [<a class="reference internal" href="../back/bibliography.html#id33" title="Robert D. Skeel. Iterative refinement implies numerical stability for Gaussian elimination. Mathematics of Computation, 35(151):817–832, 1980.">1980</a>]</span> for iterative refinement, <span class="bibtex-citation" id="id36">Carson and Higham [<a class="reference internal" href="../back/bibliography.html#id35" title="Erin Carson and Nicholas J. Higham. Accelerating the solution of linear systems by iterative refinement in three precisions. SIAM Journal on Scientific Computing, 40(2):A817–A847, 2018.">2018</a>]</span> for
+refinement in three precisions, and <span class="bibtex-citation" id="id37">Hager [<a class="reference internal" href="../back/bibliography.html#id36" title="William W. Hager. Condition estimates. SIAM Journal on Scientific and Statistical Computing, 5(2):311–316, 1984.">1984</a>]</span> and
+<span class="bibtex-citation" id="id38">Higham and Tisseur [<a class="reference internal" href="../back/bibliography.html#id37" title="Nicholas J. Higham and Françoise Tisseur. A block algorithm for matrix 1-norm estimation, with an application to 1-norm pseudospectra. SIAM Journal on Matrix Analysis and Applications, 21(4):1185–1201, 2000.">2000</a>]</span> for 1-norm estimation. <span class="bibtex-citation" id="id39">Rasmussen and Williams [<a class="reference internal" href="../back/bibliography.html#id89" title="Carl Edward Rasmussen and Christopher K. I. Williams. Gaussian Processes for Machine Learning. MIT Press, Cambridge, MA, 2006.">2006</a>]</span>
+(Chapter 2) explain the use of Cholesky in Gaussian-process regression, and
+the LAPACK Users’ Guide <span class="bibtex-citation" id="id40">[<a class="reference internal" href="../back/bibliography.html#id24" title="E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra, J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, and D. Sorensen. LAPACK Users' Guide. SIAM, Philadelphia, 3rd edition, 1999.">Anderson <em>et al.</em>, 1999</a>]</span> documents the routines
+<code class="docutils literal notranslate"><span class="pre">?potrf</span></code>, <code class="docutils literal notranslate"><span class="pre">?sytrf</span></code>, <code class="docutils literal notranslate"><span class="pre">?pocon</span></code> and <code class="docutils literal notranslate"><span class="pre">?gecon</span></code>.</p>
+</section>
+<section id="exercises">
+<span id="ch06-sec-exercises"></span><h2><span class="section-number">6.11. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<div class="exercise admonition" id="ch06-ex-which-spd">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.1 </span> (Concept: recognizing SPD matrices)</p>
+<section id="exercise-content">
+<p>Decide which of the following matrices are SPD, using the cheapest argument
+you can find (a necessary condition from
+<a class="reference internal" href="#ch06-prop-spd-properties">Proposition 6.1</a>, a Schur complement, or an explicit
+factorization):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp;A_1 = \begin{bmatrix}2&amp;3\\3&amp;4\end{bmatrix},\quad
+A_2 = \begin{bmatrix}4&amp;1&amp;1\\1&amp;4&amp;1\\1&amp;1&amp;4\end{bmatrix},\quad
+A_3 = \begin{bmatrix}1&amp;1\\-1&amp;1\end{bmatrix},\\
+&amp;A_4 = B^TB \text{ with } B = \begin{bmatrix}1&amp;2\\2&amp;4\end{bmatrix},\quad
+A_5 = T_4 - \tfrac12I,
+\end{aligned}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(T_4\)</span> is the matrix <span class="math notranslate nohighlight">\(\operatorname{tridiag}(-1,2,-1)\)</span> of order 4.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch06-cholesky/notes-solution-28">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch06-ex-which-spd"> Exercise 6.1 (Concept: recognizing SPD matrices)</a></p>
+<section id="solution-content">
+<p><span class="math notranslate nohighlight">\(A_1\)</span> is not SPD: <span class="math notranslate nohighlight">\(|a_{12}| = 3&gt;\sqrt{2\cdot4}\)</span>, equivalently the Schur
+complement <span class="math notranslate nohighlight">\(4 - 9/2&lt;0\)</span>. <span class="math notranslate nohighlight">\(A_2\)</span> is SPD: its Schur complement of <span class="math notranslate nohighlight">\(a_{11} = 4\)</span>
+is <span class="math notranslate nohighlight">\(\begin{bmatrix}15/4&amp;3/4\\3/4&amp;15/4\end{bmatrix}\)</span>, whose own Schur
+complement <span class="math notranslate nohighlight">\(15/4 - (9/16)/(15/4) = 18/5\)</span> is positive (its eigenvalues are
+<span class="math notranslate nohighlight">\(6,3,3\)</span>). <span class="math notranslate nohighlight">\(A_3\)</span> is not SPD because it is not symmetric, even though
+<span class="math notranslate nohighlight">\(x^TA_3x = \|x\|_2^2\)</span>. <span class="math notranslate nohighlight">\(A_4 = \begin{bmatrix}5&amp;10\\10&amp;20\end{bmatrix}\)</span> is
+positive semidefinite but singular, because <span class="math notranslate nohighlight">\(B\)</span> has dependent columns:
+<span class="math notranslate nohighlight">\(x = (2,-1)^T\)</span> gives <span class="math notranslate nohighlight">\(x^TA_4x = 0\)</span>. <span class="math notranslate nohighlight">\(A_5\)</span> is not SPD: the smallest
+eigenvalue of <span class="math notranslate nohighlight">\(T_4\)</span> is <span class="math notranslate nohighlight">\(4\sin^2(\pi/10)\approx0.382&lt;\tfrac12\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-pivots-minors">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.2 </span> (Theory: pivots and leading minors)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> be SPD with Cholesky factor <span class="math notranslate nohighlight">\(L\)</span> and leading principal submatrices
+<span class="math notranslate nohighlight">\(A_k\)</span>. Show that <span class="math notranslate nohighlight">\(L(1{:}k,1{:}k)\)</span> is the Cholesky factor of <span class="math notranslate nohighlight">\(A_k\)</span>, that
+<span class="math notranslate nohighlight">\(\ell_{kk}^2 = \det A_k/\det A_{k-1}\)</span> (with <span class="math notranslate nohighlight">\(\det A_0 = 1\)</span>), and that
+<span class="math notranslate nohighlight">\(\det A = \prod_k\ell_{kk}^2\)</span>. Deduce that
+<span class="math notranslate nohighlight">\(\ell_{kk}^2\ge\lambda_{\min}(A)\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch06-cholesky/notes-solution-30">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch06-ex-pivots-minors"> Exercise 6.2 (Theory: pivots and leading minors)</a></p>
+<section id="solution-content">
+<p>Because <span class="math notranslate nohighlight">\(L\)</span> is lower triangular, the leading <span class="math notranslate nohighlight">\(k\times k\)</span> block of <span class="math notranslate nohighlight">\(LL^T\)</span> is
+<span class="math notranslate nohighlight">\(L_kL_k^T\)</span> with <span class="math notranslate nohighlight">\(L_k = L(1{:}k,1{:}k)\)</span>, which is lower triangular with
+positive diagonal; by uniqueness it is the Cholesky factor of <span class="math notranslate nohighlight">\(A_k\)</span>. Then
+<span class="math notranslate nohighlight">\(\det A_k = \det(L_k)^2 = \prod_{i\le k}\ell_{ii}^2\)</span>, and dividing
+consecutive determinants gives <span class="math notranslate nohighlight">\(\ell_{kk}^2\)</span>. Finally,
+<span class="math notranslate nohighlight">\(\ell_{kk}^2 = \det A_k/\det A_{k-1}\)</span> is the Schur complement
+<span class="math notranslate nohighlight">\(a_{kk} - c^TA_{k-1}^{-1}c\)</span> of <span class="math notranslate nohighlight">\(A_{k-1}\)</span> in <span class="math notranslate nohighlight">\(A_k\)</span>, which equals
+<span class="math notranslate nohighlight">\(1/(A_k^{-1})_{kk}\)</span> (the last diagonal entry of the inverse of a block
+matrix is the inverse of the Schur complement). Since <span class="math notranslate nohighlight">\(A_k^{-1}\)</span> is SPD,
+<span class="math notranslate nohighlight">\((A_k^{-1})_{kk}\le\lambda_{\max}(A_k^{-1}) = 1/\lambda_{\min}(A_k)\)</span>, and
+<span class="math notranslate nohighlight">\(\lambda_{\min}(A_k)\ge\lambda_{\min}(A)\)</span> by the Rayleigh quotient
+characterization, so <span class="math notranslate nohighlight">\(\ell_{kk}^2\ge\lambda_{\min}(A)\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-nearest-symmetric">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.3 </span> (Theory: the nearest symmetric matrix)</p>
+<section id="exercise-content">
+<p>Show that for <span class="math notranslate nohighlight">\(A\in\R^{n\times n}\)</span> the matrix <span class="math notranslate nohighlight">\(A_s = (A+A^T)/2\)</span> minimizes
+<span class="math notranslate nohighlight">\(\|A-X\|_F\)</span> over all symmetric <span class="math notranslate nohighlight">\(X\)</span>, with minimum value
+<span class="math notranslate nohighlight">\(\|(A-A^T)/2\|_F\)</span>. What symmetric matrix does a Cholesky routine that reads
+only the lower triangle factor when given a nonsymmetric <span class="math notranslate nohighlight">\(A\)</span>, and how far
+can it be from <span class="math notranslate nohighlight">\(A_s\)</span>?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-flops">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.4 </span> (Computation: exact flop counts)</p>
+<section id="exercise-content">
+<p>Instrument your implementation of <a class="reference internal" href="#ch06-alg-cholesky">Algorithm 6.1</a> to count
+flops and square roots, and confirm
+<a class="reference internal" href="#ch06-prop-cholesky-cost">Proposition 6.2</a> for <span class="math notranslate nohighlight">\(n = 1,\dots,20\)</span>. Then write the
+square-root-free <span class="math notranslate nohighlight">\(LDL^T\)</span> variant that stores <span class="math notranslate nohighlight">\(v_k = \ell_{jk}d_k\)</span> for
+<span class="math notranslate nohighlight">\(k&lt;j\)</span> before forming column <span class="math notranslate nohighlight">\(j\)</span>, and show that it performs
+<span class="math notranslate nohighlight">\(\tfrac13n^3 + n^2 - \tfrac43n\)</span> flops.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-tridiagonal">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.5 </span> (Theory: Cholesky of the discrete Laplacian)</p>
+<section id="exercise-content">
+<p>Show that the Cholesky factor of <span class="math notranslate nohighlight">\(T_n = \operatorname{tridiag}(-1,2,-1)\)</span> is
+lower bidiagonal with</p>
+<div class="math notranslate nohighlight">
+\[
+\ell_{kk} = \sqrt{\frac{k+1}{k}},\qquad \ell_{k+1,k} = -\sqrt{\frac{k}{k+1}},
+\]</div>
+<p>that <span class="math notranslate nohighlight">\(\det T_n = n+1\)</span>, and that factoring and solving costs <span class="math notranslate nohighlight">\(\bigO(n)\)</span>
+flops. More generally, show that if <span class="math notranslate nohighlight">\(a_{ij} = 0\)</span> for <span class="math notranslate nohighlight">\(|i-j|&gt;p\)</span>, then
+<span class="math notranslate nohighlight">\(\ell_{ij} = 0\)</span> for <span class="math notranslate nohighlight">\(i-j&gt;p\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch06-cholesky/notes-solution-34">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch06-ex-tridiagonal"> Exercise 6.5 (Theory: Cholesky of the discrete Laplacian)</a></p>
+<section id="solution-content">
+<p>Use <a class="reference internal" href="#equation-ch06-eq-cholesky-entries">(6.1)</a>. By induction on <span class="math notranslate nohighlight">\(k\)</span>: <span class="math notranslate nohighlight">\(\ell_{11} =
+\sqrt2\)</span>; if <span class="math notranslate nohighlight">\(\ell_{kk} = \sqrt{(k+1)/k}\)</span>, the only nonzero term in column
+<span class="math notranslate nohighlight">\(k\)</span> below the diagonal is <span class="math notranslate nohighlight">\(\ell_{k+1,k} = a_{k+1,k}/\ell_{kk} =
+-\sqrt{k/(k+1)}\)</span> (for <span class="math notranslate nohighlight">\(i&gt;k+1\)</span>, <span class="math notranslate nohighlight">\(a_{ik} = 0\)</span> and row <span class="math notranslate nohighlight">\(i\)</span> of <span class="math notranslate nohighlight">\(L\)</span> has no
+nonzero entries in columns <span class="math notranslate nohighlight">\(1,\dots,k-1\)</span>, so <span class="math notranslate nohighlight">\(\ell_{ik} = 0\)</span>), and then <span class="math notranslate nohighlight">\(\ell_{k+1,k+1}^2 = 2 - k/(k+1) = (k+2)/(k+1)\)</span>. The
+determinant is <span class="math notranslate nohighlight">\(\prod_k\ell_{kk}^2 = \prod_{k=1}^n(k+1)/k = n+1\)</span>, a
+telescoping product. Each column needs a constant number of operations, so
+the cost is <span class="math notranslate nohighlight">\(\bigO(n)\)</span>. For bandwidth <span class="math notranslate nohighlight">\(p\)</span>, induction on the columns shows
+that row <span class="math notranslate nohighlight">\(i\)</span> of <span class="math notranslate nohighlight">\(L\)</span> is zero before column <span class="math notranslate nohighlight">\(i-p\)</span>: in
+<a class="reference internal" href="#equation-ch06-eq-cholesky-entries">(6.1)</a> with <span class="math notranslate nohighlight">\(i-j&gt;p\)</span>, <span class="math notranslate nohighlight">\(a_{ij} = 0\)</span> and each product
+<span class="math notranslate nohighlight">\(\ell_{ik}\ell_{jk}\)</span> with <span class="math notranslate nohighlight">\(k&lt;j\)</span> vanishes because <span class="math notranslate nohighlight">\(\ell_{ik}\ne0\)</span> requires
+<span class="math notranslate nohighlight">\(k\ge i-p&gt;j\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-growth">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.6 </span> (Theory: growth and the false entry bound)</p>
+<section id="exercise-content">
+<p>(a) Show that the diagonal entries of the successive Schur complements in
+the Cholesky algorithm are nonincreasing, and deduce the growth statement of
+<a class="reference internal" href="#ch06-prop-entry-bound">Proposition 6.3</a> in detail. (b) Show that
+<span class="math notranslate nohighlight">\(\sum_{j\le i}\ell_{ij}^2 = a_{ii}\)</span> implies
+<span class="math notranslate nohighlight">\(\max_{i,j}|\ell_{ij}|\le\max_i\sqrt{a_{ii}}\)</span>. (c) Construct, for every
+<span class="math notranslate nohighlight">\(t&gt;1\)</span>, a <span class="math notranslate nohighlight">\(2\times2\)</span> SPD matrix with <span class="math notranslate nohighlight">\(|\ell_{21}|/\ell_{11} = t\)</span>, showing
+that no bound of the form <span class="math notranslate nohighlight">\(|\ell_{ij}|\le c\,\ell_{jj}\)</span> can hold.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-bunch-kaufman">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.7 </span> (Theory: the Bunch–Kaufman constant)</p>
+<section id="exercise-content">
+<p>Accept that one <span class="math notranslate nohighlight">\(1\times1\)</span> Bunch–Kaufman step can increase the largest
+entry of the active matrix by at most the factor <span class="math notranslate nohighlight">\(1+1/\alpha\)</span>, and one
+<span class="math notranslate nohighlight">\(2\times2\)</span> step by at most <span class="math notranslate nohighlight">\(1+2/(1-\alpha)\)</span>. (a) Show that requiring two
+<span class="math notranslate nohighlight">\(1\times1\)</span> steps and one <span class="math notranslate nohighlight">\(2\times2\)</span> step to have the same worst-case growth
+gives <span class="math notranslate nohighlight">\(4\alpha^2-\alpha-1 = 0\)</span>, hence <span class="math notranslate nohighlight">\(\alpha = (1+\sqrt{17})/8\)</span>. (b) Show
+that then <span class="math notranslate nohighlight">\(1+1/\alpha = (1+\sqrt{17})/2 = 4\alpha\)</span>. (c) Prove the first
+of these growth factors.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-ldlt-indefinite">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.8 </span> (Computation: <span class="math notranslate nohighlight">\(LDL^T\)</span> with and without pivoting)</p>
+<section id="exercise-content">
+<p>For <span class="math notranslate nohighlight">\(A(\epsilon) = \begin{bmatrix}\epsilon&amp;1\\1&amp;1\end{bmatrix}\)</span> and
+<span class="math notranslate nohighlight">\(\epsilon = 10^{-2},10^{-5},10^{-8},10^{-11}\)</span>, compute the <span class="math notranslate nohighlight">\(LDL^T\)</span>
+factorization without pivoting in floating point, solve
+<span class="math notranslate nohighlight">\(A(\epsilon)x = (1,2)^T\)</span> with it, and report the relative forward error.
+Repeat with <code class="docutils literal notranslate"><span class="pre">scipy.linalg.ldl</span></code> (and a solve with its factors) and explain
+the differences using <a class="reference internal" href="#ch06-alg-bunch-kaufman">Algorithm 6.2</a>. What is
+<span class="math notranslate nohighlight">\(\kappa_2(A(\epsilon))\)</span>?</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-gaussian">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.9 </span> (Computation: Gaussian log-likelihood and sampling)</p>
+<section id="exercise-content">
+<p>For the squared-exponential kernel with <span class="math notranslate nohighlight">\(\sigma_f = 1\)</span>, <span class="math notranslate nohighlight">\(\ell = 0.2\)</span> on 100
+equispaced points in <span class="math notranslate nohighlight">\([0,1]\)</span> and <span class="math notranslate nohighlight">\(\sigma^2 = 10^{-6}\)</span>: (a) compute <span class="math notranslate nohighlight">\(\log
+p(y)\)</span> for a vector <span class="math notranslate nohighlight">\(y\)</span> of your choice with <a class="reference internal" href="#ch06-prop-gaussian">Proposition 6.4</a> and
+compare it with the <code class="docutils literal notranslate"><span class="pre">logpdf</span></code> method of <code class="docutils literal notranslate"><span class="pre">scipy.stats.multivariate_normal</span></code>;
+(b) draw <span class="math notranslate nohighlight">\(N =
+10^4\)</span> samples and show that the sample covariance approaches <span class="math notranslate nohighlight">\(K+\sigma^2I\)</span>
+at the rate <span class="math notranslate nohighlight">\(N^{-1/2}\)</span>; (c) explain why computing <span class="math notranslate nohighlight">\(\log\det K\)</span> as
+<code class="docutils literal notranslate"><span class="pre">np.log(np.linalg.det(K))</span></code> fails here.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-jitter">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.10 </span> (Theory: when is the jitter bound sharp?)</p>
+<section id="exercise-content">
+<p>(a) Show that equality holds in <a class="reference internal" href="#ch06-prop-jitter">Proposition 6.5</a> when
+<span class="math notranslate nohighlight">\(K = \sigma_f^2\mathbf{1}\mathbf{1}^T\)</span>, the kernel matrix of <span class="math notranslate nohighlight">\(n\)</span> coincident
+points. (b) For <span class="math notranslate nohighlight">\(n = 200\)</span> and <span class="math notranslate nohighlight">\(\sigma_f = 1\)</span>, which jitter guarantees
+<span class="math notranslate nohighlight">\(\kappa_2(K+\sigma^2I)\le10^8\)</span> for every kernel matrix with unit diagonal?
+(c) For a kernel matrix <span class="math notranslate nohighlight">\(K\)</span> with unit diagonal, show that the smallest
+eigenvalue of the diagonally scaled matrix <span class="math notranslate nohighlight">\((K+\sigma^2I)/(1+\sigma^2)\)</span> is
+at least <span class="math notranslate nohighlight">\(\sigma^2/(1+\sigma^2)\)</span>, and use the sufficient condition of
+Demmel quoted in <a class="reference internal" href="#ch06-sec-stability"><span class="std std-numref">Section 6.3</span></a> to explain why Cholesky
+succeeds in floating point when <span class="math notranslate nohighlight">\(\sigma^2\)</span> is a sufficiently large multiple
+of <span class="math notranslate nohighlight">\(n^2u\)</span>.</p>
+</section>
+</div>
+<div class="solution dropdown admonition" id="ch06-cholesky/notes-solution-40">
+
+<p class="admonition-title">Solution to<a class="reference internal" href="#ch06-ex-jitter"> Exercise 6.10 (Theory: when is the jitter bound sharp?)</a></p>
+<section id="solution-content">
+<p>(a) <span class="math notranslate nohighlight">\(\mathbf 1\mathbf 1^T\)</span> has eigenvalues <span class="math notranslate nohighlight">\(n\)</span> (eigenvector <span class="math notranslate nohighlight">\(\mathbf 1\)</span>)
+and <span class="math notranslate nohighlight">\(0\)</span> (multiplicity <span class="math notranslate nohighlight">\(n-1\)</span>), so <span class="math notranslate nohighlight">\(K+\sigma^2I\)</span> has eigenvalues
+<span class="math notranslate nohighlight">\(n\sigma_f^2+\sigma^2\)</span> and <span class="math notranslate nohighlight">\(\sigma^2\)</span>, and <span class="math notranslate nohighlight">\(\kappa_2 = 1+n\sigma_f^2/\sigma^2\)</span>
+exactly. (b) The bound <span class="math notranslate nohighlight">\(1+200/\sigma^2\le10^8\)</span> holds for
+<span class="math notranslate nohighlight">\(\sigma^2\ge200/(10^8-1)\approx2.0\times10^{-6}\)</span>. (c) The eigenvalues of
+<span class="math notranslate nohighlight">\(K+\sigma^2I\)</span> are <span class="math notranslate nohighlight">\(\lambda_i(K)+\sigma^2\ge\sigma^2\)</span>. Its diagonal is
+<span class="math notranslate nohighlight">\((1+\sigma^2)I\)</span>, so <span class="math notranslate nohighlight">\(D = (1+\sigma^2)^{1/2}I\)</span> in Demmel’s condition, and the
+scaled matrix <span class="math notranslate nohighlight">\((K+\sigma^2I)/(1+\sigma^2)\)</span> has smallest eigenvalue at least
+<span class="math notranslate nohighlight">\(\sigma^2/(1+\sigma^2)\)</span>. Demmel’s condition requires this to exceed a
+quantity of order <span class="math notranslate nohighlight">\(n^2u\)</span>, which holds once <span class="math notranslate nohighlight">\(\sigma^2\)</span> is a sufficiently
+large multiple of <span class="math notranslate nohighlight">\(n^2u\)</span>. The jitter works because it moves every
+eigenvalue away from zero by <span class="math notranslate nohighlight">\(\sigma^2\)</span>, whereas the rounding errors of the
+factorization act like a perturbation of relative size about <span class="math notranslate nohighlight">\(n^2u\)</span>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-refinement-stationary">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.11 </span> (Theory: refinement as a stationary iteration)</p>
+<section id="exercise-content">
+<p>Let <span class="math notranslate nohighlight">\(M = \widehat L\widehat L^T = A+\Delta A\)</span> be SPD. Show that iterative
+refinement with exact residuals and updates is the iteration
+<span class="math notranslate nohighlight">\(x^{(i+1)} = x^{(i)} + M^{-1}(b-Ax^{(i)})\)</span>, that the error satisfies
+<span class="math notranslate nohighlight">\(e^{(i+1)} = M^{-1}\Delta A\,e^{(i)}\)</span>, and that the iteration converges for
+every <span class="math notranslate nohighlight">\(x^{(0)}\)</span> if and only if all eigenvalues of <span class="math notranslate nohighlight">\(M^{-1}A\)</span> lie in <span class="math notranslate nohighlight">\((0,2)\)</span>.
+(<em>Hint:</em> <span class="math notranslate nohighlight">\(M^{-1}A\)</span> is similar to the SPD matrix
+<span class="math notranslate nohighlight">\(\widehat L^{-1}A\widehat L^{-T}\)</span>.) Compare with the condition of
+<a class="reference internal" href="#ch06-thm-refinement">Theorem 6.7</a>.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-hager">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.12 </span> (Computation: testing Hager’s estimator)</p>
+<section id="exercise-content">
+<p>Implement <a class="reference internal" href="#ch06-alg-hager">Algorithm 6.4</a> and use it to estimate
+<span class="math notranslate nohighlight">\(\kappa_1(A)\)</span> for the two-dimensional Laplacian on <span class="math notranslate nohighlight">\(m\times m\)</span> grids,
+<span class="math notranslate nohighlight">\(m = 10,20,40\)</span>, and for the Hilbert matrices <span class="math notranslate nohighlight">\(H_n\)</span>, <span class="math notranslate nohighlight">\(n = 4,\dots,12\)</span>.
+Compare with the exact <span class="math notranslate nohighlight">\(\kappa_1\)</span>, with LAPACK’s <code class="docutils literal notranslate"><span class="pre">dpocon</span></code> (from
+<code class="docutils literal notranslate"><span class="pre">scipy.linalg.lapack</span></code>) and with <code class="docutils literal notranslate"><span class="pre">onenormest</span></code> (from <code class="docutils literal notranslate"><span class="pre">scipy.sparse.linalg</span></code>). Count the products with <span class="math notranslate nohighlight">\(A^{-1}\)</span>
+used by each method, and find a random matrix for which Hager’s estimate is
+not exact.</p>
+</section>
+</div>
+<div class="exercise admonition" id="ch06-ex-mixed-precision">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6.13 </span> (Project: a mixed-precision SPD solver)</p>
+<section id="exercise-content">
+<p>Write a function <code class="docutils literal notranslate"><span class="pre">spd_solve_mixed(A,</span> <span class="pre">b)</span></code> that factors <span class="math notranslate nohighlight">\(A\)</span> in binary32,
+refines in binary64 until the normwise backward error
+<span class="math notranslate nohighlight">\(\|b-Ax\|_\infty/(\|A\|_\infty\|x\|_\infty)\)</span> is below <span class="math notranslate nohighlight">\(nu\)</span> or stagnates,
+and falls back to a binary64 factorization when the binary32 factorization
+fails or the iteration does not converge. Test it on matrices with
+<span class="math notranslate nohighlight">\(\kappa_2\)</span> from <span class="math notranslate nohighlight">\(10\)</span> to <span class="math notranslate nohighlight">\(10^{12}\)</span> and time it against <code class="docutils literal notranslate"><span class="pre">cho_factor</span></code> plus
+<code class="docutils literal notranslate"><span class="pre">cho_solve</span></code> in binary64 for <span class="math notranslate nohighlight">\(n\)</span> up to 4000 (medians of repeats). Report
+for which <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(\kappa\)</span> it is faster on your machine, and explain your
+stopping and fallback rules in terms of <a class="reference internal" href="#ch06-thm-refinement">Theorem 6.7</a>.</p>
+</section>
+</div>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ch06-cholesky"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../ch05-lu/lab.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">5.11. </span>Lab 5: Gaussian elimination and LU factorization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lab.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">6.12. </span>Lab 6: Cholesky factorization and iterative refinement</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetric-positive-definite-matrices">6.1. Symmetric positive definite matrices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cholesky-factorization">6.2. The Cholesky factorization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#existence-and-uniqueness">6.2.1. Existence and uniqueness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-algorithm">6.2.2. Derivation of the algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bounded-entries-and-no-pivoting">6.2.3. Bounded entries and no pivoting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-and-cholesky-as-a-test-for-definiteness">6.3. Stability, and Cholesky as a test for definiteness</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-error-analysis">6.3.1. Backward error analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-test-for-positive-definiteness">6.3.2. A test for positive definiteness</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ldl-t-and-symmetric-indefinite-matrices">6.4. <span class="math notranslate nohighlight">\(LDL^T\)</span> and symmetric indefinite matrices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-ldl-t-factorization">6.4.1. The <span class="math notranslate nohighlight">\(LDL^T\)</span> factorization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bunch-kaufman-pivoting">6.4.2. Bunch–Kaufman pivoting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-distributions-and-gaussian-processes">6.5. Gaussian distributions and Gaussian processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#log-determinants-and-sampling">6.5.1. Log-determinants and sampling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-process-regression">6.5.2. Gaussian-process regression</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iterative-refinement">6.6. Iterative refinement</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-algorithm">6.6.1. The algorithm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-does-it-converge">6.6.2. When does it converge?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-condition-numbers">6.7. Estimating condition numbers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-estimate">6.7.1. Why estimate?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hager-s-estimator">6.7.2. Hager’s estimator</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimators-in-lapack-and-scipy">6.7.3. Estimators in LAPACK and SciPy</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-laboratory">6.8. Computational laboratory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">6.9. Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">6.10. Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.11. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Abdallah Alsammani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Text and figures are licensed as described in the repository LICENSE file.
+Source: <a href="https://github.com/aalsammani/Scientific-Computations-I-Notebooks">GitHub</a>.
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
